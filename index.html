@@ -4,35 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WHAT U VIBIN TO?</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-
     <style>
         /* --- CSS スタイル設定 --- */
         
-        :root {
-            --bg-color: #f0f0eb; /* 少しグレーがかったコンクリート色 */
-            --text-color: #1a1a1a;
-            --accent-color: #FF4F00; /* オランダ・オレンジ (International Orange) */
-            --grid-color: #dcdcd9;
-        }
-
-        /* 全体のリセットとベース設定 */
+        /* 全体のリセットとベース設定（背景を元に戻す） */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--bg-color);
-            /* 背景にドットグリッド（設計図風）を追加してストリート/インダストリアル感を出す */
-            background-image: radial-gradient(var(--grid-color) 2px, transparent 2px);
-            background-size: 20px 20px;
-            
-            font-family: 'Space Mono', monospace; /* 基本は等幅フォントで無機質に */
-            color: var(--text-color);
-            overflow-x: hidden;
+            background-color: #f4f4f0; /* 元のオフホワイト */
+            font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif; /* 元の太字ゴシック */
+            overflow-x: hidden; /* 横スクロール防止 */
         }
 
         /* コンテナ */
@@ -40,52 +23,22 @@
             position: relative;
             width: 100%;
             min-height: 100vh;
-            max-width: 1400px; /* ワイドに */
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             box-sizing: border-box;
         }
 
-        /* --- 装飾：上部の流れるテキスト (Ticker) --- */
-        .marquee-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: var(--text-color);
-            color: var(--bg-color);
-            padding: 5px 0;
-            z-index: 100;
-            overflow: hidden;
-            white-space: nowrap;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-        }
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 20s linear infinite;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* 1. 左上のロゴ */
+        /* 1. 左上のロゴ（ホームボタン機能と影は維持） */
         .header-logo-wrapper {
             position: absolute;
-            top: 60px; /* Tickerの分少し下げる */
+            top: 20px;
             left: 20px;
             width: 500px; 
             max-width: 80%;
             z-index: 10;
-            transition: transform 0.3s ease;
         }
         
-        .header-logo-wrapper:hover {
-            transform: scale(1.02) rotate(-2deg);
-        }
-
         .header-logo-wrapper a {
             display: block;
             width: 100%;
@@ -95,17 +48,22 @@
             width: 100%;
             height: auto;
             transform: rotate(-10deg);
-            /* 【修正】ロゴ自体にドロップシャドウをかけて「浮いているステッカー」感を出す */
-            /* 影を少しシャープにして、グラフィカルさを強調 */
-            filter: drop-shadow(15px 15px 10px rgba(0,0,0,0.5)); 
+            /* 立体感を出す影（ここだけ残す） */
+            filter: drop-shadow(15px 15px 10px rgba(0,0,0,0.5));
+            transition: transform 0.3s;
         }
+        
+        .header-logo-wrapper img:hover {
+             transform: rotate(-12deg) scale(1.02);
+        }
+
 
         /* 2. メインコンテンツ */
         .main-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 90vh; /* 少し高さを確保 */
+            height: 80vh;
             position: relative;
         }
 
@@ -113,77 +71,62 @@
         .nav-links {
             display: flex;
             flex-direction: column;
-            gap: 5px; /* 行間を狭くして塊感を出す */
-            z-index: 20;
-            margin-top: 180px; 
+            gap: 15px;
+            z-index: 20; 
+            margin-top: 150px; 
             margin-left: 5%;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: var(--text-color);
-            /* フォント変更：インパクトのあるサンセリフ体 */
-            font-family: 'Anton', sans-serif; 
-            font-size: 4rem; /* かなり大きく */
-            line-height: 0.9; /* 行間を詰める */
-            text-transform: uppercase;
+            color: #000;
+            /* サイズとフォントを元に戻す */
+            font-size: 2.5rem; 
+            font-style: italic;
+            font-weight: 900;
+            text-transform: capitalize;
             position: relative;
-            transition: all 0.2s;
+            transition: all 0.2s; /* アニメーション速度 */
             width: fit-content;
-            letter-spacing: 1px;
-            /* 背景は透明 */
             background-color: transparent; 
         }
 
-        /* ナビゲーションのホバーエフェクト：ストローク（白抜き）+ オレンジ影 */
+        /* ★ここがポイント：カーソルを当てたときの「色と効果」だけ残す */
         .nav-links a:hover {
-            color: transparent;
-            -webkit-text-stroke: 2px var(--text-color); /* 縁取り文字 */
-            text-shadow: 5px 5px 0px var(--accent-color); /* オレンジの硬い影 */
-            transform: translateX(20px);
+            color: transparent; /* 文字色を透明に */
+            -webkit-text-stroke: 2px #000; /* 黒い縁取り */
+            text-shadow: 5px 5px 0px #FF4F00; /* オランダ・オレンジの影 */
+            transform: scale(1.05) translateX(10px);
         }
 
         /* "Dig for new music" の特別なスタイル */
-        /* 小さく添えられたタギングのような扱いに変更 */
         .nav-links a.special-link {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            letter-spacing: -1px;
-            margin-top: 20px;
-            padding: 5px 10px;
-            background: var(--text-color);
-            color: var(--bg-color);
-            text-decoration: none;
-            text-transform: none;
-            transform: rotate(-3deg);
-            display: inline-block;
-            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); /* テープのような形状 */
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 5px;
         }
         
+        /* special-linkのホバー時も同様のエフェクトを適用 */
         .nav-links a.special-link:hover {
-            background: var(--accent-color);
-            color: #fff;
-            text-shadow: none;
-            -webkit-text-stroke: 0;
-            transform: rotate(0deg) scale(1.1);
+            text-decoration: none; /* ホバー時は下線を消してエフェクト優先 */
+             -webkit-text-stroke: 2px #000;
+            text-shadow: 5px 5px 0px #FF4F00;
         }
 
         /* 3. 右側のレコード盤エリア */
         .record-wrapper {
             position: absolute;
-            right: -120px;
-            top: 55%;
+            right: -100px; 
+            top: 50%;
             transform: translateY(-50%);
-            width: 650px; /* さらに少し大きく */
-            height: 650px;
+            width: 600px;
+            height: 600px;
             z-index: 5;
             cursor: grab;
             touch-action: none;
-            border-radius: 50%;
             
-            /* 影の調整：より濃く、シャープにして床に落ちている感を出す */
-            box-shadow: 20px 30px 40px rgba(0,0,0,0.6); 
+            border-radius: 50%;
+            box-shadow: 15px 15px 30px rgba(0,0,0,0.4);
         }
 
         .record-wrapper:active {
@@ -197,66 +140,37 @@
             object-fit: cover;
             user-select: none;
             -webkit-user-drag: none;
-            /* 画像のコントラストを上げて質感を強調 */
-            filter: contrast(1.1) brightness(0.95);
         }
 
-        /* 4. フッター：スペック表のようなデザインに */
+        /* 4. フッター（元に戻す） */
         .footer {
             position: absolute;
             bottom: 20px;
-            left: 20px;
-            text-align: left; /* 左寄せ */
-            font-size: 0.7rem;
-            color: var(--text-color);
-            border-top: 2px solid var(--text-color);
-            padding-top: 10px;
-            display: flex;
-            gap: 20px;
-            opacity: 0.7;
-        }
-
-        .footer span {
-            display: block;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.5rem;
+            font-weight: bold;
+            color: #000;
         }
 
         /* --- レスポンシブ対応（スマホ向け） --- */
         @media (max-width: 768px) {
             .header-logo-wrapper {
-                width: 320px;
-                top: 50px;
-                left: 10px;
-            }
-            .nav-links {
-                margin-top: 140px;
-                margin-left: 20px;
+                width: 300px;
             }
             .nav-links a {
-                font-size: 3rem; /* スマホでも大きく */
-            }
-            .nav-links a.special-link {
-                font-size: 1rem;
+                font-size: 1.8rem; /* スマホ用サイズ */
             }
             .record-wrapper {
-                width: 380px;
-                height: 380px;
-                right: -80px;
-                top: 60%;
-            }
-            .footer {
-                flex-direction: column;
-                gap: 5px;
+                width: 350px;
+                height: 350px;
+                right: -50px;
             }
         }
     </style>
 </head>
 <body>
-
-<div class="marquee-wrapper">
-    <div class="marquee-content">
-        WHAT U VIBIN TO? /// AMSTERDAM /// TOKYO /// STRICTLY VINYL /// DIG DEEP /// PLAY IT LOUD /// WHAT U VIBIN TO? /// AMSTERDAM /// TOKYO /// STRICTLY VINYL ///
-    </div>
-</div>
 
 <div class="container">
     <div class="header-logo-wrapper">
@@ -270,8 +184,8 @@
             <a href="about.html">About</a>
             <a href="books.html">Books</a>
             <a href="contact.html">Contact</a>
+            <a href="dig.html" class="special-link">Dig for new music</a>
             <a href="event.html">Events</a>
-            <a href="dig.html" class="special-link">>> DIG FOR NEW MUSIC</a>
         </nav>
 
         <div class="record-wrapper" id="recordArea">
@@ -280,17 +194,14 @@
     </div>
 
     <div class="footer">
-        <span>DEV: LUCY</span>
-        <span>STATUS: ONLINE</span>
-        <span>LOC: AMS/TKY</span>
-        <span>© 2024 WUVT CREW</span>
+        Developed by Lucy, Wassup bro
     </div>
 </div>
 
 <audio id="scratchAudio" src="scratch.mp3" preload="auto"></audio>
 
 <script>
-    /* --- JavaScript スクラッチ機能（変更なし） --- */
+    /* --- JavaScript スクラッチ機能 (変更なし) --- */
 
     const recordArea = document.getElementById('recordArea');
     const recordDisk = document.getElementById('recordDisk');
@@ -313,8 +224,8 @@
     function getAngle(x, y, center) {
         const dy = y - center.y;
         const dx = x - center.x;
-        let theta = Math.atan2(dy, dx);
-        theta *= 180 / Math.PI;
+        let theta = Math.atan2(dy, dx); 
+        theta *= 180 / Math.PI; 
         return theta;
     }
 
@@ -332,6 +243,7 @@
         }
     }
 
+    // PC Mouse Events
     recordArea.addEventListener('mousedown', (e) => {
         isDragging = true;
         const center = getCenter(recordArea);
@@ -359,6 +271,7 @@
         recordArea.style.cursor = 'grab';
     });
 
+    // Touch Events
     recordArea.addEventListener('touchstart', (e) => {
         isDragging = true;
         const touch = e.touches[0];
