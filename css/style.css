@@ -1,0 +1,212 @@
+@charset "UTF-8";
+
+/* --- CSS スタイル設定 --- */
+
+/* 全体のリセットとベース設定 */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f0;
+    font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+    overflow-x: hidden;
+    /* スマホでタップした時のハイライト色を透明にする */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* --- 上部の流れるテキスト (Ticker) --- */
+.marquee-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    color: #f4f4f0;
+    padding: 8px 0;
+    z-index: 100;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+.marquee-content {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+}
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* コンテナ */
+.container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 1. 左上のロゴ */
+.header-logo-wrapper {
+    position: absolute;
+    top: 80px;
+    left: 30px;
+    width: 550px; 
+    max-width: 80%;
+    z-index: 10;
+}
+
+.header-logo-wrapper a {
+    display: block;
+    width: 100%;
+}
+
+.header-logo-wrapper img {
+    width: 100%;
+    height: auto;
+    transform: rotate(-10deg);
+    filter: drop-shadow(15px 15px 10px rgba(0,0,0,0.5));
+    transition: transform 0.3s;
+}
+
+/* ロゴのインタラクション */
+.header-logo-wrapper img:hover {
+        transform: rotate(-12deg) scale(1.02);
+}
+.header-logo-wrapper img:active {
+        transform: rotate(-12deg) scale(0.95);
+}
+
+/* 2. メインコンテンツ */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80vh;
+    position: relative;
+}
+
+/* 左側のナビゲーションリンク */
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 20; 
+    margin-top: 300px; 
+    margin-left: 5%;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #000;
+    font-size: 1.0rem; 
+    font-style: italic;
+    font-weight: 900;
+    text-transform: capitalize;
+    position: relative;
+    transition: transform 0.1s ease-out, color 0.2s, text-shadow 0.2s;
+    width: fit-content;
+    background-color: transparent; 
+    padding: 5px 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* --- PC向けホバーエフェクト --- */
+@media (min-width: 769px) {
+    .nav-links a:hover {
+        color: transparent;
+        -webkit-text-stroke: 2px #000;
+        text-shadow: 5px 5px 0px #333;
+        transform: scale(1.05) translateX(10px);
+    }
+    .nav-links a.special-link:hover {
+        text-decoration: none;
+        -webkit-text-stroke: 2px #000;
+        text-shadow: 5px 5px 0px #333;
+    }
+}
+
+/* "Dig for new music" の基本スタイル */
+.nav-links a.special-link {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 5px;
+    font-size: 2rem;
+}
+
+/* 3. 右側のレコード盤エリア */
+.record-wrapper {
+    position: absolute;
+    right: -100px; 
+    top: 50%;
+    transform: translateY(-50%);
+    width: 600px;
+    height: 600px;
+    z-index: 5;
+    cursor: grab;
+    touch-action: none;
+    border-radius: 50%;
+    box-shadow: 15px 15px 30px rgba(0,0,0,0.4);
+    /* ここにあった防止コードを削除しました */
+}
+
+.record-wrapper:active {
+    cursor: grabbing;
+}
+
+.record-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    /* ここにあった防止コードを削除しました */
+}
+
+/* 4. フッター */
+.footer {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 0.5rem;
+    font-weight: bold;
+    color: #000;
+}
+
+/* --- レスポンシブ対応（スマホ向け） --- */
+@media (max-width: 768px) {
+    .header-logo-wrapper {
+        width: 300px;
+        top: 60px;
+    }
+    .nav-links a {
+        font-size: 1.8rem;
+    }
+    .record-wrapper {
+        width: 350px;
+        height: 350px;
+        right: -50px;
+    }
+
+    .nav-links a:active {
+        color: transparent;
+        -webkit-text-stroke: 1.5px #000;
+        text-shadow: 3px 3px 0px #333;
+        transform: scale(0.95);
+        text-decoration: none;
+    }
+    
+    .nav-links a.special-link:active {
+        text-decoration: none;
+        color: transparent;
+        -webkit-text-stroke: 1.5px #000;
+        text-shadow: 3px 3px 0px #333;
+        transform: scale(0.95);
+    }
+}
