@@ -4,233 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WHAT U VIBIN TO?</title>
-    <style>
-        /* --- CSS スタイル設定 --- */
-        
-        /* 全体のリセットとベース設定 */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f4f4f0;
-            font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
-            overflow-x: hidden;
-            /* スマホでタップした時のハイライト色を透明にする（重要） */
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* --- 上部の流れるテキスト (Ticker) --- */
-        .marquee-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: #000;
-            color: #f4f4f0;
-            padding: 8px 0;
-            z-index: 100;
-            overflow: hidden;
-            white-space: nowrap;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            font-weight: bold;
-        }
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 20s linear infinite;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* コンテナ */
-        .container {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        /* 1. 左上のロゴ */
-        .header-logo-wrapper {
-            position: absolute;
-            top: 80px;
-            left: 30px;
-            width: 550px; 
-            max-width: 80%;
-            z-index: 10;
-        }
-        
-        .header-logo-wrapper a {
-            display: block;
-            width: 100%;
-        }
-
-        .header-logo-wrapper img {
-            width: 100%;
-            height: auto;
-            /* 以下の設定によりSVGでも同じ角度と影が適用されます */
-            transform: rotate(-10deg);
-            filter: drop-shadow(15px 15px 10px rgba(0,0,0,0.5));
-            transition: transform 0.3s;
-        }
-        
-        /* ロゴのインタラクション */
-        .header-logo-wrapper img:hover {
-             transform: rotate(-12deg) scale(1.02);
-        }
-        .header-logo-wrapper img:active {
-             transform: rotate(-12deg) scale(0.95); /* クリック時に少し沈む */
-        }
-
-        /* 2. メインコンテンツ */
-        .main-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80vh;
-            position: relative;
-        }
-
-        /* 左側のナビゲーションリンク */
-        .nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 20; 
-            margin-top: 300px; 
-            margin-left: 5%;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #000;
-            font-size: 2.0rem; 
-            font-style: italic;
-            font-weight: 900;
-            text-transform: capitalize;
-            position: relative;
-            /* アニメーションを滑らかにする設定 */
-            transition: transform 0.1s ease-out, color 0.2s, text-shadow 0.2s;
-            width: fit-content;
-            background-color: transparent; 
-            
-            /* スマホでのタップ領域を少し確保 */
-            padding: 5px 0;
-            -webkit-tap-highlight-color: transparent; /* 再度念押しで指定 */
-        }
-
-        /* --- PC向けホバーエフェクト --- */
-        @media (min-width: 769px) {
-            .nav-links a:hover {
-                color: transparent;
-                -webkit-text-stroke: 2px #000;
-                text-shadow: 5px 5px 0px #333;
-                transform: scale(1.05) translateX(10px);
-            }
-            .nav-links a.special-link:hover {
-                text-decoration: none;
-                -webkit-text-stroke: 2px #000;
-                text-shadow: 5px 5px 0px #333;
-            }
-        }
-
-        /* "Dig for new music" の基本スタイル */
-        .nav-links a.special-link {
-            text-decoration: underline;
-            text-decoration-thickness: 3px;
-            text-underline-offset: 5px;
-            font-size: 3rem;
-        }
-
-        /* 3. 右側のレコード盤エリア */
-        .record-wrapper {
-            position: absolute;
-            right: -100px; 
-            top: 50%;
-            transform: translateY(-50%);
-            width: 600px;
-            height: 600px;
-            z-index: 5;
-            cursor: grab;
-            touch-action: none;
-            border-radius: 50%;
-            box-shadow: 15px 15px 30px rgba(0,0,0,0.4);
-        }
-
-        .record-wrapper:active {
-            cursor: grabbing;
-        }
-
-        .record-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
-
-        /* 4. フッター */
-        .footer {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 0.5rem;
-            font-weight: bold;
-            color: #000;
-        }
-
-        /* --- レスポンシブ対応（スマホ向け） --- */
-        @media (max-width: 768px) {
-            .header-logo-wrapper {
-                width: 300px;
-                top: 60px;
-            }
-            .nav-links a {
-                font-size: 1.8rem;
-            }
-            .record-wrapper {
-                width: 350px;
-                height: 350px;
-                right: -50px;
-            }
-
-            /* --- スマホ専用のタップ（Active）エフェクト --- */
-            /* 指が触れている間だけスタイルを適用 */
-            .nav-links a:active {
-                color: transparent;
-                -webkit-text-stroke: 1.5px #000; /* スマホなら少し線を細く */
-                text-shadow: 3px 3px 0px #333;   /* 影も少し控えめに */
-                
-                /* 押した瞬間に少し縮むことで「押した感」を出す */
-                transform: scale(0.95);
-                text-decoration: none; /* 下線を消す */
-            }
-            
-            /* Special Linkも同様に */
-            .nav-links a.special-link:active {
-                text-decoration: none;
-                color: transparent;
-                -webkit-text-stroke: 1.5px #000;
-                text-shadow: 3px 3px 0px #333;
-                transform: scale(0.95);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <div class="marquee-wrapper">
     <div class="marquee-content">
-        WHAT U VIBIN TO? /// AMSTERDAM /// TOKYO /// STRICTLY VINYL /// DIG DEEP /// PLAY IT LOUD /// WHAT U VIBIN TO? /// AMSTERDAM /// TOKYO /// STRICTLY VINYL ///
+        WHAT U VIBIN TO? /// WHAT U VIBIN TO? /// WHAT U VIBIN TO? /// I WANNA GO TO AMSTERDAM /// WHAT U VIBIN TO? /// WHAT U VIBIN TO? /// WHAT U VIBIN TO? /// WHAT U VIBIN TO? /// TOKYO /// STRICTLY VINYL ///
     </div>
 </div>
 
@@ -307,6 +87,7 @@
 
     // PC Mouse Events
     recordArea.addEventListener('mousedown', (e) => {
+        // e.preventDefault(); 削除しました
         isDragging = true;
         const center = getCenter(recordArea);
         startAngle = getAngle(e.clientX, e.clientY, center) - currentRotation;
@@ -315,7 +96,7 @@
 
     window.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
-        e.preventDefault();
+        // e.preventDefault(); 削除しました
         const center = getCenter(recordArea);
         const angle = getAngle(e.clientX, e.clientY, center);
         const newRotation = angle - startAngle;
@@ -335,6 +116,7 @@
 
     // Touch Events
     recordArea.addEventListener('touchstart', (e) => {
+        // e.preventDefault(); 削除しました
         isDragging = true;
         const touch = e.touches[0];
         const center = getCenter(recordArea);
@@ -343,7 +125,7 @@
 
     window.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
-        e.preventDefault();
+        // e.preventDefault(); 削除しました
         const touch = e.touches[0];
         const center = getCenter(recordArea);
         const angle = getAngle(touch.clientX, touch.clientY, center);
