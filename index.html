@@ -34,8 +34,9 @@
             position: absolute;
             top: 20px;
             left: 20px;
-            width: 300px; /* 必要に応じて調整 */
-            max-width: 80%;
+            /* 【修正】サイズを大きくしてインパクトを出す (300px -> 500px) */
+            width: 500px; 
+            max-width: 90%; /* スマホなど画面が小さい時は画面幅の90%に収める */
             z-index: 10;
         }
         .header-logo img {
@@ -59,20 +60,24 @@
             flex-direction: column;
             gap: 15px;
             z-index: 20; /* レコードより手前に表示 */
-            margin-top: 100px; /* ロゴとかぶらないように */
+            /* ロゴが大きくなったのでマージンを調整（重なっても良いならそのままでもOK） */
+            margin-top: 150px; 
             margin-left: 5%;
         }
 
         .nav-links a {
             text-decoration: none;
             color: #000;
-            font-size: 2.5rem; /* 大きめの文字 */
+            /* 【修正】文字を少し小さく (2.5rem -> 2rem) */
+            font-size: 1.5rem; 
             font-style: italic;
             font-weight: 900;
             text-transform: capitalize;
             position: relative;
             transition: transform 0.2s;
             width: fit-content;
+            /* 背景色は指定せず透明のまま */
+            background-color: transparent; 
         }
 
         .nav-links a:hover {
@@ -87,7 +92,7 @@
             text-underline-offset: 5px;
         }
 
-        /* 3. 右側のレコード盤 */
+        /* 3. 右側のレコード盤エリア */
         .record-wrapper {
             position: absolute;
             right: -100px; /* 画面右端からはみ出させる */
@@ -98,6 +103,10 @@
             z-index: 5; /* 文字より奥 */
             cursor: grab; /* マウスカーソルを掴むアイコンに */
             touch-action: none; /* スマホでのスクロール干渉を防ぐ */
+            
+            /* 【修正】影をここに移動（画像ではなく枠につけることで回転させない） */
+            border-radius: 50%; /* 丸くする */
+            box-shadow: 15px 15px 30px rgba(0,0,0,0.4); /* 固定の影 */
         }
 
         .record-wrapper:active {
@@ -109,8 +118,7 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            /* 影をつけて立体感を出す */
-            box-shadow: 15px 15px 30px rgba(0,0,0,0.4);
+            /* 【修正】ここで影（box-shadow）を削除しました */
             user-select: none; /* 画像選択防止 */
             -webkit-user-drag: none; /* ドラッグ防止 */
         }
@@ -118,11 +126,11 @@
         /* 4. フッター */
         .footer {
             position: absolute;
-            bottom: 20px;
+            bottom: 15px;
             left: 0;
             width: 100%;
             text-align: center;
-            font-size: 0.5rem;
+            font-size: 0.3rem;
             font-weight: bold;
             color: #000;
         }
@@ -130,11 +138,14 @@
         /* --- レスポンシブ対応（スマホ向け） --- */
         @media (max-width: 768px) {
             .header-logo {
-                width: 200px;
+                /* スマホでも少し大きめに */
+                width: 300px;
             }
             .nav-links a {
-                font-size: 1.8rem;
-                background-color: rgba(244, 244, 240, 0.7); /* 文字が読めるように半透明背景 */
+                /* 【修正】スマホ時の文字サイズも少し小さく (1.8rem -> 1.5rem) */
+                font-size: 1rem;
+                /* 【修正】白い背景色(rgba)を削除して透明に */
+                background-color: transparent; 
             }
             .record-wrapper {
                 width: 350px;
