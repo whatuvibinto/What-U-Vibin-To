@@ -121,8 +121,216 @@
         .nav-links a:hover {
             color: transparent; /* 文字色を透明に */
             -webkit-text-stroke: 2px #000; /* 黒い縁取り */
-            text-shadow: 5px 5px 0px #333; /* オランダ・オレンジの影 */
+            text-shadow: 5px 5px 0px #FF4F00; /* オランダ・オレンジの影 */
             transform: scale(1.05) translateX(10px);
         }
 
         /* "Dig for new music" の特別なスタイル */
+        .nav-links a.special-link {
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 5px;
+        }
+        
+        .nav-links a.special-link:hover {
+            text-decoration: none;
+            -webkit-text-stroke: 2px #000;
+            text-shadow: 5px 5px 0px #FF4F00;
+        }
+
+        /* 3. 右側のレコード盤エリア */
+        .record-wrapper {
+            position: absolute;
+            right: -100px; 
+            top: 50%;
+            transform: translateY(-50%);
+            width: 600px;
+            height: 600px;
+            z-index: 5;
+            cursor: grab;
+            touch-action: none;
+            
+            border-radius: 50%;
+            box-shadow: 15px 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .record-wrapper:active {
+            cursor: grabbing;
+        }
+
+        .record-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* 4. フッター（元の表記） */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.5rem;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* --- レスポンシブ対応（スマホ向け） --- */
+        @media (max-width: 768px) {
+            .header-logo-wrapper {
+                width: 300px;
+                top: 60px; /* スマホ時の位置調整 */
+            }
+            .nav-links a {
+                font-size: 1.8rem;
+            }
+            .record-wrapper {
+                width: 350px;
+                height: 350px;
+                right: -50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="marquee-wrapper">
+    <div class="marquee-content">
+        WHAT U VIBIN TO? /// AMSTERDAM /// TOKYO /// STRICTLY VINYL /// DIG DEEP /// PLAY IT LOUD /// WHAT U VIBIN TO? /// AMSTERDAM /// TOKYO /// STRICTLY VINYL ///
+    </div>
+</div>
+
+<div class="container">
+    <div class="header-logo-wrapper">
+        <a href="index.html">
+            <img src="images/logo.png" alt="WHAT U VIBIN TO?">
+        </a>
+    </div>
+
+    <div class="main-content">
+        <nav class="nav-links">
+            <a href="about.html">About</a>
+            <a href="books.html">Books</a>
+            <a href="contact.html">Contact</a>
+            <a href="dig.html" class="special-link">Dig for new music</a>
+            <a href="event.html">Events</a>
+        </nav>
+
+        <div class="record-wrapper" id="recordArea">
+            <img src="images/record.png" alt="Vinyl Record" class="record-img" id="recordDisk">
+        </div>
+    </div>
+
+    <div class="footer">
+        Developed by Lucy, Wassup bro
+    </div>
+</div>
+
+<audio id="scratchAudio" src="scratch.mp3" preload="auto"></audio>
+
+<script>
+    /* --- JavaScript スクラッチ機能 (変更なし) --- */
+
+    const recordArea = document.getElementById('recordArea');
+    const recordDisk = document.getElementById('recordDisk');
+    const audio = document.getElementById('scratchAudio');
+
+    let isDragging = false;
+    let startAngle = 0;
+    let currentRotation = 0;
+    let lastRotation = 0;
+    let previousPlayTime = 0;
+
+    function getCenter(element) {
+        const rect = element.getBoundingClientRect();
+        return {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+        };
+    }
+
+    function getAngle(x, y, center) {
+        const dy = y - center.y;
+        const dx = x - center.x;
+        let theta = Math.atan2(dy, dx); 
+        theta *= 180 / Math.PI; 
+        return theta;
+    }
+
+    function playScratchSound() {
+        const now = Date.now();
+        if (now - previousPlayTime > 100) {
+            audio.currentTime = 0;
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Audio play prevented needed interaction first.");
+                });
+            }
+            previousPlayTime = now;
+        }
+    }
+
+    // PC Mouse Events
+    recordArea.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        const center = getCenter(recordArea);
+        startAngle = getAngle(e.clientX, e.clientY, center) - currentRotation;
+        recordArea.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const center = getCenter(recordArea);
+        const angle = getAngle(e.clientX, e.clientY, center);
+        const newRotation = angle - startAngle;
+        recordDisk.style.transform = `rotate(${newRotation}deg)`;
+
+        if (Math.abs(newRotation - lastRotation) > 2) {
+            playScratchSound();
+        }
+        currentRotation = newRotation;
+        lastRotation = newRotation;
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        recordArea.style.cursor = 'grab';
+    });
+
+    // Touch Events
+    recordArea.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const touch = e.touches[0];
+        const center = getCenter(recordArea);
+        startAngle = getAngle(touch.clientX, touch.clientY, center) - currentRotation;
+    }, { passive: false });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const center = getCenter(recordArea);
+        const angle = getAngle(touch.clientX, touch.clientY, center);
+        const newRotation = angle - startAngle;
+        recordDisk.style.transform = `rotate(${newRotation}deg)`;
+
+        if (Math.abs(newRotation - lastRotation) > 2) {
+            playScratchSound();
+        }
+        currentRotation = newRotation;
+        lastRotation = newRotation;
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+</script>
+
+</body>
+</html>
