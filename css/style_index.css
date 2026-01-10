@@ -11,7 +11,7 @@ body, html {
     width: 100%;
     height: 100%;
     background-color: #ffffff;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* プロっぽい基本フォントに変更 */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* プロっぽい基本フォント */
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
 }
@@ -28,7 +28,7 @@ body, html {
     z-index: 100;
     overflow: hidden;
     white-space: nowrap;
-    font-size: 0.9rem; /* 少し小さくして洗練させる */
+    font-size: 0.9rem;
     letter-spacing: 2px;
     font-weight: bold;
     text-transform: uppercase;
@@ -73,10 +73,10 @@ body, html {
     transition: transform 0.3s;
 }
 .header-logo-wrapper img:hover {
-        transform: rotate(-12deg) scale(1.02);
+    transform: rotate(-12deg) scale(1.02);
 }
 .header-logo-wrapper img:active {
-        transform: rotate(-12deg) scale(0.95);
+    transform: rotate(-12deg) scale(0.95);
 }
 
 /* メインコンテンツ */
@@ -92,13 +92,13 @@ body, html {
 .nav-links {
     display: flex;
     flex-direction: column;
-    gap: 12px; /* 間隔を少し広げて優雅に */
+    gap: 12px;
     z-index: 20; 
     margin-top: 200px; 
     margin-left: 5%;
 }
 
-/* ★変更: プロ仕様のフォント形式に変更 */
+/* プロ仕様のフォント形式 */
 .nav-links a {
     text-decoration: none;
     color: #000;
@@ -106,8 +106,8 @@ body, html {
     font-size: 1.5rem; 
     font-weight: 800; /* 極太 */
     text-transform: uppercase; /* 全て大文字に */
-    letter-spacing: 0.1em; /* 文字間隔を広げて高級感を出す */
-    font-style: normal; /* イタリックをやめてモダンに */
+    letter-spacing: 0.1em;
+    font-style: normal;
     position: relative;
     transition: transform 0.3s, color 0.3s;
     width: fit-content;
@@ -120,20 +120,29 @@ body, html {
 @media (min-width: 769px) {
     .nav-links a:hover {
         color: #333;
-        transform: translateX(10px); /* シンプルに右へ移動 */
-        /* シンプルかつ高級感を出すため、過度なエフェクトは削除 */
+        transform: translateX(10px);
     }
 }
 
-/* "Dig for new music" だけ特別扱い */
+/* ★修正: "Dig for new music" のストロークを元に戻す */
 .nav-links a.special-link {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 900;
-    border-bottom: 3px solid #000; /* 下線で強調 */
-    padding-bottom: 2px;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 5px;
+    text-decoration-color: #000;
+    
+    /* 白のストロークを復活 */
+    -webkit-text-stroke: 2px #fff; 
+    paint-order: stroke fill;
+    
+    /* 前回追加したborder-bottomは削除 */
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
-/* 右側のレコード盤エリア (一切変更なし) */
+/* 右側のレコード盤エリア */
 .record-wrapper {
     position: absolute;
     right: -100px; 
@@ -241,7 +250,6 @@ body, html {
 /* ==================================================
    2. 追加：Aboutパネル用スタイル (オーバーレイ)
    ================================================== */
-/* 新しいデザインに変更 */
 
 .about-bottom-panel {
     position: fixed;
@@ -299,13 +307,13 @@ body, html {
     margin: 0 auto;
 }
 
-/* ★追加: パネル内ロゴのスタイル */
+/* パネル内ロゴのスタイル */
 .about-panel-logo {
     text-align: center;
     margin-bottom: 20px;
 }
 .about-panel-logo img {
-    width: 180px; /* ロゴサイズ調整 */
+    width: 180px; 
     height: auto;
 }
 
@@ -315,8 +323,10 @@ body, html {
     font-weight: 900;
     font-size: 1.5rem;
     letter-spacing: 0.3em;
-    margin: 0 0 40px 0;
     color: #111;
+    
+    /* ★修正: マージンを詰めてタイトルと本文を近づける */
+    margin: 0 0 10px 0;
 }
 
 .about-intro {
@@ -345,10 +355,9 @@ body, html {
 
 .about-columns dl { margin: 0; }
 
-/* ★変更: プロ仕様のリストデザイン (シンプル＆モダン) */
 .about-columns dt {
     margin-bottom: 10px;
-    border-left: none; /* 縦線を削除 */
+    border-left: none; 
     padding-left: 0;
 }
 
