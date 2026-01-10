@@ -1,5 +1,23 @@
 @charset "UTF-8";
 
+/* --- index.css からの継承をリセット --- */
+
+/* 1. レコード全体にかかっている光沢を消す
+   (Aboutページではカードの「表面」だけに光沢をつけたいので、
+    大枠のwrapperについている光沢は邪魔になるため非表示にします) */
+.record-wrapper::after {
+    display: none;
+}
+
+/* 2. カーソルを変更
+   (スクラッチの「掴む(grab)」ではなく、クリックできる「指差し(pointer)」に変更) */
+.record-wrapper {
+    cursor: pointer;
+}
+.record-wrapper:active {
+    cursor: pointer;
+}
+
 /* --- Aboutページ専用: 3Dフリップアニメーション設定 --- */
 
 /* 1. 3D空間の定義 */
