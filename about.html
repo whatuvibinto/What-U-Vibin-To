@@ -12,7 +12,7 @@
 
 <div class="marquee-wrapper">
     <div class="marquee-content">
-        ABOUT THIS SITE /// WHAT U VIBIN TO? /// ABOUT THIS SITE /// WHAT U VIBIN TO? /// ABOUT THIS SITE /// WHAT U VIBIN TO? /// ABOUT THIS SITE ///
+        ABOUT THIS SITE /// WHAT U VIBIN TO? /// ABOUT THIS SITE /// WHAT U VIBIN TO? /// ABOUT THIS SITE /// WHAT U VIBIN TO? /// ABOUT THIS SITE /// WHAT U VIBIN TO? ///
     </div>
 </div>
 
@@ -37,30 +37,36 @@
         </div>
     </div>
 
-    <div class="about-bottom-panel">
+    <div class="about-bottom-panel" id="swipePanel">
+        
+        <div class="swipe-indicator"></div>
+
         <div class="about-content-inner">
+            
+            <h2 class="about-main-title">ABOUT</h2>
+
             <p class="about-intro">
                 このサイトは、気になるあの人のミュージックプレイリストを紹介します。<br>
                 ぜひ、新しい音楽との出会いを楽しんでください。
             </p>
             <p class="about-note">
-                「What u vibin to?」とは、「最近何にノってんの？」「最近どんな曲聴いてんの？」というニュアンスの口語です
+                ※「What u vibin to?」とは、「最近何にノってんの？」「最近どんな曲聴いてんの？」というニュアンスの口語です
             </p>
 
             <div class="about-columns">
                 <dl>
                     <dt>Books</dt>
                     <dd>オリジナルアートブックのアーカイブを見ることができます。<br>
-                    <span class="small-note">※準備中...軍資金がそろい次第始動します。</span></dd>
+                    <span class="small-note">※軍資金がそろい次第始動します。</span></dd>
                 </dl>
                 <dl>
                     <dt>Contact</dt>
-                    <dd>本サイトへの掲載依頼など、お問い合わせはこちらから</dd>
+                    <dd>本サイトでの掲載依頼などのお問い合わせはこちらから</dd>
                 </dl>
                 <dl>
-                    <dt>Dig for new music</dt>
-                    <dd>本サイトのメインにあたるディグページです。<br>
-                    気になるあの人のミュージックプレイリストへQRコードへ飛びます。</dd>
+                    <dt class="highlight-text">Dig for new music</dt>
+                    <dd>気になるあの人のミュージックプレイリストへQRコードへ飛びます。<br>
+                    本サイトのメインにあたるディグページです。</dd>
                 </dl>
                 <dl>
                     <dt>Events</dt>
@@ -74,6 +80,72 @@
         Developed by Lucy, Wassup bro
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const panel = document.getElementById('swipePanel');
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+
+        // タッチ開始
+        panel.addEventListener('touchstart', (e) => {
+            // パネルが一番上までスクロールされている時だけ検知する（途中からのスクロールを阻害しないため）
+            if (panel.scrollTop === 0) {
+                startY = e.touches[0].clientY;
+                isDragging = true;
+            } else {
+                isDragging = false;
+            }
+        }, { passive: true });
+
+        // タッチ移動
+        panel.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentY = e.touches[0].clientY;
+            
+            const diff = currentY - startY;
+            
+            // 下方向に引っ張っている時、少し画面を動かしてフィードバックを与える
+            if (diff > 0) {
+                // 抵抗感を出すために値を割る
+                panel.style.transform = `translateY(${diff / 3}px)`;
+            }
+        }, { passive: true });
+
+        // タッチ終了
+        panel.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            
+            const diff = currentY - startY;
+            const threshold = 80; // 戻る判定をするスワイプ距離（ピクセル）
+
+            if (diff > threshold) {
+                // しきい値を超えたらindex.htmlに戻る
+                
+                // アニメーションでパネルを下げる
+                panel.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+                panel.style.transform = 'translateY(100%)';
+                panel.style.opacity = '0';
+
+                // 少し待ってから遷移
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 300);
+            } else {
+                // しきい値を超えてなければ元の位置に戻す
+                panel.style.transition = 'transform 0.3s ease';
+                panel.style.transform = 'translateY(0)';
+                
+                // トランジションが終わったらスタイルをクリア（次の操作のため）
+                setTimeout(() => {
+                    panel.style.transition = '';
+                }, 300);
+            }
+            isDragging = false;
+        });
+    });
+</script>
 
 </body>
 </html>
