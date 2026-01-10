@@ -50,14 +50,14 @@
                 ぜひ、新しい音楽との出会いを楽しんでください。
             </p>
             <p class="about-note">
-                ※「What u vibin to?」とは、「最近何にノってんの？」「最近どんな曲聴いてんの？」というニュアンスの口語です
+                「What u vibin to?」とは、「最近何にノってんの？」「最近どんな曲聴いてんの？」というニュアンスの口語です
             </p>
 
             <div class="about-columns">
                 <dl>
                     <dt>Books</dt>
                     <dd>オリジナルアートブックのアーカイブを見ることができます。<br>
-                    <span class="small-note">※軍資金がそろい次第始動します。</span></dd>
+                    <span class="small-note">※準備中...軍資金がそろい次第始動します。</span></dd>
                 </dl>
                 <dl>
                     <dt>Contact</dt>
@@ -65,8 +65,8 @@
                 </dl>
                 <dl>
                     <dt class="highlight-text">Dig for new music</dt>
-                    <dd>気になるあの人のミュージックプレイリストへQRコードへ飛びます。<br>
-                    本サイトのメインにあたるディグページです。</dd>
+                    <dd>本サイトのメインにあたるディグページです。<br>
+                    気になるあの人のミュージックプレイリストへQRコードからお邪魔します。</dd>
                 </dl>
                 <dl>
                     <dt>Events</dt>
@@ -82,69 +82,110 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const panel = document.getElementById('swipePanel');
-        let startY = 0;
-        let currentY = 0;
-        let isDragging = false;
+document.addEventListener('DOMContentLoaded', () => {
+    const panel = document.getElementById('swipePanel');
+    const header = document.getElementById('panelHeader');
+    const content = document.getElementById('panelContent');
+    
+    // 変数定義
+    let startY = 0;
+    let currentY = 0;
+    let panelY = 0; // 現在のパネルのY座標(transform)
+    let isDragging = false;
+    
+    // 初期表示：少し待ってから下からスッと出す
+    setTimeout(() => {
+        // パネルを表示位置へ (画面下部から30%くらいの位置をデフォルトとするか、0で全表示か)
+        // ここではCSSでheight:85vhにしているので、Y=0が「出ている状態」
+        panelY = 0;
+        updatePanelPosition(0);
+    }, 100);
 
-        // タッチ開始
-        panel.addEventListener('touchstart', (e) => {
-            // パネルが一番上までスクロールされている時だけ検知する（途中からのスクロールを阻害しないため）
-            if (panel.scrollTop === 0) {
-                startY = e.touches[0].clientY;
-                isDragging = true;
-            } else {
-                isDragging = false;
-            }
-        }, { passive: true });
-
-        // タッチ移動
-        panel.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            currentY = e.touches[0].clientY;
-            
-            const diff = currentY - startY;
-            
-            // 下方向に引っ張っている時、少し画面を動かしてフィードバックを与える
-            if (diff > 0) {
-                // 抵抗感を出すために値を割る
-                panel.style.transform = `translateY(${diff / 3}px)`;
-            }
-        }, { passive: true });
-
-        // タッチ終了
-        panel.addEventListener('touchend', (e) => {
-            if (!isDragging) return;
-            
-            const diff = currentY - startY;
-            const threshold = 80; // 戻る判定をするスワイプ距離（ピクセル）
-
-            if (diff > threshold) {
-                // しきい値を超えたらindex.htmlに戻る
-                
-                // アニメーションでパネルを下げる
-                panel.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-                panel.style.transform = 'translateY(100%)';
-                panel.style.opacity = '0';
-
-                // 少し待ってから遷移
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 300);
-            } else {
-                // しきい値を超えてなければ元の位置に戻す
-                panel.style.transition = 'transform 0.3s ease';
-                panel.style.transform = 'translateY(0)';
-                
-                // トランジションが終わったらスタイルをクリア（次の操作のため）
-                setTimeout(() => {
-                    panel.style.transition = '';
-                }, 300);
-            }
+    // --- タッチ開始 (Touch Start) ---
+    panel.addEventListener('touchstart', (e) => {
+        const touchY = e.touches[0].clientY;
+        const scrollTop = content.scrollTop;
+        
+        // コンテンツのトップにいない状態で、中身を触った場合はドラッグさせない（スクロール優先）
+        // ヘッダー(header)を触った場合は常にドラッグ許可
+        const isHeader = header.contains(e.target);
+        
+        if (!isHeader && scrollTop > 0) {
             isDragging = false;
-        });
+            return;
+        }
+
+        isDragging = true;
+        startY = touchY;
+        
+        // ドラッグ中はアニメーション（遅延）を切って、指に吸い付くようにする
+        panel.classList.remove('panel-animate');
+    }, { passive: false }); // passive: false は preventDefault() を使うために必要
+
+    // --- タッチ移動 (Touch Move) ---
+    panel.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+
+        const touchY = e.touches[0].clientY;
+        const deltaY = touchY - startY; // 移動量
+        
+        // 下への移動（プラス）は制限なし（閉じる動作）
+        // 上への移動（マイナス）は、少し抵抗をつける（ゴム紐効果）
+        let newY = deltaY;
+
+        if (deltaY < 0) {
+            // 上に引っ張る時の抵抗感
+            newY = deltaY * 0.3; 
+        }
+
+        // コンテンツスクロールとの競合を防ぐ
+        // 下に引っ張ろうとしているのに、コンテンツがスクロールできる状態ならスクロールを優先させたいが…
+        // ここでは「トップにいる時」のタッチダウンで判定済みなので、そのまま動かす
+        
+        if (deltaY > 0) {
+             // 下方向のスワイプはブラウザの更新などを防ぐ
+             if(e.cancelable) e.preventDefault();
+        }
+
+        updatePanelPosition(newY);
+        currentY = newY;
+
+    }, { passive: false });
+
+    // --- タッチ終了 (Touch End) ---
+    panel.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        // アニメーションをオンに戻す（スナップ用）
+        panel.classList.add('panel-animate');
+
+        // 判定ロジック
+        const closeThreshold = 150; // これ以上下げたら閉じる
+        
+        if (currentY > closeThreshold) {
+            // --- 閉じる動作 ---
+            // 画面外まで落とす
+            updatePanelPosition(window.innerHeight);
+            
+            // index.htmlへ遷移
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300);
+            
+        } else {
+            // --- 元の位置に戻る ---
+            updatePanelPosition(0);
+            panelY = 0;
+            currentY = 0;
+        }
     });
+
+    // パネルの位置を更新する関数
+    function updatePanelPosition(y) {
+        panel.style.transform = `translateY(${y}px)`;
+    }
+});
 </script>
 
 </body>
