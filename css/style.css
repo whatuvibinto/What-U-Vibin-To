@@ -138,13 +138,18 @@ body, html {
     text-decoration-thickness: 3px;
     text-underline-offset: 5px;
     font-size: 2rem;
+    -webkit-text-stroke: 1px #fff;
+    
+    /* 2. 重要：下線の色を黒(#000)で固定する */
+    /* これを入れないと、下線もストロークの影響で白くなることがあります */
+    text-decoration-color: #000;
 }
 
 /* 3. 右側のレコード盤エリア */
 .record-wrapper {
     position: absolute;
     right: -100px; 
-    top: 50%;
+    top: 70%;
     transform: translateY(-50%);
     width: 600px;
     height: 600px;
