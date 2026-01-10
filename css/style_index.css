@@ -362,4 +362,48 @@ body, html {
     text-transform: uppercase;
     margin-bottom: 8px;
     letter-spacing: 0.5px;
-    border-
+    border-left: 4px solid #000;
+    padding-left: 12px;
+}
+
+/* ★追加: Aboutパネル内のリンクスタイル */
+.about-columns dt a {
+    text-decoration: none;
+    color: inherit; /* 元の黒色を引き継ぐ */
+    display: block; /* クリック範囲を広げる */
+    transition: opacity 0.2s;
+}
+.about-columns dt a:hover {
+    text-decoration: underline;
+    opacity: 0.7;
+}
+
+.about-columns dt.highlight-text {
+    font-family: "Arial Black", sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: -0.5px;
+}
+.about-columns dd {
+    margin: 0 0 0 16px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #333;
+}
+.small-note {
+    font-size: 0.75rem;
+    color: #777;
+    display: block;
+    margin-top: 4px;
+}
+
+/* Aboutパネルのレスポンシブ */
+@media (max-width: 768px) {
+    .about-bottom-panel {
+        height: calc(100vh - 180px); 
+    }
+    .about-columns {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+}
