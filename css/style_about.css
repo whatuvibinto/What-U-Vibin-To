@@ -1,34 +1,36 @@
 @charset "UTF-8";
+
 /* --- index.css のリセット・調整 --- */
-/* Aboutページではレコードの光沢を消してマットに見せる（文字に集中させるため） */
 .record-wrapper::after {
     display: none;
 }
-/* Aboutページではレコードをクリック・ドラッグさせない（装飾として扱う） */
+
 .record-wrapper {
     pointer-events: none;
-    /* 位置は index.css の右側配置のままでも良いですが、
-       テキストと被りすぎないよう少し位置やサイズを調整してもOKです */
-    opacity: 0.8; /* 少し存在感を薄めてテキストを目立たせる */
+    opacity: 0.8;
     transition: opacity 1s ease;
 }
+
 /* --- 下部テキストパネルのデザイン --- */
 .about-bottom-panel {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    /* 高さ: 画面下部の40%〜50%程度を占有 */
+    /* 高さ調整: 内容が多い場合に備えて少し高さを確保 */
     height: auto;
-    max-height: 50vh; 
+    max-height: 60vh; 
     
-    background: rgba(255, 255, 255, 0.95); /* ほぼ不透明な白背景 */
-    backdrop-filter: blur(10px); /* すりガラス効果でモダンに */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     border-top: 1px solid #000;
     
-    padding: 30px 5vw 60px 5vw; /* フッター(footer)と被らないよう下padding多め */
+    /* 上の角を少し丸くして「引き出せる感」を出す */
+    border-radius: 20px 20px 0 0; 
+    
+    padding: 20px 5vw 60px 5vw;
     box-sizing: border-box;
-    z-index: 50; /* ナビゲーションより手前、ロゴよりは奥(ロゴ位置による) */
+    z-index: 50;
     
     /* アニメーション初期状態 */
     opacity: 0;
@@ -36,14 +38,21 @@
     
     /* 登場アニメーション */
     animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: 0.2s; /* ページ遷移後少し待ってから出る */
+    animation-delay: 0.2s;
     
-    /* スクロール対応（画面が小さい時） */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-/* アニメーション定義: プロ仕様の滑らかなイージング */
+/* スワイプ操作を示唆するバー */
+.swipe-indicator {
+    width: 40px;
+    height: 4px;
+    background-color: #ccc;
+    border-radius: 2px;
+    margin: 0 auto 20px auto; /* 中央寄せ */
+}
+
 @keyframes slideUpFade {
     0% {
         opacity: 0;
@@ -60,6 +69,17 @@
 .about-content-inner {
     max-width: 1000px;
     margin: 0 auto;
+    text-align: left; /* 基本は左揃え */
+}
+
+/* ★追加: ABOUTタイトル */
+.about-main-title {
+    text-align: center;
+    font-family: "Arial Black", sans-serif;
+    font-size: 2rem;
+    margin: 0 0 20px 0;
+    letter-spacing: 2px;
+    color: #000;
 }
 
 .about-intro {
@@ -80,25 +100,32 @@
 /* 2カラムレイアウト（PC用） */
 .about-columns {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 2列 */
+    grid-template-columns: 1fr 1fr;
     gap: 20px 40px;
 }
 
-/* リストのデザイン */
 .about-columns dl {
     margin: 0;
 }
 
+/* 通常の項目名（太すぎない設定に変更） */
 .about-columns dt {
-    font-family: "Arial Black", sans-serif;
+    font-family: "Helvetica Neue", Arial, sans-serif; /* 普通のフォント */
+    font-weight: bold; /* 通常の太字 */
     font-size: 1.1rem;
     text-transform: uppercase;
     margin-bottom: 5px;
     letter-spacing: 1px;
-    
-    /* 左に太い線を入れてアクセント */
     border-left: 4px solid #000;
     padding-left: 10px;
+}
+
+/* ★追加: Dig for new music だけを特別に太くするクラス */
+.about-columns dt.highlight-text {
+    font-family: "Arial Black", sans-serif; /* 極太フォント */
+    font-weight: 900;
+    font-size: 1.2rem; /* 少し大きくしても良い */
+    /* 必要なら色を変えるなど追加強調も可 */
 }
 
 .about-columns dd {
@@ -115,15 +142,13 @@
     margin-top: 2px;
 }
 
-/* --- レスポンシブ対応（スマホ） --- */
+/* --- レスポンシブ対応 --- */
 @media (max-width: 768px) {
-    /* スマホではパネルを少し高くする */
     .about-bottom-panel {
-        max-height: 60vh;
-        padding: 25px 20px 50px 20px;
+        max-height: 70vh; /* スマホなら少し広く */
+        padding: 15px 20px 50px 20px;
     }
     
-    /* 1カラムにする */
     .about-columns {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -133,9 +158,8 @@
         font-size: 0.9rem;
     }
     
-    /* レコードは邪魔になるなら薄くするか消す */
     .record-wrapper {
         opacity: 0.3;
-        transform: scale(0.8) translate(50%, -50%); /* 位置調整 */
+        transform: scale(0.8) translate(50%, -50%);
     }
 }
