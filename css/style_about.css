@@ -6,7 +6,7 @@
 }
 .record-wrapper {
     pointer-events: none;
-    opacity: 0.6; /* 少し薄くしてパネルを目立たせる */
+    opacity: 1; /* 少し薄くしてパネルを目立たせる */
     transition: opacity 1s ease;
 }
 
