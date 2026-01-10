@@ -23,49 +23,73 @@
     </div>
 
     <div class="dig-content">
-        
         <div class="search-area">
-            <input type="text" class="search-input" placeholder="SEARCH WHO U LIKE...">
+            <input type="text" class="search-input" id="searchInput" placeholder="SEARCH WHO U LIKE...">
             <button class="search-btn">→</button>
         </div>
 
-        <div class="profile-list">
-
-            <div class="profile-card">
-                <div class="profile-img">
-                    <img src="https://placehold.co/200x200/333/fff?text=FACE" alt="Face">
-                </div>
-                <div class="profile-info">
-                    <h2 class="profile-name">LUCY <span class="profile-loc">/ TOKYO</span></h2>
-                    <p class="profile-genre">GENRE: <span class="tag">HIPHOP</span> <span class="tag">R&B</span></p>
-                    <div class="profile-qr">
-                        <img src="https://placehold.co/100x100/000/fff?text=QR" alt="QR Code">
-                        <span class="qr-text">SCAN TO LISTEN</span>
-                    </div>
-                </div>
+        <div class="profile-list" id="profileContainer">
             </div>
 
-            <div class="profile-card">
-                <div class="profile-img">
-                    <img src="https://placehold.co/200x200/555/fff?text=FACE" alt="Face">
-                </div>
-                <div class="profile-info">
-                    <h2 class="profile-name">MIKE <span class="profile-loc">/ NY</span></h2>
-                    <p class="profile-genre">GENRE: <span class="tag">JAZZ</span> <span class="tag">SOUL</span></p>
-                    <div class="profile-qr">
-                        <img src="https://placehold.co/100x100/000/fff?text=QR" alt="QR Code">
-                        <span class="qr-text">SCAN TO LISTEN</span>
-                    </div>
-                </div>
-            </div>
-
-            </div>
     </div>
 
     <div class="footer">
         KEEP DIGGING, KEEP VIBING.
     </div>
 </div>
+
+<script src="js/dig_data.js"></script>
+<script>
+    // データをもとにHTMLを生成するスクリプト
+    const container = document.getElementById('profileContainer');
+    
+    function renderProfiles(data) {
+        let html = '';
+        data.forEach((person, index) => {
+            // ジャンルタグを生成
+            const tags = person.genre.map(g => `<span class="tag">${g}</span>`).join('');
+            
+            // アニメーションを少しずつ遅らせる(delay)
+            const delay = index * 0.1; 
+
+            // カードのHTMLテンプレート
+            html += `
+            <div class="profile-card" style="animation-delay: ${delay}s">
+                <div class="profile-img">
+                    <img src="${person.image}" alt="${person.name}">
+                </div>
+                <div class="profile-info">
+                    <div>
+                        <h2 class="profile-name">${person.name}<span class="profile-loc">/ ${person.location}</span></h2>
+                        <p class="profile-genre">GENRE: ${tags}</p>
+                    </div>
+                    <div class="profile-qr">
+                        <img src="${person.qr}" alt="QR Code">
+                        <span class="qr-text">SCAN TO LISTEN</span>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // 初回表示
+    renderProfiles(digData);
+
+    // (オマケ) 検索機能
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        // 名前か場所に検索ワードが含まれている人だけ抽出
+        const filtered = digData.filter(person => 
+            person.name.toLowerCase().includes(term) || 
+            person.location.toLowerCase().includes(term) ||
+            person.genre.some(g => g.toLowerCase().includes(term))
+        );
+        renderProfiles(filtered);
+    });
+</script>
 
 </body>
 </html>
