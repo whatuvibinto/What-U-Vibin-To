@@ -142,7 +142,7 @@ body, html {
 .record-wrapper {
     position: absolute;
     right: -100px; 
-    top: 55%;
+    top: 50%;
     transform: translateY(-50%);
     width: 600px;
     height: 600px;
