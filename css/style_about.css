@@ -1,13 +1,12 @@
 @charset "UTF-8";
 
-/* --- index.css のリセット・調整 --- */
+/* --- index.css のリセット --- */
 .record-wrapper::after {
     display: none;
 }
-
 .record-wrapper {
     pointer-events: none;
-    opacity: 0.8;
+    opacity: 0.6; /* 少し薄くしてパネルを目立たせる */
     transition: opacity 1s ease;
 }
 
@@ -17,69 +16,77 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    /* 高さ調整: 内容が多い場合に備えて少し高さを確保 */
-    height: auto;
-    max-height: 60vh; 
+    
+    /* 初期の高さ設定（画面の85%くらいを覆う） */
+    height: 85vh; 
     
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid #000;
+    backdrop-filter: blur(15px); /* すりガラスを強めに */
+    border-top: 1px solid rgba(0,0,0,0.1);
     
-    /* 上の角を少し丸くして「引き出せる感」を出す */
-    border-radius: 20px 20px 0 0; 
+    border-radius: 24px 24px 0 0; 
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.15); /* 影をつけて浮遊感を出す */
     
-    padding: 20px 5vw 60px 5vw;
+    padding: 0; /* 内部レイアウトでパディング調整するためリセット */
     box-sizing: border-box;
     z-index: 50;
     
-    /* アニメーション初期状態 */
-    opacity: 0;
-    transform: translateY(30px);
+    /* 初期状態：画面外（下）に隠しておく */
+    transform: translateY(100%);
     
-    /* 登場アニメーション */
-    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: 0.2s;
-    
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    /* タッチ操作の最適化 */
+    touch-action: none; /* ブラウザ標準のスクロールを一旦無効化してJSで制御 */
 }
 
-/* スワイプ操作を示唆するバー */
+/* JSでクラスを付けた時だけ滑らかに動く（ドラッグ中はオフにするため） */
+.panel-animate {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- 内部構造 --- */
+
+/* ヘッダー部分（掴むエリア） */
+.panel-header {
+    width: 100%;
+    padding: 15px 0 10px 0;
+    cursor: grab;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* このエリアは絶対にドラッグ判定する */
+    touch-action: none; 
+}
+
+/* インジケーターバー */
 .swipe-indicator {
     width: 40px;
-    height: 4px;
-    background-color: #ccc;
-    border-radius: 2px;
-    margin: 0 auto 20px auto; /* 中央寄せ */
+    height: 5px;
+    background-color: #ddd;
+    border-radius: 10px;
 }
 
-@keyframes slideUpFade {
-    0% {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* コンテンツエリア（スクロール可能領域） */
+.about-scroll-container {
+    height: calc(100% - 40px); /* ヘッダー分を引く */
+    overflow-y: auto; /* 縦スクロール許可 */
+    padding: 0 20px 80px 20px; /* 下部は余白多め */
+    -webkit-overflow-scrolling: touch; /* iOS慣性スクロール */
 }
 
-/* --- コンテンツレイアウト --- */
-
+/* --- コンテンツの中身 --- */
 .about-content-inner {
-    max-width: 1000px;
+    max-width: 800px;
     margin: 0 auto;
-    text-align: left; /* 基本は左揃え */
 }
 
-/* ★追加: ABOUTタイトル */
+/* ABOUTタイトル */
 .about-main-title {
     text-align: center;
     font-family: "Arial Black", sans-serif;
     font-size: 2rem;
-    margin: 0 0 20px 0;
+    margin: 10px 0 30px 0;
     letter-spacing: 2px;
-    color: #000;
+    color: #111;
 }
 
 .about-intro {
@@ -97,40 +104,37 @@
     border-bottom: 2px solid #000;
 }
 
-/* 2カラムレイアウト（PC用） */
+/* 2カラムレイアウト */
 .about-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px 40px;
+    gap: 30px 40px;
 }
 
-.about-columns dl {
-    margin: 0;
-}
+.about-columns dl { margin: 0; }
 
-/* 通常の項目名（太すぎない設定に変更） */
 .about-columns dt {
-    font-family: "Helvetica Neue", Arial, sans-serif; /* 普通のフォント */
-    font-weight: bold; /* 通常の太字 */
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: bold;
     font-size: 1.1rem;
     text-transform: uppercase;
-    margin-bottom: 5px;
-    letter-spacing: 1px;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
     border-left: 4px solid #000;
-    padding-left: 10px;
+    padding-left: 12px;
 }
 
-/* ★追加: Dig for new music だけを特別に太くするクラス */
+/* Dig for new music 強調 */
 .about-columns dt.highlight-text {
-    font-family: "Arial Black", sans-serif; /* 極太フォント */
+    font-family: "Arial Black", sans-serif;
     font-weight: 900;
-    font-size: 1.2rem; /* 少し大きくしても良い */
-    /* 必要なら色を変えるなど追加強調も可 */
+    font-size: 1.3rem;
+    letter-spacing: -0.5px;
 }
 
 .about-columns dd {
-    margin: 0 0 0 15px;
-    font-size: 0.85rem;
+    margin: 0 0 0 16px;
+    font-size: 0.9rem;
     line-height: 1.6;
     color: #333;
 }
@@ -139,27 +143,16 @@
     font-size: 0.75rem;
     color: #777;
     display: block;
-    margin-top: 2px;
+    margin-top: 4px;
 }
 
-/* --- レスポンシブ対応 --- */
+/* --- レスポンシブ --- */
 @media (max-width: 768px) {
     .about-bottom-panel {
-        max-height: 70vh; /* スマホなら少し広く */
-        padding: 15px 20px 50px 20px;
+        height: 90vh; /* スマホならさらに高く */
     }
-    
     .about-columns {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .about-intro {
-        font-size: 0.9rem;
-    }
-    
-    .record-wrapper {
-        opacity: 0.3;
-        transform: scale(0.8) translate(50%, -50%);
+        grid-template-columns: 1fr; /* 1カラム */
+        gap: 25px;
     }
 }
