@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   1. オリジナルCSS (ご提示いただいた内容を維持)
+   1. オリジナルCSS (ご提示いただいた内容そのまま)
    ================================================== */
 
 /* 全体のリセットとベース設定 */
@@ -138,7 +138,7 @@ body, html {
     paint-order: stroke fill;
 }
 
-/* 右側のレコード盤エリア (ここはいじりません) */
+/* 右側のレコード盤エリア */
 .record-wrapper {
     position: absolute;
     right: -100px; 
@@ -224,7 +224,7 @@ body, html {
     color: #000;
 }
 
-/* レスポンシブ対応（スマホ向け） - ここもオリジナルを維持 */
+/* レスポンシブ対応（スマホ向け） */
 @media (max-width: 768px) {
     .header-logo-wrapper {
         width: 300px;
@@ -362,35 +362,4 @@ body, html {
     text-transform: uppercase;
     margin-bottom: 8px;
     letter-spacing: 0.5px;
-    border-left: 4px solid #000;
-    padding-left: 12px;
-}
-.about-columns dt.highlight-text {
-    font-family: "Arial Black", sans-serif;
-    font-weight: 900;
-    font-size: 1.3rem;
-    letter-spacing: -0.5px;
-}
-.about-columns dd {
-    margin: 0 0 0 16px;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: #333;
-}
-.small-note {
-    font-size: 0.75rem;
-    color: #777;
-    display: block;
-    margin-top: 4px;
-}
-
-/* Aboutパネルのレスポンシブ */
-@media (max-width: 768px) {
-    .about-bottom-panel {
-        height: calc(100vh - 180px); 
-    }
-    .about-columns {
-        grid-template-columns: 1fr;
-        gap: 25px;
-    }
-}
+    border-
