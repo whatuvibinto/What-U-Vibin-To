@@ -56,9 +56,9 @@ body, html {
 /* 左上のロゴ */
 .header-logo-wrapper {
     position: absolute;
-    top: 130px;
+    top: 120px;
     left: 30px;
-    width: 700px; 
+    width: 500px; 
     max-width: 80%;
     z-index: 10;
 }
@@ -92,9 +92,9 @@ body, html {
 .nav-links {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     z-index: 20; 
-    margin-top: 200px; 
+    margin-top: 250px; 
     margin-left: 5%;
 }
 
@@ -103,7 +103,7 @@ body, html {
     text-decoration: none;
     color: #000;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.5rem; 
+    font-size: 1.0rem; 
     font-weight: 800; /* 極太 */
     text-transform: uppercase; /* 全て大文字に */
     letter-spacing: 0.1em;
@@ -126,7 +126,7 @@ body, html {
 
 /* ★修正: "Dig for new music" のストロークを元に戻す */
 .nav-links a.special-link {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 900;
     text-decoration: underline;
     text-decoration-thickness: 3px;
@@ -233,7 +233,7 @@ body, html {
 /* レスポンシブ対応（スマホ向け） */
 @media (max-width: 768px) {
     .header-logo-wrapper {
-        width: 350px;
+        width: 300px;
         top: 80px;
     }
     .nav-links a {
