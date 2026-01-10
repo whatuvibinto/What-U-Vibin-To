@@ -132,4 +132,226 @@ document.addEventListener('DOMContentLoaded', () => {
             isPanelDragging = true;
             panelStartY = touchY;
             panel.classList.remove('panel-animate'); // ドラッグ中はアニメーションをオフ
-        }, { passive
+        }, { passive: false });
+
+        // タッチ移動
+        panel.addEventListener('touchmove', (e) => {
+            if (!isPanelDragging) return;
+            const touchY = e.touches[0].clientY;
+            const deltaY = touchY - panelStartY; 
+            
+            let newY = deltaY;
+            if (deltaY < 0) newY = deltaY * 0.3; // 上に引っ張る時は抵抗をつける
+            
+            // 下方向へのスワイプ（閉じる動作）の時は、ブラウザ標準のスクロール等を防ぐ
+            if (deltaY > 0 && e.cancelable) e.preventDefault();
+
+            panel.style.transform = `translateY(${newY}px)`;
+            panelCurrentY = newY;
+        }, { passive: false });
+
+        // タッチ終了
+        panel.addEventListener('touchend', () => {
+            if (!isPanelDragging) return;
+            isPanelDragging = false;
+            panel.classList.add('panel-animate'); // アニメーションをオンに戻す
+
+            // 150px以上下に引っ張ったら閉じる
+            if (panelCurrentY > 150) {
+                closeAboutPanel();
+            } else {
+                // 元の位置に戻る
+                panel.style.transform = `translateY(0px)`;
+                panelCurrentY = 0;
+            }
+        });
+
+        // パネル外（背景）をクリックしたら閉じる
+        document.addEventListener('click', (e) => {
+            if (isPanelOpen && panel) {
+                // パネル自体、または「開くボタン」以外をクリックした場合
+                if (!panel.contains(e.target) && !e.target.closest('a[onclick*="openAboutPanel"]')) {
+                    closeAboutPanel();
+                }
+            }
+        });
+    }
+
+
+    /* =================================================================
+       機能2: レコードのスクラッチ (Web Audio API)
+       ================================================================= */
+    const recordArea = document.getElementById('recordArea');
+    const recordDisk = document.getElementById('recordDisk');
+    
+    // パラメータ
+    const AUDIO_URL = 'images/scratch.mp3'; 
+    const FRICTION = 0.92;   // 摩擦（慣性）
+    const SENSITIVITY = 1.2; // 感度
+
+    // Web Audio変数
+    let audioCtx = null;
+    let audioBuffer = null;
+    let sourceNode = null;
+    let gainNode = null;
+    let isAudioUnlocked = false;
+
+    // レコード物理演算変数
+    let isRecordDragging = false;
+    let recordVelocity = 0;
+    let recordCurrentRotation = 0;
+    let recordLastMouseAngle = 0;
+    
+    // 音声ファイルのロード
+    async function loadAudio() {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            const response = await fetch(AUDIO_URL);
+            const arrayBuffer = await response.arrayBuffer();
+            audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        } catch (error) {
+            console.error("Audio Load Error:", error);
+        }
+    }
+    loadAudio();
+
+    // スマホ用ロック解除 (ユーザー操作の初回に実行)
+    function unlockAudio() {
+        if (isAudioUnlocked || !audioCtx) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const buffer = audioCtx.createBuffer(1, 1, 22050);
+        const source = audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioCtx.destination);
+        source.start(0);
+        isAudioUnlocked = true;
+    }
+
+    // 音の再生制御
+    function updateSound(currentVel) {
+        if (!audioCtx || !audioBuffer) return;
+
+        // 音が鳴ってない & 速度が出ているなら再生開始
+        if (!sourceNode && Math.abs(currentVel) > 0.1) {
+            sourceNode = audioCtx.createBufferSource();
+            sourceNode.buffer = audioBuffer;
+            sourceNode.loop = true;
+            gainNode = audioCtx.createGain();
+            sourceNode.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            sourceNode.start(0);
+        }
+
+        if (sourceNode && gainNode) {
+            // 速度に応じてピッチを変える
+            let speed = Math.abs(currentVel) * SENSITIVITY;
+            if (speed > 3.0) speed = 3.0; 
+            if (speed < 0.05) speed = 0;
+
+            const now = audioCtx.currentTime;
+            sourceNode.playbackRate.setTargetAtTime(speed, now, 0.02);
+            // 速度に応じて音量も変える
+            const volume = Math.min(speed, 1.0);
+            gainNode.gain.setTargetAtTime(volume, now, 0.02);
+        }
+    }
+
+    // 音の停止
+    function stopSound() {
+        if (sourceNode) {
+            const node = sourceNode;
+            const gain = gainNode;
+            sourceNode = null; 
+            gainNode = null;
+            if (gain && audioCtx) {
+                gain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+                setTimeout(() => { try { node.stop(); } catch(e){} }, 150);
+            }
+        }
+    }
+
+    // アニメーションループ (常に回っている監視役)
+    function animateRecord() {
+        if (!isRecordDragging) {
+            recordVelocity *= FRICTION; // 手を離したら摩擦で減速
+        }
+
+        if (Math.abs(recordVelocity) < 0.001) {
+            recordVelocity = 0;
+            stopSound();
+        } else {
+            recordCurrentRotation += recordVelocity;
+            if(recordDisk) recordDisk.style.transform = `rotate(${recordCurrentRotation}deg)`;
+            updateSound(recordVelocity);
+        }
+        requestAnimationFrame(animateRecord);
+    }
+    animateRecord();
+
+    // 座標計算用ヘルパー
+    function getCenter(el) {
+        const rect = el.getBoundingClientRect();
+        return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+    function getAngle(x, y, center) {
+        const dy = y - center.y;
+        const dx = x - center.x;
+        return Math.atan2(dy, dx) * (180 / Math.PI);
+    }
+
+    // --- レコード操作イベント ---
+    if(recordArea) {
+        function startRecordDrag(x, y) {
+            // ★重要: パネルが開いている時は、レコード操作をさせない
+            if (isPanelOpen) return;
+            
+            unlockAudio();
+            isRecordDragging = true;
+            const center = getCenter(recordArea);
+            recordLastMouseAngle = getAngle(x, y, center);
+            recordArea.style.cursor = 'grabbing';
+        }
+
+        function moveRecordDrag(x, y) {
+            if (!isRecordDragging) return;
+            const center = getCenter(recordArea);
+            const angle = getAngle(x, y, center);
+            let delta = angle - recordLastMouseAngle;
+            // 角度の補正 (-180〜180)
+            while (delta <= -180) delta += 360;
+            while (delta > 180) delta -= 360;
+            recordVelocity = delta;
+            recordLastMouseAngle = angle;
+        }
+
+        function endRecordDrag() {
+            isRecordDragging = false;
+            recordArea.style.cursor = 'grab';
+        }
+
+        // マウスイベント
+        recordArea.addEventListener('mousedown', e => startRecordDrag(e.clientX, e.clientY));
+        window.addEventListener('mousemove', e => moveRecordDrag(e.clientX, e.clientY));
+        window.addEventListener('mouseup', endRecordDrag);
+
+        // タッチイベント
+        recordArea.addEventListener('touchstart', e => {
+            if (isPanelOpen) return; 
+            startRecordDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: false });
+
+        window.addEventListener('touchmove', e => {
+            if (isRecordDragging) {
+                e.preventDefault(); // スクロール防止
+                moveRecordDrag(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: false });
+
+        window.addEventListener('touchend', endRecordDrag);
+    }
+});
+</script>
+
+</body>
+</html>
