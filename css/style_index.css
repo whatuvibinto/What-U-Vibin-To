@@ -504,3 +504,25 @@ body, html {
     opacity: 1;
     text-decoration: none;
 }
+/* ==================================================
+   ページ遷移アニメーション用クラス
+   ================================================== */
+
+/* レコードを左へ飛ばす */
+.slide-out-left {
+    transform: translateX(-150vw) rotate(-360deg) !important; /* 画面左外へ、回転しながら */
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19); /* 加速しながら消える */
+}
+
+/* ナビゲーションを右へ飛ばす */
+.slide-out-right {
+    transform: translateX(150vw) !important; /* 画面右外へ */
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+/* 本体（body）をフェードアウト（ちらつき防止） */
+.body-fade-out {
+    pointer-events: none; /* 連打防止 */
+}
