@@ -92,9 +92,9 @@ body, html {
 .nav-links {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     z-index: 20; 
-    margin-top: 250px; 
+    margin-top: 200px; 
     margin-left: 5%;
 }
 
