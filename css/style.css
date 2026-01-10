@@ -8,7 +8,8 @@ body, html {
     padding: 0;
     width: 100%;
     height: 100%;
-    background-color: #f4f4f0;
+    /* 【修正1】背景を真っ白に変更しました */
+    background-color: #ffffff;
     font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
     overflow-x: hidden;
     /* スマホでタップした時のハイライト色を透明にする */
@@ -70,7 +71,7 @@ body, html {
     width: 100%;
     height: auto;
     transform: rotate(-10deg);
-    filter: drop-shadow(15px 15px 10px rgba(0,0,0,0.5));
+    /* 【修正2】影効果（drop-shadow）を削除しました */
     transition: transform 0.3s;
 }
 
@@ -152,7 +153,6 @@ body, html {
     touch-action: none;
     border-radius: 50%;
     box-shadow: 15px 15px 30px rgba(0,0,0,0.4);
-    /* ここにあった防止コードを削除しました */
 }
 
 .record-wrapper:active {
@@ -164,7 +164,6 @@ body, html {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    /* ここにあった防止コードを削除しました */
 }
 
 /* 4. フッター */
@@ -186,7 +185,7 @@ body, html {
         top: 60px;
     }
     .nav-links a {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
     .record-wrapper {
         width: 350px;
@@ -196,7 +195,7 @@ body, html {
 
     .nav-links a:active {
         color: transparent;
-        -webkit-text-stroke: 1.5px #000;
+        -webkit-text-stroke: 1.0px #000;
         text-shadow: 3px 3px 0px #333;
         transform: scale(0.95);
         text-decoration: none;
