@@ -327,8 +327,16 @@ body, html {
     height: auto;
 }
 
+/* --- .about-main-title の部分をすべて以下に書き換え --- */
+
 .about-main-title {
-    text-align: center;
+    /* Flexboxを使って線と文字を横並び・中央揃えにする */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* 文字と線の間の余白 */
+
+    /* フォント設定（前回と同じ） */
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 800;
     font-size: 1.4rem;
@@ -336,8 +344,18 @@ body, html {
     color: #111;
     text-transform: uppercase;
     
-    /* 下の文章との余白 */
-    margin: 0 0 20px 0;
+    /* 上下の余白調整 */
+    margin: 10px 0 20px 0;
+}
+
+/* 左の線 (::before) と 右の線 (::after) を作る */
+.about-main-title::before,
+.about-main-title::after {
+    content: "";       /* 空のコンテンツを作る */
+    display: block;
+    width: 40px;       /* 線の長さ（お好みで調整可） */
+    height: 1px;       /* 線の太さ */
+    background-color: #333; /* 線の色 */
 }
 
 .about-intro {
