@@ -147,7 +147,6 @@
     display: block;
     margin-top: 4px;
 }
-
 /* --- レスポンシブ --- */
 @media (max-width: 768px) {
     .about-bottom-panel {
@@ -159,8 +158,21 @@
         gap: 25px;
     }
     
+    /* ★修正: レコードの位置を固定するための設定変更 ★ */
     .record-wrapper {
         opacity: 1;
-        transform: scale(0.8) translate(50%, -50%);
+        
+        /* transformによる配置をやめる */
+        /* transform: scale(0.8) translate(50%, -50%); */
+        transform: scale(0.8); /* サイズ縮小だけ残す */
+
+        /* 画面の右端、中央の高さに固定配置する */
+        position: fixed; 
+        right: -80px;  /* 右端からはみ出させて自然に見せる */
+        top: 50%;      /* 上下中央 */
+        margin-top: -150px; /* サイズ(scale0.8後)の半分を引いて正確な中央にする */
+        
+        /* スクロールやパネルの動きの影響を受けないようにする */
+        z-index: 1; 
     }
 }
