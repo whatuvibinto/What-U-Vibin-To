@@ -41,16 +41,12 @@
 </div>
 
 <div class="about-bottom-panel panel-animate" id="swipePanel">
-    
     <div class="panel-header" id="panelHeader">
         <div class="swipe-indicator"></div>
     </div>
-
     <div class="about-scroll-container" id="panelContent">
         <div class="about-content-inner">
-            
             <h2 class="about-main-title">ABOUT</h2>
-
             <p class="about-intro">
                 このサイトは、気になるあの人のミュージックプレイリストを紹介します。<br>
                 ぜひ、新しい音楽との出会いを楽しんでください。
@@ -58,7 +54,6 @@
             <p class="about-note">
                 ※「What u vibin to?」とは、「最近何にノってんの？」「最近どんな曲聴いてんの？」というニュアンスの口語です
             </p>
-
             <div class="about-columns">
                 <dl>
                     <dt>Books</dt>
@@ -87,22 +82,42 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-
-    /* =================================================================
-       1. Aboutパネルの制御ロジック
-       ================================================================= */
+    
+    // --- 変数定義: パネル用 ---
     const panel = document.getElementById('swipePanel');
     const panelHeader = document.getElementById('panelHeader');
     const panelContent = document.getElementById('panelContent');
     const navLinks = document.querySelector('.nav-links');
     
-    // 変数（パネル専用）
+    let isPanelOpen = false;
+    let isPanelDragging = false;
     let panelStartY = 0;
     let panelCurrentY = 0;
-    let isPanelDragging = false; 
-    let isPanelOpen = false;
 
-    // グローバル関数化（HTMLのonclickから呼ぶため）
+    // --- 変数定義: レコード用 ---
+    const recordArea = document.getElementById('recordArea');
+    const recordDisk = document.getElementById('recordDisk');
+    
+    let isRecordDragging = false;
+    let recordVelocity = 0;
+    let recordCurrentRotation = 0;
+    let recordLastMouseAngle = 0;
+
+    // --- Web Audio API 設定 ---
+    const AUDIO_URL = 'images/scratch.mp3'; 
+    const FRICTION = 0.92;
+    const SENSITIVITY = 1.2;
+    let audioCtx = null;
+    let audioBuffer = null;
+    let sourceNode = null;
+    let gainNode = null;
+    let isAudioUnlocked = false;
+
+    // =========================================================
+    // 1. Aboutパネル制御
+    // =========================================================
+
+    // グローバル関数（onclickで呼べるようにwindowに登録）
     window.openAboutPanel = function() {
         if(!panel) return;
         panel.style.transform = 'translateY(0)';
@@ -118,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { if(panelContent) panelContent.scrollTop = 0; }, 300);
     };
 
-    if(panel && panelHeader) {
+    if(panel) {
         // タッチ開始
         panel.addEventListener('touchstart', (e) => {
             const touchY = e.touches[0].clientY;
@@ -139,3 +154,4 @@ document.addEventListener('DOMContentLoaded', () => {
         panel.addEventListener('touchmove', (e) => {
             if (!isPanelDragging) return;
             const touchY = e.touches[0].clientY;
+            const deltaY = touchY - panelStartY;
