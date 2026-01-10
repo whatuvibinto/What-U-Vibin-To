@@ -8,11 +8,9 @@ body, html {
     padding: 0;
     width: 100%;
     height: 100%;
-    /* 【修正1】背景を真っ白に変更しました */
     background-color: #ffffff;
     font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
     overflow-x: hidden;
-    /* スマホでタップした時のハイライト色を透明にする */
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -55,7 +53,7 @@ body, html {
 /* 1. 左上のロゴ */
 .header-logo-wrapper {
     position: absolute;
-    top: 150px;
+    top: 100px;
     left: 30px;
     width: 600px; 
     max-width: 80%;
@@ -71,11 +69,9 @@ body, html {
     width: 100%;
     height: auto;
     transform: rotate(-10deg);
-    /* 【修正2】影効果（drop-shadow）を削除しました */
     transition: transform 0.3s;
 }
 
-/* ロゴのインタラクション */
 .header-logo-wrapper img:hover {
         transform: rotate(-12deg) scale(1.02);
 }
@@ -100,6 +96,7 @@ body, html {
     z-index: 20; 
     margin-top: 200px; 
     margin-left: 5%;
+    transition: opacity 0.3s; /* パネルオープン時に薄くするため */
 }
 
 .nav-links a {
@@ -117,7 +114,7 @@ body, html {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* --- PC向けホバーエフェクト --- */
+/* PC向けホバー */
 @media (min-width: 769px) {
     .nav-links a:hover {
         color: transparent;
@@ -132,21 +129,14 @@ body, html {
     }
 }
 
-/* "Dig for new music" の基本スタイル */
 .nav-links a.special-link {
     font-size: 2rem;
-    font-weight: 900; /* すでに設定されていますが、念のため */
-    
-    /* 下線の設定 */
+    font-weight: 900;
     text-decoration: underline;
     text-decoration-thickness: 3px;
     text-underline-offset: 5px;
     text-decoration-color: #000;
-
-    /* 文字の縁取り */
-    -webkit-text-stroke: 2px #fff; /* 多少太くしても文字が細くなりません */
-    
-    /* ★重要：ストロークを塗りの「後ろ」に描画する */
+    -webkit-text-stroke: 2px #fff; 
     paint-order: stroke fill;
 }
 
@@ -159,13 +149,14 @@ body, html {
     width: 600px;
     height: 600px;
     z-index: 5;
-    /* 回転させるのは中身のimgタグだけなので、ここは回りません */
     
     cursor: grab;
     touch-action: none;
     border-radius: 50%;
-    /* 影を濃くして浮遊感を出す */
     box-shadow: 25px 25px 50px rgba(0,0,0,0.6);
+    
+    /* パネルが開いても常にくっきり表示 */
+    opacity: 1;
 }
 
 .record-wrapper:active {
@@ -173,44 +164,39 @@ body, html {
 }
 
 .record-img {
-    display: block; /* 隙間防止 */
+    display: block; 
     width: 100%;
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    
-    /* 重要: 回転時の縁のギザギザ防止 */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     will-change: transform;
 }
 
-/* --- 【修正版】確実に光る反射レイヤー --- */
+/* レコードの光沢レイヤー */
 .record-wrapper::after {
     content: "";
-    display: block; /* 表示を強制 */
+    display: block; 
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    z-index: 10; /* 画像より手前に */
-    pointer-events: none; /* マウス操作を透過させる */
+    z-index: 10; 
+    pointer-events: none; 
 
-    /* 黒いレコードでも見えるように調整した光沢 
-       透明(transparent) と 半透明の白(rgba) を交互に配置
-    */
     background: 
         conic-gradient(
             from 40deg at 50% 50%,
             transparent 0%,
             rgba(255, 255, 255, 0.02) 15%,
-            rgba(255, 255, 255, 0.5) 20%,  /* メインの強い光 */
+            rgba(255, 255, 255, 0.5) 20%,  
             rgba(255, 255, 255, 0.02) 25%,
             transparent 30%,
             transparent 60%,
-            rgba(255, 255, 255, 0.2) 70%,  /* 反対側の弱い光 */
+            rgba(255, 255, 255, 0.2) 70%, 
             transparent 80%,
             transparent 100%
         ),
@@ -220,15 +206,10 @@ body, html {
             transparent 60%
         );
 
-    /* 【修正】mix-blend-mode を 'screen' に変更 
-       これなら黒い背景の上でも光が消えずに白く乗ります
-    */
     mix-blend-mode: screen;
-    
-    opacity: 0.9; /* 光の強さ */
+    opacity: 0.9; 
 }
 
-/* ついでに中心の穴（スピンドル）に落ちる影を追加してリアルにする */
 .record-wrapper::before {
     content: "";
     position: absolute;
@@ -243,6 +224,7 @@ body, html {
     box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8);
     pointer-events: none;
 }
+
 /* 4. フッター */
 .footer {
     position: absolute;
@@ -255,54 +237,19 @@ body, html {
     color: #000;
 }
 
-/* --- レスポンシブ対応（スマホ向け） --- */
-@media (max-width: 768px) {
-    .header-logo-wrapper {
-        width: 300px;
-        top: 60px;
-    }
-    .nav-links a {
-        font-size: 1.5rem;
-    }
-    .record-wrapper {
-        width: 350px;
-        height: 350px;
-        right: -100px;
-    }
-
-    .nav-links a:active {
-        color: transparent;
-        -webkit-text-stroke: 1.0px #000;
-        text-shadow: 3px 3px 0px #333;
-        transform: scale(0.95);
-        text-decoration: none;
-    }
-    
-    .nav-links a.special-link:active {
-        text-decoration: none;
-        color: transparent;
-        -webkit-text-stroke: 1.5px #000;
-        text-shadow: 3px 3px 0px #333;
-        transform: scale(0.95);
-    }
-}
-
 /* =========================================
    Aboutパネル用スタイル (オーバーレイ)
    ========================================= */
 
-/* パネルのデザイン */
 .about-bottom-panel {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    
-    /* 上部に200pxの隙間を空けてロゴを見せる */
+    /* 上部に200pxの隙間を空ける */
     height: calc(100vh - 200px);
     max-height: 85vh;
     
-    /* 背景とぼかし */
     background: rgba(255, 255, 255, 0.96); 
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(0,0,0,0.1);
@@ -312,20 +259,18 @@ body, html {
     
     padding: 0; 
     box-sizing: border-box;
-    z-index: 999; /* ナビやレコードより手前に */
+    z-index: 999; 
     
-    /* 初期状態：画面外（下）に隠しておく */
+    /* 初期状態：隠す */
     transform: translateY(100%);
     
     touch-action: none; 
 }
 
-/* アニメーション用クラス */
 .panel-animate {
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ヘッダー部分（ドラッグ領域） */
 .panel-header {
     width: 100%;
     padding: 15px 0 10px 0;
@@ -340,94 +285,3 @@ body, html {
     width: 40px;
     height: 5px;
     background-color: #ddd;
-    border-radius: 10px;
-}
-
-/* コンテンツエリア */
-.about-scroll-container {
-    height: calc(100% - 40px);
-    overflow-y: auto;
-    padding: 0 20px 80px 20px;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* コンテンツの中身レイアウト */
-.about-content-inner {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.about-main-title {
-    text-align: center;
-    font-family: "Arial Black", sans-serif;
-    font-size: 2rem;
-    margin: 10px 0 30px 0;
-    letter-spacing: 2px;
-    color: #111;
-}
-
-.about-intro {
-    font-size: 1rem;
-    font-weight: bold;
-    line-height: 1.8;
-    margin-bottom: 10px;
-}
-
-.about-note {
-    font-size: 0.75rem;
-    color: #666;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #000;
-}
-
-.about-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px 40px;
-}
-
-.about-columns dl { margin: 0; }
-
-.about-columns dt {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-weight: bold;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    letter-spacing: 0.5px;
-    border-left: 4px solid #000;
-    padding-left: 12px;
-}
-
-.about-columns dt.highlight-text {
-    font-family: "Arial Black", sans-serif;
-    font-weight: 900;
-    font-size: 1.3rem;
-    letter-spacing: -0.5px;
-}
-
-.about-columns dd {
-    margin: 0 0 0 16px;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: #333;
-}
-
-.small-note {
-    font-size: 0.75rem;
-    color: #777;
-    display: block;
-    margin-top: 4px;
-}
-
-/* レスポンシブ */
-@media (max-width: 768px) {
-    .about-bottom-panel {
-        height: calc(100vh - 180px); 
-    }
-    .about-columns {
-        grid-template-columns: 1fr;
-        gap: 25px;
-    }
-}
