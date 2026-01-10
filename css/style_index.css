@@ -159,76 +159,90 @@ body, html {
     width: 600px;
     height: 600px;
     z-index: 5;
+    /* 回転させるのは中身のimgタグだけなので、ここは回りません */
+    
     cursor: grab;
     touch-action: none;
     border-radius: 50%;
-    /* 影を少し調整して、より立体感を強調 */
-    box-shadow: 20px 30px 50px rgba(0,0,0,0.5);
+    /* 影を濃くして浮遊感を出す */
+    box-shadow: 25px 25px 50px rgba(0,0,0,0.6);
 }
 
-.record-wrapper {
-    cursor: grab;
-}
 .record-wrapper:active {
     cursor: grabbing;
 }
 
 .record-img {
+    display: block; /* 隙間防止 */
     width: 100%;
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    /* 回転時のちらつき防止 */
+    
+    /* 重要: 回転時の縁のギザギザ防止 */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    will-change: transform;
 }
 
-/* --- 【追加】リアルな光の反射レイヤー --- */
-/* レコードが回転しても、この光の層は回転しません */
+/* --- 【修正版】確実に光る反射レイヤー --- */
 .record-wrapper::after {
     content: "";
+    display: block; /* 表示を強制 */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    z-index: 6; /* レコード画像(.record-img)より手前に表示 */
-    
-    /* 重要: このレイヤーがマウス操作を邪魔しないようにする */
-    pointer-events: none;
+    z-index: 10; /* 画像より手前に */
+    pointer-events: none; /* マウス操作を透過させる */
 
-    /* ビニール特有の鋭い光沢（アニソトロピック反射）を再現。
-       conic-gradientで、左上(約50度方向)からの強い光の筋を描画します。
+    /* 黒いレコードでも見えるように調整した光沢 
+       透明(transparent) と 半透明の白(rgba) を交互に配置
     */
     background: 
         conic-gradient(
-            from 50deg at 50% 50%,
+            from 40deg at 50% 50%,
             transparent 0%,
-            rgba(255, 255, 255, 0.05) 10%,
-            rgba(255, 255, 255, 0.7) 15%, /* メインの鋭いハイライト */
-            rgba(255, 255, 255, 0.05) 20%,
-            transparent 25%,
-            transparent 65%,
-            rgba(255, 255, 255, 0.05) 75%,
-            rgba(255, 255, 255, 0.4) 80%, /* 反対側の弱い反射 */
-            rgba(255, 255, 255, 0.05) 85%,
+            rgba(255, 255, 255, 0.02) 15%,
+            rgba(255, 255, 255, 0.5) 20%,  /* メインの強い光 */
+            rgba(255, 255, 255, 0.02) 25%,
+            transparent 30%,
+            transparent 60%,
+            rgba(255, 255, 255, 0.2) 70%,  /* 反対側の弱い光 */
+            transparent 80%,
             transparent 100%
         ),
-        /* 全体にほんのりとした艶を追加 */
         radial-gradient(
-            circle at 30% 30%,
-            rgba(255, 255, 255, 0.15),
-            transparent 70%
+            circle at 35% 35%,
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 60%
         );
 
-    /* 下のレコード画像と自然に合成する */
-    mix-blend-mode: overlay;
+    /* 【修正】mix-blend-mode を 'screen' に変更 
+       これなら黒い背景の上でも光が消えずに白く乗ります
+    */
+    mix-blend-mode: screen;
     
-    /* 光が強すぎる場合は透明度で調整してください (0.1〜1.0) */
-    opacity: 0.8;
+    opacity: 0.9; /* 光の強さ */
 }
 
+/* ついでに中心の穴（スピンドル）に落ちる影を追加してリアルにする */
+.record-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    background: #111;
+    border-radius: 50%;
+    z-index: 11;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8);
+    pointer-events: none;
+}
 /* 4. フッター */
 .footer {
     position: absolute;
