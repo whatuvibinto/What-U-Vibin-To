@@ -5,38 +5,44 @@
     display: none; /* index用の光沢を消す */
 }
 
+/* ページ全体のスクロールを許可（巨大なレコードを表示するため） */
+body, html {
+    overflow-x: hidden; /* 横スクロールは防止 */
+    overflow-y: auto;   /* 縦スクロールは許可 */
+    height: auto;       /* 高さを固定しない */
+}
+
 /* --- Aboutページ専用: レコードの配置とサイズ --- */
 
-/* レコード盤の位置を画面中央に強制移動し、サイズを大きくする */
 .record-wrapper {
-    position: fixed; /* 絶対配置から固定配置に変更して画面全体を基準にする */
-    top: 50%;
+    /* ロゴの下に配置するために absolute を使用 */
+    position: absolute;
+    
+    /* ロゴ(top:100px + 高さ)の下あたりから開始 */
+    top: 220px; 
     left: 50%;
-    /* 右端配置の設定をリセット */
+    transform: translateX(-50%); /* 左右中央揃え */
+    
+    /* 右端配置のリセット */
     right: auto; 
-    transform: translate(-50%, -50%); /* 完全な中央寄せ */
     
-    /* サイズを大きく（画面の高さの80%くらいに） */
-    width: 80vh; 
-    height: 80vh;
-    max-width: 800px;
-    max-height: 800px;
+    /* 画面を大きくはみ出るような巨大サイズ */
+    width: 90vw; 
+    height: 90vw;
     
-    /* ロゴ(z-index:10)よりも手前に表示 */
-    z-index: 100; 
+    /* PCで見やすくなりすぎないように上限を設定（必要に応じて調整） */
+    max-width: 1000px;
+    max-height: 1000px;
     
-    cursor: pointer;
+    /* ロゴ(z-index:10)より手前にはしない（ロゴを操作できるようにするため） */
+    /* ただしテキストを読みやすくするため、背景よりは上に */
+    z-index: 5; 
+    
+    cursor: default; /* クリックで反転等の操作をしないならdefault */
+    margin-bottom: 100px; /* 下部に余白を作る */
 }
 
-/* スマホ対応 */
-@media (max-width: 768px) {
-    .record-wrapper {
-        width: 90vw;
-        height: 90vw;
-    }
-}
-
-/* --- 以下、アニメーションと裏面デザイン（前回の内容） --- */
+/* --- アニメーションと裏面デザイン --- */
 
 .record-flip-container {
     perspective: 1000px;
@@ -74,6 +80,7 @@
     transform: rotateY(0deg);
 }
 
+/* 表面の光沢設定 */
 .record-face-front::after {
     content: "";
     display: block;
@@ -101,14 +108,20 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 80px; /* 少し余白を増やす */
+    
+    /* 内部の余白 */
+    padding: 100px; 
+    
     box-sizing: border-box;
     text-align: center;
     border: 2px solid #111;
     box-shadow: inset 0 0 40px rgba(0,0,0,0.1);
-    overflow: hidden;
+    
+    /* 円からはみ出さないように */
+    overflow: hidden; 
 }
 
+/* 裏面の溝模様 */
 .record-face-back::before {
     content: "";
     position: absolute;
@@ -120,57 +133,81 @@
     z-index: -1;
 }
 
-/* テキストコンテンツ */
+/* --- テキストコンテンツ（スクロール設定） --- */
 .about-text-content {
     font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 0.9rem; /* 少し大きく */
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.8;
     z-index: 2;
     width: 100%;
-    max-height: 100%;
-    overflow-y: auto;
-    scrollbar-width: none;
+    height: 100%; /* 親要素いっぱいに広げる */
+    
+    /* ★重要：文章が長い場合にスクロールさせる設定 */
+    overflow-y: auto; 
+    
+    /* スクロールバーのデザイン（非表示にしてスッキリさせる） */
+    scrollbar-width: none; 
     -ms-overflow-style: none;
+    
+    /* 上下のパディングで読みやすく */
+    padding: 20px 0;
 }
-.about-text-content::-webkit-scrollbar { display: none; }
 
+.about-text-content::-webkit-scrollbar { 
+    display: none; 
+}
+
+/* 文章のスタイル */
 .about-intro {
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     border-bottom: 2px solid #111;
-    padding-bottom: 15px;
+    padding-bottom: 20px;
 }
 .about-note {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: #555;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     font-style: italic;
 }
 .about-list {
     text-align: left;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     width: 100%;
     margin: 0;
+    padding-bottom: 50px; /* スクロールの最後に見やすく余白 */
 }
 .about-list dt {
     font-weight: 900;
-    font-size: 1.1rem;
-    margin-top: 15px;
+    font-size: 1.2rem;
+    margin-top: 25px;
     text-transform: uppercase;
-    border-left: 4px solid #000;
-    padding-left: 8px;
+    border-left: 5px solid #000;
+    padding-left: 10px;
     line-height: 1.2;
 }
 .about-list dd {
     margin-left: 0;
-    margin-bottom: 5px;
-    padding-left: 12px;
+    margin-bottom: 10px;
+    padding-left: 15px;
     color: #333;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
-/* レスポンシブ調整 */
+/* --- スマホ対応 --- */
 @media (max-width: 768px) {
-    .record-face-back { padding: 40px; }
-    .about-intro { font-size: 0.75rem; }
+    .record-wrapper {
+        width: 95vw;
+        height: 95vw;
+        top: 180px; /* スマホだともう少し上でも良いかも */
+    }
+    .record-face-back { 
+        padding: 50px; /* スマホでは余白を減らして表示領域確保 */
+    }
+    .about-text-content {
+        font-size: 0.85rem;
+    }
+    .about-intro {
+        font-size: 0.8rem;
+    }
 }
