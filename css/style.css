@@ -144,7 +144,7 @@ body, html {
     text-decoration-color: #000;
 
     /* 文字の縁取り */
-    -webkit-text-stroke: 4px #fff; /* 多少太くしても文字が細くなりません */
+    -webkit-text-stroke: 2px #fff; /* 多少太くしても文字が細くなりません */
     
     /* ★重要：ストロークを塗りの「後ろ」に描画する */
     paint-order: stroke fill;
