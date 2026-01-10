@@ -41,138 +41,154 @@
 </div>
 
 <audio id="scratchAudio" src="images/scratch.mp3" preload="auto"></audio>
+
 <script>
-    /* --- プロ仕様 リアルスクラッチ機能 (Web Audio API + 慣性物理演算) --- */
+    /* --- スマホ完全対応 リアルスクラッチ機能 --- */
 
     const recordArea = document.getElementById('recordArea');
     const recordDisk = document.getElementById('recordDisk');
 
     // 設定
-    const AUDIO_URL = 'images/scratch.mp3'; // アップロードされたファイル名
-    const SENSITIVITY = 0.015;       // 感度（数値を変えて好みの重さに調整可）
-    const FRICTION = 0.90;           // 摩擦係数（手を離した後の止まりやすさ 0.8~0.95）
+    const AUDIO_URL = 'scratch.mp3'; 
+    const FRICTION = 0.92;           // 摩擦（慣性）
+    const SENSITIVITY = 1.2;         // スクラッチ感度
 
-    // --- Web Audio API 変数 ---
-    let audioCtx;
-    let audioBuffer;
-    let sourceNode;
-    let gainNode;
-    let isAudioLoaded = false;
-    let isPlaying = false;
-
-    // --- 物理演算用 変数 ---
+    // --- 変数 ---
+    let audioCtx = null;
+    let audioBuffer = null;
+    let sourceNode = null;
+    let gainNode = null;
+    
+    // 物理演算用
     let isDragging = false;
-    let startAngle = 0;
+    let velocity = 0;
     let currentRotation = 0;
-    let velocity = 0;           // 現在の回転速度
     let lastMouseAngle = 0;
     let lastTime = 0;
-    let rafId = null;           // アニメーションフレームID
+    let rafId = null;
+    
+    // スマホ用オーディオロック解除フラグ
+    let isAudioUnlocked = false;
 
-    // 1. 音声ファイルをロードしてデコードする
+    // 1. 音声ファイルのロード
     async function loadAudio() {
         try {
+            // AudioContextはユーザー操作の前に作っておく（状態はsuspendedになる）
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            
             const response = await fetch(AUDIO_URL);
             const arrayBuffer = await response.arrayBuffer();
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-            isAudioLoaded = true;
-            console.log("Audio Loaded!");
+            console.log("Audio Loaded. Waiting for touch...");
         } catch (error) {
             console.error("Audio Load Error:", error);
-        }
-    }
-    loadAudio(); // ページ読み込み時にロード開始
-
-    // 2. 音を鳴らす準備（ソースノード作成）
-    function createSource() {
-        if (!audioCtx || !audioBuffer) return null;
-        
-        const src = audioCtx.createBufferSource();
-        src.buffer = audioBuffer;
-        
-        // ★重要: 短い音でも途切れないようにループさせる
-        src.loop = true; 
-
-        // ゲイン（音量）ノード
-        const gain = audioCtx.createGain();
-        src.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        return { src, gain };
-    }
-
-    // 3. アニメーションループ（常に回り続ける監視役）
-    function animate() {
-        // ドラッグしていない時は、摩擦で徐々に減速させる（慣性）
-        if (!isDragging) {
-            velocity *= FRICTION;
-        }
-
-        // 速度がほぼ0なら止める（無駄な計算を防ぐ）
-        if (Math.abs(velocity) < 0.001) {
-            velocity = 0;
-            if (isPlaying && !isDragging) {
-                stopSound(); // 完全に止まったら音も止める
+            // スマホでローカルファイルを開いている場合の警告
+            if (!location.protocol.startsWith('http')) {
+                alert("注意: スマホで音を鳴らすには、Webサーバー(http/https)経由で開く必要があります。");
             }
-        } else {
-            // 速度がある場合
-            currentRotation += velocity;
-            recordDisk.style.transform = `rotate(${currentRotation}deg)`;
-            
-            // 音の更新
-            updateSound(velocity);
+        }
+    }
+    loadAudio();
+
+    // 2. ★重要: スマホのオーディオロック解除関数
+    function unlockAudio() {
+        if (isAudioUnlocked || !audioCtx) return;
+
+        // コンテキストがサスペンド状態なら再開させる
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().then(() => {
+                console.log("AudioContext Resumed");
+            });
         }
 
-        rafId = requestAnimationFrame(animate);
+        // 無音のバッファを一瞬再生して、オーディオエンジンを「暖機運転」させる
+        const buffer = audioCtx.createBuffer(1, 1, 22050);
+        const source = audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioCtx.destination);
+        source.start(0);
+
+        isAudioUnlocked = true;
+        console.log("Audio Unlocked via Touch");
     }
 
-    // 4. 音の再生・速度変更ロジック
+    // 3. 音を鳴らす・速度を変える
     function updateSound(currentVelocity) {
-        // 音が鳴っていないなら鳴らす
-        if (!isPlaying && Math.abs(currentVelocity) > 0.1) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            
-            const nodes = createSource();
-            if (nodes) {
-                sourceNode = nodes.src;
-                gainNode = nodes.gain;
-                sourceNode.start(0);
-                isPlaying = true;
-            }
+        if (!audioCtx || !audioBuffer) return;
+
+        // 音が鳴っていない、かつ速度が出ているなら再生開始
+        if (!sourceNode && Math.abs(currentVelocity) > 0.1) {
+            sourceNode = audioCtx.createBufferSource();
+            sourceNode.buffer = audioBuffer;
+            sourceNode.loop = true; // ループ再生
+
+            gainNode = audioCtx.createGain();
+            sourceNode.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            sourceNode.start(0);
         }
 
         if (sourceNode && gainNode) {
-            // 速度に応じて再生速度(ピッチ)を変える
-            // Math.absで絶対値にする（逆回転でも音を鳴らすため）
-            // ※よりリアルにするには絶対値(pitch)だけでなく再生方向制御が必要だが、
-            //   Web Audioでの逆再生は複雑なため、ピッチ変化で擬似的に表現します。
-            let rate = Math.abs(currentVelocity) * 1.5; 
+            // ピッチ（再生速度）の計算
+            let speed = Math.abs(currentVelocity) * SENSITIVITY;
             
-            // あまりに遅いとノイズになるので制限
-            if (rate < 0.05) rate = 0;
-            if (rate > 4.0) rate = 4.0; // 上限
+            // 制限
+            if (speed > 3.0) speed = 3.0; 
+            if (speed < 0.05) speed = 0;
 
-            // パラメータを滑らかに変化させる
-            sourceNode.playbackRate.setTargetAtTime(rate, audioCtx.currentTime, 0.01);
+            // 滑らかに変化させる（不快なノイズ防止）
+            const now = audioCtx.currentTime;
+            sourceNode.playbackRate.setTargetAtTime(speed, now, 0.02);
             
-            // 止まりかけは音量を絞る
-            const volume = Math.min(Math.abs(currentVelocity) / 5, 1);
-            gainNode.gain.setTargetAtTime(volume, audioCtx.currentTime, 0.01);
+            // 音量（止まりかけは小さく）
+            const volume = Math.min(speed, 1.0);
+            gainNode.gain.setTargetAtTime(volume, now, 0.02);
         }
     }
 
+    // 音を止める処理
     function stopSound() {
         if (sourceNode) {
-            try { sourceNode.stop(); } catch(e){}
-            sourceNode = null;
+            const node = sourceNode; // 参照をコピー
+            const gain = gainNode;
+            sourceNode = null; 
+            gainNode = null;
+
+            // プツッと切れないようにフェードアウトして停止
+            if (gain && audioCtx) {
+                gain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+                setTimeout(() => {
+                    try { node.stop(); } catch(e){}
+                }, 150);
+            }
         }
-        isPlaying = false;
     }
 
-    // --- 座標計算ヘルパー ---
-    function getCenter(element) {
-        const rect = element.getBoundingClientRect();
+    // 4. アニメーションループ（物理演算）
+    function animate() {
+        if (!isDragging) {
+            velocity *= FRICTION; // 摩擦で減速
+        }
+
+        // ほぼ停止したら速度0にする
+        if (Math.abs(velocity) < 0.001) {
+            velocity = 0;
+            stopSound();
+        } else {
+            currentRotation += velocity;
+            recordDisk.style.transform = `rotate(${currentRotation}deg)`;
+            updateSound(velocity);
+        }
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // --- 座標計算系 ---
+    function getCenter(el) {
+        const rect = el.getBoundingClientRect();
         return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
     }
 
@@ -182,58 +198,58 @@
         return Math.atan2(dy, dx) * (180 / Math.PI);
     }
 
-    // --- マウス/タッチ イベント ---
+    // --- イベントハンドラ ---
     
-    function startInteraction(x, y) {
+    function startDrag(x, y) {
+        // ★ここでロック解除を実行
+        unlockAudio();
+
         isDragging = true;
         const center = getCenter(recordArea);
         lastMouseAngle = getAngle(x, y, center);
         lastTime = Date.now();
-        
-        // ブラウザの自動再生制限解除のため
-        if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+        recordArea.style.cursor = 'grabbing';
     }
 
-    function moveInteraction(x, y) {
+    function moveDrag(x, y) {
         if (!isDragging) return;
-
         const center = getCenter(recordArea);
         const angle = getAngle(x, y, center);
-        
-        // 角度の差分を計算（-180 ~ 180度の範囲に補正）
+
         let delta = angle - lastMouseAngle;
+        // 角度の境界またぎ処理 (-180 <-> 180)
         while (delta <= -180) delta += 360;
         while (delta > 180) delta -= 360;
 
-        // 速度に反映（直接回転させるのではなく、velocityを与える）
-        velocity = delta;
-
+        velocity = delta; // 速度を更新
         lastMouseAngle = angle;
     }
 
-    function endInteraction() {
+    function endDrag() {
         isDragging = false;
-        // 手を離しても animate() 内で friction により徐々に止まる
+        recordArea.style.cursor = 'grab';
     }
 
-    // イベント登録
-    recordArea.addEventListener('mousedown', e => startInteraction(e.clientX, e.clientY));
-    window.addEventListener('mousemove', e => moveInteraction(e.clientX, e.clientY));
-    window.addEventListener('mouseup', endInteraction);
+    // --- イベントリスナー登録 ---
 
+    // Mouse
+    recordArea.addEventListener('mousedown', e => startDrag(e.clientX, e.clientY));
+    window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+    window.addEventListener('mouseup', endDrag);
+
+    // Touch
+    // passive: false はスクロール防止のために必須
     recordArea.addEventListener('touchstart', e => {
-        startInteraction(e.touches[0].clientX, e.touches[0].clientY);
-    }, {passive: false});
-    window.addEventListener('touchmove', e => {
-        e.preventDefault(); // スクロール防止
-        moveInteraction(e.touches[0].clientX, e.touches[0].clientY);
-    }, {passive: false});
-    window.addEventListener('touchend', endInteraction);
+        // e.preventDefault(); // 必要に応じて有効化（画面スクロールを完全に止める場合）
+        startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
 
-    // アニメーション開始
-    animate();
+    window.addEventListener('touchmove', e => {
+        e.preventDefault(); // スクラッチ中の画面スクロールを防止
+        moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
+
+    window.addEventListener('touchend', endDrag);
 
 </script>
 
