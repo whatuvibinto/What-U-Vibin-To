@@ -1,0 +1,288 @@
+@charset "UTF-8";
+
+/* --- CSS スタイル設定 --- */
+
+/* 全体のリセットとベース設定 */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    /* 【修正1】背景を真っ白に変更しました */
+    background-color: #ffffff;
+    font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+    overflow-x: hidden;
+    /* スマホでタップした時のハイライト色を透明にする */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* --- 上部の流れるテキスト (Ticker) --- */
+.marquee-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    color: #f4f4f0;
+    padding: 8px 0;
+    z-index: 100;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+.marquee-content {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+}
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* コンテナ */
+.container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* 1. 左上のロゴ */
+.header-logo-wrapper {
+    position: absolute;
+    top: 100px;
+    left: 30px;
+    width: 600px; 
+    max-width: 80%;
+    z-index: 10;
+}
+
+.header-logo-wrapper a {
+    display: block;
+    width: 100%;
+}
+
+.header-logo-wrapper img {
+    width: 100%;
+    height: auto;
+    transform: rotate(-10deg);
+    /* 【修正2】影効果（drop-shadow）を削除しました */
+    transition: transform 0.3s;
+}
+
+/* ロゴのインタラクション */
+.header-logo-wrapper img:hover {
+        transform: rotate(-12deg) scale(1.02);
+}
+.header-logo-wrapper img:active {
+        transform: rotate(-12deg) scale(0.95);
+}
+
+/* 2. メインコンテンツ */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80vh;
+    position: relative;
+}
+
+/* 左側のナビゲーションリンク */
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 20; 
+    margin-top: 200px; 
+    margin-left: 5%;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #000;
+    font-size: 1.5rem; 
+    font-style: italic;
+    font-weight: 900;
+    text-transform: capitalize;
+    position: relative;
+    transition: transform 0.1s ease-out, color 0.2s, text-shadow 0.2s;
+    width: fit-content;
+    background-color: transparent; 
+    padding: 5px 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* --- PC向けホバーエフェクト --- */
+@media (min-width: 769px) {
+    .nav-links a:hover {
+        color: transparent;
+        -webkit-text-stroke: 2px #000;
+        text-shadow: 5px 5px 0px #333;
+        transform: scale(1.05) translateX(10px);
+    }
+    .nav-links a.special-link:hover {
+        text-decoration: none;
+        -webkit-text-stroke: 2px #000;
+        text-shadow: 5px 5px 0px #333;
+    }
+}
+
+/* "Dig for new music" の基本スタイル */
+.nav-links a.special-link {
+    font-size: 2rem;
+    font-weight: 900; /* すでに設定されていますが、念のため */
+    
+    /* 下線の設定 */
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 5px;
+    text-decoration-color: #000;
+
+    /* 文字の縁取り */
+    -webkit-text-stroke: 2px #fff; /* 多少太くしても文字が細くなりません */
+    
+    /* ★重要：ストロークを塗りの「後ろ」に描画する */
+    paint-order: stroke fill;
+}
+
+/* 3. 右側のレコード盤エリア */
+.record-wrapper {
+    position: absolute;
+    right: -100px; 
+    top: 55%;
+    transform: translateY(-50%);
+    width: 600px;
+    height: 600px;
+    z-index: 5;
+    /* 回転させるのは中身のimgタグだけなので、ここは回りません */
+    
+    cursor: grab;
+    touch-action: none;
+    border-radius: 50%;
+    /* 影を濃くして浮遊感を出す */
+    box-shadow: 25px 25px 50px rgba(0,0,0,0.6);
+}
+
+.record-wrapper:active {
+    cursor: grabbing;
+}
+
+.record-img {
+    display: block; /* 隙間防止 */
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    
+    /* 重要: 回転時の縁のギザギザ防止 */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+/* --- 【修正版】確実に光る反射レイヤー --- */
+.record-wrapper::after {
+    content: "";
+    display: block; /* 表示を強制 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    z-index: 10; /* 画像より手前に */
+    pointer-events: none; /* マウス操作を透過させる */
+
+    /* 黒いレコードでも見えるように調整した光沢 
+       透明(transparent) と 半透明の白(rgba) を交互に配置
+    */
+    background: 
+        conic-gradient(
+            from 40deg at 50% 50%,
+            transparent 0%,
+            rgba(255, 255, 255, 0.02) 15%,
+            rgba(255, 255, 255, 0.5) 20%,  /* メインの強い光 */
+            rgba(255, 255, 255, 0.02) 25%,
+            transparent 30%,
+            transparent 60%,
+            rgba(255, 255, 255, 0.2) 70%,  /* 反対側の弱い光 */
+            transparent 80%,
+            transparent 100%
+        ),
+        radial-gradient(
+            circle at 35% 35%,
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 60%
+        );
+
+    /* 【修正】mix-blend-mode を 'screen' に変更 
+       これなら黒い背景の上でも光が消えずに白く乗ります
+    */
+    mix-blend-mode: screen;
+    
+    opacity: 0.9; /* 光の強さ */
+}
+
+/* ついでに中心の穴（スピンドル）に落ちる影を追加してリアルにする */
+.record-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    background: #111;
+    border-radius: 50%;
+    z-index: 11;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8);
+    pointer-events: none;
+}
+/* 4. フッター */
+.footer {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 0.5rem;
+    font-weight: bold;
+    color: #000;
+}
+
+/* --- レスポンシブ対応（スマホ向け） --- */
+@media (max-width: 768px) {
+    .header-logo-wrapper {
+        width: 300px;
+        top: 60px;
+    }
+    .nav-links a {
+        font-size: 1.5rem;
+    }
+    .record-wrapper {
+        width: 350px;
+        height: 350px;
+        right: -100px;
+    }
+
+    .nav-links a:active {
+        color: transparent;
+        -webkit-text-stroke: 1.0px #000;
+        text-shadow: 3px 3px 0px #333;
+        transform: scale(0.95);
+        text-decoration: none;
+    }
+    
+    .nav-links a.special-link:active {
+        text-decoration: none;
+        color: transparent;
+        -webkit-text-stroke: 1.5px #000;
+        text-shadow: 3px 3px 0px #333;
+        transform: scale(0.95);
+    }
+}
