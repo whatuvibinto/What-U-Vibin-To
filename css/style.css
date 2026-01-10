@@ -55,7 +55,7 @@ body, html {
 /* 1. 左上のロゴ */
 .header-logo-wrapper {
     position: absolute;
-    top: 80px;
+    top: 100px;
     left: 30px;
     width: 550px; 
     max-width: 80%;
@@ -138,7 +138,7 @@ body, html {
     text-decoration-thickness: 3px;
     text-underline-offset: 5px;
     font-size: 2rem;
-    -webkit-text-stroke: 1px #fff;
+    -webkit-text-stroke: 0.7px #fff;
     
     /* 2. 重要：下線の色を黒(#000)で固定する */
     /* これを入れないと、下線もストロークの影響で白くなることがあります */
@@ -149,7 +149,7 @@ body, html {
 .record-wrapper {
     position: absolute;
     right: -100px; 
-    top: 70%;
+    top: 60%;
     transform: translateY(-50%);
     width: 600px;
     height: 600px;
