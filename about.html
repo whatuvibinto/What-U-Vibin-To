@@ -33,43 +33,39 @@
         </nav>
 
         <div class="record-wrapper" id="recordArea">
-            <div class="record-flip-container">
-                <div class="record-flipper" id="recordFlipper">
-                    
-                    <div class="record-face record-face-front">
-                        <img src="images/record_v2.svg" alt="Vinyl Record" class="record-img">
-                        </div>
+            <img src="images/record_v2.svg" alt="Vinyl Record" class="record-img">
+        </div>
+    </div>
 
-                    <div class="record-face record-face-back">
-                        <div class="about-text-content">
-                            
-                            <div class="about-intro">
-                                このサイトは、気になるあの人の<br>ミュージックプレイリストを紹介します。<br>
-                                ぜひ、新しい音楽との出会いを楽しんでください。
-                            </div>
-                            
-                            <div class="about-note">
-                                ※「What u vibin to?」とは、「最近何にノってんの？」「最近どんな曲聴いてんの？」というニュアンスの口語です
-                            </div>
+    <div class="about-bottom-panel">
+        <div class="about-content-inner">
+            <p class="about-intro">
+                このサイトは、気になるあの人のミュージックプレイリストを紹介します。<br>
+                ぜひ、新しい音楽との出会いを楽しんでください。
+            </p>
+            <p class="about-note">
+                ※「What u vibin to?」とは、「最近何にノってんの？」「最近どんな曲聴いてんの？」というニュアンスの口語です
+            </p>
 
-                            <dl class="about-list">
-                                <dt>Books</dt>
-                                <dd>オリジナルアートブックのアーカイブを見ることができます。<br>※軍資金がそろい次第始動します。</dd>
-                                
-                                <dt>Contact</dt>
-                                <dd>本サイトでの掲載依頼などのお問い合わせはこちらから</dd>
-                                
-                                <dt>Dig for new music</dt>
-                                <dd>気になるあの人のミュージックプレイリストへQRコードから飛ぶことできます。本サイトのメインに当たるディグページです。</dd>
-                                
-                                <dt>Events</dt>
-                                <dd>イベント情報を掲載しております。さあ夜の街に繰り出そう。</dd>
-                            </dl>
-
-                        </div>
-                    </div>
-
-                </div>
+            <div class="about-columns">
+                <dl>
+                    <dt>Books</dt>
+                    <dd>オリジナルアートブックのアーカイブを見ることができます。<br>
+                    <span class="small-note">※軍資金がそろい次第始動します。</span></dd>
+                </dl>
+                <dl>
+                    <dt>Contact</dt>
+                    <dd>本サイトでの掲載依頼などのお問い合わせはこちらから</dd>
+                </dl>
+                <dl>
+                    <dt>Dig for new music</dt>
+                    <dd>気になるあの人のミュージックプレイリストへQRコードへ飛びます。<br>
+                    本サイトのメインにあたるディグページです。</dd>
+                </dl>
+                <dl>
+                    <dt>Events</dt>
+                    <dd>イベント情報を掲載しています。さあ、夜の街へ繰り出そう</dd>
+                </dl>
             </div>
         </div>
     </div>
@@ -78,24 +74,6 @@
         Developed by Lucy, Wassup bro
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const flipper = document.getElementById('recordFlipper');
-        
-        // 0.3秒後にくるっと反転させる（ページ遷移演出）
-        setTimeout(() => {
-            flipper.classList.add('is-flipped');
-        }, 300);
-    });
-
-    // ユーザーがレコードをクリックした時の動作（表裏を切り替える遊び心）
-    const recordArea = document.getElementById('recordArea');
-    recordArea.addEventListener('click', () => {
-        const flipper = document.getElementById('recordFlipper');
-        flipper.classList.toggle('is-flipped');
-    });
-</script>
 
 </body>
 </html>
