@@ -457,3 +457,50 @@ body, html {
         gap: 30px;
     }
 }
+/* ==================================================
+   Dig for new music 専用：マーカー強調エフェクト
+   ================================================== */
+
+/* 1. マーカーのベース設定 */
+.about-columns dt.highlight-text a {
+    /* 文字の基本設定（太さなど） */
+    font-size: 1.6rem;
+    font-weight: 900;
+    
+    /* マーカー線を引くための設定 */
+    /* 上半分は透明(transparent)、下半分に黄色(#fff700)を敷く */
+    background: linear-gradient(to bottom, transparent 60%, rgba(255, 247, 0, 0.8) 60%);
+    
+    /* 背景の繰り返しを防ぐ */
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    
+    /* 文字の折り返しがあっても綺麗に背景を適用させる */
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    
+    /* アニメーション（ホバー時に色が濃くなるなど） */
+    transition: background 0.3s ease, transform 0.3s ease;
+    
+    /* パディングを入れてマーカーを少し広げる */
+    padding: 0 4px;
+    margin: 0 -4px; /* パディング分を戻して位置ズレ防止 */
+}
+
+/* 2. この項目だけ、共通の「黒い下線アニメーション」を消す */
+.about-columns dt.highlight-text a::after {
+    display: none !important;
+}
+
+/* 3. ホバー時の動き（マーカーが少し太くなる） */
+.about-columns dt.highlight-text a:hover {
+    /* 黄色の領域を広げる（60% -> 40%地点から開始） */
+    background: linear-gradient(to bottom, transparent 40%, rgba(255, 247, 0, 1) 40%);
+    
+    /* 少しだけ浮き上がらせる */
+    transform: translateY(-2px);
+    
+    /* 透明度は下げない */
+    opacity: 1;
+    text-decoration: none;
+}
