@@ -5,11 +5,11 @@
     display: none;
 }
 
-/* ★修正: opacityを1にして、レコードをくっきり表示させる */
+/* レコードをくっきり表示 */
 .record-wrapper {
     pointer-events: none;
-    opacity: 1; /* ここを1に変更 */
-    transition: transform 0.5s ease; /* opacityのtransitionは削除 */
+    opacity: 1; 
+    transition: transform 0.5s ease;
 }
 
 /* --- 下部テキストパネルのデザイン --- */
@@ -19,10 +19,11 @@
     left: 0;
     width: 100%;
     
-    /* 初期の高さ設定 */
-    height: 85vh; 
+    /* ★修正: ロゴ(top:100px付近)を隠さないように、上部に200pxの隙間を空ける計算式に変更 */
+    height: calc(100vh - 200px);
+    /* 万が一のために最大高も指定 */
+    max-height: 85vh;
     
-    /* 背景色を少し濃くして、レコードと重なっても文字が読めるように調整 */
     background: rgba(255, 255, 255, 0.96); 
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(0,0,0,0.1);
@@ -34,7 +35,7 @@
     box-sizing: border-box;
     z-index: 50;
     
-    /* 初期状態：画面外（下）に隠しておく */
+    /* 初期状態 */
     transform: translateY(100%);
     
     touch-action: none; 
@@ -150,16 +151,16 @@
 /* --- レスポンシブ --- */
 @media (max-width: 768px) {
     .about-bottom-panel {
-        height: 90vh;
+        /* スマホでもロゴを隠さないように計算式を適用 */
+        height: calc(100vh - 180px); 
     }
     .about-columns {
         grid-template-columns: 1fr;
         gap: 25px;
     }
     
-    /* ★修正: スマホでもレコードを薄くせず、位置だけ調整 */
     .record-wrapper {
-        opacity: 1; /* ここも1に変更 */
+        opacity: 1;
         transform: scale(0.8) translate(50%, -50%);
     }
 }
