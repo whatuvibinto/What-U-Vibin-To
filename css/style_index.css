@@ -55,7 +55,7 @@ body, html {
 /* 1. 左上のロゴ */
 .header-logo-wrapper {
     position: absolute;
-    top: 100px;
+    top: 120px;
     left: 30px;
     width: 600px; 
     max-width: 80%;
