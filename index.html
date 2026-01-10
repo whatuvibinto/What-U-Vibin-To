@@ -41,12 +41,16 @@
 </div>
 
 <div class="about-bottom-panel panel-animate" id="swipePanel">
+    
     <div class="panel-header" id="panelHeader">
         <div class="swipe-indicator"></div>
     </div>
+
     <div class="about-scroll-container" id="panelContent">
         <div class="about-content-inner">
+            
             <h2 class="about-main-title">ABOUT</h2>
+
             <p class="about-intro">
                 このサイトは、気になるあの人のミュージックプレイリストを紹介します。<br>
                 ぜひ、新しい音楽との出会いを楽しんでください。
@@ -54,6 +58,7 @@
             <p class="about-note">
                 ※「What u vibin to?」とは、「最近何にノってんの？」「最近どんな曲聴いてんの？」というニュアンスの口語です
             </p>
+
             <div class="about-columns">
                 <dl>
                     <dt>Books</dt>
@@ -85,20 +90,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* =================================================================
        1. Aboutパネルの制御ロジック
-       (変数名を 'panel~' で統一し、レコード機能と区別)
        ================================================================= */
     const panel = document.getElementById('swipePanel');
     const panelHeader = document.getElementById('panelHeader');
     const panelContent = document.getElementById('panelContent');
     const navLinks = document.querySelector('.nav-links');
     
-    // パネル用変数
+    // 変数（パネル専用）
     let panelStartY = 0;
     let panelCurrentY = 0;
     let isPanelDragging = false; 
     let isPanelOpen = false;
 
-    // グローバル関数として登録（HTMLのonclickから呼ぶため）
+    // グローバル関数化（HTMLのonclickから呼ぶため）
     window.openAboutPanel = function() {
         if(!panel) return;
         panel.style.transform = 'translateY(0)';
@@ -114,14 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { if(panelContent) panelContent.scrollTop = 0; }, 300);
     };
 
-    // --- パネル操作イベント ---
     if(panel && panelHeader) {
+        // タッチ開始
         panel.addEventListener('touchstart', (e) => {
             const touchY = e.touches[0].clientY;
             const scrollTop = panelContent.scrollTop;
             const isHeader = panelHeader.contains(e.target);
             
-            // コンテンツの途中スクロール時はドラッグさせない
+            // コンテンツの途中をスクロール中はドラッグさせない
             if (!isHeader && scrollTop > 0) {
                 isPanelDragging = false;
                 return;
@@ -131,87 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             panel.classList.remove('panel-animate');
         }, { passive: false });
 
+        // タッチ移動
         panel.addEventListener('touchmove', (e) => {
             if (!isPanelDragging) return;
             const touchY = e.touches[0].clientY;
-            const deltaY = touchY - panelStartY; 
-            
-            let newY = deltaY;
-            if (deltaY < 0) newY = deltaY * 0.3; // 上方向への抵抗
-            
-            // 下方向スワイプ時はブラウザ更新などを防ぐ
-            if (deltaY > 0 && e.cancelable) e.preventDefault();
-
-            panel.style.transform = `translateY(${newY}px)`;
-            panelCurrentY = newY;
-        }, { passive: false });
-
-        panel.addEventListener('touchend', () => {
-            if (!isPanelDragging) return;
-            isPanelDragging = false;
-            panel.classList.add('panel-animate');
-
-            if (panelCurrentY > 150) {
-                closeAboutPanel();
-            } else {
-                panel.style.transform = `translateY(0px)`;
-                panelCurrentY = 0;
-            }
-        });
-    }
-
-    // パネル外クリックで閉じる
-    document.addEventListener('click', (e) => {
-        if (isPanelOpen && panel) {
-            // パネル内でもなく、開くボタンでもない場合
-            if (!panel.contains(e.target) && !e.target.closest('a[onclick*="openAboutPanel"]')) {
-                closeAboutPanel();
-            }
-        }
-    });
-
-
-    /* =================================================================
-       2. レコードスクラッチ機能
-       (変数名を 'record~' で統一し、パネル機能と区別)
-       ================================================================= */
-    
-    const recordArea = document.getElementById('recordArea');
-    const recordDisk = document.getElementById('recordDisk');
-    
-    // 設定
-    const AUDIO_URL = 'images/scratch.mp3'; 
-    const FRICTION = 0.92;
-    const SENSITIVITY = 1.2;
-
-    // Web Audio API
-    let audioCtx = null;
-    let audioBuffer = null;
-    let sourceNode = null;
-    let gainNode = null;
-    let isAudioUnlocked = false;
-
-    // レコード用変数
-    let isRecordDragging = false;
-    let recordVelocity = 0;
-    let recordCurrentRotation = 0;
-    let recordLastMouseAngle = 0;
-    
-    // 音声ロード
-    async function loadAudio() {
-        try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioCtx = new AudioContext();
-            const response = await fetch(AUDIO_URL);
-            const arrayBuffer = await response.arrayBuffer();
-            audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-        } catch (error) {
-            console.error("Audio Load Error:", error);
-        }
-    }
-    loadAudio();
-
-    // スマホ用ロック解除
-    function unlockAudio() {
-        if (isAudioUnlocked || !audioCtx) return;
-        if (audioCtx.
