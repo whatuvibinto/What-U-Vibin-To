@@ -94,24 +94,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // 変数定義
     let startY = 0;
     let currentY = 0;
-    let panelY = 0; // 現在のパネルのY座標(transform)
+    let panelY = 0;
     let isDragging = false;
     
-    // 初期表示：少し待ってから下からスッと出す
+    // 初期表示：アニメーションで下から出す
     setTimeout(() => {
-        // パネルを表示位置へ (画面下部から30%くらいの位置をデフォルトとするか、0で全表示か)
-        // ここではCSSでheight:85vhにしているので、Y=0が「出ている状態」
         panelY = 0;
         updatePanelPosition(0);
     }, 100);
 
-    // --- タッチ開始 (Touch Start) ---
+    // --- 共通の「閉じる」処理関数 ---
+    function closeAndRedirect() {
+        // 画面外（下）まで落とす
+        updatePanelPosition(window.innerHeight);
+        
+        // index.htmlへ遷移
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 300);
+    }
+
+    // --- ★追加: パネル外クリックで閉じる処理 ---
+    document.addEventListener('click', (e) => {
+        // クリックされた場所がパネル内部(swipePanel)に含まれていない場合
+        // かつ、ロゴリンク(header-logo-wrapper)のクリックではない場合（ロゴは自身の遷移処理があるため）
+        if (!panel.contains(e.target) && !e.target.closest('.header-logo-wrapper')) {
+            closeAndRedirect();
+        }
+    });
+
+    // --- 以下、スワイプ操作ロジック（前回と同じ） ---
+
     panel.addEventListener('touchstart', (e) => {
         const touchY = e.touches[0].clientY;
         const scrollTop = content.scrollTop;
-        
-        // コンテンツのトップにいない状態で、中身を触った場合はドラッグさせない（スクロール優先）
-        // ヘッダー(header)を触った場合は常にドラッグ許可
         const isHeader = header.contains(e.target);
         
         if (!isHeader && scrollTop > 0) {
@@ -121,71 +137,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         isDragging = true;
         startY = touchY;
-        
-        // ドラッグ中はアニメーション（遅延）を切って、指に吸い付くようにする
         panel.classList.remove('panel-animate');
-    }, { passive: false }); // passive: false は preventDefault() を使うために必要
+    }, { passive: false });
 
-    // --- タッチ移動 (Touch Move) ---
     panel.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
 
         const touchY = e.touches[0].clientY;
-        const deltaY = touchY - startY; // 移動量
+        const deltaY = touchY - startY; 
         
-        // 下への移動（プラス）は制限なし（閉じる動作）
-        // 上への移動（マイナス）は、少し抵抗をつける（ゴム紐効果）
         let newY = deltaY;
-
         if (deltaY < 0) {
-            // 上に引っ張る時の抵抗感
             newY = deltaY * 0.3; 
         }
 
-        // コンテンツスクロールとの競合を防ぐ
-        // 下に引っ張ろうとしているのに、コンテンツがスクロールできる状態ならスクロールを優先させたいが…
-        // ここでは「トップにいる時」のタッチダウンで判定済みなので、そのまま動かす
-        
-        if (deltaY > 0) {
-             // 下方向のスワイプはブラウザの更新などを防ぐ
-             if(e.cancelable) e.preventDefault();
+        if (deltaY > 0 && e.cancelable) {
+             e.preventDefault();
         }
 
         updatePanelPosition(newY);
         currentY = newY;
-
     }, { passive: false });
 
-    // --- タッチ終了 (Touch End) ---
     panel.addEventListener('touchend', () => {
         if (!isDragging) return;
         isDragging = false;
-
-        // アニメーションをオンに戻す（スナップ用）
         panel.classList.add('panel-animate');
 
-        // 判定ロジック
-        const closeThreshold = 150; // これ以上下げたら閉じる
+        const closeThreshold = 150; 
         
         if (currentY > closeThreshold) {
-            // --- 閉じる動作 ---
-            // 画面外まで落とす
-            updatePanelPosition(window.innerHeight);
-            
-            // index.htmlへ遷移
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 300);
-            
+            closeAndRedirect(); // 共通関数を使用
         } else {
-            // --- 元の位置に戻る ---
             updatePanelPosition(0);
             panelY = 0;
             currentY = 0;
         }
     });
 
-    // パネルの位置を更新する関数
     function updatePanelPosition(y) {
         panel.style.transform = `translateY(${y}px)`;
     }
