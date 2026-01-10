@@ -1,7 +1,18 @@
 @charset "UTF-8";
-
+/* --- index.css のリセット・調整 --- */
+/* Aboutページではレコードの光沢を消してマットに見せる（文字に集中させるため） */
+.record-wrapper::after {
+    display: none;
+}
+/* Aboutページではレコードをクリック・ドラッグさせない（装飾として扱う） */
+.record-wrapper {
+    pointer-events: none;
+    /* 位置は index.css の右側配置のままでも良いですが、
+       テキストと被りすぎないよう少し位置やサイズを調整してもOKです */
+    opacity: 0.8; /* 少し存在感を薄めてテキストを目立たせる */
+    transition: opacity 1s ease;
+}
 /* --- 下部テキストパネルのデザイン --- */
-
 .about-bottom-panel {
     position: fixed;
     bottom: 0;
