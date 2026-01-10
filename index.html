@@ -82,47 +82,27 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- 変数定義: パネル用 ---
+
+    /* =================================================================
+       機能1: Aboutパネルの制御
+       ================================================================= */
     const panel = document.getElementById('swipePanel');
     const panelHeader = document.getElementById('panelHeader');
     const panelContent = document.getElementById('panelContent');
     const navLinks = document.querySelector('.nav-links');
     
+    // パネルの状態管理
     let isPanelOpen = false;
     let isPanelDragging = false;
     let panelStartY = 0;
     let panelCurrentY = 0;
 
-    // --- 変数定義: レコード用 ---
-    const recordArea = document.getElementById('recordArea');
-    const recordDisk = document.getElementById('recordDisk');
-    
-    let isRecordDragging = false;
-    let recordVelocity = 0;
-    let recordCurrentRotation = 0;
-    let recordLastMouseAngle = 0;
-
-    // --- Web Audio API 設定 ---
-    const AUDIO_URL = 'images/scratch.mp3'; 
-    const FRICTION = 0.92;
-    const SENSITIVITY = 1.2;
-    let audioCtx = null;
-    let audioBuffer = null;
-    let sourceNode = null;
-    let gainNode = null;
-    let isAudioUnlocked = false;
-
-    // =========================================================
-    // 1. Aboutパネル制御
-    // =========================================================
-
-    // グローバル関数（onclickで呼べるようにwindowに登録）
+    // --- 公開関数 (HTMLのonclickから呼ぶ) ---
     window.openAboutPanel = function() {
         if(!panel) return;
         panel.style.transform = 'translateY(0)';
         isPanelOpen = true;
-        if(navLinks) navLinks.style.opacity = '0.3'; 
+        if(navLinks) navLinks.style.opacity = '0.3'; // ナビを目立たなくする
     };
 
     window.closeAboutPanel = function() {
@@ -130,28 +110,26 @@ document.addEventListener('DOMContentLoaded', () => {
         panel.style.transform = 'translateY(100%)';
         isPanelOpen = false;
         if(navLinks) navLinks.style.opacity = '1';
+        // 閉じた後にスクロール位置をリセット
         setTimeout(() => { if(panelContent) panelContent.scrollTop = 0; }, 300);
     };
 
+    // --- パネルのタッチ操作 ---
     if(panel) {
         // タッチ開始
         panel.addEventListener('touchstart', (e) => {
             const touchY = e.touches[0].clientY;
             const scrollTop = panelContent.scrollTop;
+            // ヘッダー部分を触ったか判定
             const isHeader = panelHeader.contains(e.target);
             
-            // コンテンツの途中をスクロール中はドラッグさせない
+            // 「中身」のスクロール中はパネル自体を動かさない
+            // (ヘッダーを掴んでいる時、またはスクロール位置がトップの時だけ動かす)
             if (!isHeader && scrollTop > 0) {
                 isPanelDragging = false;
                 return;
             }
             isPanelDragging = true;
             panelStartY = touchY;
-            panel.classList.remove('panel-animate');
-        }, { passive: false });
-
-        // タッチ移動
-        panel.addEventListener('touchmove', (e) => {
-            if (!isPanelDragging) return;
-            const touchY = e.touches[0].clientY;
-            const deltaY = touchY - panelStartY;
+            panel.classList.remove('panel-animate'); // ドラッグ中はアニメーションをオフ
+        }, { passive
