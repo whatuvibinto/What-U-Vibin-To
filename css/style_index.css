@@ -66,17 +66,27 @@ body, html {
     display: block;
     width: 100%;
 }
+/* 1. 通常時の傾きを変更 (-10deg → -13deg) */
 .header-logo-wrapper img {
     width: 100%;
     height: auto;
-    transform: rotate(-10deg);
+    
+    /* ★修正: -10deg から -13deg に変更 */
+    transform: rotate(-13deg);
+    
     transition: transform 0.3s;
 }
+
+/* 2. マウスを乗せた時の傾きも少し強める (-12deg → -15deg) */
 .header-logo-wrapper img:hover {
-    transform: rotate(-12deg) scale(1.02);
+    /* ★修正: -15deg に変更 */
+    transform: rotate(-15deg) scale(1.02);
 }
+
+/* 3. クリック時の傾き (-12deg → -15deg) */
 .header-logo-wrapper img:active {
-    transform: rotate(-12deg) scale(0.95);
+    /* ★修正: -15deg に変更 */
+    transform: rotate(-15deg) scale(0.95);
 }
 
 /* メインコンテンツ */
