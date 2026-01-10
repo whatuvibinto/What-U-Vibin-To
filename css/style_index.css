@@ -162,7 +162,8 @@ body, html {
     cursor: grab;
     touch-action: none;
     border-radius: 50%;
-    box-shadow: 15px 15px 30px rgba(0,0,0,0.4);
+    /* 影を少し調整して、より立体感を強調 */
+    box-shadow: 20px 30px 50px rgba(0,0,0,0.5);
 }
 
 .record-wrapper {
@@ -177,6 +178,55 @@ body, html {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+    /* 回転時のちらつき防止 */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* --- 【追加】リアルな光の反射レイヤー --- */
+/* レコードが回転しても、この光の層は回転しません */
+.record-wrapper::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    z-index: 6; /* レコード画像(.record-img)より手前に表示 */
+    
+    /* 重要: このレイヤーがマウス操作を邪魔しないようにする */
+    pointer-events: none;
+
+    /* ビニール特有の鋭い光沢（アニソトロピック反射）を再現。
+       conic-gradientで、左上(約50度方向)からの強い光の筋を描画します。
+    */
+    background: 
+        conic-gradient(
+            from 50deg at 50% 50%,
+            transparent 0%,
+            rgba(255, 255, 255, 0.05) 10%,
+            rgba(255, 255, 255, 0.7) 15%, /* メインの鋭いハイライト */
+            rgba(255, 255, 255, 0.05) 20%,
+            transparent 25%,
+            transparent 65%,
+            rgba(255, 255, 255, 0.05) 75%,
+            rgba(255, 255, 255, 0.4) 80%, /* 反対側の弱い反射 */
+            rgba(255, 255, 255, 0.05) 85%,
+            transparent 100%
+        ),
+        /* 全体にほんのりとした艶を追加 */
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 255, 255, 0.15),
+            transparent 70%
+        );
+
+    /* 下のレコード画像と自然に合成する */
+    mix-blend-mode: overlay;
+    
+    /* 光が強すぎる場合は透明度で調整してください (0.1〜1.0) */
+    opacity: 0.8;
 }
 
 /* 4. フッター */
