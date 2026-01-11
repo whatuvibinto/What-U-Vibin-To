@@ -101,7 +101,7 @@
 }
 
 .genre-label {
-    font-size: 0.7rem; /* ラベルも小さめに */
+    font-size: 0.7rem; 
     font-weight: bold;
     color: #999;
     margin-bottom: 8px;
@@ -112,7 +112,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px; /* 間隔を狭める */
+    gap: 8px; 
 }
 
 .genre-tag {
@@ -124,13 +124,13 @@
     display: none;
 }
 
-/* ★修正: タグボタンを小さくスタイリッシュに */
+/* 通常のタグボタンスタイル（小さめ） */
 .genre-name {
     display: inline-block;
-    padding: 4px 10px; /* パディング縮小 */
+    padding: 4px 10px;
     border: 1px solid #ddd;
-    border-radius: 4px; /* 丸みを減らしてシャープに */
-    font-size: 0.75rem; /* 文字サイズ縮小 */
+    border-radius: 4px;
+    font-size: 0.75rem; /* 小さめ */
     font-weight: bold;
     color: #666;
     background: #fff;
@@ -143,28 +143,30 @@
     color: #000;
 }
 
-/* チェックされた時のスタイル */
+/* チェックされた時のスタイル (通常) */
 .genre-tag input[type="checkbox"]:checked + .genre-name {
     background: #000;
     color: #fff;
     border-color: #000;
 }
 
-/* ★追加: DJ MIX専用の特別スタイル */
+
+/* ★追加・復活: DJ MIX (special-tag) のスタイル */
+/* 選択ロジック（白黒）は統一しつつ、サイズ感と枠線を強調 */
 .genre-tag.special-tag .genre-name {
-    border: 1px solid #000;
-    background: #000;
-    color: #fff;
-    /* 少し目立たせる */
-    font-size: 0.8rem; 
-    padding: 5px 12px;
+    border: 2px solid #000; /* 太い枠線 */
+    font-size: 0.85rem;     /* 通常より少し大きく */
+    padding: 5px 15px;      /* 横幅広め */
+    color: #000;            /* 文字は黒 */
 }
 
-/* DJ MIXがチェックされた時（反転させるか、そのままかはお好み。今回は反転） */
+/* DJ MIXがチェックされた時のスタイル（色は他と同じ黒背景・白文字） */
 .genre-tag.special-tag input[type="checkbox"]:checked + .genre-name {
-    background: #fff;
-    color: #000;
+    background: #000;
+    color: #fff;
+    border-color: #000;
 }
+
 
 .filter-reset-btn {
     margin-top: 15px;
@@ -196,7 +198,7 @@
     cursor: pointer;
     opacity: 0;
     animation: fadeInUpCard 0.6s ease-out forwards;
-    position: relative; /* バッジ配置用 */
+    position: relative; 
 }
 
 .profile-card:hover {
@@ -209,7 +211,7 @@
     aspect-ratio: 1 / 1; 
     overflow: hidden;
     background: #f0f0f0;
-    position: relative; /* バッジ配置用 */
+    position: relative; 
 }
 
 .profile-img img {
@@ -223,12 +225,12 @@
     transform: scale(1.05);
 }
 
-/* ★追加: 役職(Role)バッジのスタイル */
+/* 役職(Role)バッジ */
 .role-badge {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: #000; /* 黒背景 */
+    background: #000;
     color: #fff;
     font-size: 0.65rem;
     font-weight: 900;
