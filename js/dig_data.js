@@ -4,50 +4,27 @@
 const digData = [
     {
         name: "LUCY",
-        role: "DJ", 
-        date: "2023-12-01",
+        role: "", 
+        date: "2026-01-10",
         location: "TOKYO",
-        genre: ["DJ MIX", "HIPHOP", "R&B"], 
-        image: "images/profile_lucy.png", 
-        qr: "images/qr_lucy.png",
-        serviceIcon: "images/logo_spotify.png",
-        qrLink: "https://open.spotify.com/playlist/xxxxxx",
+        genre: ["HIPHOP","R&B","DUB"], 
+        image: "images/Lucy/lucy.png", 
+        qr: "images/Lucy/lucy_qr.png",
+        serviceIcon: "images/spotify_logo.png",
+        qrLink: "Friends/Lucy.html",
         instagram: "yng.r" // ★追加: インスタID
     },
     {
-        name: "MIKE",
-        role: "SELECTOR",
-        date: "2023-11-20",
-        location: "NEW YORK",
-        genre: ["JAZZ", "SOUL"],
-        image: "images/profile_mike.png",
-        qr: "images/qr_mike.png",
-        serviceIcon: "images/logo_applemusic.png",
-        qrLink: "https://music.apple.com/jp/playlist/xxxxxx",
-        instagram: "mike_soul_ny" // ★追加
-    },
-    {
-        name: "KIE",
+        name: "Hiraku Tajima",
         role: "DJ",
-        date: "2024-01-15",
-        location: "BERLIN",
-        genre: ["DJ MIX", "TECHNO", "HOUSE"],
-        image: "images/profile_kie.png",
-        qr: "images/qr_kie.png",
-        serviceIcon: "images/logo_spotify.png",
-        qrLink: "#",
-        instagram: "kie_berlin_techno" // ★追加
+        date: "2026-01-11",
+        location: "SOMEWHERE IN JAPAN",
+        genre: ["JAZZ", "SOUL"],
+        image: "images/Hiraku tajima/Hiraku Tajima.png",
+        qr: "images/HIraku Tajima/Hiraku Tajima.png",
+        serviceIcon: "images/Applemusic_logo.png",
+        qrLink: "https://music.apple.com/jp/playlist/xxxxxx",
+        instagram: "udoneatbeat" // ★追加
     },
-    {
-        name: "SATO",
-        role: "ARTIST",
-        date: "2023-10-05",
-        location: "OSAKA",
-        genre: ["REGGAE"],
-        image: "images/profile_sato.png",
-        qr: "images/qr_sato.png",
-        serviceIcon: "images/logo_soundcloud.png",
-        qrLink: "#",
-        instagram: "sato_roots_reggae" // ★追加
-    },
+   
 ];
