@@ -35,6 +35,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
+    
+    /* ベースの位置指定 */
     transform: translate(-50%, -50%);
     
     width: 100%;
@@ -42,12 +44,22 @@
     padding: 0 20px;
     box-sizing: border-box;
     
-    animation: fadeInUp 1s ease-out 0.3s backwards;
+    /* ★修正: 中央揃えを含んだ新しいアニメーションに変更 */
+    animation: fadeInUpCentered 1s ease-out 0.3s backwards;
 }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* ★修正: 中央配置(-50%, -50%)を維持したまま動かすアニメーション */
+@keyframes fadeInUpCentered {
+    from { 
+        opacity: 0; 
+        /* 中央配置 + 少し下(20px)からスタート */
+        transform: translate(-50%, -50%) translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        /* 中央配置 + 元の位置(0px)へ */
+        transform: translate(-50%, -50%) translateY(0); 
+    }
 }
 
 /* --- 4. メッセージスタイル --- */
