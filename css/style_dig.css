@@ -360,24 +360,29 @@
 .qr-modal-overlay.active .qr-modal-content.art-layout {
     transform: scale(1);
 }
-
 .qr-modal-close {
     position: absolute;
     top: 0;
     right: 0;
     width: 60px;
     height: 60px;
-    background: #000;
+    
+    /* ★変更点1: 背景を透明にする */
+    background: transparent; 
+    
     border: none;
     cursor: pointer;
     z-index: 100;
-    transition: background 0.3s;
+    transition: transform 0.3s; /* 背景色変更の代わりに回転などの動きに */
 }
 
+/* ホバー時の挙動も変更（背景色を変えない） */
 .qr-modal-close:hover {
-    background: #333;
+    background: transparent;
+    transform: rotate(90deg); /* ホバー時にくるっと回すとおしゃれです */
 }
 
+/* ★変更点2: バツ印の色を黒にする（白背景の上で見えるように） */
 .qr-modal-close::before,
 .qr-modal-close::after {
     content: '';
@@ -386,15 +391,9 @@
     left: 50%;
     width: 30px; 
     height: 2px;
-    background-color: #fff;
-}
-
-.qr-modal-close::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.qr-modal-close::after {
-    transform: translate(-50%, -50%) rotate(-45deg);
+    
+    /* 白(#fff)から黒(#000)に変更 */
+    background-color: #000; 
 }
 
 .close-line { display: none; }
