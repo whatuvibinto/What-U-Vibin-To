@@ -24,7 +24,7 @@
     <div class="main-content">
         <nav class="nav-links" id="navLinks"> 
             <a href="#" onclick="openAboutPanel(); return false;">About</a>
-            <a href="books.html">Books</a>
+            <a href="books.html" id="booksLink">Books</a>
             <a href="contact.html" id="contactLink">Contact</a>
             <a href="dig.html" class="special-link" id="digLink">Dig for new music</a>
             <a href="event.html">Events</a>
@@ -200,37 +200,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* =================================================================
-       機能3: ページ遷移アニメーション (Dig & Contact)
+       機能3: ページ遷移アニメーション (Dig & Contact & Books)
        ================================================================= */
     const digLink = document.getElementById('digLink');
-    const contactLink = document.getElementById('contactLink'); // ★追加
+    const contactLink = document.getElementById('contactLink');
+    const booksLink = document.getElementById('booksLink'); // ★追加
+    
     const navLinksContainer = document.getElementById('navLinks');
     const recordWrapper = document.getElementById('recordArea');
 
-    // ★修正: 共通のアニメーション遷移関数を作成
     function handlePageTransition(e) {
-        e.preventDefault(); // 即座の移動をキャンセル
-        const targetUrl = e.currentTarget.href; // クリックされたリンクのURLを取得
+        e.preventDefault(); 
+        const targetUrl = e.currentTarget.href; 
 
-        // 1. アニメーションクラスを付与
         if(recordWrapper) recordWrapper.classList.add('slide-out-left');
         if(navLinksContainer) navLinksContainer.classList.add('slide-out-right');
 
-        // 2. アニメーション終了後にページ移動 (0.8秒後)
         setTimeout(() => {
             window.location.href = targetUrl;
         }, 800);
     }
 
-    // Digリンクにイベント登録
-    if (digLink) {
-        digLink.addEventListener('click', handlePageTransition);
-    }
-    
-    // ★追加: Contactリンクにもイベント登録
-    if (contactLink) {
-        contactLink.addEventListener('click', handlePageTransition);
-    }
+    // イベント登録
+    if (digLink) digLink.addEventListener('click', handlePageTransition);
+    if (contactLink) contactLink.addEventListener('click', handlePageTransition);
+    // ★追加
+    if (booksLink) booksLink.addEventListener('click', handlePageTransition);
 
     // ブラウザバックで戻ってきた時にアニメーション状態をリセットする処理
     window.addEventListener('pageshow', (event) => {
