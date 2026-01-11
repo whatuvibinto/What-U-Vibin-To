@@ -310,7 +310,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* 少し薄くしてアート感を出す */
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(10px);
     z-index: 2000;
     display: flex;
@@ -326,18 +326,18 @@
     visibility: visible;
 }
 
-/* モーダル本体: アシンメトリーなレイアウト */
+/* モーダル本体 */
 .qr-modal-content.art-layout {
-    display: flex; /* 横並び */
+    display: flex;
     width: 900px;
     max-width: 90%;
-    height: 500px; /* 高さを固定してプロポーションを保つ */
+    height: 500px;
     background: #fff;
-    border-radius: 0; /* 角丸なし（シャープに） */
+    border-radius: 0;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     overflow: hidden;
     position: relative;
-    padding: 0; /* パディングリセット */
+    padding: 0;
     transform: scale(0.95);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -346,7 +346,7 @@
     transform: scale(1);
 }
 
-/* 閉じるボタン (独自デザイン) */
+/* ★修正: 閉じるボタン (綺麗な×印) */
 .qr-modal-close {
     position: absolute;
     top: 0;
@@ -357,29 +357,40 @@
     border: none;
     cursor: pointer;
     z-index: 100;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
     transition: background 0.3s;
+    /* flexなどは削除 */
 }
 .qr-modal-close:hover {
     background: #333;
 }
+
+/* CSSで×印を作る */
+.qr-modal-close::before,
+.qr-modal-close::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px; /* 線の長さ */
+    height: 2px; /* 線の太さ */
+    background-color: #fff;
+}
+
+.qr-modal-close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.qr-modal-close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* HTML内の古いspan要素は非表示にする */
 .close-line {
-    display: block;
-    width: 20px;
-    height: 2px;
-    background: #fff;
-    transform: rotate(45deg);
-}
-.close-line:last-child {
-    transform: rotate(-45deg) translate(-5px, -6px); /* 簡易的なX印 */
+    display: none;
 }
 
 
-/* 左側：写真エリア (40%幅) */
+/* 左側：写真エリア */
 .art-image-section {
     flex: 0 0 40%;
     position: relative;
@@ -391,7 +402,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    opacity: 0.95; /* 少し雰囲気を出す */
+    opacity: 0.95;
 }
 
 /* 写真上のRoleバッジ */
@@ -409,24 +420,24 @@
 }
 
 
-/* 右側：情報エリア (60%幅) */
+/* 右側：情報エリア */
 .art-info-section {
     flex: 1;
     padding: 50px 60px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* 上下に要素を分ける */
+    justify-content: space-between;
     position: relative;
 }
 
 /* 上部情報 */
 .art-name {
-    font-size: 3.5rem; /* 巨大な文字 */
+    font-size: 3.5rem;
     font-weight: 900;
     line-height: 0.9;
     margin: 0 0 20px 0;
     text-transform: uppercase;
-    letter-spacing: -2px; /* 詰め気味でモダンに */
+    letter-spacing: -2px;
 }
 
 .art-meta-row {
@@ -452,7 +463,7 @@
     color: #666;
 }
 
-/* インスタリンク (テキストのみ、矢印付き) */
+/* インスタリンク */
 .art-insta-link {
     text-decoration: none;
     font-size: 1rem;
@@ -481,7 +492,7 @@
 /* 下部情報 (QR) */
 .art-info-footer {
     display: flex;
-    align-items: flex-end; /* 下揃え */
+    align-items: flex-end;
     justify-content: space-between;
     border-top: 1px solid #eee;
     padding-top: 20px;
@@ -490,7 +501,7 @@
 .art-qr-container img {
     width: 100px;
     height: 100px;
-    mix-blend-mode: multiply; /* 背景に馴染ませる */
+    mix-blend-mode: multiply;
 }
 
 .art-scan-text {
@@ -498,15 +509,15 @@
     font-weight: 900;
     color: #ccc;
     letter-spacing: 2px;
-    writing-mode: vertical-rl; /* 縦書きでおしゃれに */
-    transform: rotate(180deg); /* 向き調整 */
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
     margin: 0;
 }
 
 /* --- モーダルのレスポンシブ (スマホ対応) --- */
 @media (max-width: 768px) {
     .qr-modal-content.art-layout {
-        flex-direction: column; /* 縦並び */
+        flex-direction: column;
         height: auto;
         max-height: 85vh;
         overflow-y: auto;
@@ -514,7 +525,7 @@
     }
 
     .art-image-section {
-        height: 250px; /* 画像の高さを制限 */
+        height: 250px;
         flex: none;
     }
 
@@ -529,13 +540,13 @@
     }
     
     .art-info-footer {
-        flex-direction: row-reverse; /* QRを右に、テキストを左に */
+        flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
     }
     
     .art-scan-text {
-        writing-mode: horizontal-tb; /* 横書きに戻す */
+        writing-mode: horizontal-tb;
         transform: none;
     }
 }
