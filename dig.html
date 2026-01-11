@@ -31,14 +31,12 @@
             
             <div class="genre-filter-area">
                 <div class="genre-label">FILTER BY GENRE:</div>
-                <div class="genre-checkboxes" id="genreCheckboxes">
-                    </div>
+                <div class="genre-checkboxes" id="genreCheckboxes"></div>
                 <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET (ALL)</button>
             </div>
         </div>
 
-        <div class="profile-list" id="profileContainer">
-            </div>
+        <div class="profile-list" id="profileContainer"></div>
     </div>
 
     <div class="footer">
@@ -58,8 +56,10 @@
                 <img src="" alt="Profile Photo" class="qr-modal-photo" id="modalPhoto">
             </div>
             <div class="qr-modal-code-area">
-                <img src="" alt="QR Code" class="qr-modal-qr" id="modalQr">
-                <p class="qr-instruction">Scan to listen</p>
+                <a id="modalQrLink" href="#" target="_blank" rel="noopener noreferrer">
+                    <img src="" alt="QR Code" class="qr-modal-qr" id="modalQr">
+                </a>
+                <p class="qr-instruction">Tap QR code to listen</p>
             </div>
         </div>
     </div>
@@ -74,6 +74,8 @@
     const modalGenre = document.getElementById('modalGenre');
     const modalPhoto = document.getElementById('modalPhoto');
     const modalQr = document.getElementById('modalQr');
+    // ★追加: リンク要素を取得
+    const modalQrLink = document.getElementById('modalQrLink');
 
     const searchInput = document.getElementById('searchInput');
     const genreContainer = document.getElementById('genreCheckboxes');
@@ -83,8 +85,7 @@
     let selectedGenres = []; 
 
     function init() {
-        // ★追加: データの日付(date)を見て、新しい順(降順)に並び替える
-        // 日付が未記入のデータがある場合は一番後ろになります
+        // 更新日順にソート
         digData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 
         generateGenreCheckboxes();
@@ -92,9 +93,7 @@
     }
 
     function generateGenreCheckboxes() {
-        // 全ジャンル抽出
         let allGenres = [...new Set(digData.flatMap(person => person.genre))].sort();
-
         const mixTag = "DJ MIX";
         if (allGenres.includes(mixTag)) {
             allGenres = allGenres.filter(g => g !== mixTag); 
@@ -104,7 +103,6 @@
         let html = '';
         allGenres.forEach(genre => {
             const specialClass = (genre === mixTag) ? 'special-tag' : '';
-
             html += `
                 <label class="genre-tag ${specialClass}">
                     <input type="checkbox" value="${genre}" onchange="handleGenreChange(this)">
@@ -129,10 +127,14 @@
 
             const role = person.role || "";
             const roleBadge = role ? `<span class="role-badge">${role}</span>` : "";
+            
+            // リンク先がない場合の安全策 (#)
+            const linkUrl = person.qrLink || "#";
 
+            // ★修正: onclickに linkUrl を渡す
             html += `
             <div class="profile-card" style="animation-delay: ${delay}s" 
-                 onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}')">
+                 onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}')">
                 
                 <div class="profile-img">
                     <img src="${person.image}" alt="${person.name}">
@@ -204,11 +206,16 @@
         applyFilters();
     });
 
-    window.openQrModal = function(name, genre, imageSrc, qrSrc) {
+    // ★修正: 引数に linkUrl を追加して受け取る
+    window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl) {
         modalName.textContent = name;
         modalGenre.textContent = genre;
         modalPhoto.src = imageSrc;
         modalQr.src = qrSrc;
+        
+        // ★追加: リンク先をセット
+        modalQrLink.href = linkUrl;
+
         modal.classList.add('active');
     };
 
