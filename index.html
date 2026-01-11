@@ -27,7 +27,7 @@
             <a href="books.html" id="booksLink">Books</a>
             <a href="contact.html" id="contactLink">Contact</a>
             <a href="dig.html" class="special-link" id="digLink">Dig for new music</a>
-            <a href="event.html">Events</a>
+            <a href="event.html" id="eventsLink">Events</a>
         </nav>
 
         <div class="record-wrapper" id="recordArea">
@@ -200,11 +200,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* =================================================================
-       機能3: ページ遷移アニメーション (Dig & Contact & Books)
+       機能3: ページ遷移アニメーション (Dig & Contact & Books & Events)
        ================================================================= */
     const digLink = document.getElementById('digLink');
     const contactLink = document.getElementById('contactLink');
-    const booksLink = document.getElementById('booksLink'); // ★追加
+    const booksLink = document.getElementById('booksLink');
+    const eventsLink = document.getElementById('eventsLink'); // ★追加
     
     const navLinksContainer = document.getElementById('navLinks');
     const recordWrapper = document.getElementById('recordArea');
@@ -224,8 +225,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // イベント登録
     if (digLink) digLink.addEventListener('click', handlePageTransition);
     if (contactLink) contactLink.addEventListener('click', handlePageTransition);
-    // ★追加
     if (booksLink) booksLink.addEventListener('click', handlePageTransition);
+    // ★追加
+    if (eventsLink) eventsLink.addEventListener('click', handlePageTransition);
 
     // ブラウザバックで戻ってきた時にアニメーション状態をリセットする処理
     window.addEventListener('pageshow', (event) => {
