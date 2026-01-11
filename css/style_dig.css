@@ -4,25 +4,22 @@
    Dig Page Specific Styles (修正版)
    ================================================== */
 
-/* --- 1. ページ全体の調整 (index.htmlと統一) --- */
+/* --- 1. ページ全体 --- */
 .dig-page {
-    /* 背景色をindex.htmlと同じ白(#ffffff)に */
     background-color: #ffffff; 
     overflow-x: hidden;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* --- 2. ロゴの位置調整 (index.htmlと完全に同じ位置に固定) --- */
+/* --- 2. ロゴの位置調整 --- */
 .dig-logo {
-    position: absolute; /* absoluteに戻す */
-    top: 120px;         /* index.htmlと同じ高さ */
-    left: 30px;         /* index.htmlと同じ左位置 */
-    margin: 0;          /* 余白リセット */
+    position: absolute;
+    top: 120px;
+    left: 30px;
+    margin: 0;
     width: 500px;
     max-width: 80%;
     z-index: 10;
-    
-    /* アニメーション：ふわっと表示 */
     animation: fadeInDown 0.8s ease-out;
 }
 
@@ -31,11 +28,12 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 3. メインコンテンツエリア --- */
+/* --- 3. メインコンテンツエリア (被り解消) --- */
 .dig-content {
-    /* ロゴと被らないように上余白を確保 */
-    padding-top: 250px; 
-    max-width: 1000px; /* 横幅を少し広げて3列表示しやすくする */
+    /* ロゴと被らないように上余白を大幅に確保 */
+    padding-top: 400px; 
+    
+    max-width: 1000px;
     margin: 0 auto;
     padding-bottom: 100px;
     padding-left: 20px;
@@ -50,101 +48,88 @@
 }
 
 
-/* --- 4. 検索バー (シンプル・クリーンに修正) --- */
+/* --- 4. 検索バー (中央配置・SEARCHボタン) --- */
 .search-area {
-    position: relative;
-    margin-bottom: 60px;
+    margin-bottom: 80px;
+    text-align: center; /* 中央寄せ */
+    width: 100%;
+}
+
+.search-box {
+    display: inline-flex; /* 入力欄とボタンを横並び */
+    width: 100%;
     max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    height: 50px;
+    border: 2px solid #000;
+    background: #fff;
+    box-sizing: border-box;
 }
 
 .search-input {
-    width: 100%;
-    /* シンプルな枠線に変更 */
-    border: 1px solid #ccc;
-    border-radius: 4px; /* 角を少し丸める */
-    background: #fff;
-    
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    flex-grow: 1; /* 残りの幅を埋める */
+    border: none;
+    background: transparent;
+    padding: 0 15px;
     font-size: 1rem;
-    font-weight: normal;
-    font-style: normal;
-    
-    padding: 12px 15px;
+    color: #000;
     outline: none;
-    color: #333;
-    /* テキスト変換なし（大文字強制をやめる） */
-    text-transform: none;
-    transition: border-color 0.3s;
-}
-
-.search-input:focus {
-    border-color: #000; /* フォーカス時に黒枠に */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .search-input::placeholder {
-    color: #999;
-    font-size: 0.9rem;
+    color: #aaa;
+    letter-spacing: 1px;
 }
 
-/* 検索ボタン（アイコン的に配置） */
+/* SEARCHボタン */
 .search-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
+    background: #000;
+    color: #fff;
     border: none;
-    font-size: 1.2rem;
+    padding: 0 25px;
+    font-size: 1rem;
+    font-weight: 800;
     cursor: pointer;
-    color: #999;
-    transition: color 0.2s;
+    letter-spacing: 1px;
+    transition: background 0.3s, color 0.3s;
 }
+
 .search-btn:hover {
-    color: #000;
+    background: #333;
 }
 
 
-/* --- 5. プロフィールカード (スマホでも3列表示にする調整) --- */
+/* --- 5. プロフィールカード --- */
 
-/* リスト全体をグリッド化 */
 .profile-list {
     display: grid;
-    /* 常に3列 (1fr 1fr 1fr) */
-    grid-template-columns: repeat(3, 1fr);
-    /* 隙間を調整 */
-    gap: 15px; 
+    grid-template-columns: repeat(3, 1fr); /* 3列 */
+    gap: 20px; 
     width: 100%;
 }
 
-/* カード単体 */
 .profile-card {
     display: flex;
     flex-direction: column;
     background: #fff;
-    /* 枠線を少し細く */
-    border: 1px solid #eee;
-    /* 影を少し控えめに */
+    border: 1px solid #ddd;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     transition: transform 0.2s, box-shadow 0.2s;
     overflow: hidden;
-    border-radius: 8px; /* 角丸追加 */
-    cursor: pointer; /* クリックできることを示す */
-    
+    border-radius: 8px;
+    cursor: pointer;
     opacity: 0;
     animation: fadeInUpCard 0.6s ease-out forwards;
 }
 
 .profile-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
 /* 顔写真エリア */
 .profile-img {
     width: 100%;
-    /* 正方形に近い比率にする */
     aspect-ratio: 1 / 1; 
     overflow: hidden;
     background: #f0f0f0;
@@ -154,8 +139,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* グレースケールをやめて鮮やかに */
-    filter: none; 
     transition: transform 0.5s;
 }
 
@@ -165,50 +148,83 @@
 
 /* 情報エリア */
 .profile-info {
-    padding: 10px; /* パディングを減らしてコンパクトに */
-    text-align: center; /* 中央揃えで見やすく */
+    padding: 15px;
+    text-align: left; /* 左揃え */
 }
 
 /* 名前 */
 .profile-name {
-    margin: 5px 0 2px 0;
-    font-size: 0.9rem; /* 文字サイズ縮小 */
-    font-weight: bold;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 900;
     text-transform: uppercase;
     color: #000;
+    line-height: 1.2;
+}
+
+/* Location */
+.profile-loc {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 8px;
+    font-weight: normal;
+}
+
+/* ジャンル */
+.profile-genre-text {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.profile-loc {
-    display: block;
-    font-size: 0.7rem;
-    color: #888;
-    font-weight: normal;
-    margin-bottom: 5px;
+/* 下段（QRとサービスロゴ） */
+.profile-bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-top: 1px dashed #eee;
+    padding-top: 10px;
 }
 
-/* ジャンルタグ */
-.profile-genre {
-    display: none; /* スマホ3列だと狭すぎるので一覧では非表示にする（QRモーダルで見せる想定、あるいは極小表示） */
+.mini-qr-wrapper, .service-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* QRコード（一覧では非表示にし、クリック時にモーダルで見せる） */
-.profile-qr-thumb {
-    display: none; 
+.mini-qr {
+    width: 30px;
+    height: 30px;
+    mix-blend-mode: multiply;
+}
+
+.service-icon {
+    width: 24px; /* アイコンサイズ */
+    height: 24px;
+    object-fit: contain;
+    filter: grayscale(100%); /* 通常はグレー */
+    transition: filter 0.3s;
+}
+
+.profile-card:hover .service-icon {
+    filter: grayscale(0%); /* ホバーで色付き */
 }
 
 
-/* --- 6. QRコード拡大モーダル --- */
+/* --- 6. モーダル (写真とQRの両方を表示) --- */
 .qr-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* 背景を暗く */
-    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.9); /* 背景をより暗く */
+    backdrop-filter: blur(8px);
     z-index: 2000;
     display: flex;
     justify-content: center;
@@ -225,13 +241,13 @@
 
 .qr-modal-content {
     background: #fff;
-    padding: 30px;
-    border-radius: 12px;
+    padding: 40px;
+    border-radius: 4px; /* 少しシャープに */
     text-align: center;
     max-width: 90%;
-    width: 320px;
+    width: 700px; /* 横幅を広げる */
     position: relative;
-    transform: scale(0.9);
+    transform: scale(0.95);
     transition: transform 0.3s;
 }
 
@@ -239,37 +255,63 @@
     transform: scale(1);
 }
 
-.qr-modal-img {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 20px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .qr-modal-name {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: 900;
     margin-bottom: 5px;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .qr-modal-genre {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #666;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+/* モーダルの中身（写真エリアとQRエリアの横並び） */
+.qr-modal-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+.qr-modal-photo {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.1); /* 写真に影をつける */
+}
+
+.qr-modal-qr {
+    width: 200px;
+    height: 200px;
+    mix-blend-mode: multiply;
+}
+
+.qr-instruction {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 .qr-modal-close {
     position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 2rem;
+    top: 15px;
+    right: 20px;
+    font-size: 2.5rem;
     cursor: pointer;
-    color: #aaa;
+    color: #333;
     line-height: 1;
+    transition: color 0.3s;
 }
+.qr-modal-close:hover {
+    color: #000;
+}
+
 
 /* アニメーション定義 */
 @keyframes fadeInUpCard {
@@ -277,21 +319,45 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* スマホ対応（ロゴ位置の微調整など） */
+/* スマホ対応 */
 @media (max-width: 768px) {
     .dig-logo {
         width: 300px;
         top: 80px;
     }
     .dig-content {
-        padding-top: 200px; /* スマホなら少し詰める */
+        padding-top: 300px; /* スマホなら少し詰める */
     }
     
-    /* 3列キープのための文字サイズ調整 */
-    .profile-name {
-        font-size: 0.8rem; 
+    .profile-list {
+        grid-template-columns: repeat(3, 1fr); /* スマホでも3列強制 */
+        gap: 10px;
     }
-    .profile-loc {
-        font-size: 0.6rem;
+    
+    /* カード内の文字を小さくする */
+    .profile-info { padding: 10px; }
+    .profile-name { font-size: 0.8rem; }
+    .profile-loc { font-size: 0.6rem; }
+    .profile-genre-text { display: none; } /* スペースがないのでジャンルは隠す */
+    .profile-bottom-row { justify-content: center; gap: 10px; }
+    .mini-qr { width: 20px; height: 20px; }
+    .service-icon { width: 18px; height: 18px; }
+
+    /* モーダルを縦並びにする */
+    .qr-modal-content {
+        width: 90%;
+        padding: 30px 20px;
+    }
+    .qr-modal-body {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .qr-modal-photo {
+        width: 180px;
+        height: 180px;
+    }
+    .qr-modal-qr {
+        width: 150px;
+        height: 150px;
     }
 }
