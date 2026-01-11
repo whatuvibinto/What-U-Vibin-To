@@ -479,7 +479,7 @@ body, html {
         position: absolute;
         
         /* レコード(top: 60%)の下側に配置されるよう調整 */
-        top: 80%;      
+        top: 85%;      
         right: -40px;    
         
         /* 初期状態: 45deg + 20deg = 65deg (時計回りに傾ける) */
