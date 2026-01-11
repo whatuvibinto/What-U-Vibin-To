@@ -10,7 +10,7 @@ const digData = [
         genre: ["HIPHOP","R&B","DUB"], 
         image: "images/Lucy/lucy.png", 
         qr: "images/Lucy/lucy_qr.png",
-        serviceIcon: "images/spotify_logo.png",
+        serviceIcon: "images/SpotifyLogo.png",
         qrLink: "Friends/Lucy.html",
         instagram: "yng.r" // ★追加: インスタID
     },
@@ -22,7 +22,7 @@ const digData = [
         genre: ["JAZZ", "SOUL"],
         image: "images/Hiraku tajima/Hiraku Tajima.png",
         qr: "images/HIraku Tajima/Hiraku Tajima.png",
-        serviceIcon: "images/Applemusic_logo.png",
+        serviceIcon: "images/AppleMusicLogo.png",
         qrLink: "https://music.apple.com/jp/playlist/xxxxxx",
         instagram: "udoneatbeat" // ★追加
     },
