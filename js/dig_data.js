@@ -1,10 +1,10 @@
 const digData = [
     {
         name: "LUCY",
-        role: "DJ", 
-        date: "2023-12-01",
+        role: "", 
+        date: "2026-01-10",
         location: "TOKYO",
-        genre: ["DJ MIX", "HIPHOP", "R&B"], 
+        genre: ["HIPHOP","R&B","DUB"], 
         image: "images/profile_lucy.png", 
         qr: "images/qr_lucy.png",
         serviceIcon: "images/logo_spotify.png",
@@ -12,10 +12,10 @@ const digData = [
         qrLink: "https://open.spotify.com/playlist/xxxxxx" 
     },
     {
-        name: "MIKE",
-        role: "SELECTOR",
-        date: "2023-11-20",
-        location: "NEW YORK",
+        name: "Hiraku Tajima",
+        role: "DJ",
+        date: "2026-01-11",
+        location: "Somewhere in Japan",
         genre: ["JAZZ", "SOUL"],
         image: "images/profile_mike.png",
         qr: "images/qr_mike.png",
