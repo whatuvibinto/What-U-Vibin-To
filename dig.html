@@ -36,7 +36,8 @@
             </div>
         </div>
 
-        <div class="profile-list" id="profileContainer"></div>
+        <div class="profile-list" id="profileContainer">
+            </div>
     </div>
 
     <div class="footer">
@@ -44,43 +45,33 @@
     </div>
 </div>
 
-<div class="qr-modal-overlay" id="qrModal">
+<div class="qr-modal" id="qrModal">
+    <div class="qr-modal-overlay" onclick="closeQrModal()"></div>
     <div class="qr-modal-content art-layout">
-        <button class="qr-modal-close" onclick="closeQrModal()">
-            <span class="close-line"></span>
-            <span class="close-line"></span>
-        </button>
+        <button class="modal-close-btn" onclick="closeQrModal()">×</button>
         
         <div class="art-image-section">
-            <img src="" alt="Profile Photo" id="modalPhoto">
-            <span class="art-role-badge" id="modalRole">DJ</span>
+            <img id="modalPhoto" src="" alt="Profile Photo">
         </div>
 
         <div class="art-info-section">
-            <div class="art-info-header">
-                <h2 class="art-name" id="modalName">NAME</h2>
-                <div class="art-meta-row">
-                    <span class="art-location" id="modalLocation">TOKYO</span>
-                    <span class="art-slash">/</span>
-                    <span class="art-genre" id="modalGenre">GENRE</span>
+            <div class="art-header">
+                <div class="art-meta">
+                    <span id="modalLocation" class="art-loc">LOCATION</span>
+                    <span id="modalRole" class="art-role">ROLE</span>
                 </div>
-                
-                <div class="art-insta-wrapper" id="modalInstaArea">
-                    <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
-                        <span class="insta-label">IG.</span>
-                        <span class="insta-val" id="modalInstaName">username</span>
-                        <span class="insta-arrow">→</span>
-                    </a>
-                </div>
+                <h2 id="modalName" class="art-name">NAME</h2>
+                <p id="modalGenre" class="art-genre">GENRE</p>
             </div>
 
-            <div class="art-info-footer">
-                <div class="art-qr-container">
-                    <a id="modalQrLink" href="#" target="_blank" rel="noopener noreferrer">
-                        <img src="" alt="QR Code" id="modalQr">
-                    </a>
+            <div id="modalInstaArea" class="art-insta-area" style="display:none;">
                 </div>
-                <p class="art-scan-text">SCAN TO LISTEN</p>
+
+            <div class="art-info-footer">
+                <span class="art-scan-text">Scan or Touch this QR</span>
+                <a id="modalQrLink" href="" target="_blank" class="art-qr-link">
+                    <img id="modalQr" src="" alt="QR Code">
+                </a>
             </div>
         </div>
     </div>
@@ -89,129 +80,85 @@
 <script src="js/dig_data.js"></script>
 <script>
     const container = document.getElementById('profileContainer');
-    const modal = document.getElementById('qrModal');
-    
-    // モーダル要素
-    const modalName = document.getElementById('modalName');
-    const modalGenre = document.getElementById('modalGenre');
-    const modalPhoto = document.getElementById('modalPhoto');
-    const modalQr = document.getElementById('modalQr');
-    const modalQrLink = document.getElementById('modalQrLink');
-    const modalRole = document.getElementById('modalRole'); // ★追加
-    const modalLocation = document.getElementById('modalLocation'); // ★追加
-    
-    // インスタ要素
-    const modalInstaArea = document.getElementById('modalInstaArea');
-    const modalInstaLink = document.getElementById('modalInstaLink');
-    const modalInstaName = document.getElementById('modalInstaName');
-
     const searchInput = document.getElementById('searchInput');
     const genreContainer = document.getElementById('genreCheckboxes');
     const resetBtn = document.getElementById('resetBtn');
 
-    let currentSearchTerm = '';
-    let selectedGenres = []; 
+    // モーダル要素
+    const modal = document.getElementById('qrModal');
+    const modalName = document.getElementById('modalName');
+    const modalGenre = document.getElementById('modalGenre');
+    const modalLocation = document.getElementById('modalLocation');
+    const modalRole = document.getElementById('modalRole');
+    const modalPhoto = document.getElementById('modalPhoto');
+    const modalQr = document.getElementById('modalQr');
+    const modalQrLink = document.getElementById('modalQrLink');
+    const modalInstaArea = document.getElementById('modalInstaArea');
 
-    function init() {
-        digData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-        generateGenreCheckboxes();
-        renderProfiles(digData); 
-    }
+    let selectedGenres = [];
 
-    function generateGenreCheckboxes() {
-        let allGenres = [...new Set(digData.flatMap(person => person.genre))].sort();
-        const mixTag = "DJ MIX";
-        if (allGenres.includes(mixTag)) {
-            allGenres = allGenres.filter(g => g !== mixTag); 
-            allGenres.unshift(mixTag); 
-        }
-
-        let html = '';
+    // --- 1. ジャンル一覧を取得してフィルターを作成 ---
+    function initFilters() {
+        const allGenres = new Set();
+        digData.forEach(person => person.genre.forEach(g => allGenres.add(g)));
+        
         allGenres.forEach(genre => {
-            const specialClass = (genre === mixTag) ? 'special-tag' : '';
-            html += `
-                <label class="genre-tag ${specialClass}">
-                    <input type="checkbox" value="${genre}" onchange="handleGenreChange(this)">
-                    <span class="genre-name">${genre}</span>
-                </label>
+            const label = document.createElement('label');
+            label.className = 'genre-checkbox-label';
+            label.innerHTML = `
+                <input type="checkbox" value="${genre}" onchange="toggleGenre('${genre}')">
+                <span>${genre}</span>
             `;
+            genreContainer.appendChild(label);
         });
-        genreContainer.innerHTML = html;
     }
 
+    // --- 2. プロフィール描画 (高さ統一・ロゴ色加工なし) ---
     function renderProfiles(data) {
-        if (data.length === 0) {
-            container.innerHTML = '<p style="text-align:center; width:100%; grid-column:1/-1; margin-top:50px;">NO VIBES FOUND...</p>';
-            return;
-        }
-
         let html = '';
         data.forEach((person, index) => {
+            const tags = person.genre.map(g => `<span class="tag">${g}</span>`).join('');
             const delay = index * 0.05; 
-            const genreText = person.genre.join(', ');
-            const serviceIconUrl = person.serviceIcon || "images/default_icon.png"; 
 
-            const role = person.role || "";
-            const roleBadge = role ? `<span class="role-badge">${role}</span>` : "";
-            const linkUrl = person.qrLink || "#";
-            const instaId = person.instagram || "";
-            const location = person.location || "";
-
-            // ★修正: 引数を増やして詳細情報を渡す
             html += `
-            <div class="profile-card" style="animation-delay: ${delay}s" 
-                 onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}', '${instaId}', '${role}', '${location}')">
-                
+            <div class="profile-card" onclick="openQrModal('${person.name.replace(/'/g, "\\'")}', '${person.genre.join(', ')}', '${person.image}', '${person.qr}', '${person.qrLink}', '${person.instagram || ""}', '${person.role || ""}', '${person.location}')" style="animation-delay: ${delay}s">
                 <div class="profile-img">
                     <img src="${person.image}" alt="${person.name}">
-                    ${roleBadge}
                 </div>
-
                 <div class="profile-info">
-                    <h2 class="profile-name">${person.name}</h2>
-                    <span class="profile-loc">${person.location}</span>
-                    <p class="profile-genre-text">${genreText}</p>
-                    
-                    <div class="profile-bottom-row">
-                        <div class="mini-qr-wrapper">
-                            <img src="${person.qr}" alt="QR" class="mini-qr">
-                        </div>
-                        <div class="service-icon-wrapper">
-                            <img src="${serviceIconUrl}" alt="Service" class="service-icon">
-                        </div>
+                    <div class="profile-name-group">
+                        <h2 class="profile-name">${person.name}</h2>
+                        <span class="profile-loc">/ ${person.location}</span>
+                    </div>
+                    <div class="profile-genre">
+                        <div class="service-icon"><img src="${person.serviceIcon}" alt="service"></div>
+                        <div class="tags-container">${tags}</div>
+                    </div>
+                    <div class="profile-qr">
+                        <img src="${person.qr}" alt="QR Code">
+                        <span class="qr-text">SCAN OR TOUCH</span>
                     </div>
                 </div>
             </div>
             `;
         });
-        container.innerHTML = html;
+        container.innerHTML = html || '<p style="color:#666; font-weight:bold; padding:20px;">No results found.</p>';
     }
 
+    // --- 3. フィルター適用 ---
     function applyFilters() {
+        const term = searchInput.value.toLowerCase();
         const filtered = digData.filter(person => {
-            const term = currentSearchTerm.toLowerCase();
-            const textMatch = !term || 
-                person.name.toLowerCase().includes(term) || 
-                person.location.toLowerCase().includes(term) ||
-                person.genre.some(g => g.toLowerCase().includes(term));
-
-            const genreMatch = selectedGenres.length === 0 || 
-                person.genre.some(g => selectedGenres.includes(g));
-
-            return textMatch && genreMatch;
+            const matchesSearch = person.name.toLowerCase().includes(term) || person.location.toLowerCase().includes(term);
+            const matchesGenre = selectedGenres.length === 0 || selectedGenres.every(g => person.genre.includes(g));
+            return matchesSearch && matchesGenre;
         });
         renderProfiles(filtered);
-        resetBtn.style.display = selectedGenres.length > 0 ? 'inline-block' : 'none';
+        resetBtn.style.display = (term || selectedGenres.length > 0) ? 'inline-block' : 'none';
     }
 
-    searchInput.addEventListener('input', (e) => {
-        currentSearchTerm = e.target.value;
-        applyFilters();
-    });
-
-    window.handleGenreChange = function(checkbox) {
-        const val = checkbox.value;
-        if (checkbox.checked) {
+    window.toggleGenre = function(val) {
+        if (!selectedGenres.includes(val)) {
             selectedGenres.push(val);
         } else {
             selectedGenres = selectedGenres.filter(g => g !== val);
@@ -221,24 +168,23 @@
 
     resetBtn.addEventListener('click', () => {
         selectedGenres = [];
+        searchInput.value = '';
         const checkboxes = genreContainer.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => cb.checked = false);
         applyFilters();
     });
 
-    // ★修正: 引数を拡張して受け取る
+    searchInput.addEventListener('input', applyFilters);
+
+    // --- 4. モーダル制御 (文言・矢印・スタイルの修正) ---
     window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
-        // テキスト情報のセット
         modalName.textContent = name;
         modalGenre.textContent = genre;
         modalLocation.textContent = location;
-        
-        // 画像のセット
         modalPhoto.src = imageSrc;
         modalQr.src = qrSrc;
         modalQrLink.href = linkUrl;
 
-        // Roleのセット
         if (role) {
             modalRole.textContent = role;
             modalRole.style.display = "block";
@@ -246,11 +192,17 @@
             modalRole.style.display = "none";
         }
 
-        // インスタのセット
         if (instaId) {
+            modalInstaArea.innerHTML = `
+                <div class="art-insta-area">
+                    <span class="insta-label-styled">Tap & Check the profile</span>
+                    <a href="https://instagram.com/${instaId}" target="_blank" class="insta-link-group" style="text-decoration:none; color:#000; display:flex; align-items:center;">
+                        <span class="insta-arrow" style="margin-right:5px; font-size:1.2rem;">←</span>
+                        <span class="art-insta-name" style="font-weight:900;">IG. ${instaId}</span>
+                    </a>
+                </div>
+            `;
             modalInstaArea.style.display = "block";
-            modalInstaName.textContent = instaId;
-            modalInstaLink.href = "https://instagram.com/" + instaId;
         } else {
             modalInstaArea.style.display = "none";
         }
@@ -262,11 +214,9 @@
         modal.classList.remove('active');
     };
 
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeQrModal();
-    });
-
-    init();
+    // 初期化
+    initFilters();
+    renderProfiles(digData);
 </script>
 
 </body>
