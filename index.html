@@ -22,12 +22,13 @@
     </div>
 
     <div class="main-content">
-        <nav class="nav-links" id="navLinks"> <a href="#" onclick="openAboutPanel(); return false;">About</a>
-        <a href="books.html">Books</a>
-        <a href="contact.html">Contact</a>
-        <a href="dig.html" class="special-link" id="digLink">Dig for new music</a>
-        <a href="event.html">Events</a>
-    </nav>
+        <nav class="nav-links" id="navLinks"> 
+            <a href="#" onclick="openAboutPanel(); return false;">About</a>
+            <a href="books.html">Books</a>
+            <a href="contact.html" id="contactLink">Contact</a>
+            <a href="dig.html" class="special-link" id="digLink">Dig for new music</a>
+            <a href="event.html">Events</a>
+        </nav>
 
         <div class="record-wrapper" id="recordArea">
             <img src="images/record_v2.svg" alt="Vinyl Record" class="record-img" id="recordDisk">
@@ -199,32 +200,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* =================================================================
-       機能3: Digページへの遷移アニメーション
+       機能3: ページ遷移アニメーション (Dig & Contact)
        ================================================================= */
     const digLink = document.getElementById('digLink');
+    const contactLink = document.getElementById('contactLink'); // ★追加
     const navLinksContainer = document.getElementById('navLinks');
     const recordWrapper = document.getElementById('recordArea');
 
-    if (digLink && navLinksContainer && recordWrapper) {
-        digLink.addEventListener('click', (e) => {
+    // ★修正: 共通のアニメーション遷移関数を作成
+    function handlePageTransition(e) {
         e.preventDefault(); // 即座の移動をキャンセル
-        const targetUrl = digLink.href;
+        const targetUrl = e.currentTarget.href; // クリックされたリンクのURLを取得
 
         // 1. アニメーションクラスを付与
-        // レコードは左へ (左にあるメニューとクロスさせるため、あえてダイナミックに)
-        recordWrapper.classList.add('slide-out-left');
-        
-        // ナビは右へ
-        navLinksContainer.classList.add('slide-out-right');
+        if(recordWrapper) recordWrapper.classList.add('slide-out-left');
+        if(navLinksContainer) navLinksContainer.classList.add('slide-out-right');
 
         // 2. アニメーション終了後にページ移動 (0.8秒後)
         setTimeout(() => {
             window.location.href = targetUrl;
         }, 800);
-    });
     }
 
-    // ★追加: ブラウザバックで戻ってきた時にアニメーション状態をリセットする処理
+    // Digリンクにイベント登録
+    if (digLink) {
+        digLink.addEventListener('click', handlePageTransition);
+    }
+    
+    // ★追加: Contactリンクにもイベント登録
+    if (contactLink) {
+        contactLink.addEventListener('click', handlePageTransition);
+    }
+
+    // ブラウザバックで戻ってきた時にアニメーション状態をリセットする処理
     window.addEventListener('pageshow', (event) => {
         if (event.persisted) { // キャッシュから復元された場合
             if(recordWrapper) recordWrapper.classList.remove('slide-out-left');
