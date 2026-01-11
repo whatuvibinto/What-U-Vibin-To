@@ -585,4 +585,13 @@
         writing-mode: horizontal-tb;
         transform: none;
     }
+
+    /* ▼▼▼ ★ここに追加してください ▼▼▼ */
+    
+    /* スマホでは画像（黒背景）の上にボタンが来るので、×印を灰色にする */
+    .qr-modal-close::before,
+    .qr-modal-close::after {
+        background-color: #ccc; /* ここで「灰色」を指定 */
+    }
+}
 }
