@@ -28,6 +28,13 @@
                 <input type="text" class="search-input" id="searchInput" placeholder="NAME or LOCATION...">
                 <button class="search-btn">SEARCH</button>
             </div>
+            
+            <div class="genre-filter-area">
+                <div class="genre-label">FILTER BY GENRE:</div>
+                <div class="genre-checkboxes" id="genreCheckboxes">
+                    </div>
+                <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET (ALL)</button>
+            </div>
         </div>
 
         <div class="profile-list" id="profileContainer">
@@ -63,20 +70,59 @@
     const container = document.getElementById('profileContainer');
     const modal = document.getElementById('qrModal');
     
-    // モーダル内の要素
+    // モーダル要素
     const modalName = document.getElementById('modalName');
     const modalGenre = document.getElementById('modalGenre');
     const modalPhoto = document.getElementById('modalPhoto');
     const modalQr = document.getElementById('modalQr');
 
+    // フィルター要素
+    const searchInput = document.getElementById('searchInput');
+    const genreContainer = document.getElementById('genreCheckboxes');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // 状態管理
+    let currentSearchTerm = '';
+    let selectedGenres = []; // 選択されたジャンルのリスト
+
+    // --------------------------------------------------
+    // 1. 初期化処理 (ジャンル生成 & 初期表示)
+    // --------------------------------------------------
+    function init() {
+        generateGenreCheckboxes();
+        renderProfiles(digData); // 全員表示
+    }
+
+    // データから全ジャンルを抽出してチェックボックスを作る
+    function generateGenreCheckboxes() {
+        // 全ジャンルを配列にして重複を削除
+        const allGenres = [...new Set(digData.flatMap(person => person.genre))].sort();
+
+        let html = '';
+        allGenres.forEach(genre => {
+            html += `
+                <label class="genre-tag">
+                    <input type="checkbox" value="${genre}" onchange="handleGenreChange(this)">
+                    <span class="genre-name">${genre}</span>
+                </label>
+            `;
+        });
+        genreContainer.innerHTML = html;
+    }
+
+    // --------------------------------------------------
+    // 2. プロフィール描画
+    // --------------------------------------------------
     function renderProfiles(data) {
+        if (data.length === 0) {
+            container.innerHTML = '<p style="text-align:center; width:100%; grid-column:1/-1; margin-top:50px;">NO VIBES FOUND...</p>';
+            return;
+        }
+
         let html = '';
         data.forEach((person, index) => {
             const delay = index * 0.05; 
             const genreText = person.genre.join(', ');
-
-            // ★修正: dig_data.js から serviceIcon を取得
-            // データが無い場合の予備画像(任意)も設定可能
             const serviceIconUrl = person.serviceIcon || "images/default_icon.png"; 
 
             html += `
@@ -107,26 +153,73 @@
         container.innerHTML = html;
     }
 
-    renderProfiles(digData);
 
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = digData.filter(person => 
-            person.name.toLowerCase().includes(term) || 
-            person.location.toLowerCase().includes(term) ||
-            person.genre.some(g => g.toLowerCase().includes(term))
-        );
+    // --------------------------------------------------
+    // 3. フィルタリングロジック (検索とジャンルの掛け合わせ)
+    // --------------------------------------------------
+    function applyFilters() {
+        const filtered = digData.filter(person => {
+            // A. テキスト検索判定
+            const term = currentSearchTerm.toLowerCase();
+            const textMatch = !term || 
+                person.name.toLowerCase().includes(term) || 
+                person.location.toLowerCase().includes(term) ||
+                person.genre.some(g => g.toLowerCase().includes(term));
+
+            // B. ジャンルフィルター判定 (OR条件: 選択したジャンルのどれか一つでも持っていればOK)
+            // selectedGenresが空(=ALL)なら全員OK
+            const genreMatch = selectedGenres.length === 0 || 
+                person.genre.some(g => selectedGenres.includes(g));
+
+            return textMatch && genreMatch;
+        });
+
         renderProfiles(filtered);
+
+        // RESETボタンの表示制御
+        if (selectedGenres.length > 0) {
+            resetBtn.style.display = 'inline-block';
+        } else {
+            resetBtn.style.display = 'none';
+        }
+    }
+
+    // --------------------------------------------------
+    // 4. イベントリスナー
+    // --------------------------------------------------
+
+    // テキスト検索入力時
+    searchInput.addEventListener('input', (e) => {
+        currentSearchTerm = e.target.value;
+        applyFilters();
     });
 
-    // --- モーダル制御 ---
+    // チェックボックス変更時 (HTML側の onchange から呼ばれる)
+    window.handleGenreChange = function(checkbox) {
+        const val = checkbox.value;
+        if (checkbox.checked) {
+            selectedGenres.push(val);
+        } else {
+            selectedGenres = selectedGenres.filter(g => g !== val);
+        }
+        applyFilters();
+    };
+
+    // リセットボタン
+    resetBtn.addEventListener('click', () => {
+        selectedGenres = [];
+        // チェックボックスの表示を外す
+        const checkboxes = genreContainer.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = false);
+        applyFilters();
+    });
+
+    // モーダル制御
     window.openQrModal = function(name, genre, imageSrc, qrSrc) {
         modalName.textContent = name;
         modalGenre.textContent = genre;
         modalPhoto.src = imageSrc;
         modalQr.src = qrSrc;
-        
         modal.classList.add('active');
     };
 
@@ -137,6 +230,10 @@
     modal.addEventListener('click', (e) => {
         if (e.target === modal) closeQrModal();
     });
+
+    // 初期化実行
+    init();
+
 </script>
 
 </body>
