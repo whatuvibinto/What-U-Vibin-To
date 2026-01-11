@@ -106,7 +106,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =================================================================
-       機能1: Aboutパネル
+       機能1: Aboutパネル (変更なし)
        ================================================================= */
     const panel = document.getElementById('swipePanel');
     const panelHeader = document.getElementById('panelHeader');
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* =================================================================
-       機能3: ページ遷移アニメーション
+       機能3: ページ遷移アニメーション (修正版)
        ================================================================= */
     const digLink = document.getElementById('digLink');
     const contactLink = document.getElementById('contactLink');
@@ -188,12 +188,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const eventsLink = document.getElementById('eventsLink');
     const navLinksContainer = document.getElementById('navLinks');
     const recordWrapper = document.getElementById('recordArea');
+    const tonearmWrapper = document.getElementById('tonearm'); 
 
+    // 共通の遷移処理関数
     function handlePageTransition(e) {
+        // 通常のリンク動作を一時停止
         e.preventDefault(); 
         const targetUrl = e.currentTarget.href; 
+        
+        // 各要素に退場アニメーションクラスを付与
         if(recordWrapper) recordWrapper.classList.add('slide-out-left');
         if(navLinksContainer) navLinksContainer.classList.add('slide-out-right');
+        
+        // ★ここだけ残す: リンククリック時にトーンアームも下に消す
+        if(tonearmWrapper) tonearmWrapper.classList.add('slide-out-bottom');
+
+        // アニメーション完了後に遷移
         setTimeout(() => {
             window.location.href = targetUrl;
         }, 800);
@@ -204,20 +214,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (booksLink) booksLink.addEventListener('click', handlePageTransition);
     if (eventsLink) eventsLink.addEventListener('click', handlePageTransition);
 
+    // ★トーンアーム自体のクリックイベントでの遷移処理は削除しました
+
     window.addEventListener('pageshow', (event) => {
         if (event.persisted) {
             if(recordWrapper) recordWrapper.classList.remove('slide-out-left');
             if(navLinksContainer) navLinksContainer.classList.remove('slide-out-right');
+            if(tonearmWrapper) tonearmWrapper.classList.remove('slide-out-bottom');
         }
     });
 
 
     /* =================================================================
-       機能2: レコードスクラッチ & トーンアーム
+       機能2: レコードスクラッチ & トーンアーム (復活・修正)
        ================================================================= */
     const recordArea = document.getElementById('recordArea');
     const recordDisk = document.getElementById('recordDisk');
-    const tonearm = document.getElementById('tonearm'); 
+    // const tonearm = document.getElementById('tonearm'); // 定義済み
     
     const AUDIO_URL = 'images/scratch.mp3'; 
     const FRICTION = 0.92;
@@ -255,16 +268,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('touchstart', unlockAudio, { once: true });
     document.body.addEventListener('click', unlockAudio, { once: true });
 
-    if (tonearm) {
-        tonearm.addEventListener('click', (e) => {
+    // ★復活: トーンアームクリック時の「針の上げ下げ」処理
+    if (tonearmWrapper) {
+        tonearmWrapper.addEventListener('click', (e) => {
             e.stopPropagation(); 
             unlockAudio(); 
+            
+            // 状態を切り替え
             isNeedleDropped = !isNeedleDropped;
             
             if (isNeedleDropped) {
-                tonearm.classList.add('tonearm-active');
+                // 針を落とす（アームを動かすクラスを付与）
+                tonearmWrapper.classList.add('tonearm-active');
             } else {
-                tonearm.classList.remove('tonearm-active');
+                // 針を上げる（クラスを削除し、音も止める）
+                tonearmWrapper.classList.remove('tonearm-active');
                 stopSound(); 
             }
         });
