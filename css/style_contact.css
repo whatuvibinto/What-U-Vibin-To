@@ -1,0 +1,163 @@
+@charset "UTF-8";
+
+/* ==================================================
+   Contact Page Specific Styles
+   ================================================== */
+
+/* --- 1. ページ全体設定 --- */
+.contact-page {
+    background-color: #ffffff; 
+    overflow-x: hidden;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* --- 2. ロゴ位置 (Digページと同じ設定) --- */
+.contact-logo {
+    position: absolute;
+    top: 120px;
+    left: 30px;
+    margin: 0;
+    width: 500px;
+    max-width: 80%;
+    z-index: 10;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 3. メインコンテンツエリア --- */
+.contact-content {
+    /* ロゴと被らないように上余白を確保 (Digページと同じく広めに) */
+    padding-top: 350px; 
+    
+    max-width: 600px; /* フォームなので少し狭めに */
+    margin: 0 auto;
+    padding-bottom: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+    
+    animation: fadeInUp 1s ease-out 0.3s backwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 4. タイトルと説明文 --- */
+.contact-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.contact-desc {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #666;
+    margin-bottom: 40px;
+    font-weight: 500;
+}
+
+/* --- 5. フォームデザイン --- */
+.contact-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+/* ラベル */
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 900; /* 極太 */
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    color: #000;
+}
+
+/* 入力フィールド共通 */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    font-size: 1rem;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    
+    background: #fff;
+    border: 2px solid #ddd; /* デフォルトは薄いグレー */
+    border-radius: 4px;
+    
+    color: #000;
+    font-weight: bold;
+    outline: none;
+    transition: all 0.3s;
+}
+
+/* プレースホルダーの色 */
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #ccc;
+    font-weight: normal;
+}
+
+/* フォーカス時（入力中）のデザイン */
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #000; /* 黒枠に変更 */
+    background-color: #fafafa;
+}
+
+/* テキストエリアのリサイズ制御 */
+.form-group textarea {
+    resize: vertical; /* 縦方向のみリサイズ許可 */
+}
+
+/* 送信ボタン */
+.send-btn {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    background: #000;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.send-btn:hover {
+    background: #333;
+    transform: translateY(-2px);
+}
+
+.send-btn:active {
+    transform: translateY(0);
+}
+
+/* --- スマホ対応 --- */
+@media (max-width: 768px) {
+    .contact-logo {
+        width: 300px;
+        top: 80px;
+    }
+    .contact-content {
+        padding-top: 250px; /* スマホなら少し詰める */
+    }
+    .contact-title {
+        font-size: 1.5rem;
+    }
+}
