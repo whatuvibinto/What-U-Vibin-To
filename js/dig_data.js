@@ -13,7 +13,7 @@ const digData = [
     },
     {
         name: "MIKE",
-        role: "SELECTOR", // DJじゃない人はSELECTORなど
+         // DJじゃない人はSELECTORなど
         location: "NEW YORK",
         genre: ["JAZZ", "SOUL"],
         image: "images/profile_mike.png",
