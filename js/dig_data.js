@@ -4,7 +4,7 @@
 const digData = [
     {
         name: "LUCY",
-        role: "DJ", // ★追加: 役職 (DJ, SELECTOR, ARTIST etc)
+        role: "", // ★追加: 役職 (DJ,ARTIST etc)
         location: "TOKYO",
         genre: ["DJ MIX", "HIPHOP", "R&B"], // "DJ MIX" を追加
         image: "images/profile_lucy.png", 
@@ -13,7 +13,7 @@ const digData = [
     },
     {
         name: "MIKE",
-         // DJじゃない人はSELECTORなど
+        role: "DJ",
         location: "NEW YORK",
         genre: ["JAZZ", "SOUL"],
         image: "images/profile_mike.png",
