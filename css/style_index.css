@@ -480,13 +480,13 @@ body, html {
         right: 20px;    
         
         /* ★修正: 初期状態: 45deg + 20deg = 65deg (時計回りに傾ける) */
-        transform: rotate(40deg);
+        transform: rotate(80deg);
         transform-origin: 50% 50px;
     }
     
     /* 針を落とした時 */
     .tonearm-wrapper.tonearm-active {
-        transform: rotate(115deg);
+        transform: rotate(125deg);
     }
     
     /* 赤い点滅丸の設定 */
