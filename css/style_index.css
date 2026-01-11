@@ -4,7 +4,6 @@
    1. オリジナルCSS
    ================================================== */
 
-/* 全体のリセットとベース設定 */
 body, html {
     margin: 0;
     padding: 0;
@@ -16,7 +15,6 @@ body, html {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* 上部の流れるテキスト */
 .marquee-wrapper {
     position: fixed;
     top: 0;
@@ -42,7 +40,6 @@ body, html {
     100% { transform: translateX(-50%); }
 }
 
-/* コンテナ */
 .container {
     position: relative;
     width: 100%;
@@ -53,7 +50,6 @@ body, html {
     box-sizing: border-box;
 }
 
-/* 左上のロゴ */
 .header-logo-wrapper {
     position: absolute;
     top: 120px;
@@ -79,7 +75,6 @@ body, html {
     transform: rotate(-15deg) scale(0.95);
 }
 
-/* メインコンテンツ */
 .main-content {
     display: flex;
     justify-content: space-between;
@@ -88,7 +83,6 @@ body, html {
     position: relative;
 }
 
-/* 左側のナビゲーション */
 .nav-links {
     display: flex;
     flex-direction: column;
@@ -130,7 +124,6 @@ body, html {
     paint-order: stroke fill;
 }
 
-/* 右側のレコード盤エリア */
 .record-wrapper {
     position: absolute;
     right: -100px; 
@@ -157,7 +150,6 @@ body, html {
     backface-visibility: hidden;
     will-change: transform;
 }
-/* レコードの光沢 */
 .record-wrapper::after {
     content: "";
     display: block; 
@@ -190,7 +182,6 @@ body, html {
     mix-blend-mode: screen;
     opacity: 0.9; 
 }
-/* センターホール */
 .record-wrapper::before {
     content: "";
     position: absolute;
@@ -228,18 +219,59 @@ body, html {
     transform: rotate(-28deg); 
 }
 
-/* ホバー時 */
 .tonearm-wrapper:hover {
     filter: brightness(1.1);
 }
 
-/* ★修正: imgタグ用のクラス */
 .tonearm-img {
     width: 100%;
     height: 100%;
     overflow: visible;
-    /* 画像そのものにドロップシャドウをかける */
     filter: drop-shadow(10px 10px 15px rgba(0,0,0,0.5));
+}
+
+/* ★追加: TAPヒント文字 */
+.tonearm-tap-hint {
+    position: absolute;
+    top: 100px; /* 針の持ち手付近 */
+    left: -20px;
+    background: #000;
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s;
+    animation: pulseHint 1.5s infinite;
+    z-index: 30;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.tonearm-tap-hint::after {
+    /* 吹き出しの三角 */
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -6px;
+    transform: translateY(-50%);
+    border-width: 6px 0 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent transparent #000;
+}
+
+@keyframes pulseHint {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* 針を落としたらTAP文字を消す */
+.tonearm-wrapper.tonearm-active .tonearm-tap-hint {
+    opacity: 0;
+    animation: none;
 }
 
 
@@ -450,15 +482,24 @@ body, html {
     .record-wrapper {
         width: 350px;
         height: 350px;
-        right: -100px;
+        /* ★修正: スマホで見切れすぎないように調整 */
+        right: -60px;
         top: 55%; 
     }
     
     .tonearm-wrapper {
-        width: 100px;
-        height: 260px;
-        top: -50px;
-        right: -20px;
+        /* スマホ用サイズ */
+        width: 120px;
+        height: 300px;
+        /* レコードに対しての位置調整 */
+        top: -60px;
+        right: 30px;
+    }
+    
+    /* TAPの文字位置調整 */
+    .tonearm-tap-hint {
+        top: 80px;
+        left: -15px;
     }
     
     .about-bottom-panel {
