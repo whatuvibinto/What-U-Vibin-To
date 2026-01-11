@@ -109,21 +109,30 @@
 
     let currentSearchTerm = '';
     let selectedGenres = []; 
-
-    function init() {
-        // ★修正: window.digData ではなく、普通の digData を使用します
-        if (typeof digData === 'undefined') {
-            console.error("digDataが読み込まれていません");
-            return;
-        }
-
-        digData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-        generateGenreCheckboxes();
-        renderProfiles(digData); 
+    
+    // ★window.digData からデータを取得
+    let profileData = [];
+    if (typeof window.digData !== 'undefined') {
+        profileData = window.digData;
+    } else if (typeof digData !== 'undefined') {
+        profileData = digData;
+    } else {
+        console.error("digData Not Found.");
     }
 
+    function init() {
+        // 日付順ソート
+        profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        generateGenreCheckboxes();
+        renderProfiles(profileData); 
+    }
+
+    // ★修正: DJ MIXタグの処理を含むジャンル生成
     function generateGenreCheckboxes() {
-        let allGenres = [...new Set(digData.flatMap(person => person.genre))].sort();
+        // 全ジャンルを抽出して重複削除
+        let allGenres = [...new Set(profileData.flatMap(person => person.genre))].sort();
+
+        // "DJ MIX" があれば先頭に移動
         const mixTag = "DJ MIX";
         if (allGenres.includes(mixTag)) {
             allGenres = allGenres.filter(g => g !== mixTag); 
@@ -191,7 +200,7 @@
     }
 
     function applyFilters() {
-        const filtered = digData.filter(person => {
+        const filtered = profileData.filter(person => {
             const term = currentSearchTerm.toLowerCase();
             const textMatch = !term || 
                 person.name.toLowerCase().includes(term) || 
