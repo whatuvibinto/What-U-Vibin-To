@@ -124,13 +124,13 @@
     display: none;
 }
 
-/* 通常のタグボタンスタイル（小さめ） */
+/* タグボタンのスタイル */
 .genre-name {
     display: inline-block;
     padding: 4px 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 0.75rem; /* 小さめ */
+    font-size: 0.75rem;
     font-weight: bold;
     color: #666;
     background: #fff;
@@ -143,30 +143,25 @@
     color: #000;
 }
 
-/* チェックされた時のスタイル (通常) */
 .genre-tag input[type="checkbox"]:checked + .genre-name {
     background: #000;
     color: #fff;
     border-color: #000;
 }
 
-
-/* ★追加・復活: DJ MIX (special-tag) のスタイル */
-/* 選択ロジック（白黒）は統一しつつ、サイズ感と枠線を強調 */
+/* DJ MIX (special-tag) のスタイル */
 .genre-tag.special-tag .genre-name {
-    border: 2px solid #000; /* 太い枠線 */
-    font-size: 0.85rem;     /* 通常より少し大きく */
-    padding: 5px 15px;      /* 横幅広め */
-    color: #000;            /* 文字は黒 */
+    border: 2px solid #000; 
+    font-size: 0.85rem;     
+    padding: 5px 15px;      
+    color: #000;            
 }
 
-/* DJ MIXがチェックされた時のスタイル（色は他と同じ黒背景・白文字） */
 .genre-tag.special-tag input[type="checkbox"]:checked + .genre-name {
     background: #000;
     color: #fff;
     border-color: #000;
 }
-
 
 .filter-reset-btn {
     margin-top: 15px;
@@ -225,7 +220,7 @@
     transform: scale(1.05);
 }
 
-/* 役職(Role)バッジ */
+/* 役職バッジ */
 .role-badge {
     position: absolute;
     top: 10px;
@@ -356,7 +351,46 @@
 .qr-modal-genre {
     font-size: 1rem;
     color: #666;
+    margin-bottom: 10px; 
+}
+
+/* ★修正: Instagram表示スタイル (カード内のジャンルテキスト風に) */
+.qr-modal-instagram {
     margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.qr-modal-instagram a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px; /* アイコンと文字の間隔 */
+    text-decoration: none;
+    
+    /* ボタンっぽさを消してテキスト形式にする */
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    
+    /* カードのジャンルテキスト(.profile-genre-text)に近いスタイル */
+    font-size: 0.85rem; 
+    font-weight: bold;
+    color: #333;
+    transition: opacity 0.3s;
+}
+
+/* ホバー時に少し薄くする + 下線 */
+.qr-modal-instagram a:hover {
+    opacity: 0.7;
+    background: transparent;
+    text-decoration: underline;
+}
+
+/* アイコンサイズも文字に合わせて少し小さく */
+.instagram-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
 }
 
 .qr-modal-body {
@@ -445,5 +479,8 @@
     .qr-modal-qr {
         width: 150px;
         height: 150px;
+    }
+    .qr-modal-name {
+        font-size: 1.5rem;
     }
 }
