@@ -46,10 +46,7 @@
 
 <div class="qr-modal-overlay" id="qrModal">
     <div class="qr-modal-content art-layout">
-        <button class="qr-modal-close" onclick="closeQrModal()">
-            <span class="close-line"></span>
-            <span class="close-line"></span>
-        </button>
+        <button class="qr-modal-close" onclick="closeQrModal()"></button>
         
         <div class="art-image-section">
             <img src="" alt="Profile Photo" id="modalPhoto">
@@ -69,7 +66,7 @@
                     <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
                         <span class="insta-label">IG.</span>
                         <span class="insta-val" id="modalInstaName">username</span>
-                        <span class="insta-arrow">→</span>
+                        <span class="insta-suffix">Tap & Check the profile</span>
                     </a>
                 </div>
             </div>
@@ -80,7 +77,7 @@
                         <img src="" alt="QR Code" id="modalQr">
                     </a>
                 </div>
-                <p class="art-scan-text">SCAN TO LISTEN</p>
+                <p class="art-scan-text">Scan or Touch This QR</p>
             </div>
         </div>
     </div>
@@ -97,8 +94,8 @@
     const modalPhoto = document.getElementById('modalPhoto');
     const modalQr = document.getElementById('modalQr');
     const modalQrLink = document.getElementById('modalQrLink');
-    const modalRole = document.getElementById('modalRole'); // ★追加
-    const modalLocation = document.getElementById('modalLocation'); // ★追加
+    const modalRole = document.getElementById('modalRole');
+    const modalLocation = document.getElementById('modalLocation');
     
     // インスタ要素
     const modalInstaArea = document.getElementById('modalInstaArea');
@@ -111,15 +108,21 @@
 
     let currentSearchTerm = '';
     let selectedGenres = []; 
+    
+    // データ読み込み（window.digDataを使用）
+    const profileData = window.digData || [];
 
     function init() {
-        digData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        if (profileData.length === 0) {
+            console.error("データが読み込めていません。js/dig_data.jsを確認してください。");
+        }
+        profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
         generateGenreCheckboxes();
-        renderProfiles(digData); 
+        renderProfiles(profileData); 
     }
 
     function generateGenreCheckboxes() {
-        let allGenres = [...new Set(digData.flatMap(person => person.genre))].sort();
+        let allGenres = [...new Set(profileData.flatMap(person => person.genre))].sort();
         const mixTag = "DJ MIX";
         if (allGenres.includes(mixTag)) {
             allGenres = allGenres.filter(g => g !== mixTag); 
@@ -157,7 +160,6 @@
             const instaId = person.instagram || "";
             const location = person.location || "";
 
-            // ★修正: 引数を増やして詳細情報を渡す
             html += `
             <div class="profile-card" style="animation-delay: ${delay}s" 
                  onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}', '${instaId}', '${role}', '${location}')">
@@ -188,7 +190,7 @@
     }
 
     function applyFilters() {
-        const filtered = digData.filter(person => {
+        const filtered = profileData.filter(person => {
             const term = currentSearchTerm.toLowerCase();
             const textMatch = !term || 
                 person.name.toLowerCase().includes(term) || 
@@ -226,19 +228,15 @@
         applyFilters();
     });
 
-    // ★修正: 引数を拡張して受け取る
     window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
-        // テキスト情報のセット
         modalName.textContent = name;
         modalGenre.textContent = genre;
         modalLocation.textContent = location;
         
-        // 画像のセット
         modalPhoto.src = imageSrc;
         modalQr.src = qrSrc;
         modalQrLink.href = linkUrl;
 
-        // Roleのセット
         if (role) {
             modalRole.textContent = role;
             modalRole.style.display = "block";
@@ -246,7 +244,6 @@
             modalRole.style.display = "none";
         }
 
-        // インスタのセット
         if (instaId) {
             modalInstaArea.style.display = "block";
             modalInstaName.textContent = instaId;
