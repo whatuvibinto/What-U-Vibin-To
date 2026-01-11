@@ -46,10 +46,7 @@
 
 <div class="qr-modal-overlay" id="qrModal">
     <div class="qr-modal-content art-layout">
-        <button class="qr-modal-close" onclick="closeQrModal()">
-            <span class="close-line"></span>
-            <span class="close-line"></span>
-        </button>
+        <button class="qr-modal-close" onclick="closeQrModal()"></button>
         
         <div class="art-image-section">
             <img src="" alt="Profile Photo" id="modalPhoto">
@@ -97,8 +94,8 @@
     const modalPhoto = document.getElementById('modalPhoto');
     const modalQr = document.getElementById('modalQr');
     const modalQrLink = document.getElementById('modalQrLink');
-    const modalRole = document.getElementById('modalRole'); // ★追加
-    const modalLocation = document.getElementById('modalLocation'); // ★追加
+    const modalRole = document.getElementById('modalRole');
+    const modalLocation = document.getElementById('modalLocation');
     
     // インスタ要素
     const modalInstaArea = document.getElementById('modalInstaArea');
@@ -157,7 +154,6 @@
             const instaId = person.instagram || "";
             const location = person.location || "";
 
-            // ★修正: 引数を増やして詳細情報を渡す
             html += `
             <div class="profile-card" style="animation-delay: ${delay}s" 
                  onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}', '${instaId}', '${role}', '${location}')">
@@ -226,19 +222,15 @@
         applyFilters();
     });
 
-    // ★修正: 引数を拡張して受け取る
     window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
-        // テキスト情報のセット
         modalName.textContent = name;
         modalGenre.textContent = genre;
         modalLocation.textContent = location;
         
-        // 画像のセット
         modalPhoto.src = imageSrc;
         modalQr.src = qrSrc;
         modalQrLink.href = linkUrl;
 
-        // Roleのセット
         if (role) {
             modalRole.textContent = role;
             modalRole.style.display = "block";
@@ -246,7 +238,6 @@
             modalRole.style.display = "none";
         }
 
-        // インスタのセット
         if (instaId) {
             modalInstaArea.style.display = "block";
             modalInstaName.textContent = instaId;
