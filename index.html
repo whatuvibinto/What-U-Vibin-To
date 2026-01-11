@@ -194,34 +194,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     closeAboutPanel();
                 }
             }
+        });
 
-            /* =================================================================
+    }
+
+    /* =================================================================
        機能3: Digページへの遷移アニメーション
        ================================================================= */
-        const digLink = document.getElementById('digLink');
-        const navLinksContainer = document.getElementById('navLinks');
-        const recordWrapper = document.getElementById('recordArea');
+    const digLink = document.getElementById('digLink');
+    const navLinksContainer = document.getElementById('navLinks');
+    const recordWrapper = document.getElementById('recordArea');
 
-        if (digLink && navLinksContainer && recordWrapper) {
-            digLink.addEventListener('click', (e) => {
-            e.preventDefault(); // 即座の移動をキャンセル
-            const targetUrl = digLink.href;
+    if (digLink && navLinksContainer && recordWrapper) {
+        digLink.addEventListener('click', (e) => {
+        e.preventDefault(); // 即座の移動をキャンセル
+        const targetUrl = digLink.href;
 
-            // 1. アニメーションクラスを付与
-            // レコードは左へ (左にあるメニューとクロスさせるため、あえてダイナミックに)
-            recordWrapper.classList.add('slide-out-left');
-            
-            // ナビは右へ
-            navLinksContainer.classList.add('slide-out-right');
+        // 1. アニメーションクラスを付与
+        // レコードは左へ (左にあるメニューとクロスさせるため、あえてダイナミックに)
+        recordWrapper.classList.add('slide-out-left');
+        
+        // ナビは右へ
+        navLinksContainer.classList.add('slide-out-right');
 
-            // 2. アニメーション終了後にページ移動 (0.8秒後)
-            setTimeout(() => {
-                window.location.href = targetUrl;
-            }, 800);
-        });
+        // 2. アニメーション終了後にページ移動 (0.8秒後)
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 800);
+    });
     }
-        });
-    }
+
+    // ★追加: ブラウザバックで戻ってきた時にアニメーション状態をリセットする処理
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) { // キャッシュから復元された場合
+            if(recordWrapper) recordWrapper.classList.remove('slide-out-left');
+            if(navLinksContainer) navLinksContainer.classList.remove('slide-out-right');
+        }
+    });
 
 
     /* =================================================================
