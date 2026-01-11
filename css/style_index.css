@@ -200,26 +200,19 @@ body, html {
 /* --- トーンアーム (PCデフォルト) --- */
 .tonearm-wrapper {
     position: absolute;
-    /* PCではレコードの右上あたりに配置 */
     top: 100px;  
     right: -80px; 
-    
     width: 150px;
     height: 400px;
     z-index: 20; 
     cursor: pointer;
-    
-    /* 回転軸 (SVGの座標 50,50 付近) */
     transform-origin: 50% 50px; 
-    
-    /* 初期位置 */
     transform: rotate(10deg);
-    
     transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: auto;
 }
 
-/* 針を落とした時の状態 (PC) */
+/* PCでのアクティブ状態 */
 .tonearm-wrapper.tonearm-active {
     transform: rotate(-15deg); 
 }
@@ -235,30 +228,20 @@ body, html {
     filter: drop-shadow(15px 20px 20px rgba(0,0,0,0.4));
 }
 
-/* TAPヒント文字 */
+/* TAPヒント (PCデフォルト) */
 .tonearm-tap-hint {
     position: absolute;
-    /* PCでの位置 */
     top: 280px; 
     left: -50px;
-    
     color: #333;
     font-family: 'Permanent Marker', cursive;
     font-size: 2rem; 
     font-weight: normal; 
     letter-spacing: 0.05em;
-    text-transform: capitalize;
-    
     pointer-events: none;
     opacity: 1;
     transition: all 0.5s;
-    
-    text-shadow: 
-        2px 2px 0px #fff, 
-        -2px -2px 0px #fff,
-        2px -2px 0px #fff,
-        -2px 2px 0px #fff;
-    
+    text-shadow: 3px 3px 0px #fff;
     animation: floatHint 2s ease-in-out infinite;
     transform: rotate(-15deg); 
 }
@@ -469,7 +452,7 @@ body, html {
     transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
-/* ★修正: スマホ対応 (トーンアーム位置を画像に合わせて大幅修正) */
+/* ★修正: スマホ対応 (トーンアーム配置・Tapデザイン変更) */
 @media (max-width: 768px) {
     .header-logo-wrapper {
         width: 300px;
@@ -489,48 +472,63 @@ body, html {
         width: 120px;
         height: 300px;
         
-        /* 画面右下に固定配置 */
+        /* 固定配置で画面右下に持っていく */
         position: fixed;
-        top: auto;
-        bottom: 25%;  /* レコードの下端付近に合わせる */
-        right: -10px; /* 画面右端 */
+        top: auto;      /* top指定を解除 */
+        bottom: -50px;  /* 画面下端よりさらに下に配置して、上半分（アーム）だけ見せる */
+        right: 20px;    /* 画面右端 */
         
-        /* 初期状態で90度回転させて水平気味にする (針先が左) */
+        /* 初期状態: 90度 (針先が左を向く=水平)
+           0度(下向き) -> 90度(左向き)
+        */
         transform: rotate(90deg);
-        transform-origin: 50% 50px; /* 回転軸はそのまま */
+        /* 回転軸はSVGの上部中央 */
+        transform-origin: 50% 50px;
     }
     
-    /* 針を落とした時 (さらに回転させてレコードに乗せる) */
+    /* 針を落とした時: 115度 (左斜め上へ回転 = レコードに乗る) */
     .tonearm-wrapper.tonearm-active {
-        transform: rotate(70deg); /* 90度から少し戻してレコード盤に乗せる */
+        transform: rotate(115deg);
     }
     
-    /* TAP文字位置 */
+    /* ★修正: TAP文字 -> 薄い赤い丸の点滅に変更 */
     .tonearm-tap-hint {
+        /* 文字の見た目をリセット */
+        font-size: 0.8rem;
+        color: #fff;
+        text-shadow: none;
+        
+        /* 配置: 針の持ち手付近 */
         top: 260px;
         left: 20px;
-        font-size: 1.5rem;
-        transform: rotate(-90deg); /* アームの回転に合わせて文字の向きを直す */
+        
+        /* 丸い形状 */
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 100, 100, 0.4); /* 薄い赤 */
+        border-radius: 50%;
+        
+        /* 中央揃え */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        /* 回転リセット (アームが90度回転しているので、文字が見やすいように戻す) */
+        transform: rotate(-90deg);
+        
+        /* ふんわり点滅アニメーション */
+        animation: pulseRedCircle 2s infinite ease-in-out;
     }
     
-    /* 文字のアニメーション (回転を考慮) */
-    @keyframes floatHintMobile {
-        0%, 100% { transform: rotate(-90deg) translateX(0); }
-        50% { transform: rotate(-90deg) translateX(-5px); }
-    }
-    .tonearm-tap-hint {
-        animation: floatHintMobile 2s ease-in-out infinite;
+    /* 吹き出しのしっぽ（三角）は不要なので消す */
+    .tonearm-tap-hint::after {
+        display: none;
     }
     
-    .tonearm-wrapper.tonearm-active .tonearm-tap-hint {
-        opacity: 0;
-    }
-    
-    .about-bottom-panel {
-        height: calc(100vh - 180px); 
-    }
-    .about-columns {
-        grid-template-columns: 1fr;
-        gap: 30px;
+    /* 赤い丸の点滅アニメーション */
+    @keyframes pulseRedCircle {
+        0% { transform: rotate(-90deg) scale(1); opacity: 0.6; }
+        50% { transform: rotate(-90deg) scale(1.15); opacity: 1; background-color: rgba(255, 80, 80, 0.6); }
+        100% { transform: rotate(-90deg) scale(1); opacity: 0.6; }
     }
 }
