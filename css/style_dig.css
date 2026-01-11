@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   Dig Page Specific Styles (表示不具合修正版)
+   Dig Page Specific Styles (画像差し替え版)
    ================================================== */
 
 /* --- 1. ページ全体 --- */
@@ -191,7 +191,6 @@
     border-radius: 8px;
     cursor: pointer;
     
-    /* ★修正: アニメーション設定を確実に */
     opacity: 0; 
     animation: fadeInUpCard 0.6s ease-out forwards;
     
@@ -199,7 +198,6 @@
     height: 100%;
 }
 
-/* ★追加: アニメーションの定義を確実にここに記述 */
 @keyframes fadeInUpCard {
     0% {
         opacity: 0;
@@ -487,8 +485,12 @@
 .art-insta-link:hover {
     border-bottom: 1px solid #000;
 }
-.insta-label {
-    font-weight: 900;
+
+/* ★修正: テキストの代わりに画像を表示するためのスタイル */
+.insta-icon {
+    width: 18px; 
+    height: 18px;
+    object-fit: contain;
     margin-right: 5px;
 }
 
