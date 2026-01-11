@@ -1,38 +1,45 @@
 /* ==================================================
-   DIG DATA - メンバー追加はここを編集
+   DIG DATA - メンバー追加・編集
    ================================================== */
 const digData = [
     {
         name: "LUCY",
+        role: "DJ", // ★追加: 役職 (DJ, SELECTOR, ARTIST etc)
         location: "TOKYO",
-        genre: ["HIPHOP", "R&B"],
-        image: "https://placehold.co/400x400/333/fff?text=LUCY", // 顔写真のパス
-        qr: "https://placehold.co/100x100/000/fff?text=QR",      // QR画像のパス
-        qrLink: "#" // (将来的にクリックで飛ぶなら)
+        genre: ["DJ MIX", "HIPHOP", "R&B"], // "DJ MIX" を追加
+        image: "images/profile_lucy.png", 
+        qr: "images/qr_lucy.png",
+        serviceIcon: "images/logo_spotify.png" 
     },
     {
         name: "MIKE",
+        role: "SELECTOR", // DJじゃない人はSELECTORなど
         location: "NEW YORK",
-        genre: ["JAZZ", "SOUL", "FUNK"],
-        image: "https://placehold.co/400x400/555/fff?text=MIKE",
-        qr: "https://placehold.co/100x100/000/fff?text=QR",
-        qrLink: "#"
+        genre: ["JAZZ", "SOUL"],
+        image: "images/profile_mike.png",
+        qr: "images/qr_mike.png",
+       qrlink:"#",
+       serviceIcon: "images/logo_applemusic.png"
     },
     {
         name: "KIE",
+        role: "DJ",
         location: "BERLIN",
-        genre: ["TECHNO", "HOUSE"],
-        image: "https://placehold.co/400x400/777/fff?text=KIE",
-        qr: "https://placehold.co/100x100/000/fff?text=QR",
-        qrLink: "#"
+        genre: ["DJ MIX", "TECHNO", "HOUSE"],
+        image: "images/profile_kie.png",
+        qr: "images/qr_kie.png",
+       qrlink:"#",
+        serviceIcon: "images/logo_spotify.png"
     },
     {
         name: "SATO",
+        role: "ARTIST",
         location: "OSAKA",
-        genre: ["REGGAE", "DUB"],
-        image: "https://placehold.co/400x400/222/fff?text=SATO",
-        qr: "https://placehold.co/100x100/000/fff?text=QR",
-        qrLink: "#"
+        genre: ["REGGAE"],
+        image: "images/profile_sato.png",
+        qr: "images/qr_sato.png",
+       qrlink:"#",
+        serviceIcon: "images/logo_soundcloud.png"
     },
-    // ★追加する場合はここにコピーして増やすだけ！
+    // 必要に応じて追加
 ];
