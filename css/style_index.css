@@ -453,6 +453,13 @@ body, html {
     opacity: 0;
     transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
+/* ★新規追加: トーンアーム用（下に消える） */
+.slide-out-bottom {
+    /* 画面のはるか下(150vh)へ移動しつつ、少し回転させて自然に落とす */
+    transform: translateY(150vh) rotate(45deg) !important; 
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
 
 /* ★修正: スマホ対応 */
 @media (max-width: 768px) {
