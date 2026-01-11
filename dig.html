@@ -24,8 +24,10 @@
 
     <div class="dig-content">
         <div class="search-area">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search by name or location...">
-            <button class="search-btn">🔍</button>
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="NAME or LOCATION...">
+                <button class="search-btn">SEARCH</button>
+            </div>
         </div>
 
         <div class="profile-list" id="profileContainer">
@@ -40,42 +42,64 @@
 <div class="qr-modal-overlay" id="qrModal">
     <div class="qr-modal-content">
         <span class="qr-modal-close" onclick="closeQrModal()">&times;</span>
+        
         <h2 class="qr-modal-name" id="modalName">NAME</h2>
         <p class="qr-modal-genre" id="modalGenre">GENRE</p>
-        <img src="" alt="QR Code" class="qr-modal-img" id="modalQr">
-        <p style="font-size:0.8rem; color:#888;">Scan to listen to the playlist</p>
+
+        <div class="qr-modal-body">
+            <div class="qr-modal-photo-area">
+                <img src="" alt="Profile Photo" class="qr-modal-photo" id="modalPhoto">
+            </div>
+            <div class="qr-modal-code-area">
+                <img src="" alt="QR Code" class="qr-modal-qr" id="modalQr">
+                <p class="qr-instruction">Scan to listen</p>
+            </div>
+        </div>
     </div>
 </div>
 
 <script src="js/dig_data.js"></script>
 <script>
-    // データをもとにHTMLを生成するスクリプト
     const container = document.getElementById('profileContainer');
     const modal = document.getElementById('qrModal');
+    
+    // モーダル内の要素
     const modalName = document.getElementById('modalName');
     const modalGenre = document.getElementById('modalGenre');
+    const modalPhoto = document.getElementById('modalPhoto');
     const modalQr = document.getElementById('modalQr');
 
     function renderProfiles(data) {
         let html = '';
         data.forEach((person, index) => {
-            // アニメーション遅延
             const delay = index * 0.05; 
-            
-            // ジャンル表示用テキスト
             const genreText = person.genre.join(', ');
 
-            // カードのHTML (クリックイベントを設定)
-            // onclickで openQrModal を呼び出す
+            // SpotifyやApple Musicのロゴ画像パス（今回は仮の画像を使用）
+            // 実際には dig_data.js に serviceLogo プロパティを追加して制御するのがベストです
+            const serviceLogoUrl = "https://placehold.co/40x40/1db954/fff?text=SP"; // 仮のSpotifyアイコン
+
             html += `
             <div class="profile-card" style="animation-delay: ${delay}s" 
-                 onclick="openQrModal('${person.name}', '${genreText}', '${person.qr}')">
+                 onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}')">
+                
                 <div class="profile-img">
                     <img src="${person.image}" alt="${person.name}">
                 </div>
+
                 <div class="profile-info">
                     <h2 class="profile-name">${person.name}</h2>
                     <span class="profile-loc">${person.location}</span>
+                    <p class="profile-genre-text">${genreText}</p>
+                    
+                    <div class="profile-bottom-row">
+                        <div class="mini-qr-wrapper">
+                            <img src="${person.qr}" alt="QR" class="mini-qr">
+                        </div>
+                        <div class="service-icon-wrapper">
+                            <img src="${serviceLogoUrl}" alt="Spotify" class="service-icon">
+                        </div>
+                    </div>
                 </div>
             </div>
             `;
@@ -83,10 +107,8 @@
         container.innerHTML = html;
     }
 
-    // 初回表示
     renderProfiles(digData);
 
-    // 検索機能
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
@@ -98,29 +120,23 @@
         renderProfiles(filtered);
     });
 
-    // --- モーダル制御関数 ---
-    
-    // モーダルを開く
-    window.openQrModal = function(name, genre, qrSrc) {
+    // --- モーダル制御 ---
+    window.openQrModal = function(name, genre, imageSrc, qrSrc) {
         modalName.textContent = name;
         modalGenre.textContent = genre;
-        modalQr.src = qrSrc;
+        modalPhoto.src = imageSrc; // 写真をセット
+        modalQr.src = qrSrc;       // QRをセット
         
         modal.classList.add('active');
     };
 
-    // モーダルを閉じる
     window.closeQrModal = function() {
         modal.classList.remove('active');
     };
 
-    // モーダルの背景クリックでも閉じる
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeQrModal();
-        }
+        if (e.target === modal) closeQrModal();
     });
-
 </script>
 
 </body>
