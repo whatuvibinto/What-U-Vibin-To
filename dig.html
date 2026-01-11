@@ -46,10 +46,17 @@
 
 <div class="qr-modal-overlay" id="qrModal">
     <div class="qr-modal-content">
-        <span class="qr-modal-close" onclick="closeQrModal()">&times;</span>
+        <span class="qr-modal-close" onclick="closeQrModal()">×</span>
         
         <h2 class="qr-modal-name" id="modalName">NAME</h2>
         <p class="qr-modal-genre" id="modalGenre">GENRE</p>
+
+        <div class="qr-modal-instagram" id="modalInstaArea">
+            <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer">
+                <img src="images/logo_instagram.png" alt="IG" class="instagram-icon">
+                <span id="modalInstaName">username</span>
+            </a>
+        </div>
 
         <div class="qr-modal-body">
             <div class="qr-modal-photo-area">
@@ -74,8 +81,12 @@
     const modalGenre = document.getElementById('modalGenre');
     const modalPhoto = document.getElementById('modalPhoto');
     const modalQr = document.getElementById('modalQr');
-    // ★追加: リンク要素を取得
     const modalQrLink = document.getElementById('modalQrLink');
+    
+    // ★追加: Instagram要素
+    const modalInstaArea = document.getElementById('modalInstaArea');
+    const modalInstaLink = document.getElementById('modalInstaLink');
+    const modalInstaName = document.getElementById('modalInstaName');
 
     const searchInput = document.getElementById('searchInput');
     const genreContainer = document.getElementById('genreCheckboxes');
@@ -85,9 +96,7 @@
     let selectedGenres = []; 
 
     function init() {
-        // 更新日順にソート
         digData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-
         generateGenreCheckboxes();
         renderProfiles(digData); 
     }
@@ -128,13 +137,13 @@
             const role = person.role || "";
             const roleBadge = role ? `<span class="role-badge">${role}</span>` : "";
             
-            // リンク先がない場合の安全策 (#)
             const linkUrl = person.qrLink || "#";
+            const instaId = person.instagram || ""; // ★追加: インスタID取得
 
-            // ★修正: onclickに linkUrl を渡す
+            // ★修正: onclick引数に instaId を追加
             html += `
             <div class="profile-card" style="animation-delay: ${delay}s" 
-                 onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}')">
+                 onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}', '${instaId}')">
                 
                 <div class="profile-img">
                     <img src="${person.image}" alt="${person.name}">
@@ -206,15 +215,22 @@
         applyFilters();
     });
 
-    // ★修正: 引数に linkUrl を追加して受け取る
-    window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl) {
+    // ★修正: 引数に instaId を追加して処理
+    window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId) {
         modalName.textContent = name;
         modalGenre.textContent = genre;
         modalPhoto.src = imageSrc;
         modalQr.src = qrSrc;
-        
-        // ★追加: リンク先をセット
         modalQrLink.href = linkUrl;
+
+        // インスタ表示処理
+        if (instaId) {
+            modalInstaArea.style.display = "block";
+            modalInstaName.textContent = "@" + instaId;
+            modalInstaLink.href = "https://instagram.com/" + instaId;
+        } else {
+            modalInstaArea.style.display = "none";
+        }
 
         modal.classList.add('active');
     };
