@@ -360,6 +360,8 @@
 .qr-modal-overlay.active .qr-modal-content.art-layout {
     transform: scale(1);
 }
+
+/* --- 閉じるボタンの修正 --- */
 .qr-modal-close {
     position: absolute;
     top: 0;
@@ -367,22 +369,22 @@
     width: 60px;
     height: 60px;
     
-    /* ★変更点1: 背景を透明にする */
+    /* 背景を透明に */
     background: transparent; 
     
     border: none;
     cursor: pointer;
     z-index: 100;
-    transition: transform 0.3s; /* 背景色変更の代わりに回転などの動きに */
+    transition: transform 0.3s;
 }
 
-/* ホバー時の挙動も変更（背景色を変えない） */
+/* ホバー時にくるっと回す */
 .qr-modal-close:hover {
     background: transparent;
-    transform: rotate(90deg); /* ホバー時にくるっと回すとおしゃれです */
+    transform: rotate(90deg);
 }
 
-/* ★変更点2: バツ印の色を黒にする（白背景の上で見えるように） */
+/* ★修正: 線を共通設定（PCでは黒） */
 .qr-modal-close::before,
 .qr-modal-close::after {
     content: '';
@@ -391,10 +393,18 @@
     left: 50%;
     width: 30px; 
     height: 2px;
-    
-    /* 白(#fff)から黒(#000)に変更 */
     background-color: #000; 
 }
+
+/* ★修正: ここで回転させて「×」の形にします */
+.qr-modal-close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.qr-modal-close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
 
 .close-line { display: none; }
 
@@ -586,12 +596,9 @@
         transform: none;
     }
 
-    /* ▼▼▼ ★ここに追加してください ▼▼▼ */
-    
-    /* スマホでは画像（黒背景）の上にボタンが来るので、×印を灰色にする */
+    /* ★修正: スマホではボタンの色を灰色にする（黒背景で見えるように） */
     .qr-modal-close::before,
     .qr-modal-close::after {
-        background-color: #ccc; /* ここで「灰色」を指定 */
+        background-color: #ccc; 
     }
-}
 }
