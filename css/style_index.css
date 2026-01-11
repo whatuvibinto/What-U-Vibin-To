@@ -492,7 +492,7 @@ body, html {
     
     /* 針を落とした時 */
     .tonearm-wrapper.tonearm-active {
-        transform: rotate(125deg);
+        transform: rotate(118deg);
     }
     
     /* ★修正: 赤い点滅丸の位置をアーム中間に */
