@@ -11,7 +11,7 @@
 
 <div class="marquee-wrapper">
     <div class="marquee-content">
-        WHAT U VIBIN TO? /// KEEP DIGGING /// WHAT U VIBIN TO? /// KEEP DIGGING /// WHAT U VIBIN TO? /// KEEP DIGGING ///
+        WHAT U VIBIN TO? /// LOVE IS FREE /// WHAT U VIBIN TO? /// KEEP DIGGING /// WHAT U VIBIN TO? /// LOVE IS FREE ///
     </div>
 </div>
 
@@ -64,7 +64,8 @@
                 
                 <div class="art-insta-wrapper" id="modalInstaArea">
                     <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
-                        <span class="insta-label">IG.</span>
+                        <img src="images/InstagramLogo.png" alt="IG" class="insta-icon">
+                        
                         <span class="insta-val" id="modalInstaName">username</span>
                         <span class="insta-suffix">Tap & Check the profile</span>
                     </a>
@@ -110,7 +111,6 @@
     let currentSearchTerm = '';
     let selectedGenres = []; 
     
-    // ★window.digData からデータを取得
     let profileData = [];
     if (typeof window.digData !== 'undefined') {
         profileData = window.digData;
@@ -121,18 +121,13 @@
     }
 
     function init() {
-        // 日付順ソート
         profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
         generateGenreCheckboxes();
         renderProfiles(profileData); 
     }
 
-    // ★修正: DJ MIXタグの処理を含むジャンル生成
     function generateGenreCheckboxes() {
-        // 全ジャンルを抽出して重複削除
         let allGenres = [...new Set(profileData.flatMap(person => person.genre))].sort();
-
-        // "DJ MIX" があれば先頭に移動
         const mixTag = "DJ MIX";
         if (allGenres.includes(mixTag)) {
             allGenres = allGenres.filter(g => g !== mixTag); 
