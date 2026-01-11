@@ -1,83 +1,580 @@
-/* --- プロフィールカード内のロゴ加工を解除 --- */
-.service-icon img {
-    width: 60px;
-    height: auto;
-    filter: none !important; /* グレースケール解除 */
-    mix-blend-mode: normal !important; /* ブレンドモード解除 */
+@charset "UTF-8";
+
+/* ==================================================
+   Dig Page Specific Styles (修正版)
+   ================================================== */
+
+/* --- 1. ページ全体 --- */
+.dig-page {
+    background-color: #ffffff; 
+    overflow-x: hidden;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* --- カード内レイアウトの高さ統一 --- */
-.profile-info {
+/* --- 2. ロゴ --- */
+.dig-logo {
+    position: absolute;
+    top: 120px;
+    left: 30px;
+    margin: 0;
+    width: 500px;
+    max-width: 80%;
+    z-index: 10;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 3. メインコンテンツ --- */
+.dig-content {
+    padding-top: 400px; 
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-bottom: 100px;
+    padding-left: 20px;
+    padding-right: 20px;
+    animation: fadeInUp 1s ease-out 0.3s backwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 4. 検索バー & フィルター --- */
+.search-area {
+    margin-bottom: 60px;
+    text-align: center;
+    width: 100%;
+}
+
+.search-box {
+    display: inline-flex;
+    width: 100%;
+    max-width: 600px;
+    height: 50px;
+    border: 2px solid #000;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.search-input {
     flex-grow: 1;
-    padding: 20px;
-    display: grid;
-    /* 名前・都市エリア / ジャンルエリア / QRエリア の3段構成 */
-    grid-template-rows: 80px 1fr 80px; 
-    gap: 10px;
-    position: relative;
+    border: none;
+    background: transparent;
+    padding: 0 15px;
+    font-size: 1rem;
+    color: #000;
+    outline: none;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.profile-name-group {
-    /* 名前と都市が2行になっても、この80pxの中で収まるように設定 */
+.search-input::placeholder {
+    color: #aaa;
+    letter-spacing: 1px;
+}
+
+.search-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 0 25px;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background 0.3s;
+}
+
+.search-btn:hover {
+    background: #333;
+}
+
+/* --- ジャンルフィルター --- */
+.genre-filter-area {
+    max-width: 800px;
+    margin: 20px auto 0;
+    text-align: center;
+}
+
+.genre-label {
+    font-size: 0.7rem; 
+    font-weight: bold;
+    color: #999;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.genre-checkboxes {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px; 
 }
 
-.profile-qr {
-    /* 下端に固定 */
-    border-top: 1px dashed #ccc;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-top: 10px;
+.genre-tag {
+    cursor: pointer;
+    user-select: none;
 }
 
-.profile-qr img {
-    width: 60px;
-    height: 60px;
-    filter: none !important;
-    mix-blend-mode: normal !important;
+.genre-tag input[type="checkbox"] {
+    display: none;
 }
 
-/* --- モーダルの修正 --- */
-.art-scan-text {
-    /* 元々のScanテキストのスタイル */
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: 0.7rem;
+.genre-name {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.75rem;
     font-weight: bold;
     color: #666;
+    background: #fff;
+    transition: all 0.2s;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
-.insta-label-styled {
-    /* Tap & Check the profile 専用スタイル */
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: 0.7rem;
-    font-weight: bold;
-    color: #666; /* スキャンテキストと同じ色 */
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-right: 10px;
-}
-
-.art-insta-area {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.insta-link-group {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+.genre-tag:hover .genre-name {
+    border-color: #000;
     color: #000;
 }
 
+.genre-tag input[type="checkbox"]:checked + .genre-name {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.genre-tag.special-tag .genre-name {
+    border: 2px solid #000; 
+    font-size: 0.85rem;     
+    padding: 5px 15px;      
+    color: #000;            
+}
+
+.genre-tag.special-tag input[type="checkbox"]:checked + .genre-name {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.filter-reset-btn {
+    margin-top: 15px;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer;
+}
+
+/* --- 5. プロフィールカード --- */
+.profile-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; 
+    width: 100%;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeInUpCard 0.6s ease-out forwards;
+    position: relative; 
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.profile-img {
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    overflow: hidden;
+    background: #f0f0f0;
+    position: relative; 
+}
+
+.profile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.profile-card:hover .profile-img img {
+    transform: scale(1.05);
+}
+
+.role-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #000;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 3px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+.profile-info {
+    padding: 15px;
+    text-align: left;
+}
+
+.profile-name {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #000;
+    line-height: 1.2;
+}
+
+.profile-loc {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 8px;
+    font-weight: normal;
+}
+
+.profile-genre-text {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-top: 1px dashed #eee;
+    padding-top: 10px;
+}
+
+.mini-qr-wrapper, .service-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-qr {
+    width: 30px;
+    height: 30px;
+    mix-blend-mode: multiply;
+}
+
+.service-icon {
+    width: 24px; 
+    height: 24px;
+    object-fit: contain;
+    filter: grayscale(100%); 
+    transition: filter 0.3s;
+}
+
+.profile-card:hover .service-icon {
+    filter: grayscale(0%);
+}
+
+
+/* ==================================================
+   ★現代アート風モーダル (Art Layout)
+   ================================================== */
+
+/* オーバーレイ */
+.qr-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+}
+
+.qr-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* モーダル本体 */
+.qr-modal-content.art-layout {
+    display: flex;
+    width: 900px;
+    max-width: 90%;
+    height: 500px;
+    background: #fff;
+    border-radius: 0;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+    transform: scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qr-modal-overlay.active .qr-modal-content.art-layout {
+    transform: scale(1);
+}
+
+/* ★修正: 閉じるボタン (綺麗な×印) */
+.qr-modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    background: #000;
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    transition: background 0.3s;
+    /* flexなどは削除 */
+}
+.qr-modal-close:hover {
+    background: #333;
+}
+
+/* CSSで×印を作る */
+.qr-modal-close::before,
+.qr-modal-close::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px; /* 線の長さ */
+    height: 2px; /* 線の太さ */
+    background-color: #fff;
+}
+
+.qr-modal-close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.qr-modal-close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* HTML内の古いspan要素は非表示にする */
+.close-line {
+    display: none;
+}
+
+
+/* 左側：写真エリア */
+.art-image-section {
+    flex: 0 0 40%;
+    position: relative;
+    background: #000;
+}
+
+.art-image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.95;
+}
+
+/* 写真上のRoleバッジ */
+.art-role-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #fff;
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: 900;
+    padding: 6px 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+
+/* 右側：情報エリア */
+.art-info-section {
+    flex: 1;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+/* 上部情報 */
+.art-name {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 0.9;
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+}
+
+.art-meta-row {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.art-slash {
+    color: #ccc;
+    font-weight: 300;
+}
+
+.art-location, .art-genre {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.art-genre {
+    color: #666;
+}
+
+/* インスタリンク */
+.art-insta-link {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #000;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.3s;
+    font-weight: bold;
+}
+.art-insta-link:hover {
+    border-bottom: 1px solid #000;
+}
+.insta-label {
+    font-weight: 900;
+    margin-right: 5px;
+}
 .insta-arrow {
-    margin-right: 5px; /* 矢印を左側に配置するための余白 */
     font-size: 1.2rem;
+    margin-left: 5px;
+    transform: translateY(-2px);
+}
+
+
+/* 下部情報 (QR) */
+.art-info-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.art-qr-container img {
+    width: 100px;
+    height: 100px;
+    mix-blend-mode: multiply;
+}
+
+.art-scan-text {
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: #ccc;
+    letter-spacing: 2px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    margin: 0;
+}
+
+/* --- モーダルのレスポンシブ (スマホ対応) --- */
+@media (max-width: 768px) {
+    .qr-modal-content.art-layout {
+        flex-direction: column;
+        height: auto;
+        max-height: 85vh;
+        overflow-y: auto;
+        width: 85%;
+    }
+
+    .art-image-section {
+        height: 250px;
+        flex: none;
+    }
+
+    .art-info-section {
+        padding: 30px;
+        flex: none;
+        gap: 30px;
+    }
+
+    .art-name {
+        font-size: 2.2rem;
+    }
+    
+    .art-info-footer {
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .art-scan-text {
+        writing-mode: horizontal-tb;
+        transform: none;
+    }
+}
+
+
+@keyframes fadeInUpCard {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .dig-logo {
+        width: 300px;
+        top: 80px;
+    }
+    .dig-content {
+        padding-top: 300px;
+    }
+    .profile-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .profile-info { padding: 10px; }
+    .profile-name { font-size: 0.8rem; }
+    .profile-loc { font-size: 0.6rem; }
+    .profile-genre-text { display: none; }
+    .profile-bottom-row { justify-content: center; gap: 10px; }
+    .mini-qr { width: 20px; height: 20px; }
+    .service-icon { width: 18px; height: 18px; }
+    .role-badge { font-size: 0.5rem; padding: 2px 4px; }
 }
