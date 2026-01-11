@@ -32,6 +32,10 @@
 
         <div class="record-wrapper" id="recordArea">
             <img src="images/record_v2.svg" alt="Vinyl Record" class="record-img" id="recordDisk">
+            
+            <div class="tonearm-wrapper" id="tonearm">
+                <img src="images/tonearm.svg" alt="Tonearm" class="tonearm-img">
+            </div>
         </div>
     </div>
 
@@ -46,17 +50,14 @@
     </div>
     <div class="about-scroll-container" id="panelContent">
         <div class="about-content-inner">
-            
             <div class="about-panel-logo">
                 <img src="images/logo.svg" alt="Logo">
             </div>
-
             <p class="logo-note">
                 「What u vibin to?」とは、<br>
                 「最近何にノってんの？」「最近どんな曲聴いてんの？」<br>
                 というニュアンスの口語です。使ってみてね。
             </p>
-
             <h2 class="about-main-title">ABOUT</h2>
             <p class="about-intro">
                 このサイトでは、<br>
@@ -65,12 +66,11 @@
                 <span class="small-note">This site features playlists from people you’re curious about.<br>
                     Find your next favorite song. Happy digging!!</span>
             </p>
-
             <div class="about-columns">
                 <dl>
                     <dt><a href="books.html">Books</a></dt>
                     <dd>オリジナルアートブックのアーカイブを見ることができます。<br>
-                        ※準備中...軍資金がそろい次第始動します...<br>
+                    ※準備中...軍資金がそろい次第始動します...<br>
                     <span class="small-note">Explore the original artbook archives. <br>
                         Coming soon... Launching as soon as the war chest is full!</span></dd>
                 </dl>
@@ -90,7 +90,7 @@
                         Just between us... the QR code drops different playlists depending on when you scan. Think you can find them all? 😏</span></dd>
                 </dl>
                 <dl>
-                    <dt><a href="event.html">Events</a></dt>
+                    <dt><a href="events.html">Events</a></dt>
                     <dd>イベント情報を掲載しています。さあ、夜の街へ繰り出そう<br>
                     <span class="small-note">Check out the latest event listings. Time to hit the town.</span></dd>
                 </dl>
@@ -112,18 +112,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const panelContent = document.getElementById('panelContent');
     const navLinks = document.querySelector('.nav-links');
     
-    // パネルの状態管理
     let isPanelOpen = false;
     let isPanelDragging = false;
     let panelStartY = 0;
     let panelCurrentY = 0;
 
-    // --- 公開関数 (HTMLのonclickから呼ぶ) ---
     window.openAboutPanel = function() {
         if(!panel) return;
         panel.style.transform = 'translateY(0)';
         isPanelOpen = true;
-        if(navLinks) navLinks.style.opacity = '0.3'; // ナビを目立たなくする
+        if(navLinks) navLinks.style.opacity = '0.3';
     };
 
     window.closeAboutPanel = function() {
@@ -131,107 +129,82 @@ document.addEventListener('DOMContentLoaded', () => {
         panel.style.transform = 'translateY(100%)';
         isPanelOpen = false;
         if(navLinks) navLinks.style.opacity = '1';
-        // 閉じた後にスクロール位置をリセット
         setTimeout(() => { if(panelContent) panelContent.scrollTop = 0; }, 300);
     };
 
-    // --- パネルのタッチ操作 ---
     if(panel) {
-        // タッチ開始
         panel.addEventListener('touchstart', (e) => {
             const touchY = e.touches[0].clientY;
             const scrollTop = panelContent.scrollTop;
-            // ヘッダー部分を触ったか判定
             const isHeader = panelHeader.contains(e.target);
-            
-            // 「中身」のスクロール中はパネル自体を動かさない
-            // (ヘッダーを掴んでいる時、またはスクロール位置がトップの時だけ動かす)
             if (!isHeader && scrollTop > 0) {
                 isPanelDragging = false;
                 return;
             }
             isPanelDragging = true;
             panelStartY = touchY;
-            panel.classList.remove('panel-animate'); // ドラッグ中はアニメーションをオフ
+            panel.classList.remove('panel-animate');
         }, { passive: false });
 
-        // タッチ移動
         panel.addEventListener('touchmove', (e) => {
             if (!isPanelDragging) return;
             const touchY = e.touches[0].clientY;
             const deltaY = touchY - panelStartY; 
-            
             let newY = deltaY;
-            if (deltaY < 0) newY = deltaY * 0.3; // 上に引っ張る時は抵抗をつける
-            
-            // 下方向へのスワイプ（閉じる動作）の時は、ブラウザ標準のスクロール等を防ぐ
+            if (deltaY < 0) newY = deltaY * 0.3;
             if (deltaY > 0 && e.cancelable) e.preventDefault();
-
             panel.style.transform = `translateY(${newY}px)`;
             panelCurrentY = newY;
         }, { passive: false });
 
-        // タッチ終了
         panel.addEventListener('touchend', () => {
             if (!isPanelDragging) return;
             isPanelDragging = false;
-            panel.classList.add('panel-animate'); // アニメーションをオンに戻す
-
-            // 150px以上下に引っ張ったら閉じる
+            panel.classList.add('panel-animate');
             if (panelCurrentY > 150) {
                 closeAboutPanel();
             } else {
-                // 元の位置に戻る
                 panel.style.transform = `translateY(0px)`;
                 panelCurrentY = 0;
             }
         });
 
-        // パネル外（背景）をクリックしたら閉じる
         document.addEventListener('click', (e) => {
             if (isPanelOpen && panel) {
-                // パネル自体、または「開くボタン」以外をクリックした場合
                 if (!panel.contains(e.target) && !e.target.closest('a[onclick*="openAboutPanel"]')) {
                     closeAboutPanel();
                 }
             }
         });
-
     }
 
     /* =================================================================
-       機能3: ページ遷移アニメーション (Dig & Contact & Books & Events)
+       機能3: ページ遷移アニメーション
        ================================================================= */
     const digLink = document.getElementById('digLink');
     const contactLink = document.getElementById('contactLink');
     const booksLink = document.getElementById('booksLink');
-    const eventsLink = document.getElementById('eventsLink'); // ★追加
-    
+    const eventsLink = document.getElementById('eventsLink');
     const navLinksContainer = document.getElementById('navLinks');
     const recordWrapper = document.getElementById('recordArea');
 
     function handlePageTransition(e) {
         e.preventDefault(); 
         const targetUrl = e.currentTarget.href; 
-
         if(recordWrapper) recordWrapper.classList.add('slide-out-left');
         if(navLinksContainer) navLinksContainer.classList.add('slide-out-right');
-
         setTimeout(() => {
             window.location.href = targetUrl;
         }, 800);
     }
 
-    // イベント登録
     if (digLink) digLink.addEventListener('click', handlePageTransition);
     if (contactLink) contactLink.addEventListener('click', handlePageTransition);
     if (booksLink) booksLink.addEventListener('click', handlePageTransition);
-    // ★追加
     if (eventsLink) eventsLink.addEventListener('click', handlePageTransition);
 
-    // ブラウザバックで戻ってきた時にアニメーション状態をリセットする処理
     window.addEventListener('pageshow', (event) => {
-        if (event.persisted) { // キャッシュから復元された場合
+        if (event.persisted) {
             if(recordWrapper) recordWrapper.classList.remove('slide-out-left');
             if(navLinksContainer) navLinksContainer.classList.remove('slide-out-right');
         }
@@ -239,64 +212,95 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* =================================================================
-       機能2: レコードのスクラッチ (Web Audio API)
+       機能2: レコードスクラッチ (トーンアーム連動版)
        ================================================================= */
     const recordArea = document.getElementById('recordArea');
     const recordDisk = document.getElementById('recordDisk');
+    const tonearm = document.getElementById('tonearm'); 
     
-    // パラメータ
     const AUDIO_URL = 'images/scratch.mp3'; 
-    const FRICTION = 0.92;   // 摩擦（慣性）
-    const SENSITIVITY = 1.2; // 感度
+    const FRICTION = 0.92;
+    const SENSITIVITY = 1.2;
 
-    // Web Audio変数
     let audioCtx = null;
     let audioBuffer = null;
     let sourceNode = null;
     let gainNode = null;
-    let isAudioUnlocked = false;
+    
+    let isAudioInitialized = false; 
+    let isFileLoaded = false;       
 
-    // レコード物理演算変数
     let isRecordDragging = false;
     let recordVelocity = 0;
     let recordCurrentRotation = 0;
     let recordLastMouseAngle = 0;
-    
-    // 音声ファイルのロード
-    async function loadAudio() {
+
+    let isNeedleDropped = false;
+
+    // --- 1. 音声ファイルロード ---
+    async function loadAudioFile() {
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioCtx = new AudioContext();
+            const tempCtx = new AudioContext();
             const response = await fetch(AUDIO_URL);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const arrayBuffer = await response.arrayBuffer();
-            audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+            audioBuffer = await tempCtx.decodeAudioData(arrayBuffer);
+            isFileLoaded = true;
+            if(tempCtx.state !== 'closed') tempCtx.close();
         } catch (error) {
             console.error("Audio Load Error:", error);
         }
     }
-    loadAudio();
+    loadAudioFile();
 
-    // スマホ用ロック解除 (ユーザー操作の初回に実行)
-    function unlockAudio() {
-        if (isAudioUnlocked || !audioCtx) return;
+    // --- 2. オーディオ初期化 ---
+    function initAudioEngine() {
+        if (isAudioInitialized) return;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx) audioCtx = new AudioContext();
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        const buffer = audioCtx.createBuffer(1, 1, 22050);
+
+        const silentBuffer = audioCtx.createBuffer(1, 1, 22050);
         const source = audioCtx.createBufferSource();
-        source.buffer = buffer;
+        source.buffer = silentBuffer;
         source.connect(audioCtx.destination);
         source.start(0);
-        isAudioUnlocked = true;
+
+        isAudioInitialized = true;
     }
 
-    // 音の再生制御
-    function updateSound(currentVel) {
-        if (!audioCtx || !audioBuffer) return;
+    // --- 3. トーンアーム操作 ---
+    if (tonearm) {
+        tonearm.addEventListener('click', () => {
+            // Safari対策: クリック時に必ずAudioContextを叩き起こす
+            initAudioEngine();
 
-        // 音が鳴ってない & 速度が出ているなら再生開始
+            isNeedleDropped = !isNeedleDropped;
+            
+            if (isNeedleDropped) {
+                tonearm.classList.add('tonearm-active');
+            } else {
+                tonearm.classList.remove('tonearm-active');
+                stopSound();
+            }
+        });
+    }
+
+    // --- 4. 音の再生制御 ---
+    function updateSound(currentVel) {
+        if (!isNeedleDropped) {
+            stopSound();
+            return;
+        }
+
+        if (!isFileLoaded || !isAudioInitialized || !audioCtx) return;
+
         if (!sourceNode && Math.abs(currentVel) > 0.1) {
             sourceNode = audioCtx.createBufferSource();
             sourceNode.buffer = audioBuffer;
             sourceNode.loop = true;
+            
             gainNode = audioCtx.createGain();
             sourceNode.connect(gainNode);
             gainNode.connect(audioCtx.destination);
@@ -304,20 +308,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (sourceNode && gainNode) {
-            // 速度に応じてピッチを変える
             let speed = Math.abs(currentVel) * SENSITIVITY;
             if (speed > 3.0) speed = 3.0; 
             if (speed < 0.05) speed = 0;
 
             const now = audioCtx.currentTime;
-            sourceNode.playbackRate.setTargetAtTime(speed, now, 0.02);
-            // 速度に応じて音量も変える
+            if(sourceNode.playbackRate.value !== speed) {
+                 sourceNode.playbackRate.setTargetAtTime(speed, now, 0.05);
+            }
             const volume = Math.min(speed, 1.0);
-            gainNode.gain.setTargetAtTime(volume, now, 0.02);
+            gainNode.gain.setTargetAtTime(volume, now, 0.05);
         }
     }
 
-    // 音の停止
+    // --- 5. 音の停止 ---
     function stopSound() {
         if (sourceNode) {
             const node = sourceNode;
@@ -331,12 +335,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // アニメーションループ (常に回っている監視役)
+    // --- 6. アニメーション ---
     function animateRecord() {
         if (!isRecordDragging) {
-            recordVelocity *= FRICTION; // 手を離したら摩擦で減速
+            recordVelocity *= FRICTION; 
         }
-
         if (Math.abs(recordVelocity) < 0.001) {
             recordVelocity = 0;
             stopSound();
@@ -349,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animateRecord();
 
-    // 座標計算用ヘルパー
+    // --- 7. ドラッグ操作 ---
     function getCenter(el) {
         const rect = el.getBoundingClientRect();
         return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
@@ -360,13 +363,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.atan2(dy, dx) * (180 / Math.PI);
     }
 
-    // --- レコード操作イベント ---
     if(recordArea) {
         function startRecordDrag(x, y) {
-            // ★重要: パネルが開いている時は、レコード操作をさせない
             if (isPanelOpen) return;
-            
-            unlockAudio();
+            initAudioEngine();
             isRecordDragging = true;
             const center = getCenter(recordArea);
             recordLastMouseAngle = getAngle(x, y, center);
@@ -378,7 +378,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const center = getCenter(recordArea);
             const angle = getAngle(x, y, center);
             let delta = angle - recordLastMouseAngle;
-            // 角度の補正 (-180〜180)
             while (delta <= -180) delta += 360;
             while (delta > 180) delta -= 360;
             recordVelocity = delta;
@@ -390,20 +389,24 @@ document.addEventListener('DOMContentLoaded', () => {
             recordArea.style.cursor = 'grab';
         }
 
-        // マウスイベント
-        recordArea.addEventListener('mousedown', e => startRecordDrag(e.clientX, e.clientY));
+        recordArea.addEventListener('mousedown', e => {
+            if(e.target.closest('#tonearm')) return;
+            startRecordDrag(e.clientX, e.clientY)
+        });
         window.addEventListener('mousemove', e => moveRecordDrag(e.clientX, e.clientY));
         window.addEventListener('mouseup', endRecordDrag);
 
-        // タッチイベント
         recordArea.addEventListener('touchstart', e => {
-            if (isPanelOpen) return; 
+            if (isPanelOpen) return;
+            if(e.target.closest('#tonearm')) return;
+            
+            initAudioEngine();
             startRecordDrag(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: false });
 
         window.addEventListener('touchmove', e => {
             if (isRecordDragging) {
-                e.preventDefault(); // スクロール防止
+                e.preventDefault(); 
                 moveRecordDrag(e.touches[0].clientX, e.touches[0].clientY);
             }
         }, { passive: false });
