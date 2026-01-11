@@ -171,7 +171,7 @@
     cursor: pointer;
 }
 
-/* --- 5. プロフィールカード --- */
+/* --- 5. プロフィールカード (位置揃え修正) --- */
 .profile-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -192,6 +192,8 @@
     opacity: 0;
     animation: fadeInUpCard 0.6s ease-out forwards;
     position: relative; 
+    /* 高さを揃えるために100%指定 */
+    height: 100%;
 }
 
 .profile-card:hover {
@@ -234,9 +236,14 @@
     z-index: 2;
 }
 
+/* ★修正: 情報を縦に広げて下部を底に押し付ける */
 .profile-info {
     padding: 15px;
     text-align: left;
+    
+    flex-grow: 1; /* 余白を埋める */
+    display: flex;
+    flex-direction: column;
 }
 
 .profile-name {
@@ -266,12 +273,14 @@
     text-overflow: ellipsis;
 }
 
+/* ★修正: margin-top: auto で一番下に配置 */
 .profile-bottom-row {
     display: flex;
     align-items: center;
     gap: 15px;
     border-top: 1px dashed #eee;
     padding-top: 10px;
+    margin-top: auto; /* これで底付きになる */
 }
 
 .mini-qr-wrapper, .service-icon-wrapper {
@@ -286,21 +295,20 @@
     mix-blend-mode: multiply;
 }
 
+/* ★修正: グレースケール解除 */
 .service-icon {
     width: 24px; 
     height: 24px;
     object-fit: contain;
-    filter: grayscale(100%); 
-    transition: filter 0.3s;
+    /* filter: grayscale(100%);  <-- 削除 */
+    transition: transform 0.3s;
 }
 
-.profile-card:hover .service-icon {
-    filter: grayscale(0%);
-}
+/* .profile-card:hover .service-icon { filter: grayscale(0%); } <-- 削除 */
 
 
 /* ==================================================
-   ★現代アート風モーダル (Art Layout)
+   ★現代アート風モーダル (Art Layout - Clean)
    ================================================== */
 
 /* オーバーレイ */
@@ -338,6 +346,9 @@
     overflow: hidden;
     position: relative;
     padding: 0;
+    box-sizing: border-box;
+    text-align: left;
+    
     transform: scale(0.95);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -346,7 +357,7 @@
     transform: scale(1);
 }
 
-/* ★修正: 閉じるボタン (綺麗な×印) */
+/* 閉じるボタン (×印) */
 .qr-modal-close {
     position: absolute;
     top: 0;
@@ -358,21 +369,21 @@
     cursor: pointer;
     z-index: 100;
     transition: background 0.3s;
-    /* flexなどは削除 */
 }
+
 .qr-modal-close:hover {
     background: #333;
 }
 
-/* CSSで×印を作る */
+/* ×印の作成 */
 .qr-modal-close::before,
 .qr-modal-close::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 30px; /* 線の長さ */
-    height: 2px; /* 線の太さ */
+    width: 30px; 
+    height: 2px;
     background-color: #fff;
 }
 
@@ -384,7 +395,6 @@
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-/* HTML内の古いspan要素は非表示にする */
 .close-line {
     display: none;
 }
@@ -395,6 +405,7 @@
     flex: 0 0 40%;
     position: relative;
     background: #000;
+    height: 100%;
 }
 
 .art-image-section img {
@@ -417,6 +428,7 @@
     padding: 6px 12px;
     letter-spacing: 2px;
     text-transform: uppercase;
+    z-index: 2;
 }
 
 
@@ -428,6 +440,7 @@
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+    box-sizing: border-box; 
 }
 
 /* 上部情報 */
@@ -438,6 +451,7 @@
     margin: 0 0 20px 0;
     text-transform: uppercase;
     letter-spacing: -2px;
+    color: #000;
 }
 
 .art-meta-row {
@@ -482,10 +496,15 @@
     font-weight: 900;
     margin-right: 5px;
 }
-.insta-arrow {
-    font-size: 1.2rem;
-    margin-left: 5px;
-    transform: translateY(-2px);
+
+/* ★追加: インスタ右側のテキスト (矢印の代わり) */
+.insta-suffix {
+    color: #ccc;
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    margin-left: 10px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 
@@ -516,6 +535,31 @@
 
 /* --- モーダルのレスポンシブ (スマホ対応) --- */
 @media (max-width: 768px) {
+    /* dig.html本体のレスポンシブ */
+    .dig-logo {
+        width: 300px;
+        top: 80px;
+    }
+    .dig-content {
+        padding-top: 300px;
+    }
+    .profile-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .profile-info { padding: 10px; }
+    .profile-name { font-size: 0.8rem; }
+    .profile-loc { font-size: 0.6rem; }
+    .profile-genre-text { display: none; }
+    .profile-bottom-row { justify-content: center; gap: 10px; }
+    .mini-qr { width: 20px; height: 20px; }
+    .service-icon { width: 18px; height: 18px; }
+    .profile-card .role-badge { 
+        font-size: 0.5rem; 
+        padding: 2px 4px; 
+    }
+
+    /* モーダルのレスポンシブ */
     .qr-modal-content.art-layout {
         flex-direction: column;
         height: auto;
@@ -532,7 +576,7 @@
     .art-info-section {
         padding: 30px;
         flex: none;
-        gap: 30px;
+        gap: 20px;
     }
 
     .art-name {
