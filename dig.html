@@ -70,13 +70,11 @@
     const container = document.getElementById('profileContainer');
     const modal = document.getElementById('qrModal');
     
-    // モーダル要素
     const modalName = document.getElementById('modalName');
     const modalGenre = document.getElementById('modalGenre');
     const modalPhoto = document.getElementById('modalPhoto');
     const modalQr = document.getElementById('modalQr');
 
-    // フィルター要素
     const searchInput = document.getElementById('searchInput');
     const genreContainer = document.getElementById('genreCheckboxes');
     const resetBtn = document.getElementById('resetBtn');
@@ -85,27 +83,28 @@
     let selectedGenres = []; 
 
     function init() {
+        // ★追加: データの日付(date)を見て、新しい順(降順)に並び替える
+        // 日付が未記入のデータがある場合は一番後ろになります
+        digData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
         generateGenreCheckboxes();
         renderProfiles(digData); 
     }
 
-    // ★修正: DJ MIXを特別扱いして先頭に持ってくる
     function generateGenreCheckboxes() {
         // 全ジャンル抽出
         let allGenres = [...new Set(digData.flatMap(person => person.genre))].sort();
 
-        // "DJ MIX" があれば配列から抜いて、先頭に追加する
         const mixTag = "DJ MIX";
         if (allGenres.includes(mixTag)) {
-            allGenres = allGenres.filter(g => g !== mixTag); // 一旦削除
-            allGenres.unshift(mixTag); // 先頭に追加
+            allGenres = allGenres.filter(g => g !== mixTag); 
+            allGenres.unshift(mixTag); 
         }
 
         let html = '';
         allGenres.forEach(genre => {
-            // DJ MIXだけ特別なクラス(special-tag)を付ける
             const specialClass = (genre === mixTag) ? 'special-tag' : '';
-            
+
             html += `
                 <label class="genre-tag ${specialClass}">
                     <input type="checkbox" value="${genre}" onchange="handleGenreChange(this)">
@@ -128,8 +127,6 @@
             const genreText = person.genre.join(', ');
             const serviceIconUrl = person.serviceIcon || "images/default_icon.png"; 
 
-            // ★追加: 役職(Role)を表示。なければ空文字
-            // DJの場合は特別なクラスをつけることも可能
             const role = person.role || "";
             const roleBadge = role ? `<span class="role-badge">${role}</span>` : "";
 
