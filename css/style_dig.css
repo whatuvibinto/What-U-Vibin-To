@@ -11,7 +11,7 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* --- 2. ロゴの位置調整 --- */
+/* --- 2. ロゴ --- */
 .dig-logo {
     position: absolute;
     top: 120px;
@@ -28,7 +28,7 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 3. メインコンテンツエリア --- */
+/* --- 3. メインコンテンツ --- */
 .dig-content {
     padding-top: 400px; 
     max-width: 1000px;
@@ -36,7 +36,6 @@
     padding-bottom: 100px;
     padding-left: 20px;
     padding-right: 20px;
-    
     animation: fadeInUp 1s ease-out 0.3s backwards;
 }
 
@@ -45,10 +44,9 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-
 /* --- 4. 検索バー & フィルター --- */
 .search-area {
-    margin-bottom: 60px; /* 少し詰める */
+    margin-bottom: 60px;
     text-align: center;
     width: 100%;
 }
@@ -95,7 +93,7 @@
     background: #333;
 }
 
-/* --- ★追加: ジャンルフィルターのデザイン --- */
+/* --- ジャンルフィルター --- */
 .genre-filter-area {
     max-width: 800px;
     margin: 20px auto 0;
@@ -103,10 +101,10 @@
 }
 
 .genre-label {
-    font-size: 0.8rem;
+    font-size: 0.7rem; /* ラベルも小さめに */
     font-weight: bold;
     color: #999;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     letter-spacing: 1px;
 }
 
@@ -114,29 +112,30 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 8px; /* 間隔を狭める */
 }
 
-/* チェックボックスのデザインを隠してボタン風にする */
 .genre-tag {
     cursor: pointer;
     user-select: none;
 }
 
 .genre-tag input[type="checkbox"] {
-    display: none; /* 元のチェックボックスは非表示 */
+    display: none;
 }
 
+/* ★修正: タグボタンを小さくスタイリッシュに */
 .genre-name {
     display: inline-block;
-    padding: 6px 14px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    padding: 4px 10px; /* パディング縮小 */
+    border: 1px solid #ddd;
+    border-radius: 4px; /* 丸みを減らしてシャープに */
+    font-size: 0.75rem; /* 文字サイズ縮小 */
     font-weight: bold;
     color: #666;
     background: #fff;
     transition: all 0.2s;
+    text-transform: uppercase;
 }
 
 .genre-tag:hover .genre-name {
@@ -151,7 +150,22 @@
     border-color: #000;
 }
 
-/* リセットボタン */
+/* ★追加: DJ MIX専用の特別スタイル */
+.genre-tag.special-tag .genre-name {
+    border: 1px solid #000;
+    background: #000;
+    color: #fff;
+    /* 少し目立たせる */
+    font-size: 0.8rem; 
+    padding: 5px 12px;
+}
+
+/* DJ MIXがチェックされた時（反転させるか、そのままかはお好み。今回は反転） */
+.genre-tag.special-tag input[type="checkbox"]:checked + .genre-name {
+    background: #fff;
+    color: #000;
+}
+
 .filter-reset-btn {
     margin-top: 15px;
     background: none;
@@ -161,13 +175,8 @@
     color: #888;
     cursor: pointer;
 }
-.filter-reset-btn:hover {
-    color: #000;
-}
-
 
 /* --- 5. プロフィールカード --- */
-
 .profile-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -187,6 +196,7 @@
     cursor: pointer;
     opacity: 0;
     animation: fadeInUpCard 0.6s ease-out forwards;
+    position: relative; /* バッジ配置用 */
 }
 
 .profile-card:hover {
@@ -199,6 +209,7 @@
     aspect-ratio: 1 / 1; 
     overflow: hidden;
     background: #f0f0f0;
+    position: relative; /* バッジ配置用 */
 }
 
 .profile-img img {
@@ -210,6 +221,23 @@
 
 .profile-card:hover .profile-img img {
     transform: scale(1.05);
+}
+
+/* ★追加: 役職(Role)バッジのスタイル */
+.role-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #000; /* 黒背景 */
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 3px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 2;
 }
 
 .profile-info {
@@ -275,7 +303,6 @@
 .profile-card:hover .service-icon {
     filter: grayscale(0%);
 }
-
 
 /* --- 6. モーダル --- */
 .qr-modal-overlay {
@@ -373,13 +400,11 @@
 }
 
 
-/* アニメーション定義 */
 @keyframes fadeInUpCard {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* スマホ対応 */
 @media (max-width: 768px) {
     .dig-logo {
         width: 300px;
@@ -401,6 +426,7 @@
     .profile-bottom-row { justify-content: center; gap: 10px; }
     .mini-qr { width: 20px; height: 20px; }
     .service-icon { width: 18px; height: 18px; }
+    .role-badge { font-size: 0.5rem; padding: 2px 4px; }
 
     .qr-modal-content {
         width: 90%;
