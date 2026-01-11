@@ -84,6 +84,7 @@
 </div>
 
 <script src="js/dig_data.js"></script>
+
 <script>
     const container = document.getElementById('profileContainer');
     const modal = document.getElementById('qrModal');
@@ -108,21 +109,21 @@
 
     let currentSearchTerm = '';
     let selectedGenres = []; 
-    
-    // データ読み込み（window.digDataを使用）
-    const profileData = window.digData || [];
 
     function init() {
-        if (profileData.length === 0) {
-            console.error("データが読み込めていません。js/dig_data.jsを確認してください。");
+        // ★修正: window.digData ではなく、普通の digData を使用します
+        if (typeof digData === 'undefined') {
+            console.error("digDataが読み込まれていません");
+            return;
         }
-        profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+        digData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
         generateGenreCheckboxes();
-        renderProfiles(profileData); 
+        renderProfiles(digData); 
     }
 
     function generateGenreCheckboxes() {
-        let allGenres = [...new Set(profileData.flatMap(person => person.genre))].sort();
+        let allGenres = [...new Set(digData.flatMap(person => person.genre))].sort();
         const mixTag = "DJ MIX";
         if (allGenres.includes(mixTag)) {
             allGenres = allGenres.filter(g => g !== mixTag); 
@@ -190,7 +191,7 @@
     }
 
     function applyFilters() {
-        const filtered = profileData.filter(person => {
+        const filtered = digData.filter(person => {
             const term = currentSearchTerm.toLowerCase();
             const textMatch = !term || 
                 person.name.toLowerCase().includes(term) || 
