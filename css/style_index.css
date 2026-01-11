@@ -480,7 +480,7 @@ body, html {
         right: 20px;    
         
         /* ★修正: 初期状態: 45deg + 20deg = 65deg (時計回りに傾ける) */
-        transform: rotate(80deg);
+        transform: rotate(90deg);
         transform-origin: 50% 50px;
     }
     
