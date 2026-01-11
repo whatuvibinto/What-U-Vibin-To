@@ -1,0 +1,84 @@
+@charset "UTF-8";
+
+/* ==================================================
+   Books Page Specific Styles
+   ================================================== */
+
+/* --- 1. ページ全体 --- */
+.books-page {
+    background-color: #ffffff; /* dig.htmlと同じ */
+    overflow-x: hidden;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 100vh; /* 画面いっぱいの高さ */
+    width: 100%;
+}
+
+/* --- 2. ロゴ位置 (Digページと統一) --- */
+.books-logo {
+    position: absolute;
+    top: 120px;
+    left: 30px;
+    margin: 0;
+    width: 500px;
+    max-width: 80%;
+    z-index: 10;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 3. メインコンテンツエリア (中央配置) --- */
+.books-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: 100%;
+    text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    
+    animation: fadeInUp 1s ease-out 0.3s backwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 4. メッセージスタイル --- */
+.books-message {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    line-height: 2;
+    letter-spacing: 1px;
+}
+
+.books-message .en-text {
+    display: block;
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #666;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* --- スマホ対応 --- */
+@media (max-width: 768px) {
+    .books-logo {
+        width: 300px;
+        top: 80px;
+    }
+    .books-message {
+        font-size: 1rem;
+    }
+    .books-message .en-text {
+        font-size: 0.8rem;
+    }
+}
