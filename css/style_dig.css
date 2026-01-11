@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   Dig Page Specific Styles (修正版)
+   Dig Page Specific Styles (完全修正版)
    ================================================== */
 
 /* --- 1. ページ全体 --- */
@@ -300,7 +300,7 @@
 
 
 /* ==================================================
-   ★現代アート風モーダル (Art Layout)
+   ★現代アート風モーダル (Art Layout - Clean)
    ================================================== */
 
 /* オーバーレイ */
@@ -338,6 +338,10 @@
     overflow: hidden;
     position: relative;
     padding: 0;
+    /* Box-sizingを追加して崩れを防止 */
+    box-sizing: border-box;
+    text-align: left; /* 親要素のcenter継承をリセット */
+    
     transform: scale(0.95);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -346,7 +350,7 @@
     transform: scale(1);
 }
 
-/* ★修正: 閉じるボタン (綺麗な×印) */
+/* 閉じるボタン (×印) */
 .qr-modal-close {
     position: absolute;
     top: 0;
@@ -358,21 +362,21 @@
     cursor: pointer;
     z-index: 100;
     transition: background 0.3s;
-    /* flexなどは削除 */
 }
+
 .qr-modal-close:hover {
     background: #333;
 }
 
-/* CSSで×印を作る */
+/* ×印の作成 */
 .qr-modal-close::before,
 .qr-modal-close::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 30px; /* 線の長さ */
-    height: 2px; /* 線の太さ */
+    width: 30px; 
+    height: 2px;
     background-color: #fff;
 }
 
@@ -384,7 +388,7 @@
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-/* HTML内の古いspan要素は非表示にする */
+/* 古いspanを無効化 */
 .close-line {
     display: none;
 }
@@ -395,6 +399,7 @@
     flex: 0 0 40%;
     position: relative;
     background: #000;
+    height: 100%; /* 高さを確実に */
 }
 
 .art-image-section img {
@@ -417,6 +422,7 @@
     padding: 6px 12px;
     letter-spacing: 2px;
     text-transform: uppercase;
+    z-index: 2;
 }
 
 
@@ -428,6 +434,7 @@
     flex-direction: column;
     justify-content: space-between;
     position: relative;
+    box-sizing: border-box; /* 崩れ防止 */
 }
 
 /* 上部情報 */
@@ -438,6 +445,7 @@
     margin: 0 0 20px 0;
     text-transform: uppercase;
     letter-spacing: -2px;
+    color: #000;
 }
 
 .art-meta-row {
@@ -516,48 +524,7 @@
 
 /* --- モーダルのレスポンシブ (スマホ対応) --- */
 @media (max-width: 768px) {
-    .qr-modal-content.art-layout {
-        flex-direction: column;
-        height: auto;
-        max-height: 85vh;
-        overflow-y: auto;
-        width: 85%;
-    }
-
-    .art-image-section {
-        height: 250px;
-        flex: none;
-    }
-
-    .art-info-section {
-        padding: 30px;
-        flex: none;
-        gap: 30px;
-    }
-
-    .art-name {
-        font-size: 2.2rem;
-    }
-    
-    .art-info-footer {
-        flex-direction: row-reverse;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .art-scan-text {
-        writing-mode: horizontal-tb;
-        transform: none;
-    }
-}
-
-
-@keyframes fadeInUpCard {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 768px) {
+    /* dig.html本体のレスポンシブ */
     .dig-logo {
         width: 300px;
         top: 80px;
@@ -576,5 +543,44 @@
     .profile-bottom-row { justify-content: center; gap: 10px; }
     .mini-qr { width: 20px; height: 20px; }
     .service-icon { width: 18px; height: 18px; }
-    .role-badge { font-size: 0.5rem; padding: 2px 4px; }
+    /* カード内のRoleバッジ */
+    .profile-card .role-badge { 
+        font-size: 0.5rem; 
+        padding: 2px 4px; 
+    }
+
+    /* モーダルのレスポンシブ */
+    .qr-modal-content.art-layout {
+        flex-direction: column;
+        height: auto;
+        max-height: 85vh;
+        overflow-y: auto;
+        width: 85%;
+    }
+
+    .art-image-section {
+        height: 250px; /* スマホでは高さ固定 */
+        flex: none;
+    }
+
+    .art-info-section {
+        padding: 30px;
+        flex: none;
+        gap: 20px;
+    }
+
+    .art-name {
+        font-size: 2.2rem;
+    }
+    
+    .art-info-footer {
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .art-scan-text {
+        writing-mode: horizontal-tb;
+        transform: none;
+    }
 }
