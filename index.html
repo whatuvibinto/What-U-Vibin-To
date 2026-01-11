@@ -35,6 +35,7 @@
             
             <div class="tonearm-wrapper" id="tonearm">
                 <img src="images/tonearm.svg" alt="Tonearm" class="tonearm-img">
+                <span class="tonearm-tap-hint">TAP</span>
             </div>
         </div>
     </div>
@@ -212,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* =================================================================
-       機能2: レコードスクラッチ (トーンアーム連動版)
+       機能2: レコードスクラッチ (シンプル版 + トーンアーム連動)
        ================================================================= */
     const recordArea = document.getElementById('recordArea');
     const recordDisk = document.getElementById('recordDisk');
@@ -227,80 +228,62 @@ document.addEventListener('DOMContentLoaded', () => {
     let sourceNode = null;
     let gainNode = null;
     
-    let isAudioInitialized = false; 
-    let isFileLoaded = false;       
-
+    let isNeedleDropped = false; 
+    
     let isRecordDragging = false;
     let recordVelocity = 0;
     let recordCurrentRotation = 0;
     let recordLastMouseAngle = 0;
 
-    let isNeedleDropped = false;
-
-    // --- 1. 音声ファイルロード ---
-    async function loadAudioFile() {
+    async function loadAudio() {
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
-            const tempCtx = new AudioContext();
+            audioCtx = new AudioContext();
             const response = await fetch(AUDIO_URL);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const arrayBuffer = await response.arrayBuffer();
-            audioBuffer = await tempCtx.decodeAudioData(arrayBuffer);
-            isFileLoaded = true;
-            if(tempCtx.state !== 'closed') tempCtx.close();
+            audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
         } catch (error) {
             console.error("Audio Load Error:", error);
         }
     }
-    loadAudioFile();
+    loadAudio();
 
-    // --- 2. オーディオ初期化 ---
-    function initAudioEngine() {
-        if (isAudioInitialized) return;
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!audioCtx) audioCtx = new AudioContext();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-
-        const silentBuffer = audioCtx.createBuffer(1, 1, 22050);
-        const source = audioCtx.createBufferSource();
-        source.buffer = silentBuffer;
-        source.connect(audioCtx.destination);
-        source.start(0);
-
-        isAudioInitialized = true;
+    function unlockAudio() {
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
     }
+    document.body.addEventListener('touchstart', unlockAudio, { once: true });
+    document.body.addEventListener('click', unlockAudio, { once: true });
 
-    // --- 3. トーンアーム操作 ---
     if (tonearm) {
-        tonearm.addEventListener('click', () => {
-            // Safari対策: クリック時に必ずAudioContextを叩き起こす
-            initAudioEngine();
-
+        tonearm.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            unlockAudio(); 
+            
             isNeedleDropped = !isNeedleDropped;
             
             if (isNeedleDropped) {
                 tonearm.classList.add('tonearm-active');
             } else {
                 tonearm.classList.remove('tonearm-active');
-                stopSound();
+                stopSound(); 
             }
         });
     }
 
-    // --- 4. 音の再生制御 ---
     function updateSound(currentVel) {
         if (!isNeedleDropped) {
             stopSound();
             return;
         }
 
-        if (!isFileLoaded || !isAudioInitialized || !audioCtx) return;
+        if (!audioCtx || !audioBuffer) return;
 
         if (!sourceNode && Math.abs(currentVel) > 0.1) {
             sourceNode = audioCtx.createBufferSource();
             sourceNode.buffer = audioBuffer;
             sourceNode.loop = true;
-            
             gainNode = audioCtx.createGain();
             sourceNode.connect(gainNode);
             gainNode.connect(audioCtx.destination);
@@ -313,15 +296,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (speed < 0.05) speed = 0;
 
             const now = audioCtx.currentTime;
-            if(sourceNode.playbackRate.value !== speed) {
-                 sourceNode.playbackRate.setTargetAtTime(speed, now, 0.05);
-            }
+            sourceNode.playbackRate.setTargetAtTime(speed, now, 0.02);
             const volume = Math.min(speed, 1.0);
-            gainNode.gain.setTargetAtTime(volume, now, 0.05);
+            gainNode.gain.setTargetAtTime(volume, now, 0.02);
         }
     }
 
-    // --- 5. 音の停止 ---
     function stopSound() {
         if (sourceNode) {
             const node = sourceNode;
@@ -335,11 +315,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 6. アニメーション ---
     function animateRecord() {
         if (!isRecordDragging) {
             recordVelocity *= FRICTION; 
         }
+
         if (Math.abs(recordVelocity) < 0.001) {
             recordVelocity = 0;
             stopSound();
@@ -352,7 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animateRecord();
 
-    // --- 7. ドラッグ操作 ---
     function getCenter(el) {
         const rect = el.getBoundingClientRect();
         return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
@@ -366,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(recordArea) {
         function startRecordDrag(x, y) {
             if (isPanelOpen) return;
-            initAudioEngine();
+            unlockAudio();
             isRecordDragging = true;
             const center = getCenter(recordArea);
             recordLastMouseAngle = getAngle(x, y, center);
@@ -390,17 +369,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         recordArea.addEventListener('mousedown', e => {
-            if(e.target.closest('#tonearm')) return;
-            startRecordDrag(e.clientX, e.clientY)
+            if (e.target.closest('#tonearm')) return; 
+            startRecordDrag(e.clientX, e.clientY);
         });
         window.addEventListener('mousemove', e => moveRecordDrag(e.clientX, e.clientY));
         window.addEventListener('mouseup', endRecordDrag);
 
         recordArea.addEventListener('touchstart', e => {
-            if (isPanelOpen) return;
-            if(e.target.closest('#tonearm')) return;
-            
-            initAudioEngine();
+            if (isPanelOpen) return; 
+            if (e.target.closest('#tonearm')) return;
             startRecordDrag(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: false });
 
