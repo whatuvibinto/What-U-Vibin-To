@@ -197,10 +197,10 @@ body, html {
     pointer-events: none;
 }
 
-/* トーンアーム (針) のスタイル */
+/* --- トーンアーム (PCデフォルト) --- */
 .tonearm-wrapper {
     position: absolute;
-    /* PCでのデフォルト位置 */
+    /* PCではレコードの右上あたりに配置 */
     top: 100px;  
     right: -80px; 
     
@@ -209,19 +209,18 @@ body, html {
     z-index: 20; 
     cursor: pointer;
     
-    /* 回転軸 */
+    /* 回転軸 (SVGの座標 50,50 付近) */
     transform-origin: 50% 50px; 
     
-    /* 初期位置: 少し右に開いている */
+    /* 初期位置 */
     transform: rotate(10deg);
     
     transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: auto;
 }
 
-/* 針を落とした時の状態 */
+/* 針を落とした時の状態 (PC) */
 .tonearm-wrapper.tonearm-active {
-    /* レコード盤の上に移動 */
     transform: rotate(-15deg); 
 }
 
@@ -236,52 +235,42 @@ body, html {
     filter: drop-shadow(15px 20px 20px rgba(0,0,0,0.4));
 }
 
-/* ★修正: TAP文字のデザイン (手書き風・自然な見た目) */
+/* TAPヒント文字 */
 .tonearm-tap-hint {
     position: absolute;
-    /* 針の持ち手の左側 */
+    /* PCでの位置 */
     top: 280px; 
-    left: -60px;
+    left: -50px;
     
     color: #333;
     font-family: 'Permanent Marker', cursive;
-    font-size: 1.8rem; /* 少し大きくしてラフさを出す */
+    font-size: 2rem; 
     font-weight: normal; 
     letter-spacing: 0.05em;
-    text-transform: capitalize; /* 先頭だけ大文字 */
-    
-    /* 枠線を消してテキストのみにする */
-    background: transparent;
-    padding: 0;
-    border: none;
+    text-transform: capitalize;
     
     pointer-events: none;
     opacity: 1;
     transition: all 0.5s;
     
-    /* 文字に白い縁取りをつけて読みやすくする */
     text-shadow: 
         2px 2px 0px #fff, 
         -2px -2px 0px #fff,
         2px -2px 0px #fff,
         -2px 2px 0px #fff;
     
-    /* ふわふわ浮くアニメーション */
     animation: floatHint 2s ease-in-out infinite;
-    
-    /* 手書きらしく少し傾ける */
-    transform: rotate(-10deg);
+    transform: rotate(-15deg); 
 }
 
 @keyframes floatHint {
-    0%, 100% { transform: rotate(-10deg) translateY(0); }
-    50% { transform: rotate(-10deg) translateY(-8px); }
+    0%, 100% { transform: rotate(-15deg) translateY(0); }
+    50% { transform: rotate(-15deg) translateY(-8px); }
 }
 
-/* 針を落としたら消える */
 .tonearm-wrapper.tonearm-active .tonearm-tap-hint {
     opacity: 0;
-    transform: rotate(-10deg) translateY(10px); 
+    transform: rotate(-15deg) translateY(20px); 
 }
 
 
@@ -480,7 +469,7 @@ body, html {
     transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
-/* ★修正: スマホ対応 (トーンアーム位置を画面内側に) */
+/* ★修正: スマホ対応 (トーンアーム位置を画像に合わせて大幅修正) */
 @media (max-width: 768px) {
     .header-logo-wrapper {
         width: 300px;
@@ -499,14 +488,42 @@ body, html {
     .tonearm-wrapper {
         width: 120px;
         height: 300px;
-        /* ★修正: 画面の内側（レコードの下側）に配置 */
-        top: 200px;  
-        right: 150px; /* 右端から十分離して画面内に入れる */
+        
+        /* 画面右下に固定配置 */
+        position: fixed;
+        top: auto;
+        bottom: 25%;  /* レコードの下端付近に合わせる */
+        right: -10px; /* 画面右端 */
+        
+        /* 初期状態で90度回転させて水平気味にする (針先が左) */
+        transform: rotate(90deg);
+        transform-origin: 50% 50px; /* 回転軸はそのまま */
     }
     
+    /* 針を落とした時 (さらに回転させてレコードに乗せる) */
+    .tonearm-wrapper.tonearm-active {
+        transform: rotate(70deg); /* 90度から少し戻してレコード盤に乗せる */
+    }
+    
+    /* TAP文字位置 */
     .tonearm-tap-hint {
-        top: 280px;
-        left: -30px;
+        top: 260px;
+        left: 20px;
+        font-size: 1.5rem;
+        transform: rotate(-90deg); /* アームの回転に合わせて文字の向きを直す */
+    }
+    
+    /* 文字のアニメーション (回転を考慮) */
+    @keyframes floatHintMobile {
+        0%, 100% { transform: rotate(-90deg) translateX(0); }
+        50% { transform: rotate(-90deg) translateX(-5px); }
+    }
+    .tonearm-tap-hint {
+        animation: floatHintMobile 2s ease-in-out infinite;
+    }
+    
+    .tonearm-wrapper.tonearm-active .tonearm-tap-hint {
+        opacity: 0;
     }
     
     .about-bottom-panel {
