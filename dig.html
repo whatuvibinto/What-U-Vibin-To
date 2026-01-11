@@ -11,7 +11,7 @@
 
 <div class="marquee-wrapper">
     <div class="marquee-content">
-        WHAT U VIBIN TO? /// LOVE IS FREE /// WHAT U VIBIN TO? /// KEEP DIGGING /// WHAT U VIBIN TO? /// LOVE IS FREE ///
+        WHAT U VIBIN TO? /// KEEP DIGGING /// WHAT U VIBIN TO? /// KEEP DIGGING /// WHAT U VIBIN TO? /// KEEP DIGGING ///
     </div>
 </div>
 
@@ -24,13 +24,12 @@
 
     <div class="dig-content">
         <div class="search-area">
-            <input type="text" class="search-input" id="searchInput" placeholder="SEARCH WHO U LIKE...">
-            <button class="search-btn">→</button>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search by name or location...">
+            <button class="search-btn">🔍</button>
         </div>
 
         <div class="profile-list" id="profileContainer">
             </div>
-
     </div>
 
     <div class="footer">
@@ -38,35 +37,45 @@
     </div>
 </div>
 
+<div class="qr-modal-overlay" id="qrModal">
+    <div class="qr-modal-content">
+        <span class="qr-modal-close" onclick="closeQrModal()">&times;</span>
+        <h2 class="qr-modal-name" id="modalName">NAME</h2>
+        <p class="qr-modal-genre" id="modalGenre">GENRE</p>
+        <img src="" alt="QR Code" class="qr-modal-img" id="modalQr">
+        <p style="font-size:0.8rem; color:#888;">Scan to listen to the playlist</p>
+    </div>
+</div>
+
 <script src="js/dig_data.js"></script>
 <script>
     // データをもとにHTMLを生成するスクリプト
     const container = document.getElementById('profileContainer');
-    
+    const modal = document.getElementById('qrModal');
+    const modalName = document.getElementById('modalName');
+    const modalGenre = document.getElementById('modalGenre');
+    const modalQr = document.getElementById('modalQr');
+
     function renderProfiles(data) {
         let html = '';
         data.forEach((person, index) => {
-            // ジャンルタグを生成
-            const tags = person.genre.map(g => `<span class="tag">${g}</span>`).join('');
+            // アニメーション遅延
+            const delay = index * 0.05; 
             
-            // アニメーションを少しずつ遅らせる(delay)
-            const delay = index * 0.1; 
+            // ジャンル表示用テキスト
+            const genreText = person.genre.join(', ');
 
-            // カードのHTMLテンプレート
+            // カードのHTML (クリックイベントを設定)
+            // onclickで openQrModal を呼び出す
             html += `
-            <div class="profile-card" style="animation-delay: ${delay}s">
+            <div class="profile-card" style="animation-delay: ${delay}s" 
+                 onclick="openQrModal('${person.name}', '${genreText}', '${person.qr}')">
                 <div class="profile-img">
                     <img src="${person.image}" alt="${person.name}">
                 </div>
                 <div class="profile-info">
-                    <div>
-                        <h2 class="profile-name">${person.name}<span class="profile-loc">/ ${person.location}</span></h2>
-                        <p class="profile-genre">GENRE: ${tags}</p>
-                    </div>
-                    <div class="profile-qr">
-                        <img src="${person.qr}" alt="QR Code">
-                        <span class="qr-text">SCAN TO LISTEN</span>
-                    </div>
+                    <h2 class="profile-name">${person.name}</h2>
+                    <span class="profile-loc">${person.location}</span>
                 </div>
             </div>
             `;
@@ -77,11 +86,10 @@
     // 初回表示
     renderProfiles(digData);
 
-    // (オマケ) 検索機能
+    // 検索機能
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
-        // 名前か場所に検索ワードが含まれている人だけ抽出
         const filtered = digData.filter(person => 
             person.name.toLowerCase().includes(term) || 
             person.location.toLowerCase().includes(term) ||
@@ -89,6 +97,30 @@
         );
         renderProfiles(filtered);
     });
+
+    // --- モーダル制御関数 ---
+    
+    // モーダルを開く
+    window.openQrModal = function(name, genre, qrSrc) {
+        modalName.textContent = name;
+        modalGenre.textContent = genre;
+        modalQr.src = qrSrc;
+        
+        modal.classList.add('active');
+    };
+
+    // モーダルを閉じる
+    window.closeQrModal = function() {
+        modal.classList.remove('active');
+    };
+
+    // モーダルの背景クリックでも閉じる
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeQrModal();
+        }
+    });
+
 </script>
 
 </body>
