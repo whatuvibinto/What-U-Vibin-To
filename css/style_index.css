@@ -83,12 +83,12 @@ body, html {
     position: relative;
 }
 
-/* ★修正: ナビゲーションのz-indexを上げて、トーンアームより上にする */
 .nav-links {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    z-index: 30; /* トーンアーム(20/15)より上に */
+    /* ナビを最前面に */
+    z-index: 30; 
     margin-top: 200px; 
     margin-left: 5%;
 }
@@ -205,10 +205,7 @@ body, html {
     right: -80px; 
     width: 150px;
     height: 400px;
-    
-    /* ★修正: ナビ(30)より下のレイヤーにする */
-    z-index: 15; 
-    
+    z-index: 15; /* ナビより下 */
     cursor: pointer;
     transform-origin: 50% 50px; 
     transform: rotate(10deg);
@@ -216,7 +213,6 @@ body, html {
     pointer-events: auto;
 }
 
-/* PCでのアクティブ状態 */
 .tonearm-wrapper.tonearm-active {
     transform: rotate(-15deg); 
 }
@@ -232,48 +228,27 @@ body, html {
     filter: drop-shadow(15px 20px 20px rgba(0,0,0,0.4));
 }
 
-/* --- TAPヒント (PCデフォルト: 手書き文字) --- */
-/* PCでは広いので文字を出しておきます（不要なら消せます） */
+/* --- 赤い点滅インジケーター (共通) --- */
 .tonearm-tap-hint {
     position: absolute;
-    top: 280px; 
-    left: -50px;
-    color: #333;
-    font-family: 'Permanent Marker', cursive;
-    font-size: 2rem; 
-    font-weight: normal; 
-    letter-spacing: 0.05em;
-    pointer-events: none;
-    opacity: 1;
-    transition: all 0.5s;
-    text-shadow: 3px 3px 0px #fff;
-    animation: floatHint 2s ease-in-out infinite;
-    transform: rotate(-15deg); 
-}
-/* PC用: 文字として表示する場合の中身はHTMLには空で書いているので、
-   CSS疑似要素で入れるか、今回は「スマホ優先」で赤丸にするため
-   PC表示も赤丸に合わせて上書きします。 */
-
-/* ★修正: 全デバイス共通で「赤い点滅丸」にする */
-.tonearm-tap-hint {
-    top: 260px;
-    left: 20px;
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: rgba(255, 80, 80, 0.5); /* 薄い赤 */
-    font-size: 0; /* 文字があっても消す */
-    text-shadow: none;
-    border: none;
-    padding: 0;
+    background-color: rgba(255, 80, 80, 0.5);
+    /* PCでの位置 */
+    top: 260px;
+    left: 20px;
     
-    transform: none;
+    font-size: 0; 
+    border: none;
+    pointer-events: none;
+    
     animation: pulseRedDot 1.5s infinite ease-in-out;
 }
 
 @keyframes pulseRedDot {
     0% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); }
+    50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
     100% { transform: scale(1); opacity: 0.6; }
 }
 
@@ -478,7 +453,7 @@ body, html {
     transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
-/* ★修正: スマホ対応 (トーンアーム配置・Tapデザイン変更) */
+/* ★修正: スマホ対応 (位置・角度・インジケーター位置の調整) */
 @media (max-width: 768px) {
     .header-logo-wrapper {
         width: 300px;
@@ -498,26 +473,29 @@ body, html {
         width: 120px;
         height: 300px;
         
-        /* ★修正: 固定配置で画面右下（レコードの下）に持っていく */
+        /* ★修正: 基座の位置を「レコードの右側中部」付近に配置 */
         position: fixed;
-        top: auto;      
-        bottom: -50px;  /* 画面下端よりさらに下に配置 */
-        right: 20px;    /* 画面右端 */
+        top: 55%;       /* 画面中央より少し下 */
+        right: -30px;   /* 画面右端 */
+        margin-top: -50px; /* 位置微調整 */
         
-        /* ★修正: 初期状態: 60度 (針先が左斜め上を向く) */
-        transform: rotate(60deg);
-        transform-origin: 50% 50px; /* 回転軸はそのまま */
+        /* ★修正: 初期状態 = 右下に垂れている (45度) */
+        transform: rotate(45deg);
+        transform-origin: 50% 50px;
     }
     
-    /* ★修正: 針を落とした時: 100度 (さらに左へ回転 = レコードに乗る) */
+    /* ★修正: タップ後 = 左上に持ち上がってレコードに乗る (-10度) */
+    /* これにより、下から上へ大きく動くアクションになります */
     .tonearm-wrapper.tonearm-active {
-        transform: rotate(100deg);
+        transform: rotate(-10deg);
     }
     
-    /* Tapの赤い点滅丸の位置調整 (針先付近) */
+    /* ★修正: インジケーターをアームの中間地点へ */
     .tonearm-tap-hint {
-        top: 260px;
-        left: 0px; /* 針先に合わせる */
+        top: 150px; /* SVG高さ300pxの真ん中 */
+        left: 40px; /* 管の上に重なるように */
+        width: 40px;
+        height: 40px;
     }
     
     .about-bottom-panel {
