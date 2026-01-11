@@ -371,7 +371,7 @@ body, html {
 }
 .about-columns {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 40px;
 }
 .about-columns dl { margin: 0; }
