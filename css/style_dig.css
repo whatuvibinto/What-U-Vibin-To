@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   Dig Page Specific Styles (要望反映版)
+   Dig Page Specific Styles (表示不具合修正版)
    ================================================== */
 
 /* --- 1. ページ全体 --- */
@@ -148,6 +148,7 @@
     border-color: #000;
 }
 
+/* DJ MIXタグ用スタイル */
 .genre-tag.special-tag .genre-name {
     border: 2px solid #000; 
     font-size: 0.85rem;     
@@ -171,7 +172,7 @@
     cursor: pointer;
 }
 
-/* --- 5. プロフィールカード (位置揃え修正) --- */
+/* --- 5. プロフィールカード --- */
 .profile-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -189,11 +190,25 @@
     overflow: hidden;
     border-radius: 8px;
     cursor: pointer;
-    opacity: 0;
+    
+    /* ★修正: アニメーション設定を確実に */
+    opacity: 0; 
     animation: fadeInUpCard 0.6s ease-out forwards;
+    
     position: relative; 
-    /* ★修正: 高さを100%にして、カードの高さを揃える */
     height: 100%;
+}
+
+/* ★追加: アニメーションの定義を確実にここに記述 */
+@keyframes fadeInUpCard {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .profile-card:hover {
@@ -236,12 +251,10 @@
     z-index: 2;
 }
 
-/* ★修正: フレックスボックスで中身を縦に配置し、下部を底に押し付ける */
 .profile-info {
     padding: 15px;
     text-align: left;
-    
-    flex-grow: 1; /* 余白を埋めるように伸びる */
+    flex-grow: 1; 
     display: flex;
     flex-direction: column;
 }
@@ -273,7 +286,6 @@
     text-overflow: ellipsis;
 }
 
-/* ★修正: margin-top: auto で、この要素をカードの一番下に配置する */
 .profile-bottom-row {
     display: flex;
     align-items: center;
@@ -295,12 +307,10 @@
     mix-blend-mode: multiply;
 }
 
-/* ★修正: サービスのロゴの色加工を削除 */
 .service-icon {
     width: 24px; 
     height: 24px;
     object-fit: contain;
-    /* filter: grayscale(100%); ←削除 */
     transition: transform 0.3s;
 }
 
@@ -309,7 +319,6 @@
    ★現代アート風モーダル (Art Layout - Clean)
    ================================================== */
 
-/* オーバーレイ */
 .qr-modal-overlay {
     position: fixed;
     top: 0;
@@ -332,7 +341,6 @@
     visibility: visible;
 }
 
-/* モーダル本体 */
 .qr-modal-content.art-layout {
     display: flex;
     width: 900px;
@@ -355,7 +363,6 @@
     transform: scale(1);
 }
 
-/* 閉じるボタン (×印) */
 .qr-modal-close {
     position: absolute;
     top: 0;
@@ -373,7 +380,6 @@
     background: #333;
 }
 
-/* ×印の作成 */
 .qr-modal-close::before,
 .qr-modal-close::after {
     content: '';
@@ -395,8 +401,6 @@
 
 .close-line { display: none; }
 
-
-/* 左側：写真エリア */
 .art-image-section {
     flex: 0 0 40%;
     position: relative;
@@ -412,7 +416,6 @@
     opacity: 0.95;
 }
 
-/* 写真上のRoleバッジ */
 .art-role-badge {
     position: absolute;
     top: 20px;
@@ -427,8 +430,6 @@
     z-index: 2;
 }
 
-
-/* 右側：情報エリア */
 .art-info-section {
     flex: 1;
     padding: 50px 60px;
@@ -439,7 +440,6 @@
     box-sizing: border-box; 
 }
 
-/* 上部情報 */
 .art-name {
     font-size: 3.5rem;
     font-weight: 900;
@@ -473,7 +473,6 @@
     color: #666;
 }
 
-/* インスタリンク */
 .art-insta-link {
     text-decoration: none;
     font-size: 1rem;
@@ -493,7 +492,6 @@
     margin-right: 5px;
 }
 
-/* ★修正: "Tap & Check..." のスタイル。色は#cccでScanテキストと統一 */
 .insta-suffix {
     color: #ccc; 
     font-size: 0.8rem;
@@ -501,11 +499,9 @@
     letter-spacing: 1px;
     margin-left: 10px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-transform: none; /* 小文字混じりを許可 */
+    text-transform: none; 
 }
 
-
-/* 下部情報 (QR) */
 .art-info-footer {
     display: flex;
     align-items: flex-end;
