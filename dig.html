@@ -75,9 +75,9 @@
             const delay = index * 0.05; 
             const genreText = person.genre.join(', ');
 
-            // SpotifyやApple Musicのロゴ画像パス（今回は仮の画像を使用）
-            // 実際には dig_data.js に serviceLogo プロパティを追加して制御するのがベストです
-            const serviceLogoUrl = "https://placehold.co/40x40/1db954/fff?text=SP"; // 仮のSpotifyアイコン
+            // ★修正: dig_data.js から serviceIcon を取得
+            // データが無い場合の予備画像(任意)も設定可能
+            const serviceIconUrl = person.serviceIcon || "images/default_icon.png"; 
 
             html += `
             <div class="profile-card" style="animation-delay: ${delay}s" 
@@ -97,7 +97,7 @@
                             <img src="${person.qr}" alt="QR" class="mini-qr">
                         </div>
                         <div class="service-icon-wrapper">
-                            <img src="${serviceLogoUrl}" alt="Spotify" class="service-icon">
+                            <img src="${serviceIconUrl}" alt="Service" class="service-icon">
                         </div>
                     </div>
                 </div>
@@ -124,8 +124,8 @@
     window.openQrModal = function(name, genre, imageSrc, qrSrc) {
         modalName.textContent = name;
         modalGenre.textContent = genre;
-        modalPhoto.src = imageSrc; // 写真をセット
-        modalQr.src = qrSrc;       // QRをセット
+        modalPhoto.src = imageSrc;
+        modalQr.src = qrSrc;
         
         modal.classList.add('active');
     };
