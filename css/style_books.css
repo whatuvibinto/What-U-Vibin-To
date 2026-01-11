@@ -30,13 +30,13 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 3. メインコンテンツエリア (中央配置) --- */
+/* --- 3. メインコンテンツエリア (中央配置・見切れ防止) --- */
 .books-content {
     position: absolute;
     top: 50%;
     left: 50%;
     
-    /* ベースの位置指定 */
+    /* ベースの位置（中央揃え） */
     transform: translate(-50%, -50%);
     
     width: 100%;
@@ -44,11 +44,11 @@
     padding: 0 20px;
     box-sizing: border-box;
     
-    /* ★修正: 中央揃えを含んだ新しいアニメーションに変更 */
+    /* 中央揃えを維持する専用アニメーションを適用 */
     animation: fadeInUpCentered 1s ease-out 0.3s backwards;
 }
 
-/* ★修正: 中央配置(-50%, -50%)を維持したまま動かすアニメーション */
+/* 中央配置(-50%, -50%)を維持したまま、下からふわっと浮き上がる */
 @keyframes fadeInUpCentered {
     from { 
         opacity: 0; 
@@ -67,4 +67,28 @@
     color: #000;
     line-height: 2;
     letter-spacing: 1px;
+}
+
+.books-message .en-text {
+    display: block;
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #666;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* --- スマホ対応 --- */
+@media (max-width: 768px) {
+    .books-logo {
+        width: 300px;
+        top: 80px;
+    }
+    .books-message {
+        font-size: 1rem;
+    }
+    .books-message .en-text {
+        font-size: 0.8rem;
+    }
 }
