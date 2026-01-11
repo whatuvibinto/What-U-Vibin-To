@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   Dig Page Specific Styles (修正版)
+   Dig Page Specific Styles (要望反映版)
    ================================================== */
 
 /* --- 1. ページ全体 --- */
@@ -192,7 +192,7 @@
     opacity: 0;
     animation: fadeInUpCard 0.6s ease-out forwards;
     position: relative; 
-    /* 高さを揃えるために100%指定 */
+    /* ★修正: 高さを100%にして、カードの高さを揃える */
     height: 100%;
 }
 
@@ -236,12 +236,12 @@
     z-index: 2;
 }
 
-/* ★修正: 情報を縦に広げて下部を底に押し付ける */
+/* ★修正: フレックスボックスで中身を縦に配置し、下部を底に押し付ける */
 .profile-info {
     padding: 15px;
     text-align: left;
     
-    flex-grow: 1; /* 余白を埋める */
+    flex-grow: 1; /* 余白を埋めるように伸びる */
     display: flex;
     flex-direction: column;
 }
@@ -273,14 +273,14 @@
     text-overflow: ellipsis;
 }
 
-/* ★修正: margin-top: auto で一番下に配置 */
+/* ★修正: margin-top: auto で、この要素をカードの一番下に配置する */
 .profile-bottom-row {
     display: flex;
     align-items: center;
     gap: 15px;
     border-top: 1px dashed #eee;
     padding-top: 10px;
-    margin-top: auto; /* これで底付きになる */
+    margin-top: auto; 
 }
 
 .mini-qr-wrapper, .service-icon-wrapper {
@@ -295,16 +295,14 @@
     mix-blend-mode: multiply;
 }
 
-/* ★修正: グレースケール解除 */
+/* ★修正: サービスのロゴの色加工を削除 */
 .service-icon {
     width: 24px; 
     height: 24px;
     object-fit: contain;
-    /* filter: grayscale(100%);  <-- 削除 */
+    /* filter: grayscale(100%); ←削除 */
     transition: transform 0.3s;
 }
-
-/* .profile-card:hover .service-icon { filter: grayscale(0%); } <-- 削除 */
 
 
 /* ==================================================
@@ -395,9 +393,7 @@
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.close-line {
-    display: none;
-}
+.close-line { display: none; }
 
 
 /* 左側：写真エリア */
@@ -497,14 +493,15 @@
     margin-right: 5px;
 }
 
-/* ★追加: インスタ右側のテキスト (矢印の代わり) */
+/* ★修正: "Tap & Check..." のスタイル。色は#cccでScanテキストと統一 */
 .insta-suffix {
-    color: #ccc;
+    color: #ccc; 
     font-size: 0.8rem;
     font-weight: 900;
     letter-spacing: 1px;
     margin-left: 10px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-transform: none; /* 小文字混じりを許可 */
 }
 
 
@@ -535,7 +532,6 @@
 
 /* --- モーダルのレスポンシブ (スマホ対応) --- */
 @media (max-width: 768px) {
-    /* dig.html本体のレスポンシブ */
     .dig-logo {
         width: 300px;
         top: 80px;
@@ -559,7 +555,6 @@
         padding: 2px 4px; 
     }
 
-    /* モーダルのレスポンシブ */
     .qr-modal-content.art-layout {
         flex-direction: column;
         height: auto;
@@ -593,32 +588,4 @@
         writing-mode: horizontal-tb;
         transform: none;
     }
-}
-
-
-@keyframes fadeInUpCard {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 768px) {
-    .dig-logo {
-        width: 300px;
-        top: 80px;
-    }
-    .dig-content {
-        padding-top: 300px;
-    }
-    .profile-list {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-    .profile-info { padding: 10px; }
-    .profile-name { font-size: 0.8rem; }
-    .profile-loc { font-size: 0.6rem; }
-    .profile-genre-text { display: none; }
-    .profile-bottom-row { justify-content: center; gap: 10px; }
-    .mini-qr { width: 20px; height: 20px; }
-    .service-icon { width: 18px; height: 18px; }
-    .role-badge { font-size: 0.5rem; padding: 2px 4px; }
 }
