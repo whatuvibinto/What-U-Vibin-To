@@ -6,14 +6,14 @@
 
 /* --- 1. ページ全体 --- */
 .books-page {
-    background-color: #ffffff; /* dig.htmlと同じ */
+    background-color: #ffffff;
     overflow-x: hidden;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    height: 100vh; /* 画面いっぱいの高さ */
+    height: 100vh;
     width: 100%;
 }
 
-/* --- 2. ロゴ位置 (Digページと統一) --- */
+/* --- 2. ロゴ位置 --- */
 .books-logo {
     position: absolute;
     top: 120px;
@@ -35,6 +35,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
+    
+    /* ベースの位置指定 */
     transform: translate(-50%, -50%);
     
     width: 100%;
@@ -42,12 +44,20 @@
     padding: 0 20px;
     box-sizing: border-box;
     
-    animation: fadeInUp 1s ease-out 0.3s backwards;
+    /* ★修正: 中央揃えを含んだ新しいアニメーションに変更 */
+    animation: fadeInUpCentered 1s ease-out 0.3s backwards;
 }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* ★修正: 中央配置(-50%, -50%)を維持したまま動かすアニメーション */
+@keyframes fadeInUpCentered {
+    from { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) translateY(0); 
+    }
 }
 
 /* --- 4. メッセージスタイル --- */
@@ -57,28 +67,4 @@
     color: #000;
     line-height: 2;
     letter-spacing: 1px;
-}
-
-.books-message .en-text {
-    display: block;
-    margin-top: 10px;
-    font-size: 1rem;
-    color: #666;
-    font-weight: normal;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* --- スマホ対応 --- */
-@media (max-width: 768px) {
-    .books-logo {
-        width: 300px;
-        top: 80px;
-    }
-    .books-message {
-        font-size: 1rem;
-    }
-    .books-message .en-text {
-        font-size: 0.8rem;
-    }
 }
