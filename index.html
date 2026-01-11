@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WHAT U VIBIN TO?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="css/style_index.css">
 </head>
 <body>
@@ -32,11 +36,11 @@
 
         <div class="record-wrapper" id="recordArea">
             <img src="images/record_v2.svg" alt="Vinyl Record" class="record-img" id="recordDisk">
-            
-            <div class="tonearm-wrapper" id="tonearm">
-                <img src="images/tonearm.svg" alt="Tonearm" class="tonearm-img">
-                <span class="tonearm-tap-hint">TAP</span>
-            </div>
+        </div>
+
+        <div class="tonearm-wrapper" id="tonearm">
+            <img src="images/tonearm.svg" alt="Tonearm" class="tonearm-img">
+            <span class="tonearm-tap-hint">Tap</span>
         </div>
     </div>
 
@@ -106,7 +110,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =================================================================
-       機能1: Aboutパネルの制御
+       機能1: Aboutパネル
        ================================================================= */
     const panel = document.getElementById('swipePanel');
     const panelHeader = document.getElementById('panelHeader');
@@ -213,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /* =================================================================
-       機能2: レコードスクラッチ (シンプル版 + トーンアーム連動)
+       機能2: レコードスクラッチ & トーンアーム
        ================================================================= */
     const recordArea = document.getElementById('recordArea');
     const recordDisk = document.getElementById('recordDisk');
@@ -229,7 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let gainNode = null;
     
     let isNeedleDropped = false; 
-    
     let isRecordDragging = false;
     let recordVelocity = 0;
     let recordCurrentRotation = 0;
@@ -260,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tonearm.addEventListener('click', (e) => {
             e.stopPropagation(); 
             unlockAudio(); 
-            
             isNeedleDropped = !isNeedleDropped;
             
             if (isNeedleDropped) {
@@ -277,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
             stopSound();
             return;
         }
-
         if (!audioCtx || !audioBuffer) return;
 
         if (!sourceNode && Math.abs(currentVel) > 0.1) {
@@ -319,7 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isRecordDragging) {
             recordVelocity *= FRICTION; 
         }
-
         if (Math.abs(recordVelocity) < 0.001) {
             recordVelocity = 0;
             stopSound();
@@ -368,16 +368,12 @@ document.addEventListener('DOMContentLoaded', () => {
             recordArea.style.cursor = 'grab';
         }
 
-        recordArea.addEventListener('mousedown', e => {
-            if (e.target.closest('#tonearm')) return; 
-            startRecordDrag(e.clientX, e.clientY);
-        });
+        recordArea.addEventListener('mousedown', e => startRecordDrag(e.clientX, e.clientY));
         window.addEventListener('mousemove', e => moveRecordDrag(e.clientX, e.clientY));
         window.addEventListener('mouseup', endRecordDrag);
 
         recordArea.addEventListener('touchstart', e => {
             if (isPanelOpen) return; 
-            if (e.target.closest('#tonearm')) return;
             startRecordDrag(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: false });
 
