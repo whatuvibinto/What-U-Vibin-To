@@ -287,7 +287,6 @@ body, html {
     text-transform: uppercase;
     color: #666;
 }
-
 /* ==================================================
    Aboutパネル用スタイル
    ================================================== */
@@ -401,7 +400,6 @@ body, html {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 800;
     font-size: 1.4rem;
-    align-items: center;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     position: relative;
@@ -423,7 +421,6 @@ body, html {
 }
 .about-columns dt.highlight-text a {
     font-size: 1.6rem;
-    align-items: center;
     font-weight: 900;
     background: linear-gradient(to bottom, transparent 60%, rgba(255, 247, 0, 0.8) 60%);
     background-repeat: no-repeat;
@@ -446,19 +443,16 @@ body, html {
 .about-columns dd {
     margin: 0;
     font-size: 0.85rem;
-    align-items: center;
     line-height: 1.8;
     color: #555;
     font-family: sans-serif;
 }
 .small-note {
     font-size: 0.7rem;
-    align-items: center;
     color: #999;
     display: block;
     margin-top: 5px;
 }
-
 /* ==================================================
    ページ遷移アニメーション
    ================================================== */
