@@ -231,7 +231,7 @@ body, html {
 
 /* PCでのアクティブ状態 */
 .tonearm-wrapper.tonearm-active {
-    transform: rotate(-15deg); 
+    transform: scaleX(-1) rotate(-15deg); 
 }
 
 .tonearm-wrapper:hover {
