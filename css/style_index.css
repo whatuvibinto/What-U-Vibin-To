@@ -224,14 +224,14 @@ body, html {
     z-index: 20; 
     cursor: pointer;
     transform-origin: 50% 50px; 
-    transform: scaleX(-1) rotate(30deg);
+    transform: rotate(30deg) scaleX(-1);
     transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: auto;
 }
 
 /* PCでのアクティブ状態 */
 .tonearm-wrapper.tonearm-active {
-    transform: scaleX(-1) rotate(-15deg); 
+    transform: rotate(-15deg) scaleX(-1); 
 }
 
 .tonearm-wrapper:hover {
