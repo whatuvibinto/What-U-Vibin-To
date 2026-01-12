@@ -89,7 +89,7 @@ body, html {
     flex-direction: column;
     gap: 10px;
     z-index: 30; /* トーンアーム(20)より確実に上に */
-    margin-top: 200px; 
+    margin-top: 250px; 
     margin-left: 30%;
 }
 .nav-links a {
