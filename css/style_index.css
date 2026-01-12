@@ -89,8 +89,8 @@ body, html {
     flex-direction: column;
     gap: 10px;
     z-index: 30; /* トーンアーム(20)より確実に上に */
-    margin-top: 200px; 
-    margin-left: 5%;
+    margin-top: 400px; 
+    margin-left: 20%;
 }
 .nav-links a {
     text-decoration: none;
@@ -485,8 +485,6 @@ body, html {
     }
     .nav-links a {
         font-size: 1.3rem;
-        margin-top: 200px; 
-        margin-left: 5%;
     }
     .record-wrapper {
         width: 350px;
