@@ -116,6 +116,7 @@ body, html {
 }
 .nav-links a.special-link {
     font-size: 1.8rem;
+    font-family: "Arial Black"", Helvetica, Arial, sans-serif
     font-weight: 900;
     text-decoration: underline;
     text-decoration-thickness: 3px;
