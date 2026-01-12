@@ -126,7 +126,7 @@ body, html {
     
     /* アニメーションの追加 */
     display: inline-block; /* 揺らすために必要 */
-    animation: guragura 1s infinite;
+    animation: guragura 2.5s infinite;
 }
 
 /* 1秒周期の揺れ：最初の20%で動き、残りの80%は静止して注視させる */
