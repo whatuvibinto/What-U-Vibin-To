@@ -216,6 +216,7 @@ body, html {
 /* --- トーンアーム (PCデフォルト) --- */
 .tonearm-wrapper {
     position: absolute;
+    transform: scaleX(-1);
     top: 100px;  
     right: 450px; 
     width: 150px;
