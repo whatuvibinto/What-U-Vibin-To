@@ -485,7 +485,7 @@ body, html {
     }
     .nav-links a {
         font-size: 1.3rem;
-        margin-left: 5%; 
+        margin-left: 5% !important;
         margin-top: 200px;
     }
     .record-wrapper {
