@@ -484,10 +484,6 @@ body, html {
         top: 80px;
     }
     .nav-links a {
-        display: flex;
-        flex-direction: column;
-   　　  gap: 10px;
-        z-index: 30;
         font-size: 1.3rem;
         margin-left: 5%; 
         margin-top: 200px;
