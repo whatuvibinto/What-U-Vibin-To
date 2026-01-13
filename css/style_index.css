@@ -253,8 +253,8 @@ body, html {
     border: none;
     pointer-events: none;
     
-    top: 260px;
-    left: 20px;
+    top: 350px;
+    left: 30px;
     
     animation: pulseRedDot 1.5s infinite ease-in-out;
 }
