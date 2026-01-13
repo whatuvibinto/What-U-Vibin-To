@@ -521,8 +521,8 @@ body, html {
            min(200px, 50vw) のように指定することで、
            大きい画面では200px、小さい画面では50vwというように
            レコードの縮小に合わせてトーンアームの位置も自動で縮まる */
-        margin-top: min(200px, 50vw);   /* 中心から下にずらす */
-        margin-right: min(260px, 65vw); /* 中心から左にずらす */
+        margin-top: min(200px, 40vw);   /* 中心から下にずらす */
+        margin-right: min(260px, 50vw); /* 中心から左にずらす */
         
         /* 初期角度 */
         transform: rotate(65deg);
