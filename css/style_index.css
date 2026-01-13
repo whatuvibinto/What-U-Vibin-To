@@ -246,14 +246,14 @@ body, html {
 .tonearm-tap-hint {
     position: absolute;
     width: 60px;
-    height: 30px;
+    height: 60px;
     border-radius: 50%;
     background-color: rgba(255, 80, 80, 0.5); 
     font-size: 0; 
     border: none;
     pointer-events: none;
     
-    top: 250px;
+    top: 260px;
     left: 40px;
     
     animation: pulseRedDot 1.5s infinite ease-in-out;
