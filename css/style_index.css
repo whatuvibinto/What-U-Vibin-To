@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   1. オリジナルCSS (PC: 固定サイズ・配置)
+   1. オリジナルCSS (PC: 固定サイズ)
    ================================================== */
 
 body, html {
@@ -50,7 +50,7 @@ body, html {
     box-sizing: border-box;
 }
 
-/* PC: 固定 */
+/* PC: 固定サイズ */
 .header-logo-wrapper {
     position: absolute;
     top: 120px;
@@ -84,7 +84,7 @@ body, html {
     position: relative;
 }
 
-/* PC: 固定 */
+/* PC: 固定サイズ */
 .nav-links {
     display: flex;
     flex-direction: column;
@@ -138,7 +138,7 @@ body, html {
     100% { transform: translate(0, 0) rotate(0deg); }
 }
 
-/* PC: 固定 */
+/* PC: 固定サイズ */
 .record-wrapper {
     position: absolute;
     right: -100px; 
@@ -212,7 +212,7 @@ body, html {
     pointer-events: none;
 }
 
-/* PC: 固定 */
+/* PC: 固定サイズ */
 .tonearm-wrapper {
     position: absolute;
     top: 100px;  
@@ -467,60 +467,64 @@ body, html {
 }
 
 /* ==================================================
-   ★スマホ対応 (比率完全維持 & 自動縮小版)
-   iPhone12でもiPhone16ProMaxでも全く同じバランスで表示されます
+   ★スマホ対応 (サイズ自動調整: iPhone16ProMax維持 & iPhone12縮小)
+   重要: レコードとトーンアームの位置関係を統一するため、
+   どちらも top: 70%, right: -100px を基準点にしてから margin で位置を決めています。
    ================================================== */
 @media (max-width: 768px) {
-    /* ロゴ: 画面幅の65%の大きさ */
+    /* ロゴ: Max300px, 画面狭ければ65vw */
     .header-logo-wrapper {
-        width: 65vw;
-        max-width: none; /* 上限解除してProMaxでも比率維持 */
+        width: min(300px, 65vw); 
         top: 80px;
+        left: 20px;
     }
     
-    /* ナビゲーション: フォントサイズも画面幅連動(vw) */
+    /* ナビゲーション: 文字サイズ自動調整 */
     .nav-links {
         margin-left: 5%;
         margin-top: 200px;
         gap: 1.5vh; 
     }
     .nav-links a {
-        font-size: 6vw; /* 画面幅に合わせて文字が小さくなる */
+        font-size: clamp(1.1rem, 4.5vw, 1.3rem); 
     }
     .nav-links a.special-link {
-        font-size: 8vw;
+        font-size: clamp(1.5rem, 6vw, 1.8rem);
     }
 
-    /* レコード: 画面幅の88% (位置: 上から55%, 右から-28%はみ出す) */
+    /* --- レコード盤 --- */
     .record-wrapper {
-        width: 88vw;
-        height: 88vw;
-        max-width: none;
-        max-height: none;
+        /* Max350px, 画面狭ければ88vw */
+        width: min(350px, 88vw);
+        height: min(350px, 88vw);
         
         /* 基準位置 */
-        top: 55%; 
-        right: -28vw; 
+        top: 70%;      
+        right: -100px; 
     }
     
-    /* トーンアーム: 画面幅の32% */
+    /* --- トーンアーム --- */
     .tonearm-wrapper {
-        width: 32vw;
+        /* Max120px, 画面狭ければ30vw */
+        width: min(120px, 30vw); 
         height: auto;
         aspect-ratio: 120 / 300;
-        max-width: none;
-        max-height: none;
         
+        /* Absoluteでスクロール追従 */
         position: absolute;
         
-        /* ★重要: レコードと同じ基準(top:55%)にしてから、margin-top(vw)で下にずらす */
-        /* これにより、画面幅が変わってもレコードとアームの距離感が一定に保たれる */
-        top: 55%;
-        margin-top: 60vw; /* レコードの中心から下に60vw分ずらす */
+        /* ★重要: レコードと同じ基準点(top:70%, right:-100px)に設定 */
+        top: 70%;
+        right: -50px;
         
-        right: -8vw; /* 右端の位置調整 */
+        /* ★重要: マージンを使ってレコードからの相対位置を決める
+           min(200px, 50vw) のように指定することで、
+           大きい画面では200px、小さい画面では50vwというように
+           レコードの縮小に合わせてトーンアームの位置も自動で縮まる */
+        margin-top: min(200px, 50vw);   /* 中心から下にずらす */
+        margin-right: min(260px, 65vw); /* 中心から左にずらす */
         
-        /* 初期角度: 65度 */
+        /* 初期角度 */
         transform: rotate(65deg);
         transform-origin: 50% 50px;
         
@@ -537,10 +541,8 @@ body, html {
         top: 50%; 
         left: 40px;
         
-        /* 丸の大きさもvwにして縮小に追従させる */
-        width: 8vw; 
-        height: 8vw;
-        
+        width: 30px;
+        height: 30px;
         background-color: rgba(255, 80, 80, 0.5); 
         border-radius: 50%;
         border: none;
