@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   1. オリジナルCSS (PCは固定サイズのまま)
+   1. オリジナルCSS (PC: 固定サイズ)
    ================================================== */
 
 body, html {
@@ -90,8 +90,8 @@ body, html {
     flex-direction: column;
     gap: 10px;
     z-index: 30; 
-    margin-top: 200px; 
-    margin-left: 5%;
+    margin-top: 350px; 
+    margin-left: 15%;
 }
 .nav-links a {
     text-decoration: none;
@@ -116,7 +116,8 @@ body, html {
     }
 }
 .nav-links a.special-link {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    font-family: "Arial Black", Helvetica, Arial, sans-serif;
     font-weight: 900;
     text-decoration: underline;
     text-decoration-thickness: 3px;
@@ -124,6 +125,17 @@ body, html {
     text-decoration-color: #000;
     -webkit-text-stroke: 2px #fff; 
     paint-order: stroke fill;
+    display: inline-block; 
+    animation: guragura 2.5s infinite;
+}
+
+@keyframes guragura {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    5% { transform: translate(2px, 1px) rotate(2deg); }
+    10% { transform: translate(-1px, -2px) rotate(-2deg); }
+    15% { transform: translate(3px, 0px) rotate(2deg); }
+    20% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
 }
 
 /* PC: 固定サイズ */
@@ -210,13 +222,13 @@ body, html {
     z-index: 20; 
     cursor: pointer;
     transform-origin: 50% 50px; 
-    transform: rotate(30deg);
+    transform: rotate(30deg) scaleX(-1);
     transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: auto;
 }
 
 .tonearm-wrapper.tonearm-active {
-    transform: rotate(-15deg); 
+    transform: rotate(-15deg) scaleX(-1); 
 }
 
 .tonearm-wrapper:hover {
@@ -226,7 +238,7 @@ body, html {
 .tonearm-img {
     width: 100%;
     height: 100%;
-    overflow: visible;
+    overflow: visible !important;
     filter: drop-shadow(15px 20px 20px rgba(0,0,0,0.4));
 }
 
@@ -240,8 +252,10 @@ body, html {
     font-size: 0; 
     border: none;
     pointer-events: none;
+    
     top: 260px;
     left: 20px;
+    
     animation: pulseRedDot 1.5s infinite ease-in-out;
 }
 
@@ -457,9 +471,9 @@ body, html {
    min(固定サイズ, vw) を使って、大画面では固定、小画面では縮小させる
    ================================================== */
 @media (max-width: 768px) {
-    /* ロゴ: Max300px(ProMax用)、画面が狭ければ70vw */
+    /* ロゴ: Max300px(ProMax用)、画面が狭ければ65vw */
     .header-logo-wrapper {
-        width: min(300px, 70vw); 
+        width: min(300px, 65vw); 
         top: 80px;
     }
     
@@ -482,7 +496,7 @@ body, html {
         width: min(350px, 85vw);
         height: min(350px, 85vw); /* 正方形維持 */
         
-        right: -100px; /* 元の位置関係 */
+        right: -100px; /* 元の位置関係（右に隠す） */
         top: 65%;      /* 下にずらす */
     }
     
@@ -494,10 +508,12 @@ body, html {
         
         /* 絶対配置でスクロール追従 */
         position: absolute;
-        top: 85%;      /* レコードより下に */
-        right: -10px;  /* 画面端 */
         
-        /* 初期角度 */
+        /* ★修正: レコードより下、被らない位置へ (100%付近) */
+        top: 100%;      
+        right: 5vw;  /* 右端から少し内側へ */
+        
+        /* 初期角度: 65度 (時計回りに傾ける) */
         transform: rotate(65deg);
         transform-origin: 50% 50px;
         
