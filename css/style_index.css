@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   1. オリジナルCSS (レスポンシブ自動調整版)
+   1. オリジナルCSS
    ================================================== */
 
 body, html {
@@ -15,7 +15,7 @@ body, html {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* --- Marquee (上部の流れる文字) --- */
+/* --- Marquee (レスポンシブフォント) --- */
 .marquee-wrapper {
     position: fixed;
     top: 0;
@@ -23,11 +23,11 @@ body, html {
     width: 100%;
     background: #000;
     color: #f4f4f0;
-    padding: 0.5rem 0; /* em/remで指定 */
+    padding: 8px 0;
     z-index: 100;
     overflow: hidden;
     white-space: nowrap;
-    /* 画面幅に応じてフォントサイズを微調整 */
+    /* 画面幅に応じて文字サイズを自動調整 (最小0.7rem, 推奨2vw, 最大0.9rem) */
     font-size: clamp(0.7rem, 2vw, 0.9rem);
     letter-spacing: 2px;
     font-weight: bold;
@@ -52,18 +52,16 @@ body, html {
     box-sizing: border-box;
 }
 
-/* --- ロゴ (左上) --- */
+/* --- ロゴ (レスポンシブサイズ) --- */
 .header-logo-wrapper {
     position: absolute;
-    /* 画面高さ/幅に応じた位置 */
-    top: clamp(80px, 15vh, 120px);
+    /* 高さは画面高さの12%くらいの位置に */
+    top: clamp(80px, 12vh, 120px);
     left: clamp(20px, 5vw, 30px);
     
-    /* 幅をvwで指定して画面サイズに追従させる (最大500px) */
-    width: 40vw; 
+    /* 幅を画面幅の45%に設定 (最大500px) */
+    width: 45vw;
     max-width: 500px;
-    min-width: 250px; /* 小さくなりすぎないように */
-    
     z-index: 10;
 }
 .header-logo-wrapper a {
@@ -91,24 +89,24 @@ body, html {
     position: relative;
 }
 
-/* --- ナビゲーションリンク --- */
+/* --- ナビゲーション (レスポンシブ配置) --- */
 .nav-links {
     display: flex;
     flex-direction: column;
-    gap: 1.5vh; /* 画面高さに応じて間隔を調整 */
+    gap: 1.5vh; /* 画面高さに応じて間隔調整 */
     z-index: 30; 
     
-    /* 位置調整: vw/vhを使って可変に */
-    margin-top: 30vh; 
-    margin-left: 10vw;
+    /* PCでの位置 */
+    margin-top: 20vh; 
+    margin-left: 5%;
 }
 .nav-links a {
     text-decoration: none;
     color: #000;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     
-    /* フォントサイズを画面幅に連動させる (Clamp関数) */
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    /* 文字サイズ自動調整 */
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
     
     font-weight: 800;
     text-transform: uppercase;
@@ -128,7 +126,7 @@ body, html {
     }
 }
 .nav-links a.special-link {
-    /* Special Linkも可変サイズに */
+    /* 目立たせるリンクも自動調整 */
     font-size: clamp(1.4rem, 3.5vw, 1.8rem);
     
     font-family: "Arial Black", Helvetica, Arial, sans-serif;
@@ -139,7 +137,6 @@ body, html {
     text-decoration-color: #000;
     -webkit-text-stroke: 2px #fff;
     paint-order: stroke fill;
-    
     display: inline-block; 
     animation: guragura 2.5s infinite;
 }
@@ -159,13 +156,8 @@ body, html {
     right: -100px; 
     top: 60%;
     transform: translateY(-50%);
-    
-    /* サイズを可変に */
-    width: 45vw;
-    height: 45vw;
-    max-width: 600px;
-    max-height: 600px;
-    
+    width: 600px;
+    height: 600px;
     z-index: 5;
     cursor: grab;
     touch-action: none;
@@ -236,16 +228,9 @@ body, html {
 .tonearm-wrapper {
     position: absolute;
     top: 100px;  
-    
-    /* レコードの位置に追従させるためvwを使用 */
-    right: 35vw; 
-    
-    /* サイズも画面幅に追従 */
-    width: 12vw;
-    height: 32vw;
-    max-width: 150px;
-    max-height: 400px;
-    
+    right: 450px; 
+    width: 150px;
+    height: 400px;
     z-index: 20; 
     cursor: pointer;
     transform-origin: 50% 50px; 
@@ -272,8 +257,8 @@ body, html {
 /* TAPヒント (PC) */
 .tonearm-tap-hint {
     position: absolute;
-    top: 70%; 
-    left: -40%;
+    top: 280px; 
+    left: -50px;
     color: #333;
     font-family: 'Permanent Marker', cursive;
     font-size: 2rem; 
@@ -492,67 +477,62 @@ body, html {
     opacity: 0;
     transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
-.slide-out-bottom {
-    transform: translateY(150vh) rotate(45deg) !important; 
-    opacity: 0;
-    transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-}
 
 /* ==================================================
-   ★スマホ対応 (レスポンシブ自動調整版)
-   iPhone12のような小さい画面でもギュッとならないように調整
+   ★スマホ対応 (レスポンシブ & 位置調整版)
    ================================================== */
 @media (max-width: 768px) {
-    
-    /* ロゴ: 画面幅に応じて自然に縮小 (60vw = 画面幅の60%) */
     .header-logo-wrapper {
-        width: 60vw;
+        /* vwを使って画面幅に合わせて縮小 */
+        width: 65vw;
         max-width: 300px;
         top: 80px;
-        left: 20px;
-    }
-
-    /* ナビゲーション: 位置を少し左に戻し、マージンを調整 */
-    .nav-links {
-        margin-left: 5%;
-        margin-top: 15vh; /* 画面高さの15%の位置から開始 */
-        gap: 15px;
     }
     
-    /* フォントサイズ: clampで最小・推奨・最大を指定し、画面サイズに連動 */
+    /* ナビゲーションをレスポンシブ配置 */
+    .nav-links {
+        margin-left: 5%;
+        margin-top: 25vh; /* 画面高さの25%位置から */
+        gap: 2vh; /* 間隔も可変に */
+    }
     .nav-links a {
-        font-size: clamp(1.2rem, 5vw, 1.5rem); 
+        /* 文字サイズも可変 */
+        font-size: clamp(1.2rem, 5vw, 1.5rem);
     }
-    .nav-links a.special-link {
-        font-size: clamp(1.6rem, 7vw, 2.0rem);
-    }
-
-    /* レコード: 画面幅に連動してサイズ可変 */
+    
+    /* レコード (位置調整 & vwでサイズ可変) */
     .record-wrapper {
-        width: 85vw;  /* 画面幅の85% */
-        height: 85vw; /* 正方形を維持 */
+        /* 画面幅の88%の大きさにする */
+        width: 88vw;
+        height: 88vw;
         max-width: 350px;
         max-height: 350px;
         
-        right: -25vw; /* 画面右端から少し出す */
-        top: 60%; 
+        right: -25vw;
+        
+        /* ★修正: 60% -> 70% に変更して下にずらす */
+        top: 70%; 
     }
     
-    /* トーンアーム: サイズと位置を可変に */
+    /* トーンアーム (位置調整 & vwでサイズ可変) */
     .tonearm-wrapper {
-        width: 30vw;  /* 画面幅の30% */
-        height: 75vw; /* 比率を維持 */
+        /* 画面幅の30%の大きさ */
+        width: 30vw;
+        height: 75vw;
         max-width: 120px;
         max-height: 300px;
         
         position: absolute;
-        top: 85%;      
-        right: -10vw; /* 画面端からの距離も可変に */
         
-        /* 初期状態: 100度 (時計回りに傾ける) */
+        /* ★修正: 85% -> 95% に変更して下にずらす */
+        top: 95%;      
+        right: -10vw;    
+        
+        /* 角度は維持 */
         transform: rotate(100deg);
         transform-origin: 50% 50px;
         
+        /* ナビ(30)より下のレイヤー */
         z-index: 10;
     }
     
@@ -561,23 +541,25 @@ body, html {
         transform: rotate(118deg);
     }
     
-    /* 赤い点滅丸: アームサイズに合わせて位置調整 */
+    /* 赤い点滅丸の設定 (サイズも可変に) */
     .tonearm-tap-hint {
         font-size: 0; 
         
-        /* 位置を%で指定して、アームの大きさが変わっても追従させる */
+        /* アーム画像の中間位置に配置 (top:50%など相対指定) */
         top: 70%; 
         left: 33%; 
         
-        width: 13%;  /* サイズも可変 */
+        /* 丸のサイズも可変に */
+        width: 13%; 
         height: auto;
-        aspect-ratio: 1 / 1; /* 正円を維持 */
+        aspect-ratio: 1 / 1;
         
         background-color: rgba(255, 80, 80, 0.5); 
         border-radius: 50%;
         border: none;
         
         display: block;
+        
         transform: rotate(-90deg);
         animation: pulseRedCircle 2s infinite ease-in-out;
     }
@@ -592,9 +574,9 @@ body, html {
         100% { transform: scale(1); opacity: 0.6; }
     }
     
-    /* Aboutパネルの高さ調整 */
+    /* パネルの高さ調整 */
     .about-bottom-panel {
-        height: calc(100vh - 150px); 
+        height: calc(100vh - 180px); 
     }
     .about-columns {
         grid-template-columns: 1fr;
