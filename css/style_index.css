@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   1. オリジナルCSS
+   1. オリジナルCSS (レスポンシブ自動調整版)
    ================================================== */
 
 body, html {
@@ -15,6 +15,7 @@ body, html {
     -webkit-tap-highlight-color: transparent;
 }
 
+/* --- Marquee (上部の流れる文字) --- */
 .marquee-wrapper {
     position: fixed;
     top: 0;
@@ -22,11 +23,12 @@ body, html {
     width: 100%;
     background: #000;
     color: #f4f4f0;
-    padding: 8px 0;
+    padding: 0.5rem 0; /* em/remで指定 */
     z-index: 100;
     overflow: hidden;
     white-space: nowrap;
-    font-size: 0.9rem;
+    /* 画面幅に応じてフォントサイズを微調整 */
+    font-size: clamp(0.7rem, 2vw, 0.9rem);
     letter-spacing: 2px;
     font-weight: bold;
     text-transform: uppercase;
@@ -50,12 +52,18 @@ body, html {
     box-sizing: border-box;
 }
 
+/* --- ロゴ (左上) --- */
 .header-logo-wrapper {
     position: absolute;
-    top: 120px;
-    left: 30px;
-    width: 500px; 
-    max-width: 80%;
+    /* 画面高さ/幅に応じた位置 */
+    top: clamp(80px, 15vh, 120px);
+    left: clamp(20px, 5vw, 30px);
+    
+    /* 幅をvwで指定して画面サイズに追従させる (最大500px) */
+    width: 40vw; 
+    max-width: 500px;
+    min-width: 250px; /* 小さくなりすぎないように */
+    
     z-index: 10;
 }
 .header-logo-wrapper a {
@@ -83,20 +91,25 @@ body, html {
     position: relative;
 }
 
-/* ★修正: ナビゲーションのz-indexを上げて、トーンアームより上にする */
+/* --- ナビゲーションリンク --- */
 .nav-links {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    z-index: 30; /* トーンアーム(20)より確実に上に */
-    margin-top: 350px; 
-    margin-left: 15%;
+    gap: 1.5vh; /* 画面高さに応じて間隔を調整 */
+    z-index: 30; 
+    
+    /* 位置調整: vw/vhを使って可変に */
+    margin-top: 30vh; 
+    margin-left: 10vw;
 }
 .nav-links a {
     text-decoration: none;
     color: #000;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.0rem; 
+    
+    /* フォントサイズを画面幅に連動させる (Clamp関数) */
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -115,7 +128,9 @@ body, html {
     }
 }
 .nav-links a.special-link {
-    font-size: 1.8rem;
+    /* Special Linkも可変サイズに */
+    font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+    
     font-family: "Arial Black", Helvetica, Arial, sans-serif;
     font-weight: 900;
     text-decoration: underline;
@@ -125,12 +140,10 @@ body, html {
     -webkit-text-stroke: 2px #fff;
     paint-order: stroke fill;
     
-    /* アニメーションの追加 */
-    display: inline-block; /* 揺らすために必要 */
+    display: inline-block; 
     animation: guragura 2.5s infinite;
 }
 
-/* 1秒周期の揺れ：最初の20%で動き、残りの80%は静止して注視させる */
 @keyframes guragura {
     0% { transform: translate(0, 0) rotate(0deg); }
     5% { transform: translate(2px, 1px) rotate(2deg); }
@@ -140,13 +153,19 @@ body, html {
     100% { transform: translate(0, 0) rotate(0deg); }
 }
 
+/* --- レコード盤 (PC) --- */
 .record-wrapper {
     position: absolute;
     right: -100px; 
     top: 60%;
     transform: translateY(-50%);
-    width: 600px;
-    height: 600px;
+    
+    /* サイズを可変に */
+    width: 45vw;
+    height: 45vw;
+    max-width: 600px;
+    max-height: 600px;
+    
     z-index: 5;
     cursor: grab;
     touch-action: none;
@@ -213,14 +232,20 @@ body, html {
     pointer-events: none;
 }
 
-/* --- トーンアーム (PCデフォルト) --- */
+/* --- トーンアーム (PC) --- */
 .tonearm-wrapper {
     position: absolute;
     top: 100px;  
-    right: 450px; 
-    width: 150px;
-    height: 400px;
-    /* ★修正: ナビ(30)より下のレイヤーにする */
+    
+    /* レコードの位置に追従させるためvwを使用 */
+    right: 35vw; 
+    
+    /* サイズも画面幅に追従 */
+    width: 12vw;
+    height: 32vw;
+    max-width: 150px;
+    max-height: 400px;
+    
     z-index: 20; 
     cursor: pointer;
     transform-origin: 50% 50px; 
@@ -229,7 +254,6 @@ body, html {
     pointer-events: auto;
 }
 
-/* PCでのアクティブ状態 */
 .tonearm-wrapper.tonearm-active {
     transform: rotate(-15deg) scaleX(-1); 
 }
@@ -245,11 +269,11 @@ body, html {
     filter: drop-shadow(15px 20px 20px rgba(0,0,0,0.4));
 }
 
-/* TAPヒント (PCデフォルト) */
+/* TAPヒント (PC) */
 .tonearm-tap-hint {
     position: absolute;
-    top: 280px; 
-    left: -50px;
+    top: 70%; 
+    left: -40%;
     color: #333;
     font-family: 'Permanent Marker', cursive;
     font-size: 2rem; 
@@ -287,6 +311,7 @@ body, html {
     text-transform: uppercase;
     color: #666;
 }
+
 /* ==================================================
    Aboutパネル用スタイル
    ================================================== */
@@ -385,7 +410,7 @@ body, html {
 }
 .about-columns {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
 }
 .about-columns dl { margin: 0; }
@@ -453,6 +478,7 @@ body, html {
     display: block;
     margin-top: 5px;
 }
+
 /* ==================================================
    ページ遷移アニメーション
    ================================================== */
@@ -466,52 +492,67 @@ body, html {
     opacity: 0;
     transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
-/* ★新規追加: トーンアーム用（下に消える） */
 .slide-out-bottom {
-    /* 画面のはるか下(150vh)へ移動しつつ、少し回転させて自然に落とす */
     transform: translateY(150vh) rotate(45deg) !important; 
     opacity: 0;
     transition: all 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
-/* ★修正: スマホ対応 */
+/* ==================================================
+   ★スマホ対応 (レスポンシブ自動調整版)
+   iPhone12のような小さい画面でもギュッとならないように調整
+   ================================================== */
 @media (max-width: 768px) {
+    
+    /* ロゴ: 画面幅に応じて自然に縮小 (60vw = 画面幅の60%) */
     .header-logo-wrapper {
-        width: 300px;
+        width: 60vw;
+        max-width: 300px;
         top: 80px;
+        left: 20px;
     }
-   .nav-links {
-        /* 重要：PCで指定した margin-left: 55% をスマホの元の位置(5%)に上書き */
-        margin-left: 5%; 
-        margin-top: 200px; /* スマホ用の高さに調整 */
+
+    /* ナビゲーション: 位置を少し左に戻し、マージンを調整 */
+    .nav-links {
+        margin-left: 5%;
+        margin-top: 15vh; /* 画面高さの15%の位置から開始 */
+        gap: 15px;
     }
+    
+    /* フォントサイズ: clampで最小・推奨・最大を指定し、画面サイズに連動 */
     .nav-links a {
-        font-size: 1.3rem;
+        font-size: clamp(1.2rem, 5vw, 1.5rem); 
     }
+    .nav-links a.special-link {
+        font-size: clamp(1.6rem, 7vw, 2.0rem);
+    }
+
+    /* レコード: 画面幅に連動してサイズ可変 */
     .record-wrapper {
-        width: 350px;
-        height: 350px;
-        right: -100px;
-        /* レコード位置: 画面中央よりやや下 */
+        width: 85vw;  /* 画面幅の85% */
+        height: 85vw; /* 正方形を維持 */
+        max-width: 350px;
+        max-height: 350px;
+        
+        right: -25vw; /* 画面右端から少し出す */
         top: 60%; 
     }
     
+    /* トーンアーム: サイズと位置を可変に */
     .tonearm-wrapper {
-        width: 120px;
-        height: 300px;
+        width: 30vw;  /* 画面幅の30% */
+        height: 75vw; /* 比率を維持 */
+        max-width: 120px;
+        max-height: 300px;
         
-        /* ★修正: fixedからabsoluteに変更し、スクロールに追従させる */
         position: absolute;
-        
-        /* レコード(top: 60%)の下側に配置されるよう調整 */
         top: 85%;      
-        right: -40px;    
+        right: -10vw; /* 画面端からの距離も可変に */
         
-        /* 初期状態: 45deg + 20deg = 65deg (時計回りに傾ける) */
+        /* 初期状態: 100度 (時計回りに傾ける) */
         transform: rotate(100deg);
         transform-origin: 50% 50px;
         
-        /* ナビ(30)より下のレイヤー */
         z-index: 10;
     }
     
@@ -520,25 +561,24 @@ body, html {
         transform: rotate(118deg);
     }
     
-    /* ★修正: 赤い点滅丸の位置をアーム中間に */
+    /* 赤い点滅丸: アームサイズに合わせて位置調整 */
     .tonearm-tap-hint {
-        font-size: 0; /* 文字なし */
+        font-size: 0; 
         
-        /* SVG高さ300pxの真ん中あたり */
-        top: 215px; 
-        left: 40px; 
+        /* 位置を%で指定して、アームの大きさが変わっても追従させる */
+        top: 70%; 
+        left: 33%; 
         
-        width: 40px;
-        height: 40px;
+        width: 13%;  /* サイズも可変 */
+        height: auto;
+        aspect-ratio: 1 / 1; /* 正円を維持 */
+        
         background-color: rgba(255, 80, 80, 0.5); 
         border-radius: 50%;
         border: none;
         
         display: block;
-        
-        /* 回転リセット (アームの角度がついているので丸を正立させるが、丸なので見た目は変わらない) */
         transform: rotate(-90deg);
-        
         animation: pulseRedCircle 2s infinite ease-in-out;
     }
     
@@ -546,15 +586,18 @@ body, html {
         display: none;
     }
     
-    /* タップ後は消える */
-    .tonearm-wrapper.tonearm-active .tonearm-tap-hint {
-        opacity: 0;
-        animation: none;
-    }
-    
     @keyframes pulseRedCircle {
         0% { transform: scale(1); opacity: 0.6; }
         50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
         100% { transform: scale(1); opacity: 0.6; }
+    }
+    
+    /* Aboutパネルの高さ調整 */
+    .about-bottom-panel {
+        height: calc(100vh - 150px); 
+    }
+    .about-columns {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 }
