@@ -505,10 +505,10 @@ body, html {
    
    @media (min-width: 420px) {
         .record-wrapper {
-            top: 65%; /* 上にずらす (70% -> 65%) */
+            top: 60%; /* 上にずらす (70% -> 65%) */
         }
         .tonearm-wrapper {
-            top: 65%; /* 上にずらす (70% -> 65%) */
+            top: 55%; /* 上にずらす (70% -> 65%) */
         }
     }
 
