@@ -510,8 +510,8 @@ body, html {
         position: absolute;
         
         /* ★修正: レコードより下、被らない位置へ (100%付近) */
-        top: 100%;      
-        right: 5vw;  /* 右端から少し内側へ */
+        top: 90%;      /*100→90*/
+        right: 2vw;  /* 右端から少し内側へ 5→2*/
         
         /* 初期角度: 65度 (時計回りに傾ける) */
         transform: rotate(65deg);
