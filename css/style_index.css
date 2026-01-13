@@ -538,7 +538,7 @@ body, html {
     
     /* インジケーター */
     .tonearm-tap-hint {
-        top: 50%; 
+        top: 70%; 
         left: 40px;
         
         width: 30px;
