@@ -468,22 +468,23 @@ body, html {
 
 /* ==================================================
    ★スマホ対応 (サイズ自動調整: iPhone16ProMax維持 & iPhone12縮小)
-   min(固定サイズ, vw) を使って、大画面では固定、小画面では縮小させる
+   重要: レコードとトーンアームの位置関係を統一するため、
+   どちらも top: 70%, right: -100px を基準点にしてから margin で位置を決めています。
    ================================================== */
 @media (max-width: 768px) {
-    /* ロゴ: Max300px(ProMax用)、画面が狭ければ65vw */
+    /* ロゴ: Max300px, 画面狭ければ65vw */
     .header-logo-wrapper {
         width: min(300px, 65vw); 
         top: 80px;
+        left: 20px;
     }
     
-    /* ナビゲーション: 文字サイズを自動調整 */
+    /* ナビゲーション: 文字サイズ自動調整 */
     .nav-links {
         margin-left: 5%;
         margin-top: 200px;
         gap: 1.5vh; 
     }
-    /* clamp(最小, 推奨, 最大) でProMax(大)と12(小)の間を埋める */
     .nav-links a {
         font-size: clamp(1.1rem, 4.5vw, 1.3rem); 
     }
@@ -491,29 +492,39 @@ body, html {
         font-size: clamp(1.5rem, 6vw, 1.8rem);
     }
 
-    /* レコード: Max350px(ProMax用)、画面が狭ければ85vw */
+    /* --- レコード盤 --- */
     .record-wrapper {
-        width: min(350px, 85vw);
-        height: min(350px, 85vw); /* 正方形維持 */
+        /* Max350px, 画面狭ければ88vw */
+        width: min(350px, 88vw);
+        height: min(350px, 88vw);
         
-        right: -100px; /* 元の位置関係（右に隠す） */
-        top: 65%;      /* 下にずらす */
+        /* 基準位置 */
+        top: 70%;      
+        right: -100px; 
     }
     
-    /* トーンアーム: Max120px(ProMax用)、画面が狭ければ30vw */
+    /* --- トーンアーム --- */
     .tonearm-wrapper {
+        /* Max120px, 画面狭ければ30vw */
         width: min(120px, 30vw); 
         height: auto;
-        aspect-ratio: 120 / 300; /* アスペクト比維持 */
+        aspect-ratio: 120 / 300;
         
-        /* 絶対配置でスクロール追従 */
+        /* Absoluteでスクロール追従 */
         position: absolute;
         
-        /* ★修正: レコードより下、被らない位置へ (100%付近) */
-        top: 95%;      /*100→90*/
-        right: 1vw;  /* 右端から少し内側へ 5→2*/
+        /* ★重要: レコードと同じ基準点(top:70%, right:-100px)に設定 */
+        top: 70%;
+        right: -100px;
         
-        /* 初期角度: 65度 (時計回りに傾ける) */
+        /* ★重要: マージンを使ってレコードからの相対位置を決める
+           min(200px, 50vw) のように指定することで、
+           大きい画面では200px、小さい画面では50vwというように
+           レコードの縮小に合わせてトーンアームの位置も自動で縮まる */
+        margin-top: min(200px, 50vw);   /* 中心から下にずらす */
+        margin-right: min(260px, 65vw); /* 中心から左にずらす */
+        
+        /* 初期角度 */
         transform: rotate(65deg);
         transform-origin: 50% 50px;
         
@@ -527,7 +538,7 @@ body, html {
     
     /* インジケーター */
     .tonearm-tap-hint {
-        top: 50%; /* アームの真ん中 */
+        top: 50%; 
         left: 40px;
         
         width: 30px;
