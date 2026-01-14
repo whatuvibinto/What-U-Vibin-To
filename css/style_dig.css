@@ -564,7 +564,7 @@
 /* --- モーダルのレスポンシブ (スマホ対応) --- */
 @media (max-width: 768px) {
     .dig-logo {
-        width: 300px;
+        width: min(300px, 70vw);
         top: 80px;
     }
     .dig-content {
