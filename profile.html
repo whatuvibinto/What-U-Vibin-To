@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script src="js/dig_data.js"></script>
+</head>
+<body style="background-color: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+    <div id="status">
+        <p>Loading Profile...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. URLパラメータから id を取得 (?id=lucy)
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get('id');
+
+            // 2. データから該当するメンバーを探す
+            let person = null;
+            if (window.digData) {
+                person = window.digData.find(p => p.id === userId);
+            }
+
+            // 3. メンバーが見つからない場合
+            if (!person) {
+                document.getElementById('status').innerHTML = "<p>Profile not found.</p>";
+                return;
+            }
+
+            // 4. 時間帯によるリダイレクト処理
+            document.getElementById('status').innerHTML = `<p>Redirecting to ${person.name}'s Vibe...</p>`;
+            
+            const hour = new Date().getHours();
+            const urls = person.playlists; // データからプレイリスト情報を取得
+
+            // プレイリスト情報がない場合のフォールバック
+            if (!urls) {
+                document.getElementById('status').innerHTML = "<p>No playlist data.</p>";
+                return;
+            }
+
+            let targetUrl = urls.default;
+
+            if (hour >= 6 && hour < 11 && urls.morning) {
+                targetUrl = urls.morning;
+            } else if (hour >= 16 && hour < 19 && urls.evening) {
+                targetUrl = urls.evening;
+            } else if (hour >= 21 && hour < 24 && urls.night) {
+                targetUrl = urls.night;
+            }
+
+            // 5. リダイレクト実行
+            // 少しだけ待ってから飛ばす（ユーザーに名前を見せるため）
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 800);
+        });
+    </script>
+</body>
+</html>
