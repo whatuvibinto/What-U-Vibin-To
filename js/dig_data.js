@@ -17,7 +17,6 @@ window.digData = [
         // ★追加: HTMLファイルに書いていたリダイレクト先をここに記述
         playlists: {
             morning: "https://open.spotify.com/playlist/5eZRF45oQTOTKxc6LlrdCC",
-            evening: "https://open.spotify.com/playlist/2zQmS4CcnQRlWh6mY5ph23",
             night:   "https://open.spotify.com/playlist/0rwum0FuoiCw54BVeHdJdO",
             default: "https://open.spotify.com/playlist/0Pt3YcKUIt6n92aLIICOvF?si=-SbPSo_jT_yTu0bzULUFKw"
         }
