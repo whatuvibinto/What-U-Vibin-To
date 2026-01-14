@@ -557,7 +557,9 @@
 }
 
 /* --- モーダルのレスポンシブ (スマホ対応) --- */
+/* --- モーダルのレスポンシブ (スマホ対応・iPhone12一画面収まり版) --- */
 @media (max-width: 768px) {
+    /* ... (ロゴやナビの既存設定はそのまま) ... */
     .dig-logo {
         width: min(300px, 70vw);
         top: 80px;
@@ -581,51 +583,70 @@
         padding: 2px 4px; 
     }
 
+    /* ▼▼▼ ここからがモーダル調整箇所 ▼▼▼ */
+
     .qr-modal-content.art-layout {
         flex-direction: column;
         height: auto;
-        max-height: 85vh;
-        overflow-y: auto;
+        /* 画面からはみ出さないよう高さを制限 */
+        max-height: 80vh; 
         width: 85%;
+        overflow: hidden; /* スクロール防止 */
     }
 
+    /* 1. 画像エリアの高さを縮小 (250px -> 180px) */
     .art-image-section {
-        height: 250px;
+        height: 180px; 
         flex: none;
     }
 
+    /* 2. 余白を縮小 (30px -> 20px) */
     .art-info-section {
-        padding: 30px;
-        flex: none;
-        gap: 20px;
+        padding: 20px;
+        flex: 1; /* 残りのスペースを使う */
+        gap: 5px; /* 要素間の隙間を詰める */
+        justify-content: space-evenly; /* 均等配置 */
     }
 
-    /* ★修正: スマホ表示時の名前・バッジの並び */
     .art-name-wrapper {
-        gap: 10px;
-        margin-bottom: 15px;
+        gap: 8px;
+        margin-bottom: 5px; /* 下の余白を詰める */
     }
 
+    /* 3. 名前を少し小さく (2.2rem -> 1.8rem) */
     .art-name {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
     }
     
-    /* ★修正: スマホではバッジも小さく */
     .art-role-badge {
         font-size: 0.6rem;
         padding: 4px 8px;
         transform: translateY(0);
     }
-    
+
+    .art-meta-row {
+        margin-bottom: 10px; /* 余白を詰める */
+        font-size: 0.85rem;
+    }
+
+    /* 4. QRコードを縮小 (100px -> 80px) */
+    .art-qr-container img {
+        width: 80px;
+        height: 80px;
+    }
+
     .art-info-footer {
         flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
+        padding-top: 10px; /* 線との距離を詰める */
+        border-top: 1px solid #eee;
     }
     
     .art-scan-text {
         writing-mode: horizontal-tb;
         transform: none;
+        font-size: 0.7rem;
     }
 
     .qr-modal-close::before,
