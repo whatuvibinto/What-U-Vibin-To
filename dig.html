@@ -65,7 +65,6 @@
                 <div class="art-insta-wrapper" id="modalInstaArea">
                     <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
                         <img src="images/InstagramLogo.png" alt="IG" class="insta-icon">
-                        
                         <span class="insta-val" id="modalInstaName">username</span>
                         <span class="insta-suffix">Tap & Check the profile</span>
                     </a>
@@ -87,6 +86,74 @@
 <script src="js/dig_data.js"></script>
 
 <script>
+    // 要素の取得
+    const container = document.getElementById('profileContainer');
+    const modal = document.getElementById('qrModal');
+    
+    // モーダル内要素
+    const modalName = document.getElementById('modalName');
+    const modalGenre = document.getElementById('modalGenre');
+    const modalPhoto = document.getElementById('modalPhoto');
+    const modalQr = document.getElementById('modalQr');
+    const modalQrLink = document.getElementById('modalQrLink');
+    const modalRole = document.getElementById('modalRole');
+    const modalLocation = document.getElementById('modalLocation');
+    
+    // インスタ要素
+    const modalInstaArea = document.getElementById('modalInstaArea');
+    const modalInstaLink = document.getElementById('modalInstaLink');
+    const modalInstaName = document.getElementById('modalInstaName');
+
+    // 検索・フィルター要素
+    const searchInput = document.getElementById('searchInput');
+    const genreContainer = document.getElementById('genreCheckboxes');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let currentSearchTerm = '';
+    let selectedGenres = []; 
+    let profileData = [];
+    
+    // データ読み込み処理 (エラーハンドリング付き)
+    if (typeof window.digData !== 'undefined') {
+        profileData = window.digData;
+    } else if (typeof digData !== 'undefined') {
+        profileData = digData;
+    } else {
+        console.error("digData Not Found. Check js/dig_data.js loading.");
+    }
+
+    // --- 初期化 ---
+    function init() {
+        // 日付順にソート（新しい順）
+        profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        
+        generateGenreCheckboxes(); // フィルター生成
+        renderProfiles(profileData); // 一覧描画
+    }
+
+    // --- ジャンルフィルター生成 ---
+    function generateGenreCheckboxes() {
+        let allGenres = [...new Set(profileData.flatMap(person => person.genre))].sort();
+        const mixTag = "DJ MIX";
+        if (allGenres.includes(mixTag)) {
+            allGenres = allGenres.filter(g => g !== mixTag); 
+            allGenres.unshift(mixTag); 
+        }
+
+        let html = '';
+        allGenres.forEach(genre => {
+            const specialClass = (genre === mixTag) ? 'special-tag' : '';
+            html += `
+                <label class="genre-tag ${specialClass}">
+                    <input type="checkbox" value="${genre}" onchange="handleGenreChange(this)">
+                    <span class="genre-name">${genre}</span>
+                </label>
+            `;
+        });
+        genreContainer.innerHTML = html;
+    }
+
+    // --- プロフィール一覧描画 (リンク生成ロジック修正済み) ---
     function renderProfiles(data) {
         if (data.length === 0) {
             container.innerHTML = '<p style="text-align:center; width:100%; grid-column:1/-1; margin-top:50px;">NO VIBES FOUND...</p>';
@@ -102,9 +169,15 @@
             const role = person.role || "";
             const roleBadge = role ? `<span class="role-badge">${role}</span>` : "";
             
-            // ★修正: URLパラメータ形式のリンクを生成
-            // もしデータに qrLink が直接書かれていればそれを優先、なければ id から生成
-            const linkUrl = person.qrLink ? person.qrLink : `profile.html?id=${person.id}`;
+            // ★重要: IDに基づくリンク生成ロジック
+            // データに id があれば profile.html?id=... を生成
+            // 古いデータ形式(qrLink)が残っている場合の互換性も維持
+            let linkUrl = "#";
+            if (person.id) {
+                linkUrl = `profile.html?id=${person.id}`;
+            } else if (person.qrLink) {
+                linkUrl = person.qrLink;
+            }
             
             const instaId = person.instagram || "";
             const location = person.location || "";
@@ -137,6 +210,89 @@
         });
         container.innerHTML = html;
     }
+
+    // --- フィルタリング実行 ---
+    function applyFilters() {
+        const filtered = profileData.filter(person => {
+            const term = currentSearchTerm.toLowerCase();
+            const textMatch = !term || 
+                person.name.toLowerCase().includes(term) || 
+                person.location.toLowerCase().includes(term) ||
+                person.genre.some(g => g.toLowerCase().includes(term));
+
+            const genreMatch = selectedGenres.length === 0 || 
+                person.genre.some(g => selectedGenres.includes(g));
+
+            return textMatch && genreMatch;
+        });
+        renderProfiles(filtered);
+        resetBtn.style.display = selectedGenres.length > 0 ? 'inline-block' : 'none';
+    }
+
+    // --- イベントリスナー ---
+    searchInput.addEventListener('input', (e) => {
+        currentSearchTerm = e.target.value;
+        applyFilters();
+    });
+
+    window.handleGenreChange = function(checkbox) {
+        const val = checkbox.value;
+        if (checkbox.checked) {
+            selectedGenres.push(val);
+        } else {
+            selectedGenres = selectedGenres.filter(g => g !== val);
+        }
+        applyFilters();
+    };
+
+    resetBtn.addEventListener('click', () => {
+        selectedGenres = [];
+        const checkboxes = genreContainer.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = false);
+        applyFilters();
+    });
+
+    // --- モーダル操作 ---
+    window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
+        modalName.textContent = name;
+        modalGenre.textContent = genre;
+        modalLocation.textContent = location;
+        
+        modalPhoto.src = imageSrc;
+        modalQr.src = qrSrc;
+        
+        // モーダル内のQR画像リンク先設定
+        modalQrLink.href = linkUrl;
+
+        if (role) {
+            modalRole.textContent = role;
+            modalRole.style.display = "block";
+        } else {
+            modalRole.style.display = "none";
+        }
+
+        if (instaId) {
+            modalInstaArea.style.display = "block";
+            modalInstaName.textContent = instaId;
+            // インスタリンク生成
+            modalInstaLink.href = "https://instagram.com/" + instaId;
+        } else {
+            modalInstaArea.style.display = "none";
+        }
+
+        modal.classList.add('active');
+    };
+
+    window.closeQrModal = function() {
+        modal.classList.remove('active');
+    };
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeQrModal();
+    });
+
+    // 実行開始
+    init();
 </script>
 
 </body>
