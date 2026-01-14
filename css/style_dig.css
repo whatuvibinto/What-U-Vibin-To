@@ -558,8 +558,14 @@
 
 /* --- モーダルのレスポンシブ (スマホ対応) --- */
 /* --- モーダルのレスポンシブ (スマホ対応・サイズ再調整版) --- */
+/* ==================================================
+   ★スマホ対応 (ProMax用ゆとり設定 & iPhone12用縮小設定)
+   ================================================== */
+
+/* ① スマホ全般 (iPhone 16 Pro Max など大きいスマホ向け) */
+/* ここでは「元通り」に近い、少し大きめのサイズを指定します */
 @media (max-width: 768px) {
-    /* ... (ロゴやナビの既存設定はそのまま) ... */
+    /* --- 共通レイアウト --- */
     .dig-logo {
         width: min(300px, 70vw);
         top: 80px;
@@ -583,75 +589,116 @@
         padding: 2px 4px; 
     }
 
-    /* ▼▼▼ ここからがモーダル調整箇所 ▼▼▼ */
-
+    /* --- モーダル (Pro Max用の大きめ設定) --- */
     .qr-modal-content.art-layout {
         flex-direction: column;
         height: auto;
-        /* 高さを少し余裕を持たせる (80vh -> 88vh) */
-        max-height: 88vh; 
+        max-height: 90vh; /* 余裕を持たせる */
         width: 85%;
-        /* 万が一はみ出た場合のみスクロール許可 */
         overflow-y: auto; 
     }
 
-    /* 1. 画像エリア: 前回(180px)より大きく、初期(250px)より少し小さく */
+    /* 画像: 大きめに戻す */
     .art-image-section {
-        height: 220px; 
+        height: 280px; 
         flex: none;
     }
 
-    /* 2. 余白: 前回(20px)より少し広げて窮屈さを解消 */
+    /* 余白: ゆったり */
     .art-info-section {
-        padding: 25px; 
+        padding: 30px;
         flex: 1;
-        gap: 10px; 
-        justify-content: space-between; /* 均等配置に戻す */
+        gap: 15px;
+        justify-content: space-between;
     }
 
     .art-name-wrapper {
-        gap: 10px;
-        margin-bottom: 10px;
+        gap: 12px;
+        margin-bottom: 15px;
     }
 
-    /* 3. 名前: 前回(1.8rem)より大きく、読みやすく */
+    /* 名前: 大きく */
     .art-name {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
     }
     
     .art-role-badge {
-        font-size: 0.65rem;
+        font-size: 0.7rem;
         padding: 5px 10px;
         transform: translateY(0);
     }
 
     .art-meta-row {
-        margin-bottom: 15px;
-        font-size: 0.9rem;
+        margin-bottom: 20px;
+        font-size: 1rem;
     }
 
-    /* 4. QRコード: 前回(80px)より少し大きく */
     .art-qr-container img {
-        width: 90px;
-        height: 90px;
+        width: 100px; /* 元のサイズ */
+        height: 100px;
     }
 
     .art-info-footer {
         flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
-        padding-top: 15px;
+        padding-top: 20px;
         border-top: 1px solid #eee;
     }
     
     .art-scan-text {
         writing-mode: horizontal-tb;
         transform: none;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
     }
 
     .qr-modal-close::before,
     .qr-modal-close::after {
         background-color: #ccc; 
+    }
+}
+
+/* ② iPhone 12 / 13 / 14 / 15 (幅430px以下) 向けの縮小設定 */
+/* ここで、画面が狭い場合だけ要素を小さく上書きします */
+@media (max-width: 430px) {
+    
+    /* モーダル全体の高さを制限 */
+    .qr-modal-content.art-layout {
+        max-height: 88vh; 
+    }
+
+    /* 画像を縮小 (280px -> 200px) */
+    .art-image-section {
+        height: 200px; 
+    }
+
+    /* 余白を詰める (30px -> 20px) */
+    .art-info-section {
+        padding: 20px; 
+        gap: 10px;
+    }
+
+    .art-name-wrapper {
+        margin-bottom: 8px;
+    }
+
+    /* 文字サイズを縮小 (2.5rem -> 2.0rem) */
+    .art-name {
+        font-size: 2.0rem; 
+    }
+
+    .art-meta-row {
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+    }
+
+    /* QRコードを少し小さく (100px -> 90px) */
+    .art-qr-container img {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .art-info-footer {
+        padding-top: 15px;
     }
 }
