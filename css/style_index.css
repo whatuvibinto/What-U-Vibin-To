@@ -285,6 +285,9 @@ body, html {
 }
 
 /* Aboutパネル */
+/* ==================================================
+   Aboutパネル用スタイル (レスポンシブ文字サイズ版)
+   ================================================== */
 .about-bottom-panel {
     position: fixed;
     bottom: 0;
@@ -336,7 +339,8 @@ body, html {
     margin-bottom: 20px;
 }
 .about-panel-logo img {
-    width: 180px; 
+    /* ロゴ画像も画面幅に合わせて可変に */
+    width: clamp(120px, 40vw, 180px);
     height: auto;
 }
 .about-main-title {
@@ -346,7 +350,10 @@ body, html {
     gap: 20px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 800;
-    font-size: 1.4rem;
+    
+    /* 文字サイズ自動調整 */
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
+    
     letter-spacing: 0.05em;
     color: #111;
     text-transform: uppercase;
@@ -361,7 +368,9 @@ body, html {
     background-color: #333;
 }
 .about-intro {
-    font-size: 0.95rem;
+    /* 文字サイズ自動調整 */
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
+    
     font-weight: 500;
     line-height: 2;
     margin-bottom: 40px; 
@@ -370,7 +379,9 @@ body, html {
     text-align: center;
 }
 .logo-note {
-    font-size: 0.8rem;
+    /* 文字サイズ自動調整 */
+    font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+    
     color: #666;
     text-align: center;
     margin-bottom: 30px; 
@@ -394,7 +405,10 @@ body, html {
     color: #000;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 800;
-    font-size: 1.4rem;
+    
+    /* リンク文字サイズ自動調整 */
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
+    
     text-transform: uppercase;
     letter-spacing: 0.05em;
     position: relative;
@@ -415,7 +429,9 @@ body, html {
     width: 100%;
 }
 .about-columns dt.highlight-text a {
-    font-size: 1.6rem;
+    /* ハイライト文字サイズ自動調整（少し大きめ） */
+    font-size: clamp(1.3rem, 5vw, 1.6rem);
+    
     font-weight: 900;
     background: linear-gradient(to bottom, transparent 60%, rgba(255, 247, 0, 0.8) 60%);
     background-repeat: no-repeat;
@@ -437,13 +453,18 @@ body, html {
 }
 .about-columns dd {
     margin: 0;
-    font-size: 0.85rem;
+    
+    /* 説明文サイズ自動調整 */
+    font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+    
     line-height: 1.8;
     color: #555;
     font-family: sans-serif;
 }
 .small-note {
-    font-size: 0.7rem;
+    /* 注釈サイズ自動調整 */
+    font-size: clamp(0.6rem, 2vw, 0.7rem);
+    
     color: #999;
     display: block;
     margin-top: 5px;
