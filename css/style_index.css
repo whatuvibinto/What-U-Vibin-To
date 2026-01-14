@@ -497,7 +497,6 @@ body, html {
     .header-logo-wrapper {
         width: min(300px, 70vw); 
         top: 80px;
-        left: 20px;
     }
     
     /* ナビゲーション: 文字サイズ自動調整 */
