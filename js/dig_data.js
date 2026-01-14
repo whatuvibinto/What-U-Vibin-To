@@ -4,7 +4,7 @@
 window.digData = [
     {
         id: "lucy", // ★必須: URLパラメータ用の一意なID
-        name: "RYUICHI YANAI",
+        name: "LUCY",
         role: "DJ", 
         date: "2026-01-10",
         location: "TOKYO",
