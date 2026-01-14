@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* ==================================================
-   Dig Page Specific Styles (画像差し替え版)
+   Dig Page Specific Styles (修正統合版)
    ================================================== */
 
 /* --- 1. ページ全体 --- */
@@ -44,9 +44,9 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 4. 検索バー & フィルター --- */
+/* --- 4. 検索バー (Minimal Style) --- */
 .search-area {
-    margin-bottom: 80px; /* 余白を広げて優雅に */
+    margin-bottom: 80px;
     text-align: center;
     width: 100%;
 }
@@ -55,24 +55,23 @@
     position: relative;
     display: inline-block;
     width: 100%;
-    max-width: 500px; /* 少し幅を絞って引き締める */
+    max-width: 500px;
     height: auto;
-    border: none; /* 枠線を消す */
-    border-bottom: 1px solid #e0e0e0; /* 非常に薄いグレーのライン */
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
     background: transparent;
     transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* フォーカス時にラインが黒く光る演出 */
 .search-box:focus-within {
     border-bottom: 1px solid #000;
 }
 
 .search-input {
     width: 100%;
-    padding: 15px 90px 15px 0; /* 右側にボタン用の余白、左は詰め */
+    padding: 15px 90px 15px 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.2rem; /* 文字を少し大きく、自信のある印象に */
+    font-size: 1.2rem;
     font-weight: 500;
     color: #000;
     background: transparent;
@@ -88,7 +87,6 @@
     transition: opacity 0.3s;
 }
 
-/* 入力中はプレースホルダーを薄くする */
 .search-input:focus::placeholder {
     opacity: 0.5;
 }
@@ -103,19 +101,19 @@
     border: none;
     padding: 0;
     font-size: 0.75rem;
-    font-weight: 900; /* 極太フォントでコントラスト */
+    font-weight: 900;
     letter-spacing: 2px;
     cursor: pointer;
     text-transform: uppercase;
     transition: opacity 0.3s, transform 0.3s;
 }
 
-/* ホバー時に少し浮くような演出 */
 .search-btn:hover {
-    background: transparent; /* 前回の背景色リセット */
+    background: transparent;
     opacity: 0.6;
     transform: translateY(-50%) translateX(-2px);
 }
+
 /* --- ジャンルフィルター --- */
 .genre-filter-area {
     max-width: 800px;
@@ -171,7 +169,7 @@
     border-color: #000;
 }
 
-/* DJ MIXタグ用スタイル */
+/* DJ MIXタグ */
 .genre-tag.special-tag .genre-name {
     border: 2px solid #000; 
     font-size: 0.85rem;     
@@ -195,7 +193,7 @@
     cursor: pointer;
 }
 
-/* --- 5. プロフィールカード --- */
+/* --- 5. プロフィールカード (一覧) --- */
 .profile-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -216,20 +214,13 @@
     
     opacity: 0; 
     animation: fadeInUpCard 0.6s ease-out forwards;
-    
     position: relative; 
     height: 100%;
 }
 
 @keyframes fadeInUpCard {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
 .profile-card:hover {
@@ -256,6 +247,7 @@
     transform: scale(1.05);
 }
 
+/* カード内の役割バッジ */
 .role-badge {
     position: absolute;
     top: 10px;
@@ -384,30 +376,25 @@
     transform: scale(1);
 }
 
-/* --- 閉じるボタンの修正 --- */
+/* 閉じるボタン */
 .qr-modal-close {
     position: absolute;
     top: 0;
     right: 0;
     width: 60px;
     height: 60px;
-    
-    /* 背景を透明に */
     background: transparent; 
-    
     border: none;
     cursor: pointer;
     z-index: 100;
     transition: transform 0.3s;
 }
 
-/* ホバー時にくるっと回す */
 .qr-modal-close:hover {
     background: transparent;
     transform: rotate(90deg);
 }
 
-/* ★修正: 線を共通設定（PCでは黒） */
 .qr-modal-close::before,
 .qr-modal-close::after {
     content: '';
@@ -419,7 +406,6 @@
     background-color: #000; 
 }
 
-/* ★修正: ここで回転させて「×」の形にします */
 .qr-modal-close::before {
     transform: translate(-50%, -50%) rotate(45deg);
 }
@@ -428,9 +414,9 @@
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-
 .close-line { display: none; }
 
+/* 画像セクション */
 .art-image-section {
     flex: 0 0 40%;
     position: relative;
@@ -446,20 +432,22 @@
     opacity: 0.95;
 }
 
+/* ★修正: モーダル内の役職バッジ（黒背景・白文字・位置調整） */
 .art-role-badge {
-    position: absolute;
-    top: 20px;
-    left: 20px;
+    display: inline-block;
     background: #000;
     color: #fff;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 900;
     padding: 6px 12px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    z-index: 2;
+    white-space: nowrap;
+    transform: translateY(2px); 
+    box-shadow: none;
 }
 
+/* 情報セクション */
 .art-info-section {
     flex: 1;
     padding: 50px 60px;
@@ -470,11 +458,20 @@
     box-sizing: border-box; 
 }
 
+/* ★修正: 名前とバッジを並べるラッパー */
+.art-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
 .art-name {
     font-size: 3.5rem;
     font-weight: 900;
     line-height: 0.9;
-    margin: 0 0 20px 0;
+    margin: 0; /* ラッパーで余白管理 */
     text-transform: uppercase;
     letter-spacing: -2px;
     color: #000;
@@ -518,7 +515,6 @@
     border-bottom: 1px solid #000;
 }
 
-/* ★修正: テキストの代わりに画像を表示するためのスタイル */
 .insta-icon {
     width: 18px; 
     height: 18px;
@@ -604,8 +600,21 @@
         gap: 20px;
     }
 
+    /* ★修正: スマホ表示時の名前・バッジの並び */
+    .art-name-wrapper {
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
     .art-name {
         font-size: 2.2rem;
+    }
+    
+    /* ★修正: スマホではバッジも小さく */
+    .art-role-badge {
+        font-size: 0.6rem;
+        padding: 4px 8px;
+        transform: translateY(0);
     }
     
     .art-info-footer {
@@ -619,7 +628,6 @@
         transform: none;
     }
 
-    /* ★修正: スマホではボタンの色を灰色にする（黒背景で見えるように） */
     .qr-modal-close::before,
     .qr-modal-close::after {
         background-color: #ccc; 
