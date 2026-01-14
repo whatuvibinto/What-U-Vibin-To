@@ -557,7 +557,7 @@
 }
 
 /* --- モーダルのレスポンシブ (スマホ対応) --- */
-/* --- モーダルのレスポンシブ (スマホ対応・iPhone12一画面収まり版) --- */
+/* --- モーダルのレスポンシブ (スマホ対応・サイズ再調整版) --- */
 @media (max-width: 768px) {
     /* ... (ロゴやナビの既存設定はそのまま) ... */
     .dig-logo {
@@ -588,65 +588,66 @@
     .qr-modal-content.art-layout {
         flex-direction: column;
         height: auto;
-        /* 画面からはみ出さないよう高さを制限 */
-        max-height: 80vh; 
+        /* 高さを少し余裕を持たせる (80vh -> 88vh) */
+        max-height: 88vh; 
         width: 85%;
-        overflow: hidden; /* スクロール防止 */
+        /* 万が一はみ出た場合のみスクロール許可 */
+        overflow-y: auto; 
     }
 
-    /* 1. 画像エリアの高さを縮小 (250px -> 180px) */
+    /* 1. 画像エリア: 前回(180px)より大きく、初期(250px)より少し小さく */
     .art-image-section {
-        height: 180px; 
+        height: 220px; 
         flex: none;
     }
 
-    /* 2. 余白を縮小 (30px -> 20px) */
+    /* 2. 余白: 前回(20px)より少し広げて窮屈さを解消 */
     .art-info-section {
-        padding: 20px;
-        flex: 1; /* 残りのスペースを使う */
-        gap: 5px; /* 要素間の隙間を詰める */
-        justify-content: space-evenly; /* 均等配置 */
+        padding: 25px; 
+        flex: 1;
+        gap: 10px; 
+        justify-content: space-between; /* 均等配置に戻す */
     }
 
     .art-name-wrapper {
-        gap: 8px;
-        margin-bottom: 5px; /* 下の余白を詰める */
+        gap: 10px;
+        margin-bottom: 10px;
     }
 
-    /* 3. 名前を少し小さく (2.2rem -> 1.8rem) */
+    /* 3. 名前: 前回(1.8rem)より大きく、読みやすく */
     .art-name {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
     }
     
     .art-role-badge {
-        font-size: 0.6rem;
-        padding: 4px 8px;
+        font-size: 0.65rem;
+        padding: 5px 10px;
         transform: translateY(0);
     }
 
     .art-meta-row {
-        margin-bottom: 10px; /* 余白を詰める */
-        font-size: 0.85rem;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
     }
 
-    /* 4. QRコードを縮小 (100px -> 80px) */
+    /* 4. QRコード: 前回(80px)より少し大きく */
     .art-qr-container img {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
     }
 
     .art-info-footer {
         flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
-        padding-top: 10px; /* 線との距離を詰める */
+        padding-top: 15px;
         border-top: 1px solid #eee;
     }
     
     .art-scan-text {
         writing-mode: horizontal-tb;
         transform: none;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
     }
 
     .qr-modal-close::before,
