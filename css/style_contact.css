@@ -151,7 +151,7 @@
 /* --- スマホ対応 --- */
 @media (max-width: 768px) {
     .contact-logo {
-        width: 300px;
+        width: min(300px, 70vw);
         top: 80px;
     }
     .contact-content {
