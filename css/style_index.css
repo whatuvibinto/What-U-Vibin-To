@@ -573,6 +573,10 @@ body, html {
         }
     }
     @media (max-width: 400px) {
+       /* ★ここに追記: ナビの位置を下にずらす */
+        .nav-links {
+            margin-top: 230px; /* 200px -> 240px に増やす（数字が大きいほど下へ） */
+        }
         .record-wrapper {
             right: -120px;
         }
