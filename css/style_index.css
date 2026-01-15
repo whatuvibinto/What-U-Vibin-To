@@ -55,7 +55,7 @@ body, html {
 .header-logo-wrapper {
     position: absolute;
     top: 120px;
-    left: 24px;
+    left: 30px;
     width: 500px; 
     max-width: 80%;
     z-index: 10;
