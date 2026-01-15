@@ -242,9 +242,9 @@ body, html {
     filter: drop-shadow(15px 20px 20px rgba(0,0,0,0.4));
 
    /* ★追加: レンダリング最適化の対策 */
-    will-change: filter;       /* フィルター処理を最適化するヒント */
-    transform: translateZ(0);  /* GPUレイヤーを強制的に作成 */
-    -webkit-backface-visibility: hidden; /* チラつき防止 */
+    will-change: filter;       
+    transform: translateZ(0);  
+    -webkit-backface-visibility: hidden; 
 }
 
 /* PC: インジケーター */
@@ -508,13 +508,28 @@ body, html {
     .nav-links {
         margin-left: 5%;
         margin-top: 200px;
-        gap: 1.5vh; 
+        gap: 1.5vh;
+        z-index: 50; /* ★重要: レコードより確実に手前に表示 */
     }
     .nav-links a {
-        font-size: clamp(1.1rem, 4.5vw, 1.3rem); 
+        font-size: clamp(1.1rem, 4.5vw, 1.3rem);
+        /* ★重要: 文字の周りに強い白い光彩(影)をつけて、黒いレコードの上でもくっきり見せる */
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+        color: #000;
+        position: relative;
     }
     .nav-links a.special-link {
         font-size: clamp(1.5rem, 6vw, 1.8rem);
+        /* Special Linkも同様に影をつける */
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+    }
+    
+    /* もしサブタイトル(.nav-subtitle)を使っている場合の設定 */
+    .nav-subtitle {
+        /* 白い影の上でグレーだと見えにくいので、スマホでは濃い色に変更 */
+        color: #222;
+        text-shadow: 0 0 3px #fff, 0 0 6px #fff;
+        opacity: 1;
     }
 
     /* --- レコード盤 --- */
