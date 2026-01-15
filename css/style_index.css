@@ -240,6 +240,11 @@ body, html {
     height: 100%;
     overflow: visible !important;
     filter: drop-shadow(15px 20px 20px rgba(0,0,0,0.4));
+
+   /* ★追加: レンダリング最適化の対策 */
+    will-change: filter;       /* フィルター処理を最適化するヒント */
+    transform: translateZ(0);  /* GPUレイヤーを強制的に作成 */
+    -webkit-backface-visibility: hidden; /* チラつき防止 */
 }
 
 /* PC: インジケーター */
