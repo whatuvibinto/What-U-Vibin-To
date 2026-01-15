@@ -167,6 +167,10 @@ body, html {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     will-change: transform;
+   /* ★追加: 画像自体へのクリック判定を消し、親要素(wrapper)で操作させる */
+    pointer-events: none; 
+    /* ★追加: 画像のドラッグ禁止 (Safari/Chrome用) */
+    -webkit-user-drag: none;
 }
 /* 光沢エフェクト */
 .record-wrapper::after {
