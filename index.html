@@ -6,40 +6,102 @@
     <title>WHAT U VIBIN TO?</title>
     <link rel="stylesheet" href="css/style_index.css">
     <style>
-        /* =========================================
-           New Navigation Styles for Subtitles
-           ========================================= */
+    /* =========================================
+       ナビゲーションを「ボタン形式」にするスタイル
+       ========================================= */
+    
+    /* PC・スマホ共通: ボタンの配置 */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* ボタン同士の間隔 */
+        margin-top: 320px; /* 位置調整 */
+        margin-left: 10%;
+        z-index: 30;
+    }
+
+    /* ボタン自体のデザイン */
+    .nav-links a {
+        display: flex;
+        flex-direction: column; /* 英語と日本語を縦に積む */
+        justify-content: center;
+        align-items: flex-start;
+        
+        width: 260px; /* ボタンの幅 */
+        padding: 15px 20px; /* 内側の余白 */
+        
+        /* 線と背景 */
+        border: 1px solid #000; 
+        background-color: #fff;
+        
+        /* テキスト設定 */
+        text-decoration: none;
+        color: #000;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 1.1rem; 
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        
+        /* アニメーション設定 */
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        position: relative;
+    }
+
+    /* ホバー時の動き（黒く反転して浮き上がる） */
+    @media (min-width: 769px) {
+        .nav-links a:hover {
+            background-color: #000; /* 背景を黒に */
+            color: #fff;            /* 文字を白に */
+            border-color: #000;
+            
+            /* 右上に少し浮き上がり、影を落とす */
+            transform: translate(5px, -5px);
+            box-shadow: -5px 5px 0px rgba(0,0,0,0.2); 
+        }
+        
+        /* ホバー時の日本語サブタイトルの色 */
+        .nav-links a:hover .nav-subtitle {
+            color: #ccc; /* 薄いグレーにして読みやすく */
+            opacity: 1;
+        }
+    }
+
+    /* 日本語サブタイトルのデザイン */
+    .nav-subtitle {
+        display: block;
+        font-size: 0.7rem; 
+        font-weight: normal; 
+        color: #888; /* 通常時はグレー */
+        margin-top: 4px; 
+        letter-spacing: 0.05em; 
+        text-transform: none; 
+        opacity: 0.8;
+        font-family: "Helvetica Neue", Helvetica, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
+        transition: color 0.3s;
+    }
+
+    /* --- スマホ対応 (レスポンシブ) --- */
+    @media (max-width: 768px) {
+        .nav-links {
+            margin-top: 220px;
+            margin-left: 5vw;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
         .nav-links a {
-            display: flex;
-            flex-direction: column; /* Stack English and Japanese vertically */
-            align-items: flex-start; /* Align to the left */
-            line-height: 1.2; /* Tighter line height for the group */
-            margin-bottom: 15px; /* Add some space between items */
+            /* 画面幅に合わせてボタン幅を調整 */
+            width: min(280px, 80vw); 
+            padding: 12px 18px;
+            font-size: 1.0rem;
         }
-
+        
         .nav-subtitle {
-            display: block;
-            font-size: 0.65rem; /* Smaller font size */
-            font-weight: normal; /* Non-bold */
-            color: #888; /* Gray color (faint) */
-            margin-top: 2px; /* Slight gap from the English text */
-            letter-spacing: 0.05em; /* Normal spacing */
-            text-transform: none; /* Keep Japanese as is */
-            opacity: 0.8;
-            font-family: "Helvetica Neue", Helvetica, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
+            font-size: 0.65rem;
         }
-
-        /* Adjust hover effect to move the whole block */
-        @media (min-width: 769px) {
-            .nav-links a:hover {
-                transform: translateX(10px);
-            }
-            /* Ensure the color change applies to the main text, keep subtitle gray or slightly darker */
-            .nav-links a:hover .nav-subtitle {
-                color: #666;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 
