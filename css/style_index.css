@@ -526,10 +526,6 @@ body, html {
         /* 基準位置 */
         top: 70%;      
         right: -100px;
-       /* ★追加: 左側（文字と重なる部分）を薄くする魔法のコード */
-        /* 左端(0%)は30%の濃さ、右側(60%)以降は100%の濃さにするグラデーション */
-        -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,1) 60%);
-        mask-image: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,1) 60%);
     }
     
     /* --- トーンアーム --- */
@@ -558,10 +554,6 @@ body, html {
         transform-origin: 50% 50px;
         
         z-index: 10;
-       /* ★追加: 根元から先端にかけて自然に薄くする魔法のコード */
-        /* 上(0%)〜中間(60%)まではハッキリ、そこから先端(100%)にかけて薄く(0.3)する */
-        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0.3) 100%);
-        mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0.3) 100%);
     }
     
     /* 針を落とした時 */
