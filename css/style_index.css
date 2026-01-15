@@ -581,3 +581,41 @@ body, html {
         }
     }
 }
+/* ==================================================
+   ★追加: Exploreボタンを揺らすアニメーション設定
+   ================================================== */
+
+/* 揺れる動きの定義 */
+@keyframes guragura {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    5% { transform: translate(2px, 1px) rotate(2deg); }
+    10% { transform: translate(-1px, -2px) rotate(-2deg); }
+    15% { transform: translate(3px, 0px) rotate(2deg); }
+    20% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* Exploreボタン(.special-link)に動きを適用 */
+.nav-links a.special-link {
+    /* 以前の強調デザイン（太字・下線・フォント）も復活 */
+    font-size: 1.8rem;
+    font-family: "Arial Black", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 5px;
+    text-decoration-color: #000;
+    
+    display: inline-block; 
+    animation: guragura 2.5s infinite; /* 2.5秒間隔で揺らす */
+}
+
+/* スマホ表示時のサイズ調整（上書き） */
+@media (max-width: 768px) {
+    .nav-links a.special-link {
+        font-size: clamp(1.5rem, 6vw, 1.8rem);
+        /* スマホでも下線などのデザインを維持 */
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+    }
+}
