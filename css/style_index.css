@@ -15,6 +15,7 @@ body, html {
     -webkit-tap-highlight-color: transparent;
 }
 
+/* マーキー（流れる文字） */
 .marquee-wrapper {
     position: fixed;
     top: 0;
@@ -50,7 +51,7 @@ body, html {
     box-sizing: border-box;
 }
 
-/* PC: 固定サイズ */
+/* ロゴ */
 .header-logo-wrapper {
     position: absolute;
     top: 120px;
@@ -84,11 +85,11 @@ body, html {
     position: relative;
 }
 
-/* PC: 固定サイズ */
+/* --- ナビゲーション (PC) --- */
 .nav-links {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px; /* 行間を少し広げる */
     z-index: 30; 
     margin-top: 350px; 
     margin-left: 15%;
@@ -108,37 +109,39 @@ body, html {
     background-color: transparent; 
     padding: 5px 0;
     -webkit-tap-highlight-color: transparent;
+    
+    /* 縦並びレイアウト用 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
 }
+
+/* 日本語サブタイトル (PC初期設定) */
+.nav-subtitle {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: normal;
+    color: #888; /* PCでは薄いグレー */
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+    text-transform: none;
+    opacity: 0.8;
+    transition: color 0.3s;
+    text-shadow: none; /* PCでは影なし */
+}
+
 @media (min-width: 769px) {
     .nav-links a:hover {
         color: #333;
         transform: translateX(10px);
     }
-}
-.nav-links a.special-link {
-    font-size: 1.8rem;
-    font-family: "Arial Black", Helvetica, Arial, sans-serif;
-    font-weight: 900;
-    text-decoration: underline;
-    text-decoration-thickness: 3px;
-    text-underline-offset: 5px;
-    text-decoration-color: #000;
-    -webkit-text-stroke: 2px #fff; 
-    paint-order: stroke fill;
-    display: inline-block; 
-    animation: guragura 2.5s infinite;
+    .nav-links a:hover .nav-subtitle {
+        color: #555; /* ホバー時に少し濃く */
+    }
 }
 
-@keyframes guragura {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    5% { transform: translate(2px, 1px) rotate(2deg); }
-    10% { transform: translate(-1px, -2px) rotate(-2deg); }
-    15% { transform: translate(3px, 0px) rotate(2deg); }
-    20% { transform: translate(0, 0) rotate(0deg); }
-    100% { transform: translate(0, 0) rotate(0deg); }
-}
-
-/* PC: 固定サイズ */
+/* --- レコード盤 --- */
 .record-wrapper {
     position: absolute;
     right: -100px; 
@@ -165,6 +168,7 @@ body, html {
     backface-visibility: hidden;
     will-change: transform;
 }
+/* 光沢エフェクト */
 .record-wrapper::after {
     content: "";
     display: block; 
@@ -197,6 +201,7 @@ body, html {
     mix-blend-mode: screen;
     opacity: 0.9; 
 }
+/* センターホール */
 .record-wrapper::before {
     content: "";
     position: absolute;
@@ -212,7 +217,7 @@ body, html {
     pointer-events: none;
 }
 
-/* PC: 固定サイズ */
+/* --- トーンアーム --- */
 .tonearm-wrapper {
     position: absolute;
     top: 100px;  
@@ -226,28 +231,25 @@ body, html {
     transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: auto;
 }
-
 .tonearm-wrapper.tonearm-active {
     transform: rotate(-15deg) scaleX(-1); 
 }
-
 .tonearm-wrapper:hover {
     filter: brightness(1.05);
 }
-
 .tonearm-img {
     width: 100%;
     height: 100%;
     overflow: visible !important;
     filter: drop-shadow(15px 20px 20px rgba(0,0,0,0.4));
-
-   /* ★追加: レンダリング最適化の対策 */
+    
+    /* レンダリング最適化 */
     will-change: filter;       
     transform: translateZ(0);  
     -webkit-backface-visibility: hidden; 
 }
 
-/* PC: インジケーター */
+/* インジケーター */
 .tonearm-tap-hint {
     position: absolute;
     width: 60px;
@@ -257,19 +259,15 @@ body, html {
     font-size: 0; 
     border: none;
     pointer-events: none;
-    
     top: 260px;
     left: 40px;
-    
     animation: pulseRedDot 1.5s infinite ease-in-out;
 }
-
 @keyframes pulseRedDot {
     0% { transform: scale(1); opacity: 0.6; }
     50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
     100% { transform: scale(1); opacity: 0.6; }
 }
-
 .tonearm-wrapper.tonearm-active .tonearm-tap-hint {
     opacity: 0;
     animation: none;
@@ -289,7 +287,6 @@ body, html {
     color: #666;
 }
 
-/* Aboutパネル */
 /* ==================================================
    Aboutパネル用スタイル (レスポンシブ文字サイズ版)
    ================================================== */
@@ -344,7 +341,6 @@ body, html {
     margin-bottom: 20px;
 }
 .about-panel-logo img {
-    /* ロゴ画像も画面幅に合わせて可変に */
     width: clamp(120px, 40vw, 180px);
     height: auto;
 }
@@ -355,10 +351,7 @@ body, html {
     gap: 20px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 800;
-    
-    /* 文字サイズ自動調整 */
     font-size: clamp(1.1rem, 4vw, 1.4rem);
-    
     letter-spacing: 0.05em;
     color: #111;
     text-transform: uppercase;
@@ -373,9 +366,7 @@ body, html {
     background-color: #333;
 }
 .about-intro {
-    /* 文字サイズ自動調整 */
     font-size: clamp(0.85rem, 3vw, 0.95rem);
-    
     font-weight: 500;
     line-height: 2;
     margin-bottom: 40px; 
@@ -384,9 +375,7 @@ body, html {
     text-align: center;
 }
 .logo-note {
-    /* 文字サイズ自動調整 */
     font-size: clamp(0.7rem, 2.5vw, 0.8rem);
-    
     color: #666;
     text-align: center;
     margin-bottom: 30px; 
@@ -410,10 +399,7 @@ body, html {
     color: #000;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 800;
-    
-    /* リンク文字サイズ自動調整 */
     font-size: clamp(1.1rem, 4vw, 1.4rem);
-    
     text-transform: uppercase;
     letter-spacing: 0.05em;
     position: relative;
@@ -434,9 +420,7 @@ body, html {
     width: 100%;
 }
 .about-columns dt.highlight-text a {
-    /* ハイライト文字サイズ自動調整（少し大きめ） */
     font-size: clamp(1.3rem, 5vw, 1.6rem);
-    
     font-weight: 900;
     background: linear-gradient(to bottom, transparent 60%, rgba(255, 247, 0, 0.8) 60%);
     background-repeat: no-repeat;
@@ -458,18 +442,13 @@ body, html {
 }
 .about-columns dd {
     margin: 0;
-    
-    /* 説明文サイズ自動調整 */
     font-size: clamp(0.75rem, 2.5vw, 0.85rem);
-    
     line-height: 1.8;
     color: #555;
     font-family: sans-serif;
 }
 .small-note {
-    /* 注釈サイズ自動調整 */
     font-size: clamp(0.6rem, 2vw, 0.7rem);
-    
     color: #999;
     display: block;
     margin-top: 5px;
@@ -494,84 +473,66 @@ body, html {
 
 /* ==================================================
    ★スマホ対応 (サイズ自動調整: iPhone16ProMax維持 & iPhone12縮小)
-   重要: レコードとトーンアームの位置関係を統一するため、
-   どちらも top: 70%, right: -100px を基準点にしてから margin で位置を決めています。
    ================================================== */
 @media (max-width: 768px) {
-    /* ロゴ: Max300px, 画面狭ければ65vw */
+    /* ロゴ */
     .header-logo-wrapper {
         width: min(300px, 70vw); 
         top: 80px;
     }
     
-    /* ナビゲーション: 文字サイズ自動調整 */
+    /* ナビゲーション */
     .nav-links {
         margin-left: 5%;
         margin-top: 200px;
         gap: 1.5vh;
-        z-index: 50; /* ★重要: レコードより確実に手前に表示 */
+        z-index: 50; /* レコードより手前に */
     }
     .nav-links a {
         font-size: clamp(1.1rem, 4.5vw, 1.3rem);
-        /* ★重要: 文字の周りに強い白い光彩(影)をつけて、黒いレコードの上でもくっきり見せる */
-        text-shadow: 0 0 5px #fff, 0 0 10px #fff;
         color: #000;
-        position: relative;
+        /* ★英語リンク: 白い影をつけて黒背景でも読めるようにする */
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff;
     }
     .nav-links a.special-link {
         font-size: clamp(1.5rem, 6vw, 1.8rem);
-        /* Special Linkも同様に影をつける */
         text-shadow: 0 0 5px #fff, 0 0 10px #fff;
     }
-    
-    /* もしサブタイトル(.nav-subtitle)を使っている場合の設定 */
+
+    /* ★日本語サブタイトル: 影なし、白系文字ですっきり見せる */
     .nav-subtitle {
-        /* 白い影の上でグレーだと見えにくいので、スマホでは濃い色に変更 */
-        color: #222;
-        text-shadow: 0 0 3px #fff, 0 0 6px #fff;
+        text-shadow: none !important; /* 影を消す */
+        color: rgba(255, 255, 255, 0.9); /* レコードの上でも見える白文字 */
+        font-weight: normal;
+        margin-top: 2px;
         opacity: 1;
     }
 
     /* --- レコード盤 --- */
     .record-wrapper {
-        /* Max350px, 画面狭ければ88vw */
         width: min(350px, 88vw);
         height: min(350px, 88vw);
-        
-        /* 基準位置 */
         top: 70%;      
         right: -100px;
     }
     
     /* --- トーンアーム --- */
     .tonearm-wrapper {
-        /* Max120px, 画面狭ければ30vw */
         width: min(120px, 30vw); 
         height: auto;
         aspect-ratio: 120 / 300;
-        
-        /* Absoluteでスクロール追従 */
         position: absolute;
         
-        /* ★重要: レコードと同じ基準点(top:70%, right:-100px)に設定 */
         top: 70%;
         right: -150px;
+        margin-top: min(200px, 40vw);
+        margin-right: min(260px, 30vw);
         
-        /* ★重要: マージンを使ってレコードからの相対位置を決める
-           min(200px, 50vw) のように指定することで、
-           大きい画面では200px、小さい画面では50vwというように
-           レコードの縮小に合わせてトーンアームの位置も自動で縮まる */
-        margin-top: min(200px, 40vw);   /* 中心から下にずらす */
-        margin-right: min(260px, 30vw); /* 中心から左にずらす */
-        
-        /* 初期角度 */
         transform: rotate(80deg);
         transform-origin: 50% 50px;
-        
         z-index: 10;
     }
     
-    /* 針を落とした時 */
     .tonearm-wrapper.tonearm-active {
         transform: rotate(120deg);
     }
@@ -580,17 +541,14 @@ body, html {
     .tonearm-tap-hint {
         top: 70%; 
         left: 40px;
-        
         width: 30px;
         height: 30px;
         background-color: rgba(255, 80, 80, 0.5); 
         border-radius: 50%;
         border: none;
-        
         transform: rotate(-90deg);
         animation: pulseRedCircle 2s infinite ease-in-out;
     }
-    
     @keyframes pulseRedCircle {
         0% { transform: rotate(-90deg) scale(1); opacity: 0.6; }
         50% { transform: rotate(-90deg) scale(1.3); opacity: 1; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
@@ -604,22 +562,19 @@ body, html {
         grid-template-columns: 1fr;
         gap: 20px;
     }
+
+    /* 微調整 */
     @media (min-width: 420px) {
         .record-wrapper {
-            top: 60%; /* 上にずらす (70% -> 65%) */
+            top: 60%;
         }
         .tonearm-wrapper {
-            top: 58%; /* 上にずらす (70% -> 65%) */
+            top: 58%;
         }
     }
-
-    /* ----------------------------------------------------
-       ② iPhone 12 (幅390px前後) 向けの微調整
-       ---------------------------------------------------- */
     @media (max-width: 400px) {
         .record-wrapper {
-            right: -120px; /* 右にずらす (-100px -> -120px) */
-            /* 必要であればtopも調整 */
+            right: -120px;
         }
         .footer {
             bottom: 10px !important; 
