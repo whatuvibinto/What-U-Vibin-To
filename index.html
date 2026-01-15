@@ -407,7 +407,11 @@ document.addEventListener('DOMContentLoaded', () => {
             recordArea.style.cursor = 'grab';
         }
 
-        recordArea.addEventListener('mousedown', e => startRecordDrag(e.clientX, e.clientY));
+        /* 修正後（中括弧 { } で囲って、e.preventDefault() を追加） */
+        recordArea.addEventListener('mousedown', e => {
+            e.preventDefault(); // ★ここを追加：PCでの不要なドラッグ動作・選択動作をブロック
+            startRecordDrag(e.clientX, e.clientY);
+        });
         window.addEventListener('mousemove', e => moveRecordDrag(e.clientX, e.clientY));
         window.addEventListener('mouseup', endRecordDrag);
 
