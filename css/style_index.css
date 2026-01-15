@@ -625,3 +625,10 @@ body, html {
         text-decoration-thickness: 2px;
     }
 }
+@media (min-width: 769px) {
+    body, html {
+        overflow: hidden !important; /* スクロールバーを非表示＆スクロール禁止 */
+        height: 100vh;               /* 高さを画面サイズに完全固定 */
+        overscroll-behavior: none;   /* バウンス（引っ張り）効果も無効化 */
+    }
+}
