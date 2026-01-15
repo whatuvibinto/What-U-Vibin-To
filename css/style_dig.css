@@ -1,8 +1,10 @@
 @charset "UTF-8";
 
-/* ==================================================
-   Dig Page Specific Styles (修正統合版)
-   ================================================== */
+html, body {
+    overflow: auto !important;      /* スクロールバーを復活させる */
+    height: auto !important;        /* 高さを画面固定にしない */
+    overscroll-behavior: auto !important; /* バウンス効果も戻す */
+}
 
 /* --- 1. ページ全体 --- */
 .dig-page {
