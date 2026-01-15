@@ -5,6 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WHAT U VIBIN TO?</title>
     <link rel="stylesheet" href="css/style_index.css">
+    <style>
+        /* =========================================
+           New Navigation Styles for Subtitles
+           ========================================= */
+        .nav-links a {
+            display: flex;
+            flex-direction: column; /* Stack English and Japanese vertically */
+            align-items: flex-start; /* Align to the left */
+            line-height: 1.2; /* Tighter line height for the group */
+            margin-bottom: 15px; /* Add some space between items */
+        }
+
+        .nav-subtitle {
+            display: block;
+            font-size: 0.65rem; /* Smaller font size */
+            font-weight: normal; /* Non-bold */
+            color: #888; /* Gray color (faint) */
+            margin-top: 2px; /* Slight gap from the English text */
+            letter-spacing: 0.05em; /* Normal spacing */
+            text-transform: none; /* Keep Japanese as is */
+            opacity: 0.8;
+            font-family: "Helvetica Neue", Helvetica, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
+        }
+
+        /* Adjust hover effect to move the whole block */
+        @media (min-width: 769px) {
+            .nav-links a:hover {
+                transform: translateX(10px);
+            }
+            /* Ensure the color change applies to the main text, keep subtitle gray or slightly darker */
+            .nav-links a:hover .nav-subtitle {
+                color: #666;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -23,13 +58,20 @@
 
     <div class="main-content">
         <nav class="nav-links" id="navLinks"> 
-            <a href="#" onclick="openAboutPanel(); return false;">About</a>
-            <a href="books.html" id="booksLink">Books</a>
-            <a href="contact.html" id="contactLink">Contact</a>
-            <a href="dig.html" class="special-link" id="digLink">Dig for new music</a>
-            <!--
-            <a href="events.html" id="eventsLink">Events</a>
-            -->
+            <a href="dig.html" id="exploreLink">
+                EXPLORE
+                <span class="nav-subtitle">あの人が今聞いている曲をのぞく</span>
+            </a>
+
+            <a href="#" onclick="openAboutPanel(); return false;">
+                HOW IT WORKS
+                <span class="nav-subtitle">このQRの仕組み、使い方</span>
+            </a>
+
+            <a href="contact.html" id="getQrLink">
+                GET YOURS
+                <span class="nav-subtitle">あなただけの音の名刺を作る</span>
+            </a>
         </nav>
 
         <div class="record-wrapper" id="recordArea">
@@ -56,53 +98,46 @@
             <div class="about-panel-logo">
                 <img src="images/logo.svg" alt="Logo">
             </div>
-            <p class="logo-note">
-                「What u vibin to?」とは、<br>
-                「最近何にノってんの？」「最近どんな曲聴いてんの？」<br>
-                というニュアンスの口語です。使ってみてね。
-            </p>
-            <h2 class="about-main-title">ABOUT</h2>
+            
+            <h2 class="about-main-title">HOW IT WORKS</h2>
             <p class="about-intro">
-                このサイトでは、<br>
-                気になるあの人の音楽プレイリストやDJミックスを紹介しています。<br>
-                ぜひ、新しい音楽との出会いを楽しんでください。<br>
-                <span class="small-note">This site features playlists from people you’re curious about.<br>
-                    Find your next favorite song. Happy digging!!</span>
-                <p><br></p>
+                「What u vibin to?」へようこそ。<br>
+                ここは、音のセンスで繋がる新しい社交場です。<br>
+                <span class="small-note">Welcome to "What u vibin to?". <br>A new social space connected by musical taste.</span>
             </p>
+
             <div class="about-columns">
                 <dl>
-                    <dt class="highlight-text"><a href="dig.html">Dig for new music</a></dt>
-                    <dd>本サイトのメインにあたるディグページです。<br>
-                    気になるあの人のミュージックプレイリストへQRコードからお邪魔します。<br>
-                    ちなみにここだけの話..掲載しているQRコードは開いた時間帯によって違うプレイリストに飛ぶ仕様になっています。<br>
-                    さあ、あなたはすべてのプレイリストを見つけることができるのか<br>
-                    <span class="small-note">Welcome to Main "Dig" page.<br>
-                        Scan the QR codes to jump straight into the music playlists of our featured personalities.<br>
-                        Just between us... the QR code drops different playlists depending on when you scan. Think you can find them all? 😏</span></dd>
+                    <dt class="highlight-text">STEP 1: EXPLORE</dt>
+                    <dd>
+                        気になるあの人のQRコードをスキャン。<br>
+                        その人が「今」聴いているプレイリストにアクセスできます。<br>
+                        <span class="small-note">Scan the QR code of someone who catches your eye. Access their "current" playlist instantly.</span>
+                    </dd>
                 </dl>
                 <dl>
-                    <dt><a href="books.html">Books</a></dt>
-                    <dd>オリジナルアートブックのアーカイブを見ることができます。<br>
-                    ※準備中...軍資金がそろい次第始動します...<br>
-                    <span class="small-note">Explore the original artbook archives. <br>
-                        Coming soon... Launching as soon as the war chest is full!</span></dd>
+                    <dt>STEP 2: VIBE</dt>
+                    <dd>
+                        流れてくる音楽に耳を傾けて。<br>
+                        新しいお気に入りの曲が見つかるかもしれません。<br>
+                        <span class="small-note">Listen to the vibes. You might just find your next favorite song.</span>
+                    </dd>
                 </dl>
                 <dl>
-                    <dt><a href="contact.html">Contact</a></dt>
-                    <dd>本サイトでの掲載依頼など、お問い合わせはこちらから<br>
-                    <span class="small-note">Want to be featured? Get in touch with me here for inquiries and requests.<br><br>
-                    </span></dd>
+                    <dt>STEP 3: GET YOURS</dt>
+                    <dd>
+                        あなたも自分の「音の名刺」を作りませんか？<br>
+                        時間帯によって変わるプレイリストで、あなたのセンスを表現しましょう。<br>
+                        <span class="small-note">Create your own "Audio Business Card". Express your taste with playlists that change with the time of day.</span>
+                    </dd>
                 </dl>
-            
-                <!--
-                <dl>
-                    <dt><a href="events.html">Events</a></dt>
-                    <dd>イベント情報を掲載しています。さあ、夜の街へ繰り出そう<br>
-                    <span class="small-note">Check out the latest event listings. Time to hit the town.</span></dd>
-                </dl>
-                -->
             </div>
+            
+            <p class="logo-note" style="margin-top: 40px;">
+                <a href="contact.html" style="text-decoration: underline; color: #333; font-weight: bold;">
+                    GET YOUR QR CODE HERE &rarr;
+                </a>
+            </p>
         </div>
     </div>
 </div>
@@ -113,7 +148,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* =================================================================
-       機能1: Aboutパネル (変更なし)
+       Function 1: Panel Control (About / How it works)
        ================================================================= */
     const panel = document.getElementById('swipePanel');
     const panelHeader = document.getElementById('panelHeader');
@@ -187,41 +222,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* =================================================================
-       機能3: ページ遷移アニメーション (修正版)
+       Function 2: Page Transitions
        ================================================================= */
-    const digLink = document.getElementById('digLink');
-    const contactLink = document.getElementById('contactLink');
-    const booksLink = document.getElementById('booksLink');
-    const eventsLink = document.getElementById('eventsLink');
+    const exploreLink = document.getElementById('exploreLink');
+    const getQrLink = document.getElementById('getQrLink');
     const navLinksContainer = document.getElementById('navLinks');
     const recordWrapper = document.getElementById('recordArea');
     const tonearmWrapper = document.getElementById('tonearm'); 
 
-    // 共通の遷移処理関数
+    // Common transition handler
     function handlePageTransition(e) {
-        // 通常のリンク動作を一時停止
         e.preventDefault(); 
         const targetUrl = e.currentTarget.href; 
         
-        // 各要素に退場アニメーションクラスを付与
         if(recordWrapper) recordWrapper.classList.add('slide-out-left');
         if(navLinksContainer) navLinksContainer.classList.add('slide-out-right');
-        
-        // ★ここだけ残す: リンククリック時にトーンアームも下に消す
         if(tonearmWrapper) tonearmWrapper.classList.add('slide-out-bottom');
 
-        // アニメーション完了後に遷移
         setTimeout(() => {
             window.location.href = targetUrl;
         }, 800);
     }
 
-    if (digLink) digLink.addEventListener('click', handlePageTransition);
-    if (contactLink) contactLink.addEventListener('click', handlePageTransition);
-    if (booksLink) booksLink.addEventListener('click', handlePageTransition);
-    if (eventsLink) eventsLink.addEventListener('click', handlePageTransition);
-
-    // ★トーンアーム自体のクリックイベントでの遷移処理は削除しました
+    if (exploreLink) exploreLink.addEventListener('click', handlePageTransition);
+    if (getQrLink) getQrLink.addEventListener('click', handlePageTransition);
 
     window.addEventListener('pageshow', (event) => {
         if (event.persisted) {
@@ -231,13 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
     /* =================================================================
-       機能2: レコードスクラッチ & トーンアーム (復活・修正)
+       Function 3: Record Player (Scratch & Tonearm)
        ================================================================= */
     const recordArea = document.getElementById('recordArea');
     const recordDisk = document.getElementById('recordDisk');
-    // const tonearm = document.getElementById('tonearm'); // 定義済み
     
     const AUDIO_URL = 'images/scratch.mp3'; 
     const FRICTION = 0.92;
@@ -275,20 +297,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('touchstart', unlockAudio, { once: true });
     document.body.addEventListener('click', unlockAudio, { once: true });
 
-    // ★復活: トーンアームクリック時の「針の上げ下げ」処理
     if (tonearmWrapper) {
         tonearmWrapper.addEventListener('click', (e) => {
             e.stopPropagation(); 
             unlockAudio(); 
             
-            // 状態を切り替え
             isNeedleDropped = !isNeedleDropped;
             
             if (isNeedleDropped) {
-                // 針を落とす（アームを動かすクラスを付与）
                 tonearmWrapper.classList.add('tonearm-active');
             } else {
-                // 針を上げる（クラスを削除し、音も止める）
                 tonearmWrapper.classList.remove('tonearm-active');
                 stopSound(); 
             }
