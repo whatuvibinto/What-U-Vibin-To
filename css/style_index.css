@@ -132,21 +132,9 @@ body, html {
 }
 
 @media (min-width: 769px) {
-    /* 1. 普通のリンク：これまで通り transform で動かす */
-    .nav-links a:not(.special-link):hover {
+    .nav-links a:hover {
         color: #333;
         transform: translateX(10px);
-    }
-    
-    /* 2. Explore (special-link)：揺れを止めないよう margin で動かす */
-    .nav-links a.special-link:hover {
-        color: #333;
-        margin-left: 10px; /* 余白を増やして右へ */
-    }
-    
-    /* Exploreの動きを滑らかにする設定 */
-    .nav-links a.special-link {
-        transition: color 0.3s, margin-left 0.3s;
     }
     .nav-links a:hover .nav-subtitle {
         color: #555; /* ホバー時に少し濃く */
