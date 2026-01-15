@@ -412,7 +412,13 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault(); // ★ここを追加：PCでの不要なドラッグ動作・選択動作をブロック
             startRecordDrag(e.clientX, e.clientY);
         });
-        window.addEventListener('mousemove', e => moveRecordDrag(e.clientX, e.clientY));
+        window.addEventListener('mousemove', e => {
+    // レコードをドラッグしている時だけ、画面の動きを止める
+            if (isRecordDragging) {
+                e.preventDefault(); /* ★ここを追加！ これでぐらぐらが止まります */
+                moveRecordDrag(e.clientX, e.clientY);
+            }
+        });
         window.addEventListener('mouseup', endRecordDrag);
 
         recordArea.addEventListener('touchstart', e => {
