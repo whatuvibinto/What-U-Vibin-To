@@ -449,60 +449,76 @@ html, body {
 }
 
 /* ==================================================
-   ★追加: iPhone 12/13/14/15 (幅390px前後) 向け
-   ProMaxの比率を維持したまま、要素を全体的に縮小して収める設定
+   ★修正版: iPhone 12/13/14/15 (幅390px前後) 向け
+   スクロールが発生しないよう、限界までコンパクトに凝縮
    ================================================== */
 @media (max-width: 430px) {
 
-    /* 1. モーダル全体の余白を少し詰める */
+    /* 1. モーダル幅を広げて高さを節約 */
     .qr-modal-content.art-layout {
-        width: 92%; /* 横幅を少し広げて窮屈さを解消 */
-        max-height: 88vh; /* 縦の表示領域を少し増やす */
+        width: 94%; 
+        max-height: 92vh; 
     }
 
-    /* 2. 画像エリアの高さを縮小 (ここが一番場所を取るため重要) */
+    /* 2. 画像エリアをさらに縮小 */
     .art-image-section {
-        height: 30vh;      /* 35vh -> 30vh */
-        min-height: 200px; /* 250px -> 200px に緩和 */
+        height: 25vh;      /* 30vh -> 25vh に短縮 */
+        min-height: 180px; /* 最低高さを180pxまで許容 */
     }
 
-    /* 3. 情報エリアの余白を縮小 */
+    /* 3. 情報エリアの余白を最小限に */
     .art-info-section {
-        padding: 20px 15px; /* 25px -> 20px/15px */
-        gap: 15px;          /* 間隔を詰める */
+        padding: 15px 12px; /* 左右の余白も少し詰める */
+        gap: 10px;          /* 要素間の隙間を詰める */
     }
 
-    /* 4. 名前の文字サイズを縮小 */
+    /* 4. 文字サイズを全体的にワンサイズダウン */
     .art-name {
-        font-size: 1.6rem; /* 2rem -> 1.6rem */
-        margin-bottom: 4px;
+        font-size: 1.5rem; /* 1.6rem -> 1.5rem */
+        margin-bottom: 2px;
     }
-
-    /* 5. QRコードを少し小さくしてバランスを取る */
-    .art-qr-wrapper {
-        margin-bottom: 15px;
-        padding: 10px 0;
-    }
-    .art-qr-box {
-        width: 130px;  /* 160px -> 130px */
-        height: 130px;
-    }
-
-    /* 6. その他の文字サイズ微調整 */
     .art-meta-row {
-        font-size: 0.8rem;
+        font-size: 0.75rem; /* 0.8rem -> 0.75rem */
     }
     .art-role-overlay {
-        font-size: 0.65rem;
-        padding: 6px 12px;
+        font-size: 0.6rem;
+        padding: 4px 10px;
+    }
+
+    /* 5. QRコードを一回り小さく (ここが効きます) */
+    .art-qr-wrapper {
+        margin-bottom: 5px;
+        padding: 5px 0;
+    }
+    .art-qr-box {
+        width: 115px;  /* 130px -> 115px */
+        height: 115px;
+        margin-bottom: 8px;
+    }
+
+    /* 6. インストラクション文字を小さく */
+    .art-instruction-text {
+        font-size: 0.55rem;
+    }
+
+    /* 7. フッター(Instagram)もコンパクトに */
+    .art-info-footer {
+        padding-top: 10px;
+    }
+    .insta-icon {
+        width: 16px;
+        height: 16px;
+    }
+    .insta-val {
+        font-size: 0.8rem;
     }
     
-    /* 閉じるボタンも少し小さくして邪魔にならないように */
+    /* 閉じるボタン */
     .qr-modal-close {
-        width: 38px;
-        height: 38px;
-        top: 8px;
-        right: 8px;
+        width: 36px;
+        height: 36px;
+        top: 6px;
+        right: 6px;
     }
 }
 
