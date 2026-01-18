@@ -24,9 +24,18 @@
 
     <div class="menu-panel" id="menuPanel">
         <nav class="menu-nav">
-            <a href="dig.html" class="menu-link">Explore</a>
-            <a href="how.html" class="menu-link">How it works</a>
-            <a href="getQR.html" class="menu-link highlight">Get Your QR</a>
+            <a href="dig.html" class="menu-link">
+                <span class="en-text">Explore</span>
+                <span class="jp-sub">あの人が"この時間"に聞いている曲をのぞく</span>
+            </a>
+            <a href="how.html" class="menu-link">
+                <span class="en-text">How it works</span>
+                <span class="jp-sub">このQRの仕組み/使い方</span>
+            </a>
+            <a href="getQR.html" class="menu-link highlight">
+                <span class="en-text">Get Your QR</span>
+                <span class="jp-sub">あなただけのQRをつくる</span>
+            </a>
         </nav>
     </div>
 
@@ -59,6 +68,10 @@
         </div>
     </main>
 
+    <footer class="site-footer">
+        © 2026 WHAT U VIBIN TO / One QR, different vibes
+    </footer>
+
     <script>
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
@@ -68,8 +81,8 @@
             isMenuOpen = !isMenuOpen;
             if (isMenuOpen) {
                 menuPanel.classList.add('active');
-                menuBtn.classList.add('active'); // ボタンのアニメーション用
-                document.body.style.overflow = 'hidden'; // スクロール固定
+                menuBtn.classList.add('active');
+                document.body.style.overflow = 'hidden';
             } else {
                 menuPanel.classList.remove('active');
                 menuBtn.classList.remove('active');
