@@ -168,7 +168,7 @@ html, body {
     object-fit: cover;
 }
 
-/* 役割バッジ (左上に小さく) */
+/* 役割バッジ (カード内: 左上に小さく) */
 .role-badge {
     position: absolute;
     top: 4px;
@@ -318,22 +318,9 @@ html, body {
     display: block;
 }
 
-/* Roleバッジ (画像左上に配置) */
-.art-role-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #000;
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 8px 16px;
-    border-bottom-right-radius: 12px; /* 角のデザイン処理 */
-    letter-spacing: 0.05em;
-    z-index: 10;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-}
+/* ★削除: 画像上のRoleバッジスタイルは不要 */
+/* .art-role-overlay { ... } */
+
 
 /* 情報エリア全体 */
 .art-info-section {
@@ -350,16 +337,43 @@ html, body {
 .art-info-header {
     margin-bottom: 20px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ★追加: 名前とバッジの横並び用ラッパー */
+.art-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* 名前とバッジの間隔 */
+    margin-bottom: 8px;
 }
 
 .art-name {
     font-size: 2rem;
     font-weight: 900;
     line-height: 1.1;
-    margin: 0 0 8px 0;
+    margin: 0;
     text-transform: uppercase;
     color: #000;
     letter-spacing: -0.02em;
+}
+
+/* ★追加: 名前の横に置くRoleバッジのスタイル */
+.art-role-badge {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transform: translateY(-2px); /* 微調整して名前の中心と合わせる */
 }
 
 .art-meta-row {
@@ -472,17 +486,22 @@ html, body {
         gap: 10px;          /* 要素間の隙間を詰める */
     }
 
+    .art-name-row {
+        margin-bottom: 2px;
+        gap: 8px;
+    }
+
     /* 4. 文字サイズを全体的にワンサイズダウン */
     .art-name {
         font-size: 1.5rem; /* 1.6rem -> 1.5rem */
-        margin-bottom: 2px;
     }
     .art-meta-row {
         font-size: 0.75rem; /* 0.8rem -> 0.75rem */
     }
-    .art-role-overlay {
-        font-size: 0.6rem;
-        padding: 4px 10px;
+    /* ★追加: 縮小時のバッジサイズ調整 */
+    .art-role-badge {
+        font-size: 0.65rem;
+        padding: 3px 6px;
     }
 
     /* 5. QRコードを一回り小さく (ここが効きます) */
@@ -530,7 +549,9 @@ html, body {
     .profile-name { font-size: 1rem; }
     .profile-loc { font-size: 0.75rem; }
     .mini-qr, .service-icon { width: 24px; height: 24px; }
-    .role-badge { font-size: 0.6rem; padding: 3px 6px; }
+    
+    /* カード内のバッジも少し大きく */
+    .profile-card .role-badge { font-size: 0.6rem; padding: 3px 6px; }
     
     /* モーダルPCレイアウト */
     .qr-modal-content.art-layout {
@@ -553,7 +574,13 @@ html, body {
         text-align: left;
     }
 
-    .art-info-header { text-align: left; }
+    .art-info-header { 
+        text-align: left; 
+        align-items: flex-start;
+    }
+    .art-name-row {
+        justify-content: flex-start;
+    }
     .art-meta-row { justify-content: flex-start; }
 
     /* PCではQRエリアを少し控えめにしつつバランスを取る */
