@@ -18,14 +18,14 @@
     padding: 0;
 }
 
-/* 横スクロール防止を強化 */
+/* ★修正: htmlにも overflow-x: hidden を適用してより強固にする */
 html, body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-en), var(--font-jp);
-    overflow-x: hidden;
+    overflow-x: hidden; /* 横スクロール禁止 */
     width: 100%;
-    height: 100%;
+    height: 100%;       /* height: 100vh だとアドレスバーの影響が出る場合があるため修正 */
     -webkit-font-smoothing: antialiased;
 }
 
@@ -172,8 +172,9 @@ a {
     padding-bottom: 60px;
     display: flex;
     flex-direction: column;
-    /* 背景画像のはみ出しをここでカット */
-    overflow: hidden;
+    
+    /* ★修正: ここが重要。はみ出した背景画像を親要素でカットする */
+    overflow: hidden; 
 }
 
 .container {
@@ -280,22 +281,24 @@ a {
 }
 
 /* ==================================================
-   Background Graphic (サイズ感維持 & 自然なフェード)
+   Background Graphic
    ================================================== */
 .hero-background {
     position: absolute;
     
-    /* ★修正: 元のサイズ感と配置に戻しました */
-    bottom: 0;
-    right: -50%;
-    width: 80%;
-    height: 60%;
+    /* 画面上部へ移動 (0 -> 15% 程度) */
+    bottom: -10%;
     
-    z-index: 0;
-    overflow: visible;
+    /* 画像の端が見えないよう、幅を広げて右にはみ出させる */
+    right: -50%; 
+    width: 140%; 
+    height: 70%;
+    
+    z-index: 0; /* 文字(z-index:10以上)の裏側に配置 */
+    overflow: visible; /* グラデーションを綺麗に見せるためvisible推奨 */
     pointer-events: none;
     
-    /* ★修正: 元の回転角度に戻しました */
+    /* 反時計回りに回転 */
     transform: rotate(-20deg);
     transform-origin: center center;
 }
@@ -306,12 +309,12 @@ a {
     object-fit: cover;
     object-position: center;
     
-    /* ★修正: 中央から外側へ向かって透明にする */
-    /* black 40%: 中心付近はくっきり表示 */
-    /* transparent 80%: 端(下側や左側)に行くにつれ自然に消える */
-    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    /* 左側(文字エリア)を透明にし、右に向かって徐々に濃くするグラデーション */
+    /* to right: 左(透明) → 中央(薄い) → 右(はっきり) */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 45%, black 85%);
+    mask-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 45%, black 85%);
     
+    /* 全体の強さを少し抑えて文字を読みやすくする */
     opacity: 0.95;
 }
 
@@ -358,9 +361,9 @@ a {
     
     /* PCでは背景位置を微調整 */
     .hero-background {
-        width: 60%;
-        height: 80%;
+        width: 120%;
+        height: 100%;
         right: -10%;
-        bottom: 0;
+        bottom: -10%;
     }
 }
