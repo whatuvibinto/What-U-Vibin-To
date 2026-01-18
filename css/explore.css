@@ -232,23 +232,24 @@ html, body {
 }
 
 /* ==================================================
-   Modal Styles (Art Layout - Mobile Optimized)
+   Modal Styles (Refined Professional UI)
    ================================================== */
+
 .qr-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.85); /* 背景を濃くして没入感を高める */
+    backdrop-filter: blur(15px);      /* ブラーを強めて高級感を出す */
     z-index: 2000;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .qr-modal-overlay.active {
@@ -258,105 +259,196 @@ html, body {
 
 .qr-modal-content.art-layout {
     display: flex;
-    flex-direction: column; /* スマホ: 縦並び */
+    flex-direction: column;
     width: 88%;
+    max-width: 400px; /* スマホで見やすい最大幅 */
+    height: auto;
     max-height: 85vh;
-    background: #fff;
-    border-radius: 16px;
-    overflow-y: auto; /* 縦スクロール許可 */
+    background: #ffffff;
+    border-radius: 20px; /* 角丸を滑らかに */
+    overflow: hidden;    /* はみ出し防止 */
     position: relative;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    transform: scale(0.95);
-    transition: transform 0.3s;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .qr-modal-overlay.active .qr-modal-content.art-layout {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
 }
 
+/* 閉じるボタン */
 .qr-modal-close {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 50px;
-    height: 50px;
-    background: transparent;
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    background: rgba(0,0,0,0.3); /* 画像の上で見やすいよう背景追加 */
+    border-radius: 50%;
     border: none;
     z-index: 100;
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    transition: background 0.2s;
 }
+.qr-modal-close:active { transform: scale(0.95); }
+
 .qr-modal-close::before, .qr-modal-close::after {
     content: ''; position: absolute; top: 50%; left: 50%;
-    width: 20px; height: 2px; background-color: #fff; /* 画像の上なら白 */
-    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    width: 20px; height: 2px; background-color: #fff;
+    border-radius: 1px;
 }
 .qr-modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
 .qr-modal-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
 
-/* モーダル画像 */
+/* 画像エリア */
 .art-image-section {
     width: 100%;
-    height: 280px; /* 画像エリア高さ */
-    flex-shrink: 0;
-    background: #000;
-}
-.art-image-section img {
-    width: 100%; height: 100%; object-fit: cover; opacity: 0.9;
+    height: 35vh; /* 画面高さの35%を使用 */
+    min-height: 250px;
+    position: relative;
+    background: #111;
 }
 
-/* モーダル情報 */
+.art-image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Roleバッジ (画像左上に配置) */
+.art-role-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-bottom-right-radius: 12px; /* 角のデザイン処理 */
+    letter-spacing: 0.05em;
+    z-index: 10;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+}
+
+/* 情報エリア全体 */
 .art-info-section {
-    padding: 25px;
-    flex-grow: 1;
+    flex: 1;
+    padding: 25px 25px 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
+    text-align: center;
+    background: #fff;
+}
+
+/* ヘッダー情報 (名前・ジャンル) */
+.art-info-header {
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .art-name {
-    font-size: 2.2rem;
+    font-size: 2rem;
     font-weight: 900;
-    line-height: 1;
-    margin: 0 0 5px 0;
+    line-height: 1.1;
+    margin: 0 0 8px 0;
     text-transform: uppercase;
     color: #000;
+    letter-spacing: -0.02em;
 }
 
 .art-meta-row {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    letter-spacing: 0.05em;
+}
+.art-slash { color: #ccc; font-weight: 300; }
+
+/* QRコードエリア (メインとして大きく) */
+.art-qr-wrapper {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 20px 0;
+    background: #f9f9f9; /* QRを目立たせるための背景 */
+    border-radius: 16px;
+}
+
+.art-qr-box {
+    width: 160px; /* PC/SP共通で十分な大きさ */
+    height: 160px;
+    margin-bottom: 12px;
+    transition: transform 0.2s;
+}
+.art-qr-box:active { transform: scale(0.95); }
+
+.art-qr-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply; /* 背景に馴染ませる */
+}
+
+/* 統一されたインストラクションテキスト */
+.art-instruction-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #ccc; /* 薄いグレーで統一 */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+/* フッター: Instagram */
+.art-info-footer {
+    width: 100%;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.art-insta-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    width: 100%;
+}
+
+.insta-left {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.art-role-badge {
-    background: #000; color: #fff;
-    font-size: 0.7rem; padding: 4px 8px;
-    font-weight: 700; text-transform: uppercase;
+.insta-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 }
 
-.art-insta-link {
-    display: inline-flex; align-items: center;
-    text-decoration: none; color: #000; font-weight: bold;
+.insta-val {
     font-size: 0.9rem;
-    border-bottom: 1px solid #ddd; padding-bottom: 2px;
-}
-.insta-icon { width: 16px; margin-right: 5px; }
-
-.art-info-footer {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
+    font-weight: 700;
+    letter-spacing: 0.02em;
 }
 
-.art-qr-container img { width: 80px; height: 80px; mix-blend-mode: multiply; }
-.art-scan-text { font-size: 0.7rem; font-weight: 700; color: #ccc; letter-spacing: 1px; }
-
-/* PC画面用の最低限の調整 (拡大表示用) */
+/* PC対応 (横並びレイアウト) */
 @media (min-width: 769px) {
     .explore-container { max-width: 1000px; padding: 0 20px; }
     .profile-list { gap: 15px; }
@@ -368,8 +460,45 @@ html, body {
     
     /* モーダルPCレイアウト */
     .qr-modal-content.art-layout {
-        flex-direction: row; height: 500px; width: 900px; overflow: hidden;
+        flex-direction: row;
+        width: 800px;
+        max-width: 90%;
+        height: 500px;
+        max-height: none;
     }
-    .art-image-section { width: 40%; height: 100%; }
-    .qr-modal-close::before, .qr-modal-close::after { background-color: #000; }
+    
+    .art-image-section {
+        width: 45%;
+        height: 100%;
+    }
+    
+    .art-info-section {
+        width: 55%;
+        padding: 40px;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .art-info-header { text-align: left; }
+    .art-meta-row { justify-content: flex-start; }
+
+    /* PCではQRエリアを少し控えめにしつつバランスを取る */
+    .art-qr-wrapper {
+        flex-grow: 0;
+        width: 100%;
+        background: transparent;
+        padding: 0;
+        margin: auto 0;
+        align-items: flex-start; /* 左寄せ */
+    }
+    
+    .art-qr-box {
+        width: 140px;
+        height: 140px;
+        margin-left: 0;
+    }
+
+    .art-info-footer {
+        margin-top: auto;
+    }
 }
