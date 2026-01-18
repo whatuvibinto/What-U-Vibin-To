@@ -90,7 +90,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- スライダー生成 ---
             const container = document.getElementById('featuredContainer');
             
             let profiles = [];
@@ -101,16 +100,19 @@
             }
 
             if (profiles.length > 0) {
-                // 最新の5人
+                // 最新5件
                 const featuredProfiles = profiles.slice(0, 5);
                 let html = '';
 
-                featuredProfiles.forEach(person => {
+                featuredProfiles.forEach((person, index) => {
                     const displayName = person.name.length > 10 ? person.name.substring(0, 10) + '..' : person.name;
                     const displayRole = person.role || 'VIBER';
                     
+                    // z-indexを逆順にする (左側のカードを上に重ねるため)
+                    const zIndex = 100 - index;
+                    
                     html += `
-                    <a href="explore.html" class="hero-profile-card">
+                    <a href="explore.html" class="hero-profile-card" style="z-index: ${zIndex};">
                         <div class="card-inner">
                             <div class="card-image-area">
                                 <img src="${person.image}" alt="${person.name}">
@@ -127,9 +129,9 @@
                     `;
                 });
 
-                // 最後に「もっと見る」カード
+                // 「もっと見る」カード (一番下になる)
                 html += `
-                <a href="explore.html" class="hero-profile-card see-more">
+                <a href="explore.html" class="hero-profile-card see-more" style="z-index: 1;">
                     <div class="card-inner see-more-inner">
                         <div class="plus-icon">+</div>
                         <span class="see-more-text">Explore All</span>
@@ -141,7 +143,7 @@
             }
         });
 
-        // --- メニュー開閉 ---
+        // メニュー開閉
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
         let isMenuOpen = false;
