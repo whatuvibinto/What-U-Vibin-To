@@ -12,55 +12,35 @@
     --font-en: "Inter", sans-serif;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ★修正: 縦スクロールを許可 (overflow-y: auto) */
 html, body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-en), var(--font-jp);
-    overflow-x: hidden; /* 横のみ禁止 */
-    overflow-y: auto;   /* 縦は許可 */
-    width: 100%;
-    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto; /* 縦スクロール有効 */
+    width: 100%; height: 100%;
     -webkit-font-smoothing: antialiased;
 }
 
 a { text-decoration: none; color: inherit; }
 
-/* ==================================================
-   Header
-   ================================================== */
+/* Header */
 .site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 6vw;
-    background: rgba(255, 255, 255, 0.8); 
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: fixed; top: 0; left: 0; width: 100%; height: 80px;
+    display: flex; justify-content: space-between; align-items: center; padding: 0 6vw;
+    background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     z-index: 100;
 }
-
 .header-logo { height: 50px; width: auto; display: block; }
 
 .menu-btn {
-    background: none; border: none; cursor: pointer;
-    width: 30px; height: 24px; position: relative; z-index: 110;
+    background: none; border: none; cursor: pointer; width: 30px; height: 24px; position: relative; z-index: 110;
 }
 .menu-btn span {
-    display: block; width: 100%; height: 2px; background-color: #000;
-    position: absolute; left: 0; transition: all 0.3s ease;
+    display: block; width: 100%; height: 2px; background-color: #000; position: absolute; left: 0; transition: all 0.3s ease;
 }
 .menu-btn span:nth-child(1) { top: 0; }
 .menu-btn span:nth-child(2) { top: 50%; transform: translateY(-50%); }
@@ -69,136 +49,80 @@ a { text-decoration: none; color: inherit; }
 .menu-btn.active span:nth-child(2) { opacity: 0; }
 .menu-btn.active span:nth-child(3) { transform: rotate(-45deg); bottom: 11px; }
 
-/* ==================================================
-   Menu Panel
-   ================================================== */
+/* Menu Panel */
 .menu-panel {
     position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
-    background: #fff; z-index: 90;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    padding-bottom: 60px; 
+    background: #fff; z-index: 90; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 60px; 
 }
 .menu-panel.active { right: 0; }
-
-.menu-nav {
-    display: flex; flex-direction: column; gap: 40px; text-align: center; width: 80%;
-}
-.menu-link {
-    display: flex; flex-direction: column; align-items: center; gap: 8px; transition: opacity 0.3s;
-}
+.menu-nav { display: flex; flex-direction: column; gap: 40px; text-align: center; width: 80%; }
+.menu-link { display: flex; flex-direction: column; align-items: center; gap: 8px; transition: opacity 0.3s; }
 .menu-link:hover { opacity: 0.6; }
-.menu-link .en-text {
-    font-size: 1.8rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: #000; line-height: 1;
-}
+.menu-link .en-text { font-size: 1.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #000; line-height: 1; }
 .menu-link.highlight .en-text { color: var(--primary-color); }
-.menu-link .jp-sub {
-    font-family: var(--font-jp); font-size: 0.85rem; font-weight: 400; color: #666; letter-spacing: 0.05em;
-}
+.menu-link .jp-sub { font-family: var(--font-jp); font-size: 0.85rem; font-weight: 400; color: #666; letter-spacing: 0.05em; }
 
-/* ==================================================
-   Main Hero Section
-   ================================================== */
+/* Main Hero */
 .hero-section {
-    position: relative;
-    width: 100%;
-    /* height: 100%; を削除し、コンテンツに応じた高さ + 余白にする */
-    min-height: 100vh; 
-    padding-top: 100px;
-    
-    /* ★修正: 下スクロール用の大きな余白 (画面の30%分くらい) */
-    padding-bottom: 30vh; 
-    
-    display: flex; flex-direction: column;
-    overflow: hidden; /* 背景はみ出し防止 */
+    position: relative; width: 100%; min-height: 100vh; padding-top: 100px;
+    padding-bottom: 40vh; /* 余白を大きめに確保 */
+    display: flex; flex-direction: column; overflow: hidden; 
 }
-
 .container { padding: 0 6vw; z-index: 10; position: relative; }
 .hero-text { margin-top: 5vh; }
-.main-copy {
-    font-family: var(--font-jp); font-size: 11vw; font-weight: 900;
-    line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 2vh; color: #000;
-}
+.main-copy { font-family: var(--font-jp); font-size: 11vw; font-weight: 900; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 2vh; color: #000; }
 .sub-copy-jp { font-size: 4vw; font-weight: 700; margin-bottom: 4vh; color: #333; }
-.sub-copy-en {
-    font-family: var(--font-en); font-size: 3.8vw; font-weight: 400; color: #555;
-    line-height: 1.5; margin-bottom: 6vh;
-}
+.sub-copy-en { font-family: var(--font-en); font-size: 3.8vw; font-weight: 400; color: #555; line-height: 1.5; margin-bottom: 6vh; }
 
 .hero-actions { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; width: 100%; }
 .action-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-.btn-sub-text {
-    font-family: var(--font-jp); font-size: 3vw; font-weight: 500;
-    color: #888; margin-left: 15px; letter-spacing: 0.02em; line-height: 1; white-space: nowrap;
-}
-.btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 15px 30px; border-radius: 50px; font-size: 4vw; font-weight: 600;
-    transition: transform 0.2s; white-space: nowrap; letter-spacing: 0.02em;
-}
+.btn-sub-text { font-family: var(--font-jp); font-size: 3vw; font-weight: 500; color: #888; margin-left: 15px; letter-spacing: 0.02em; line-height: 1; white-space: nowrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 30px; border-radius: 50px; font-size: 4vw; font-weight: 600; transition: transform 0.2s; white-space: nowrap; letter-spacing: 0.02em; }
 .btn:active { transform: scale(0.98); }
-.btn-primary {
-    background-color: var(--primary-color); color: #fff;
-    box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3); width: auto; min-width: 60%;
-}
+.btn-primary { background-color: var(--primary-color); color: #fff; box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3); width: auto; min-width: 60%; }
 .btn-secondary { background-color: #f0f0f0; color: #333; padding: 12px 28px; font-size: 3.5vw; }
 .btn-secondary .arrow { margin-left: 8px; font-size: 0.8em; font-weight: bold; }
 
-/* Background Graphic */
+/* Background Graphic (位置を戻す) */
 .hero-background {
     position: absolute; 
-    bottom: 0; 
-    right: -50%; 
-    width: 140%; 
-    height: 70%;
-    z-index: 0; 
-    overflow: visible; 
-    pointer-events: none;
-    transform: rotate(-20deg); 
-    transform-origin: center center;
+    bottom: -5%; 
+    right: -50%; width: 140%; height: 70%;
+    z-index: 0; overflow: visible; pointer-events: none;
+    transform: rotate(-20deg); transform-origin: center center;
 }
-
 .bg-graphic {
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    object-position: center;
-    
-    /* ★修正: 左下も含めて自然に消えるグラデーション */
-    /* to right bottom: 左上から右下へ向かうグラデーション */
-    /* transparent 10%: 左上の文字エリアは透明 */
-    /* black 60%: 右下に行くにつれ画像が見える */
-    -webkit-mask-image: linear-gradient(110deg, transparent 0%, transparent 25%, rgba(0,0,0,0.5) 45%, black 80%);
-    mask-image: linear-gradient(110deg, transparent 0%, transparent 25%, rgba(0,0,0,0.5) 45%, black 80%);
-    
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
     opacity: 0.95;
 }
 
 /* Footer */
 .site-footer {
     position: fixed; bottom: 0; left: 0; width: 100%; padding: 10px 0;
-    text-align: center; font-family: var(--font-en); font-size: 0.65rem;
-    color: #999; letter-spacing: 0.05em; font-weight: 500;
-    background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(5px); z-index: 200; 
+    text-align: center; font-family: var(--font-en); font-size: 0.65rem; color: #999;
+    letter-spacing: 0.05em; font-weight: 500; background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px); z-index: 200; 
 }
 
-
 /* ==================================================
-   Swipe Up Indicator
+   ★修正: Swipe Up Indicator (左寄せ配置)
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    /* フッターより少し上、スクロール余白部分に配置 */
-    bottom: 80px; 
-    left: 0;
-    width: 100%;
+    bottom: 50px; /* フッターの上、スクロール領域の最下部 */
+    left: 6vw; /* コンテナの左パディングに合わせる */
+    width: auto; /* 全幅ではなく中身に合わせる */
+    
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 8px;
+    align-items: flex-start; /* 左揃え */
+    gap: 10px;
     z-index: 50;
     cursor: pointer;
+    
     opacity: 0;
     animation: fadeInUp 1s ease-out 1s forwards;
 }
@@ -208,14 +132,15 @@ a { text-decoration: none; color: inherit; }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.swipe-text { text-align: center; color: #888; line-height: 1.4; }
+.swipe-text { text-align: left; color: #888; line-height: 1.4; }
 .swipe-text .jp { display: block; font-family: var(--font-jp); font-size: 0.75rem; font-weight: 700; }
 .swipe-text .en { display: block; font-family: var(--font-en); font-size: 0.65rem; font-weight: 400; opacity: 0.7; }
 
 .swipe-arrow {
     width: 20px; height: 20px;
     border-top: 2px solid #888; border-left: 2px solid #888;
-    transform: rotate(45deg); margin-bottom: 5px;
+    transform: rotate(45deg); 
+    margin-left: 5px; /* 矢印の位置微調整 */
     animation: bounceUp 2s infinite;
 }
 
@@ -225,26 +150,15 @@ a { text-decoration: none; color: inherit; }
     60% { transform: translateY(-5px) rotate(45deg); }
 }
 
-
 /* ==================================================
-   Explore Overlay (Swipe Interface)
+   Explore Overlay
    ================================================== */
 .explore-overlay {
-    position: fixed;
-    top: 100%; /* 初期状態は画面外(下) */
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    z-index: 150;
-    transition: top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-    overflow-y: auto;
-    padding-top: 60px;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+    position: fixed; top: 100%; left: 0; width: 100%; height: 100%;
+    background: #fff; z-index: 150; transition: top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    overflow-y: auto; padding-top: 60px; box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
 }
-
 .explore-overlay.active { top: 0; }
-
 .explore-header-trigger {
     position: absolute; top: 0; left: 0; width: 100%; height: 60px;
     display: flex; justify-content: center; align-items: center;
@@ -255,17 +169,13 @@ a { text-decoration: none; color: inherit; }
 
 .explore-container { width: 100%; max-width: 800px; margin: 0 auto; padding: 0 4vw; }
 .dig-content { padding-top: 20px; width: 100%; padding-bottom: 80px; }
-.explore-footer {
-    text-align: center; font-weight: 900; color: #eee; font-size: 1.5rem;
-    margin-top: 50px; text-transform: uppercase;
-}
+.explore-footer { text-align: center; font-weight: 900; color: #eee; font-size: 1.5rem; margin-top: 50px; text-transform: uppercase; }
 
 /* Explore Integrated Styles */
 .search-area { margin-bottom: 40px; text-align: center; width: 100%; }
 .search-box { position: relative; display: inline-block; width: 90%; border-bottom: 1px solid #e0e0e0; }
 .search-input { width: 100%; padding: 10px 80px 10px 0; font-size: 1rem; font-weight: 500; color: #000; background: transparent; border: none; outline: none; }
 .search-btn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; }
-
 .genre-filter-area { margin: 20px auto 0; text-align: center; }
 .genre-label { font-size: 0.65rem; font-weight: bold; color: #999; margin-bottom: 10px; letter-spacing: 1px; }
 .genre-checkboxes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
@@ -277,11 +187,9 @@ a { text-decoration: none; color: inherit; }
 .profile-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw; width: 100%; }
 .profile-card { display: flex; flex-direction: column; background: #fff; border: 1px solid #eee; border-radius: 6px; overflow: hidden; position: relative; cursor: pointer; opacity: 0; animation: fadeInUpCard 0.6s ease-out forwards; }
 @keyframes fadeInUpCard { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
-
 .profile-img { width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #f5f5f5; position: relative; }
 .profile-img img { width: 100%; height: 100%; object-fit: cover; }
 .role-badge { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.8); color: #fff; font-size: 2.5vw; font-weight: 700; padding: 2px 4px; border-radius: 2px; text-transform: uppercase; z-index: 2; }
-
 .profile-info { padding: 2vw; text-align: left; display: flex; flex-direction: column; gap: 2px; }
 .profile-name { margin: 0; font-size: 3.2vw; font-weight: 900; text-transform: uppercase; color: #000; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .profile-loc { display: block; font-size: 2.5vw; color: #888; font-weight: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -297,7 +205,6 @@ a { text-decoration: none; color: inherit; }
 .qr-modal-close::before, .qr-modal-close::after { content: ''; position: absolute; top: 50%; left: 50%; width: 20px; height: 2px; background-color: #fff; border-radius: 1px; }
 .qr-modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
 .qr-modal-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
-
 .art-image-section { width: 100%; height: 35vh; min-height: 250px; position: relative; background: #111; }
 .art-image-section img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .art-info-section { flex: 1; padding: 25px 25px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; background: #fff; }
