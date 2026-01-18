@@ -113,7 +113,7 @@ a { text-decoration: none; color: inherit; }
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    bottom: 30px; /* フッターの上 */
+    bottom: 60px; /* フッターの上 */
     left: 6vw; /* 画面の左パディングに揃える */
     width: auto;
     
