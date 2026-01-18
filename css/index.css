@@ -46,7 +46,9 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 0 6vw;
-    background: rgba(255, 255, 255, 0.9);
+    background: #F9F9F9; 
+    border-bottom: 1px solid #eee; /* 境界線も少し濃く */
+    /*background: rgba(255, 255, 255, 0.9);*/
     backdrop-filter: blur(10px);
     z-index: 100;
 }
