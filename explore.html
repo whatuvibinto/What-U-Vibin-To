@@ -43,11 +43,6 @@
     </div>
 
     <div class="explore-container">
-        
-        <div class="explore-hero-logo">
-            <img src="images/newLogo.svg" alt="WHAT U VIBIN TO?">
-        </div>
-
         <div class="dig-content">
             <div class="search-area">
                 <div class="search-box">
@@ -66,7 +61,7 @@
         </div>
 
         <footer class="site-footer">
-        © 2026 WHAT U VIBIN TO / One QR, different vibes
+            © 2026 WHAT U VIBIN TO / One QR, different vibes
         </footer>
     </div>
 
@@ -134,11 +129,8 @@
     </script>
 
     <script>
-        // 要素の取得
         const container = document.getElementById('profileContainer');
         const modal = document.getElementById('qrModal');
-        
-        // モーダル内要素
         const modalName = document.getElementById('modalName');
         const modalGenre = document.getElementById('modalGenre');
         const modalPhoto = document.getElementById('modalPhoto');
@@ -146,13 +138,9 @@
         const modalQrLink = document.getElementById('modalQrLink');
         const modalRole = document.getElementById('modalRole');
         const modalLocation = document.getElementById('modalLocation');
-        
-        // インスタ要素
         const modalInstaArea = document.getElementById('modalInstaArea');
         const modalInstaLink = document.getElementById('modalInstaLink');
         const modalInstaName = document.getElementById('modalInstaName');
-
-        // 検索・フィルター要素
         const searchInput = document.getElementById('searchInput');
         const genreContainer = document.getElementById('genreCheckboxes');
         const resetBtn = document.getElementById('resetBtn');
@@ -161,24 +149,20 @@
         let selectedGenres = []; 
         let profileData = [];
         
-        // データ読み込み処理
         if (typeof window.digData !== 'undefined') {
             profileData = window.digData;
         } else if (typeof digData !== 'undefined') {
             profileData = digData;
-        } else {
-            console.error("digData Not Found. Check js/dig_data.js loading.");
         }
 
-        // --- 初期化 ---
         function init() {
-            // 日付順にソート（新しい順）
-            profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-            generateGenreCheckboxes(); 
-            renderProfiles(profileData); 
+            if(profileData.length > 0) {
+                profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+                generateGenreCheckboxes(); 
+                renderProfiles(profileData); 
+            }
         }
 
-        // --- ジャンルフィルター生成 ---
         function generateGenreCheckboxes() {
             let allGenres = [...new Set(profileData.flatMap(person => person.genre))].sort();
             const mixTag = "DJ MIX";
@@ -186,117 +170,70 @@
                 allGenres = allGenres.filter(g => g !== mixTag); 
                 allGenres.unshift(mixTag); 
             }
-
             let html = '';
             allGenres.forEach(genre => {
                 const specialClass = (genre === mixTag) ? 'special-tag' : '';
-                html += `
-                    <label class="genre-tag ${specialClass}">
-                        <input type="checkbox" value="${genre}" onchange="handleGenreChange(this)">
-                        <span class="genre-name">${genre}</span>
-                    </label>
-                `;
+                html += `<label class="genre-tag ${specialClass}"><input type="checkbox" value="${genre}" onchange="handleGenreChange(this)"><span class="genre-name">${genre}</span></label>`;
             });
             genreContainer.innerHTML = html;
         }
 
-        // --- プロフィール一覧描画 ---
         function renderProfiles(data) {
             if (data.length === 0) {
                 container.innerHTML = '<p style="text-align:center; width:100%; grid-column:1/-1; margin-top:50px; font-weight:bold;">NO VIBES FOUND...</p>';
                 return;
             }
-
             let html = '';
             data.forEach((person, index) => {
                 const delay = index * 0.05; 
                 const genreText = person.genre.join(', ');
                 const serviceIconUrl = person.serviceIcon || "images/default_icon.png"; 
-
                 const role = person.role || "";
                 const roleBadge = role ? `<span class="role-badge">${role}</span>` : "";
-                
-                let linkUrl = "#";
-                if (person.id) {
-                    linkUrl = `profile.html?id=${person.id}`;
-                } else if (person.qrLink) {
-                    linkUrl = person.qrLink;
-                }
-                
+                let linkUrl = person.id ? `profile.html?id=${person.id}` : (person.qrLink || "#");
                 const instaId = person.instagram || "";
                 const location = person.location || "";
 
                 html += `
                 <div class="profile-card" style="animation-delay: ${delay}s" 
                      onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}', '${instaId}', '${role}', '${location}')">
-                    
-                    <div class="profile-img">
-                        <img src="${person.image}" alt="${person.name}">
-                        ${roleBadge}
-                    </div>
-
+                    <div class="profile-img"><img src="${person.image}" alt="${person.name}">${roleBadge}</div>
                     <div class="profile-info">
                         <h2 class="profile-name">${person.name}</h2>
                         <span class="profile-loc">${person.location}</span>
-                        <p class="profile-genre-text">${genreText}</p>
-                        
                         <div class="profile-bottom-row">
-                            <div class="mini-qr-wrapper">
-                                <img src="${person.qr}" alt="QR" class="mini-qr">
-                            </div>
-                            <div class="service-icon-wrapper">
-                                <img src="${serviceIconUrl}" alt="Service" class="service-icon">
-                            </div>
+                            <div class="mini-qr-wrapper"><img src="${person.qr}" alt="QR" class="mini-qr"></div>
+                            <div class="service-icon-wrapper"><img src="${serviceIconUrl}" alt="Service" class="service-icon"></div>
                         </div>
                     </div>
-                </div>
-                `;
+                </div>`;
             });
             container.innerHTML = html;
         }
 
-        // --- フィルタリング実行 ---
         function applyFilters() {
             const filtered = profileData.filter(person => {
                 const term = currentSearchTerm.toLowerCase();
-                const textMatch = !term || 
-                    person.name.toLowerCase().includes(term) || 
-                    person.location.toLowerCase().includes(term) ||
-                    person.genre.some(g => g.toLowerCase().includes(term));
-
-                const genreMatch = selectedGenres.length === 0 || 
-                    person.genre.some(g => selectedGenres.includes(g));
-
+                const textMatch = !term || person.name.toLowerCase().includes(term) || person.location.toLowerCase().includes(term) || person.genre.some(g => g.toLowerCase().includes(term));
+                const genreMatch = selectedGenres.length === 0 || person.genre.some(g => selectedGenres.includes(g));
                 return textMatch && genreMatch;
             });
             renderProfiles(filtered);
             resetBtn.style.display = selectedGenres.length > 0 ? 'inline-block' : 'none';
         }
 
-        // --- イベントリスナー ---
-        searchInput.addEventListener('input', (e) => {
-            currentSearchTerm = e.target.value;
-            applyFilters();
-        });
-
+        searchInput.addEventListener('input', (e) => { currentSearchTerm = e.target.value; applyFilters(); });
         window.handleGenreChange = function(checkbox) {
             const val = checkbox.value;
-            if (checkbox.checked) {
-                selectedGenres.push(val);
-            } else {
-                selectedGenres = selectedGenres.filter(g => g !== val);
-            }
+            if (checkbox.checked) selectedGenres.push(val); else selectedGenres = selectedGenres.filter(g => g !== val);
             applyFilters();
         };
-
         resetBtn.addEventListener('click', () => {
             selectedGenres = [];
-            const checkboxes = genreContainer.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(cb => cb.checked = false);
+            genreContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             applyFilters();
         });
 
-        // --- モーダル操作 ---
         window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
             modalName.textContent = name;
             modalGenre.textContent = genre;
@@ -304,35 +241,13 @@
             modalPhoto.src = imageSrc;
             modalQr.src = qrSrc;
             modalQrLink.href = linkUrl;
-
-            if (role) {
-                modalRole.textContent = role;
-                modalRole.style.display = "block";
-            } else {
-                modalRole.style.display = "none";
-            }
-
-            if (instaId) {
-                modalInstaArea.style.display = "block";
-                modalInstaName.textContent = instaId;
-                modalInstaLink.href = "https://instagram.com/" + instaId;
-            } else {
-                modalInstaArea.style.display = "none";
-            }
-
+            if (role) { modalRole.textContent = role; modalRole.style.display = "block"; } else { modalRole.style.display = "none"; }
+            if (instaId) { modalInstaArea.style.display = "block"; modalInstaName.textContent = instaId; modalInstaLink.href = "https://instagram.com/" + instaId; } else { modalInstaArea.style.display = "none"; }
             modal.classList.add('active');
         };
-
-        window.closeQrModal = function() {
-            modal.classList.remove('active');
-        };
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeQrModal();
-        });
-
+        window.closeQrModal = function() { modal.classList.remove('active'); };
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeQrModal(); });
         init();
     </script>
-
 </body>
 </html>
