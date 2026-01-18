@@ -56,7 +56,6 @@ a { text-decoration: none; color: inherit; }
     display: block;
 }
 
-/* Hamburger Button */
 .menu-btn {
     background: none;
     border: none;
@@ -66,7 +65,6 @@ a { text-decoration: none; color: inherit; }
     position: relative;
     z-index: 110;
 }
-
 .menu-btn span {
     display: block;
     width: 100%;
@@ -111,7 +109,6 @@ a { text-decoration: none; color: inherit; }
     text-align: center;
     width: 80%;
 }
-
 .menu-link {
     display: flex;
     flex-direction: column;
@@ -120,7 +117,6 @@ a { text-decoration: none; color: inherit; }
     transition: opacity 0.3s;
 }
 .menu-link:hover { opacity: 0.6; }
-
 .menu-link .en-text {
     font-size: 1.8rem;
     font-weight: 700;
@@ -149,7 +145,6 @@ a { text-decoration: none; color: inherit; }
     padding-bottom: 60px;
     display: flex;
     flex-direction: column;
-    /* overflow-x: hidden; を削除してスライダーのはみ出しを許可 */
 }
 
 .container {
@@ -157,10 +152,18 @@ a { text-decoration: none; color: inherit; }
     z-index: 10;
     position: relative;
     width: 100%;
+    /* コンテンツがカードの下に潜り込まないよう、最大幅は制限しないが
+       テキストエリア側で制御する */
 }
 
+/* テキストエリアの調整 */
 .hero-text {
-    margin-top: 5vh;
+    margin-top: 2vh;
+    /* スマホでカードと被らないよう、幅を少し制限するか、
+       カードを十分に右下に配置する */
+    max-width: 100%; 
+    z-index: 20; /* カードより上に来ないようにするが、クリックは可能に */
+    position: relative;
 }
 
 .main-copy {
@@ -196,14 +199,12 @@ a { text-decoration: none; color: inherit; }
     align-items: flex-start;
     width: 100%;
 }
-
 .action-group {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
 }
-
 .btn {
     display: inline-flex;
     align-items: center;
@@ -217,14 +218,12 @@ a { text-decoration: none; color: inherit; }
     letter-spacing: 0.02em;
 }
 .btn:active { transform: scale(0.98); }
-
 .btn-primary {
     background-color: var(--primary-color);
     color: #fff;
     box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3);
     min-width: 60%;
 }
-
 .btn-secondary {
     background-color: #f0f0f0;
     color: #333;
@@ -232,7 +231,6 @@ a { text-decoration: none; color: inherit; }
     font-size: 3.5vw;
 }
 .btn-secondary .arrow { margin-left: 8px; font-weight: bold; }
-
 .btn-sub-text {
     font-family: var(--font-jp);
     font-size: 3vw;
@@ -282,77 +280,105 @@ a { text-decoration: none; color: inherit; }
 
 
 /* ==================================================
-   ★修正: Right Bottom Card Slider (Image Replication)
-   画像のような「白い大きなカード」を実現するスタイル
+   ★修正: Right Bottom Card Slider (Stacked & Squeezed)
    ================================================== */
 
 .hero-card-slider-wrapper {
     position: absolute;
-    bottom: 60px; /* フッターの上 */
-    left: 0;      /* 画面幅全体を使う */
+    /* 画面下端に配置 */
+    bottom: 0; 
+    right: 0;
     width: 100%;
-    z-index: 50;  /* 背景より上 */
-    overflow: hidden; /* 横スクロールのはみ出し制御 */
+    height: auto;
+    z-index: 50;
+    
+    /* ★重要: ラッパー自体はクリックを邪魔しない */
+    pointer-events: none; 
+    
+    /* アニメーション */
+    opacity: 0;
+    animation: fadeInUpSlider 0.8s ease-out 0.5s forwards;
 }
 
-/* 「View More Vibes ->」リンク */
+@keyframes fadeInUpSlider {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* View More リンク */
 .slider-header-link {
     text-align: right;
     padding-right: 6vw;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    pointer-events: auto; /* リンクはクリック可能に */
 }
 .slider-header-link a {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--primary-color);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    background: rgba(255,255,255,0.8); /* 文字が見やすいよう背景追加 */
+    padding: 4px 8px;
+    border-radius: 4px;
+    backdrop-filter: blur(5px);
 }
-.slider-header-link .arrow { font-size: 1.1em; }
 
 /* スクロールレール */
 .card-slider-track {
     display: flex;
-    gap: 20px;       /* カード間の隙間 */
+    /* カード同士の間隔をなくし、逆にマイナスマージンで重ねる */
+    /* gapは使用せず margin で制御 */
+    
     overflow-x: auto;
-    padding-bottom: 40px; /* 影が見切れないように */
+    overflow-y: hidden;
     
-    /* 重要: 最初のカードを右側に配置するためのパディング */
-    /* 画面の左側40%くらいを空けて、右側からスタートさせる */
-    padding-left: 45vw; 
-    padding-right: 6vw; /* 最後のカードの右余白 */
+    /* スクロールバーのスペース確保 */
+    padding-bottom: 80px; /* フッターや影のために十分な余白 */
     
-    /* スクロールスナップ */
+    /* 開始位置の調整: 
+       画面の右側からカードが始まるように左側に大きなパディングを入れる */
+    padding-left: 40vw; 
+    padding-right: 20px;
+    
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    
-    /* スクロールバー非表示 */
-    scrollbar-width: none; 
+    scrollbar-width: none;
+    pointer-events: auto; /* カード操作は可能に */
 }
 .card-slider-track::-webkit-scrollbar { display: none; }
 
 
-/* --- カード本体のデザイン (画像の白い四角を再現) --- */
+/* --- カード本体 (スタック仕様) --- */
 .hero-profile-card {
-    /* サイズ設定: 縦長のスマホ画面っぽい比率 */
-    width: 240px; 
-    height: 380px;
+    /* スマホに合わせたサイズ */
+    width: 180px; 
+    height: 300px;
     flex-shrink: 0;
     
-    /* 外観設定 */
     background: #ffffff;
-    border-radius: 35px; /* 大きな丸み */
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12); /* 浮遊感のある影 */
+    border-radius: 24px;
+    /* 影を濃くして重なりを強調 */
+    box-shadow: -5px 10px 30px rgba(0, 0, 0, 0.15); 
+    border: 1px solid rgba(0,0,0,0.03);
     
-    scroll-snap-align: center; /* スクロール時に真ん中に来る */
+    /* ★重要: ネガティブマージンでカードを重ねる */
+    margin-right: -130px; 
+    
+    scroll-snap-align: center;
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     
-    /* 内部レイアウト */
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 15px;
     position: relative;
     overflow: hidden;
+}
+
+/* 一番右のカード(See More)だけマージンを戻すか、JSで制御しても良いが
+   ここではCSSで最後の要素の余白を調整 */
+.hero-profile-card:last-child {
+    margin-right: 0;
 }
 
 .hero-profile-card:active {
@@ -370,18 +396,17 @@ a { text-decoration: none; color: inherit; }
 
 /* 画像エリア */
 .card-image-area {
-    width: 100px;
-    height: 100px;
-    margin-top: 30px;
-    margin-bottom: 25px;
+    width: 80px;
+    height: 80px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     border-radius: 50%;
     overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: #f0f0f0;
 }
 .card-image-area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100%; height: 100%; object-fit: cover;
 }
 
 /* 情報エリア */
@@ -389,78 +414,65 @@ a { text-decoration: none; color: inherit; }
     text-align: center;
     width: 100%;
 }
-
 .card-role {
     display: block;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: #999;
     font-weight: 700;
     letter-spacing: 0.1em;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     text-transform: uppercase;
 }
-
 .card-name {
     margin: 0;
     font-family: var(--font-en);
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: #111;
     line-height: 1.1;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* 音の波形アニメーション (VIBIN感の演出) */
+/* 波形アニメーション */
 .card-music-wave {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 4px;
-    height: 20px;
+    gap: 3px;
+    height: 15px;
 }
 .card-music-wave span {
-    width: 4px;
+    width: 3px;
     background: var(--primary-color);
     border-radius: 2px;
     animation: waveBounce 1s infinite ease-in-out;
 }
-.card-music-wave span:nth-child(1) { height: 10px; animation-delay: 0.1s; }
-.card-music-wave span:nth-child(2) { height: 18px; animation-delay: 0.2s; }
-.card-music-wave span:nth-child(3) { height: 14px; animation-delay: 0.3s; }
-.card-music-wave span:nth-child(4) { height: 8px; animation-delay: 0.4s; }
-
+.card-music-wave span:nth-child(1) { height: 8px; animation-delay: 0.1s; }
+.card-music-wave span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+.card-music-wave span:nth-child(3) { height: 10px; animation-delay: 0.3s; }
+.card-music-wave span:nth-child(4) { height: 6px; animation-delay: 0.4s; }
 @keyframes waveBounce {
     0%, 100% { transform: scaleY(1); }
     50% { transform: scaleY(0.5); }
 }
 
-
-/* --- 「もっと見る」カード --- */
+/* See More Card */
 .hero-profile-card.see-more {
-    background: #f8f8f8;
-    border: 2px dashed #e0e0e0;
+    background: #fcfcfc;
+    border: 2px dashed #ddd;
     box-shadow: none;
-    justify-content: center;
+    margin-right: 0; /* 最後のカードは重ねない */
 }
-.see-more-inner {
-    justify-content: center;
-}
-.plus-icon {
-    font-size: 3rem;
-    color: #ccc;
-    font-weight: 300;
-    margin-bottom: 10px;
-}
-.see-more-text {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #999;
-}
-
+.see-more-inner { justify-content: center; }
+.plus-icon { font-size: 2.5rem; color: #ccc; margin-bottom: 10px; }
+.see-more-text { font-size: 0.8rem; font-weight: 700; color: #999; }
 
 /* ==================================================
-   Responsive (PC)
+   Responsive (PC / Tablet)
    ================================================== */
 @media (min-width: 768px) {
     .container { max-width: 600px; margin: 0 auto; }
@@ -470,15 +482,20 @@ a { text-decoration: none; color: inherit; }
     .btn { font-size: 1rem; padding: 15px 40px; }
     .btn-secondary { font-size: 0.9rem; }
     .btn-sub-text { font-size: 0.8rem; margin-left: 20px; }
-    
-    /* PCではスライダーの位置を調整 */
+
+    /* PCではスライダーを右側に寄せる */
     .hero-card-slider-wrapper {
-        bottom: 80px;
-        right: 0;
-        left: auto;
         width: 50%;
+        left: auto;
+        right: 0;
+        bottom: 40px;
     }
     .card-slider-track {
-        padding-left: 50px;
+        padding-left: 100px;
+    }
+    .hero-profile-card {
+        width: 220px;
+        height: 360px;
+        margin-right: -160px; /* PCではより深く重ねる */
     }
 }
