@@ -58,7 +58,8 @@
                 </div>
 
                 <div class="hero-actions">
-                    <a href="getQR.html" class="btn btn-primary">Get your Sound QR</a>
+                    <a href="getQR.html" class="btn btn-primary">Get your QR</a>
+
                     <div class="action-group">
                         <a href="how.html" class="btn btn-secondary">How it works <span class="arrow">&gt;</span></a>
                         <span class="btn-sub-text">このQRの仕組み/使い方</span>
@@ -71,79 +72,13 @@
         <div class="hero-background">
             <img src="images/background.svg" alt="" class="bg-graphic">
         </div>
-
-        <div class="hero-card-slider-wrapper">
-            <div class="slider-header-link">
-                <a href="explore.html">View More Vibes <span class="arrow">→</span></a>
-            </div>
-
-            <div class="card-slider-track" id="featuredContainer">
-                </div>
-        </div>
     </main>
 
     <footer class="site-footer">
         © 2026 WHAT U VIBIN TO / One QR, different vibes
     </footer>
 
-    <script src="js/dig_data.js"></script>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('featuredContainer');
-            
-            let profiles = [];
-            if (typeof window.digData !== 'undefined') {
-                profiles = window.digData;
-            } else if (typeof digData !== 'undefined') {
-                profiles = digData;
-            }
-
-            if (profiles.length > 0) {
-                // 最新5件
-                const featuredProfiles = profiles.slice(0, 5);
-                let html = '';
-
-                featuredProfiles.forEach((person, index) => {
-                    const displayName = person.name.length > 10 ? person.name.substring(0, 10) + '..' : person.name;
-                    const displayRole = person.role || 'VIBER';
-                    
-                    // z-indexを逆順にする (左側のカードを上に重ねるため)
-                    const zIndex = 100 - index;
-                    
-                    html += `
-                    <a href="explore.html" class="hero-profile-card" style="z-index: ${zIndex};">
-                        <div class="card-inner">
-                            <div class="card-image-area">
-                                <img src="${person.image}" alt="${person.name}">
-                            </div>
-                            <div class="card-info-area">
-                                <span class="card-role">${displayRole}</span>
-                                <h3 class="card-name">${displayName}</h3>
-                                <div class="card-music-wave">
-                                    <span></span><span></span><span></span><span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    `;
-                });
-
-                // 「もっと見る」カード (一番下になる)
-                html += `
-                <a href="explore.html" class="hero-profile-card see-more" style="z-index: 1;">
-                    <div class="card-inner see-more-inner">
-                        <div class="plus-icon">+</div>
-                        <span class="see-more-text">Explore All</span>
-                    </div>
-                </a>
-                `;
-
-                container.innerHTML = html;
-            }
-        });
-
-        // メニュー開閉
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
         let isMenuOpen = false;
