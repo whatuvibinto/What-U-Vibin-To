@@ -282,13 +282,13 @@ a {
 .hero-background {
     position: absolute;
     bottom: 0;
-    right: -40%;
+    right: -50%;
     width: 80%;
     height: 60%;
     z-index: 1;
     overflow: hidden;
     pointer-events: none;
-    transform: rotate(-10deg);
+    transform: rotate(-20deg);
     transform-origin: bottom right;
 }
 
