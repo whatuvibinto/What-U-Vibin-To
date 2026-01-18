@@ -18,13 +18,14 @@
     padding: 0;
 }
 
-body {
+/* ★修正: htmlにも overflow-x: hidden を適用してより強固にする */
+html, body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-en), var(--font-jp);
-    overflow-x: hidden;
+    overflow-x: hidden; /* 横スクロール禁止 */
     width: 100%;
-    height: 100vh;
+    height: 100%;       /* height: 100vh だとアドレスバーの影響が出る場合があるため修正 */
     -webkit-font-smoothing: antialiased;
 }
 
@@ -171,6 +172,9 @@ a {
     padding-bottom: 60px;
     display: flex;
     flex-direction: column;
+    
+    /* ★修正: ここが重要。はみ出した背景画像を親要素でカットする */
+    overflow: hidden; 
 }
 
 .container {
@@ -277,7 +281,7 @@ a {
 }
 
 /* ==================================================
-   Background Graphic (一つ前の状態に戻しました)
+   Background Graphic
    ================================================== */
 .hero-background {
     position: absolute;
