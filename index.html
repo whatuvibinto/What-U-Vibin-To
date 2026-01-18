@@ -71,11 +71,11 @@
         </div>
 
         <div class="swipe-indicator-area" onclick="openExplore()">
+            <div class="swipe-arrow"></div>
             <div class="swipe-text">
                 <span class="jp">スワイプアップして<br>あの人の"この時間"をのぞく</span>
                 <span class="en">Swipe up to Explore</span>
             </div>
-            <div class="swipe-arrow"></div>
         </div>
     </main>
 
@@ -84,11 +84,9 @@
     </footer>
 
     <div class="explore-overlay" id="exploreOverlay">
-        
         <div class="explore-header-trigger" onclick="closeExplore()">
             <div class="drag-handle"></div>
         </div>
-
         <div class="explore-container">
             <div class="dig-content">
                 <div class="search-area">
@@ -96,16 +94,13 @@
                         <input type="text" class="search-input" id="searchInput" placeholder="Name or Location...">
                         <button class="search-btn">SEARCH</button>
                     </div>
-                    
                     <div class="genre-filter-area">
                         <div class="genre-label">FILTER BY GENRE:</div>
                         <div class="genre-checkboxes" id="genreCheckboxes"></div>
                         <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET (ALL)</button>
                     </div>
                 </div>
-
                 <div class="profile-list" id="profileContainer"></div>
-                
                 <div class="explore-footer">
                     KEEP DIGGING, KEEP VIBING.
                 </div>
@@ -155,16 +150,13 @@
     <script src="js/dig_data.js"></script>
 
     <script>
-        // --- 変数定義 ---
         const heroSection = document.getElementById('heroSection');
         const exploreOverlay = document.getElementById('exploreOverlay');
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
-        
         let isExploreOpen = false;
         let isMenuOpen = false;
 
-        // --- メニュー開閉 ---
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if (isMenuOpen) {
@@ -177,14 +169,9 @@
         }
         menuBtn.addEventListener('click', toggleMenu);
 
-        // --- Explore開閉 (スワイプアニメーション用) ---
         window.openExplore = function() {
             exploreOverlay.classList.add('active');
-            // 背景のHeroを少し暗くしたり縮小したりする演出（任意）
-            // heroSection.style.transform = "scale(0.95)"; 
             isExploreOpen = true;
-            
-            // 初回のみデータ描画などの初期化を呼ぶ（軽量化のため）
             if (!window.exploreInitialized) {
                 initExplore();
                 window.exploreInitialized = true;
@@ -193,62 +180,61 @@
 
         window.closeExplore = function() {
             exploreOverlay.classList.remove('active');
-            // heroSection.style.transform = "scale(1)";
             isExploreOpen = false;
-            // 閉じたときにスクロールをトップに戻す
-            setTimeout(() => {
-                exploreOverlay.scrollTop = 0;
-            }, 500);
+            setTimeout(() => { exploreOverlay.scrollTop = 0; }, 500);
         };
 
-        // --- スワイプ検知ロジック ---
+        // --- ★修正: スワイプ検知ロジック ---
         let touchStartY = 0;
         let touchEndY = 0;
 
-        // 画面全体でのタッチ開始
         document.addEventListener('touchstart', e => {
             touchStartY = e.changedTouches[0].screenY;
         }, {passive: true});
 
         document.addEventListener('touchend', e => {
             touchEndY = e.changedTouches[0].screenY;
-            handleSwipe();
+            handleSwipe(e);
         }, {passive: true});
 
-        // PCのマウスホイール操作（オプション）
+        // PCホイール操作
         document.addEventListener('wheel', e => {
+            // 下スクロールで、かつ画面最下部にいる場合のみオープンするロジックも可だが、
+            // シンプルに「下スクロール」だけで開くと誤作動が多いため、PCではクリック推奨。
+            // 既存の動き維持
             if (!isExploreOpen && e.deltaY > 50) {
-                // 下スクロールでオープン
+                // ここも「画面下部」判定を入れるとより良いが、一旦維持
                 openExplore();
             } else if (isExploreOpen && exploreOverlay.scrollTop === 0 && e.deltaY < -50) {
-                // 上スクロールかつ、Exploreがトップにある時だけクローズ
                 closeExplore();
             }
         });
 
-        function handleSwipe() {
+        function handleSwipe(e) {
             const swipeDistance = touchStartY - touchEndY;
-            const threshold = 50; // スワイプ感度
+            const threshold = 50; 
+            
+            // 画面の高さ
+            const windowHeight = window.innerHeight;
+            // タッチ開始位置が画面の下25%以内でなければ無視 (誤作動防止)
+            const isBottomArea = touchStartY > (windowHeight * 0.75);
 
             if (!isExploreOpen) {
-                // Hero画面で上スワイプ -> Exploreを開く
-                if (swipeDistance > threshold) {
+                // ★修正: 画面下部エリアでのみ反応させる
+                if (isBottomArea && swipeDistance > threshold) {
                     openExplore();
                 }
             } else {
-                // Explore画面で下スワイプ -> Exploreを閉じる
-                // ただし、Exploreの中身がスクロールされている場合は閉じない
+                // 閉じる動作はオーバーレイの上部など、どこでもOK (スクロールトップ時のみ)
                 if (exploreOverlay.scrollTop <= 0 && swipeDistance < -threshold) {
                     closeExplore();
                 }
             }
         }
 
-
-        // --- Explore機能のロジック (explore.htmlから移植) ---
+        // --- Explore機能 ---
         const container = document.getElementById('profileContainer');
         const modal = document.getElementById('qrModal');
-        // モーダル要素
         const mName = document.getElementById('modalName');
         const mGenre = document.getElementById('modalGenre');
         const mPhoto = document.getElementById('modalPhoto');
@@ -260,7 +246,6 @@
         const mInstaLink = document.getElementById('modalInstaLink');
         const mInstaName = document.getElementById('modalInstaName');
         
-        // フィルター要素
         const searchInput = document.getElementById('searchInput');
         const genreContainer = document.getElementById('genreCheckboxes');
         const resetBtn = document.getElementById('resetBtn');
@@ -351,7 +336,6 @@
             applyFilters();
         });
 
-        // モーダル操作
         window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
             mName.textContent = name;
             mGenre.textContent = genre;
@@ -365,7 +349,6 @@
         };
         window.closeQrModal = function() { modal.classList.remove('active'); };
         modal.addEventListener('click', (e) => { if (e.target === modal) closeQrModal(); });
-
     </script>
 </body>
 </html>
