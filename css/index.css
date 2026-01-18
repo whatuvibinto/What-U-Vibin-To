@@ -18,24 +18,21 @@
     padding: 0;
 }
 
-/* ★修正: htmlにも overflow-x: hidden を適用してより強固にする */
+/* スクロール制御: オーバーレイ実装のためhtml/bodyは固定 */
 html, body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-en), var(--font-jp);
-    overflow-x: hidden; /* 横スクロール禁止 */
+    overflow: hidden; /* 通常スクロール禁止 */
     width: 100%;
-    height: 100%;       /* height: 100vh だとアドレスバーの影響が出る場合があるため修正 */
+    height: 100%;
     -webkit-font-smoothing: antialiased;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
+a { text-decoration: none; color: inherit; }
 
 /* ==================================================
-   Header (Glassmorphism)
+   Header
    ================================================== */
 .site-header {
     position: fixed;
@@ -54,316 +51,410 @@ a {
     z-index: 100;
 }
 
-.header-logo {
-    height: 50px;
-    width: auto;
-    display: block;
-}
+.header-logo { height: 50px; width: auto; display: block; }
 
 /* Hamburger Button */
 .menu-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 30px;
-    height: 24px;
-    position: relative;
-    z-index: 110;
+    background: none; border: none; cursor: pointer;
+    width: 30px; height: 24px; position: relative; z-index: 110;
 }
-
 .menu-btn span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: #000;
-    position: absolute;
-    left: 0;
-    transition: all 0.3s ease;
+    display: block; width: 100%; height: 2px; background-color: #000;
+    position: absolute; left: 0; transition: all 0.3s ease;
 }
-
 .menu-btn span:nth-child(1) { top: 0; }
 .menu-btn span:nth-child(2) { top: 50%; transform: translateY(-50%); }
 .menu-btn span:nth-child(3) { bottom: 0; }
-
-.menu-btn.active span:nth-child(1) {
-    transform: rotate(45deg);
-    top: 11px;
-}
-.menu-btn.active span:nth-child(2) {
-    opacity: 0;
-}
-.menu-btn.active span:nth-child(3) {
-    transform: rotate(-45deg);
-    bottom: 11px;
-}
+.menu-btn.active span:nth-child(1) { transform: rotate(45deg); top: 11px; }
+.menu-btn.active span:nth-child(2) { opacity: 0; }
+.menu-btn.active span:nth-child(3) { transform: rotate(-45deg); bottom: 11px; }
 
 /* ==================================================
-   Slide Menu Panel
+   Menu Panel
    ================================================== */
 .menu-panel {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 100%;
-    height: 100vh;
-    background: #fff;
-    z-index: 90;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+    background: #fff; z-index: 90;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
     transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     padding-bottom: 60px; 
 }
-
-.menu-panel.active {
-    right: 0;
-}
+.menu-panel.active { right: 0; }
 
 .menu-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    text-align: center;
-    width: 80%;
+    display: flex; flex-direction: column; gap: 40px; text-align: center; width: 80%;
 }
-
 .menu-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px; 
-    transition: opacity 0.3s;
+    display: flex; flex-direction: column; align-items: center; gap: 8px; transition: opacity 0.3s;
 }
-
-.menu-link:hover {
-    opacity: 0.6;
-}
-
+.menu-link:hover { opacity: 0.6; }
 .menu-link .en-text {
-    font-size: 1.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #000;
-    line-height: 1;
+    font-size: 1.8rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: #000; line-height: 1;
 }
-
-.menu-link.highlight .en-text {
-    color: var(--primary-color);
-}
-
+.menu-link.highlight .en-text { color: var(--primary-color); }
 .menu-link .jp-sub {
-    font-family: var(--font-jp);
-    font-size: 0.85rem;
-    font-weight: 400;
-    color: #666;
-    letter-spacing: 0.05em;
+    font-family: var(--font-jp); font-size: 0.85rem; font-weight: 400; color: #666; letter-spacing: 0.05em;
 }
 
 /* ==================================================
    Main Hero Section
    ================================================== */
 .hero-section {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    padding-top: 100px;
-    padding-bottom: 60px;
-    display: flex;
-    flex-direction: column;
-    
-    /* ★修正: ここが重要。はみ出した背景画像を親要素でカットする */
-    overflow: hidden; 
+    position: relative; width: 100%; height: 100%; /* 全画面固定 */
+    padding-top: 100px; padding-bottom: 60px;
+    display: flex; flex-direction: column;
+    overflow: hidden; /* 背景はみ出し防止 */
+    transition: transform 0.5s ease;
 }
 
-.container {
-    padding: 0 6vw;
-    z-index: 10;
-    position: relative;
-}
-
-.hero-text {
-    margin-top: 5vh;
-}
-
+.container { padding: 0 6vw; z-index: 10; position: relative; }
+.hero-text { margin-top: 5vh; }
 .main-copy {
-    font-family: var(--font-jp);
-    font-size: 11vw;
-    font-weight: 900;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    margin-bottom: 2vh;
-    color: #000;
+    font-family: var(--font-jp); font-size: 11vw; font-weight: 900;
+    line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 2vh; color: #000;
 }
-
-.sub-copy-jp {
-    font-size: 4vw;
-    font-weight: 700;
-    margin-bottom: 4vh;
-    color: #333;
-}
-
+.sub-copy-jp { font-size: 4vw; font-weight: 700; margin-bottom: 4vh; color: #333; }
 .sub-copy-en {
-    font-family: var(--font-en);
-    font-size: 3.8vw;
-    font-weight: 400;
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 6vh;
+    font-family: var(--font-en); font-size: 3.8vw; font-weight: 400; color: #555;
+    line-height: 1.5; margin-bottom: 6vh;
 }
 
-/* ==================================================
-   Hero Actions (Buttons & Support Text)
-   ================================================== */
-.hero-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: flex-start;
-    width: 100%;
-}
-
-.action-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px; 
-}
-
+/* Hero Actions */
+.hero-actions { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; width: 100%; }
+.action-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .btn-sub-text {
-    font-family: var(--font-jp);
-    font-size: 3vw;
-    font-weight: 500;
-    color: #888;
-    margin-left: 15px;
-    letter-spacing: 0.02em;
-    line-height: 1;
-    white-space: nowrap;
+    font-family: var(--font-jp); font-size: 3vw; font-weight: 500;
+    color: #888; margin-left: 15px; letter-spacing: 0.02em; line-height: 1; white-space: nowrap;
 }
-
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px 30px;
-    border-radius: 50px;
-    font-size: 4vw;
-    font-weight: 600;
-    transition: transform 0.2s;
-    white-space: nowrap;
-    letter-spacing: 0.02em;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 15px 30px; border-radius: 50px; font-size: 4vw; font-weight: 600;
+    transition: transform 0.2s; white-space: nowrap; letter-spacing: 0.02em;
 }
-
-.btn:active {
-    transform: scale(0.98);
-}
-
+.btn:active { transform: scale(0.98); }
 .btn-primary {
-    background-color: var(--primary-color);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3);
-    width: auto;
-    min-width: 60%;
+    background-color: var(--primary-color); color: #fff;
+    box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3); width: auto; min-width: 60%;
 }
+.btn-secondary { background-color: #f0f0f0; color: #333; padding: 12px 28px; font-size: 3.5vw; }
+.btn-secondary .arrow { margin-left: 8px; font-size: 0.8em; font-weight: bold; }
 
-.btn-secondary {
-    background-color: #f0f0f0;
-    color: #333;
-    padding: 12px 28px;
-    font-size: 3.5vw;
-}
-
-.btn-secondary .arrow {
-    margin-left: 8px;
-    font-size: 0.8em;
-    font-weight: bold;
-}
-
-/* ==================================================
-   Background Graphic
-   ================================================== */
+/* Background Graphic */
 .hero-background {
-    position: absolute;
-    
-    /* 画面上部へ移動 (0 -> 15% 程度) */
-    bottom: -5%;
-    
-    /* 画像の端が見えないよう、幅を広げて右にはみ出させる */
-    right: -50%; 
-    width: 140%; 
-    height: 70%;
-    
-    z-index: 0; /* 文字(z-index:10以上)の裏側に配置 */
-    overflow: visible; /* グラデーションを綺麗に見せるためvisible推奨 */
-    pointer-events: none;
-    
-    /* 反時計回りに回転 */
-    transform: rotate(-20deg);
-    transform-origin: center center;
+    position: absolute; bottom: 0; right: -50%; width: 140%; height: 70%;
+    z-index: 0; overflow: visible; pointer-events: none;
+    transform: rotate(-20deg); transform-origin: center center;
 }
-
 .bg-graphic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    
-    /* 左側(文字エリア)を透明にし、右に向かって徐々に濃くするグラデーション */
-    /* to right: 左(透明) → 中央(薄い) → 右(はっきり) */
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 45%, black 85%);
-    mask-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 45%, black 85%);
-    
-    /* 全体の強さを少し抑えて文字を読みやすくする */
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
     opacity: 0.95;
 }
 
-/* ==================================================
-   Bottom Footer (Fixed)
-   ================================================== */
+/* Footer */
 .site-footer {
-    position: fixed;
-    bottom: 0;
+    position: fixed; bottom: 0; left: 0; width: 100%; padding: 10px 0;
+    text-align: center; font-family: var(--font-en); font-size: 0.65rem;
+    color: #999; letter-spacing: 0.05em; font-weight: 500;
+    background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(5px); z-index: 200; 
+}
+
+
+/* ==================================================
+   ★新規: Swipe Up Indicator (Pro Spec)
+   ================================================== */
+.swipe-indicator-area {
+    position: absolute;
+    bottom: 50px; /* フッターの上 */
     left: 0;
     width: 100%;
-    padding: 10px 0;
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 50;
+    cursor: pointer;
+    /* フワッと表示 */
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 1s forwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.swipe-text {
     text-align: center;
-    font-family: var(--font-en);
-    font-size: 0.65rem;
-    color: #999;
-    letter-spacing: 0.05em;
-    font-weight: 500;
-    
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(5px);
-    z-index: 200; 
+    color: #888;
+    line-height: 1.4;
+}
+.swipe-text .jp {
+    display: block; font-family: var(--font-jp); font-size: 0.75rem; font-weight: 700;
+}
+.swipe-text .en {
+    display: block; font-family: var(--font-en); font-size: 0.65rem; font-weight: 400; opacity: 0.7;
+}
+
+/* 矢印アニメーション */
+.swipe-arrow {
+    width: 20px;
+    height: 20px;
+    border-top: 2px solid #888;
+    border-left: 2px solid #888;
+    transform: rotate(45deg);
+    margin-bottom: 5px;
+    animation: bounceUp 2s infinite;
+}
+
+@keyframes bounceUp {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); }
+    40% { transform: translateY(-10px) rotate(45deg); }
+    60% { transform: translateY(-5px) rotate(45deg); }
+}
+
+
+/* ==================================================
+   ★新規: Explore Overlay (Swipe Interface)
+   ================================================== */
+.explore-overlay {
+    position: fixed;
+    top: 100%; /* 初期状態は画面外(下) */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 150; /* ヘッダーより上 */
+    transition: top 0.6s cubic-bezier(0.19, 1, 0.22, 1); /* iOSっぽい慣性 */
+    overflow-y: auto; /* 内部スクロール許可 */
+    padding-top: 60px; /* ハンドル用余白 */
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+}
+
+.explore-overlay.active {
+    top: 0; /* 画面いっぱいに表示 */
+}
+
+/* 閉じるためのハンドルバー */
+.explore-header-trigger {
+    position: fixed;
+    top: 100%; /* 連動して動くようにJSではなくCSSで制御したいが、fixedなのでoverlay内相対にはならない */
+    /* 実装簡略化のため、overlay内部上部に配置 */
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 60px;
+    display: flex; justify-content: center; align-items: center;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 160;
+    cursor: pointer;
+}
+.drag-handle {
+    width: 40px; height: 5px;
+    background: #ddd;
+    border-radius: 10px;
+}
+
+.explore-container {
+    width: 100%; max-width: 800px; margin: 0 auto; padding: 0 4vw;
+}
+
+.dig-content {
+    padding-top: 20px; width: 100%; padding-bottom: 80px;
+}
+
+/* Explore Footer */
+.explore-footer {
+    text-align: center; font-weight: 900; color: #eee; font-size: 1.5rem;
+    margin-top: 50px; text-transform: uppercase;
 }
 
 /* ==================================================
-   Responsive Tweaks (Over 768px - Tablet/PC)
+   Integrated Explore Styles (Search, Filter, Cards)
+   ================================================== */
+/* Search */
+.search-area { margin-bottom: 40px; text-align: center; width: 100%; }
+.search-box {
+    position: relative; display: inline-block; width: 90%; border-bottom: 1px solid #e0e0e0;
+}
+.search-input {
+    width: 100%; padding: 10px 80px 10px 0; font-size: 1rem; font-weight: 500;
+    color: #000; background: transparent; border: none; outline: none;
+}
+.search-btn {
+    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    background: transparent; border: none; font-size: 0.7rem; font-weight: 900; letter-spacing: 1px;
+}
+
+/* Genre Filter */
+.genre-filter-area { margin: 20px auto 0; text-align: center; }
+.genre-label { font-size: 0.65rem; font-weight: bold; color: #999; margin-bottom: 10px; letter-spacing: 1px; }
+.genre-checkboxes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.genre-tag input[type="checkbox"] { display: none; }
+.genre-name {
+    display: inline-block; padding: 5px 10px; border: 1px solid #eee; border-radius: 4px;
+    font-size: 0.7rem; font-weight: bold; color: #666; background: #fff; text-transform: uppercase;
+}
+.genre-tag input[type="checkbox"]:checked + .genre-name {
+    background: #000; color: #fff; border-color: #000;
+}
+.filter-reset-btn {
+    margin-top: 15px; background: none; border: none; text-decoration: underline; font-size: 0.75rem; color: #888;
+}
+
+/* Profile List */
+.profile-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw; width: 100%; }
+.profile-card {
+    display: flex; flex-direction: column; background: #fff; border: 1px solid #eee;
+    border-radius: 6px; overflow: hidden; position: relative; cursor: pointer;
+    opacity: 0; animation: fadeInUpCard 0.6s ease-out forwards;
+}
+@keyframes fadeInUpCard {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.profile-img {
+    width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #f5f5f5; position: relative;
+}
+.profile-img img { width: 100%; height: 100%; object-fit: cover; }
+.role-badge {
+    position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.8);
+    color: #fff; font-size: 2.5vw; font-weight: 700; padding: 2px 4px;
+    border-radius: 2px; text-transform: uppercase; z-index: 2;
+}
+
+.profile-info { padding: 2vw; text-align: left; display: flex; flex-direction: column; gap: 2px; }
+.profile-name {
+    margin: 0; font-size: 3.2vw; font-weight: 900; text-transform: uppercase;
+    color: #000; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.profile-loc {
+    display: block; font-size: 2.5vw; color: #888; font-weight: normal;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.profile-bottom-row {
+    display: flex; align-items: center; gap: 1vw; margin-top: 4px; padding-top: 4px; border-top: 1px dashed #f0f0f0;
+}
+.mini-qr, .service-icon { width: 5vw; height: 5vw; object-fit: contain; mix-blend-mode: multiply; }
+
+
+/* ==================================================
+   Modal (Overlay on Overlay)
+   ================================================== */
+.qr-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); z-index: 2000;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.qr-modal-overlay.active { opacity: 1; visibility: visible; }
+
+.qr-modal-content.art-layout {
+    display: flex; flex-direction: column; width: 88%; max-width: 400px; max-height: 85vh;
+    background: #ffffff; border-radius: 20px; overflow: hidden; position: relative;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    transform: scale(0.95) translateY(10px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.qr-modal-overlay.active .qr-modal-content.art-layout { transform: scale(1) translateY(0); }
+
+.qr-modal-close {
+    position: absolute; top: 10px; right: 10px; width: 44px; height: 44px;
+    background: rgba(0,0,0,0.3); border-radius: 50%; border: none; z-index: 100;
+    backdrop-filter: blur(4px); cursor: pointer;
+}
+.qr-modal-close::before, .qr-modal-close::after {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 20px; height: 2px;
+    background-color: #fff; border-radius: 1px;
+}
+.qr-modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+.qr-modal-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.art-image-section { width: 100%; height: 35vh; min-height: 250px; position: relative; background: #111; }
+.art-image-section img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.art-info-section {
+    flex: 1; padding: 25px 25px 20px; display: flex; flex-direction: column;
+    align-items: center; text-align: center; background: #fff;
+}
+.art-info-header { margin-bottom: 20px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.art-name-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; }
+.art-name { font-size: 2rem; font-weight: 900; line-height: 1.1; margin: 0; text-transform: uppercase; color: #000; }
+.art-role-badge {
+    display: inline-block; background: #000; color: #fff; font-family: 'Inter', sans-serif;
+    font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 4px;
+    text-transform: uppercase; transform: translateY(-2px);
+}
+.art-meta-row {
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    font-size: 0.85rem; font-weight: 600; color: #666;
+}
+.art-qr-wrapper {
+    flex-grow: 1; width: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; margin-bottom: 20px; padding: 20px 0;
+    background: #f9f9f9; border-radius: 16px;
+}
+.art-qr-box { width: 160px; height: 160px; margin-bottom: 12px; }
+.art-qr-box img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.art-instruction-text {
+    font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 700;
+    color: #ccc; text-transform: uppercase; letter-spacing: 1px; margin: 0;
+}
+.art-info-footer { width: 100%; border-top: 1px solid #eee; padding-top: 15px; }
+.art-insta-link { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.insta-left { display: flex; align-items: center; gap: 8px; }
+.insta-icon { width: 20px; height: 20px; object-fit: contain; }
+.insta-val { font-size: 0.9rem; font-weight: 700; }
+
+
+/* ==================================================
+   Responsive Tweaks (Tablet/PC)
    ================================================== */
 @media (min-width: 768px) {
-    .container {
-        max-width: 600px;
-        margin: 0 auto;
-    }
+    .container { max-width: 600px; margin: 0 auto; }
     .main-copy { font-size: 3.5rem; }
     .sub-copy-jp { font-size: 1.2rem; }
     .sub-copy-en { font-size: 1rem; }
-    
     .btn { font-size: 1rem; padding: 15px 40px; }
-    .btn-secondary { font-size: 0.9rem; }
-    .btn-sub-text { font-size: 0.8rem; margin-left: 20px; }
-    
     .menu-link .en-text { font-size: 2.5rem; }
-    .menu-link .jp-sub { font-size: 1rem; }
+    .hero-background { width: 120%; height: 100%; right: -10%; bottom: -10%; }
     
-    /* PCでは背景位置を微調整 */
-    .hero-background {
-        width: 120%;
-        height: 100%;
-        right: -10%;
-        bottom: -10%;
-    }
+    /* PCでのExplore表示調整 */
+    .profile-list { gap: 15px; }
+    .profile-info { padding: 15px; }
+    .profile-name { font-size: 1rem; }
+    .profile-loc { font-size: 0.75rem; }
+    .mini-qr, .service-icon { width: 24px; height: 24px; }
+    .profile-card .role-badge { font-size: 0.6rem; padding: 3px 6px; }
+    
+    .qr-modal-content.art-layout { flex-direction: row; width: 800px; max-width: 90%; max-height: none; height: 500px; }
+    .art-image-section { width: 45%; height: 100%; }
+    .art-info-section { width: 55%; padding: 40px; align-items: flex-start; text-align: left; }
+    .art-info-header { text-align: left; align-items: flex-start; }
+    .art-name-row { justify-content: flex-start; }
+    .art-meta-row { justify-content: flex-start; }
+    .art-qr-wrapper { flex-grow: 0; background: transparent; padding: 0; margin: auto 0; align-items: flex-start; }
+    .art-qr-box { width: 140px; height: 140px; margin-left: 0; }
+    .art-info-footer { margin-top: auto; }
+}
+
+/* ==================================================
+   Small Mobile Tweaks (iPhone 12 etc.)
+   ================================================== */
+@media (max-width: 430px) {
+    .qr-modal-content.art-layout { width: 94%; max-height: 92vh; }
+    .art-image-section { height: 25vh; min-height: 180px; }
+    .art-info-section { padding: 15px 12px; gap: 10px; }
+    .art-name-row { margin-bottom: 2px; gap: 8px; }
+    .art-name { font-size: 1.5rem; }
+    .art-meta-row { font-size: 0.75rem; }
+    .art-role-badge { font-size: 0.65rem; padding: 3px 6px; }
+    .art-qr-wrapper { margin-bottom: 5px; padding: 5px 0; }
+    .art-qr-box { width: 115px; height: 115px; margin-bottom: 8px; }
+    .art-instruction-text { font-size: 0.55rem; }
+    .art-info-footer { padding-top: 10px; }
+    .insta-icon { width: 16px; height: 16px; }
+    .insta-val { font-size: 0.8rem; }
 }
