@@ -1,54 +1,67 @@
 @charset "UTF-8";
 
+/* ==================================================
+   Explore Page Layout
+   ================================================== */
+
+/* index.cssでのスクロール固定設定を解除してスクロール可能にする */
 html, body {
-    overflow: auto !important;      /* スクロールバーを復活させる */
-    height: auto !important;        /* 高さを画面固定にしない */
-    overscroll-behavior: auto !important; /* バウンス効果も戻す */
+    overflow: auto !important;
+    height: auto !important;
+    overscroll-behavior: auto !important;
 }
 
-/* --- 1. ページ全体 --- */
-.dig-page {
-    background-color: #ffffff; 
-    overflow-x: hidden;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+.explore-page {
+    background-color: #ffffff;
+    padding-top: 80px; /* 固定ヘッダーの分だけ下げる */
 }
 
-/* --- 2. ロゴ --- */
-.dig-logo {
-    position: absolute;
-    top: 120px;
-    left: 30px;
-    margin: 0;
-    width: 500px;
-    max-width: 80%;
-    z-index: 10;
-    animation: fadeInDown 0.8s ease-out;
-}
-
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- 3. メインコンテンツ --- */
-.dig-content {
-    padding-top: 400px; 
-    max-width: 1000px;
+.explore-container {
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding-bottom: 100px;
-    padding-left: 20px;
-    padding-right: 20px;
-    animation: fadeInUp 1s ease-out 0.3s backwards;
+    padding: 0 20px;
 }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
+/* 中央配置の大きいロゴエリア */
+.explore-hero-logo {
+    text-align: center;
+    padding: 40px 0 30px; /* 上下の余白 */
+    width: 100%;
+}
+
+.explore-hero-logo img {
+    /* ロゴサイズ調整: 元のsvgが横長であることを想定 */
+    width: 300px;
+    max-width: 80%;
+    height: auto;
+    display: inline-block;
+    
+    /* 軽くフェードインアニメーション */
+    animation: fadeInLogo 1s ease-out;
+}
+
+@keyframes fadeInLogo {
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 4. 検索バー (Minimal Style) --- */
+/* メインコンテンツエリア調整 */
+.dig-content {
+    /* 固定パディングを削除し、自然な流れにする */
+    padding-top: 20px; 
+    width: 100%;
+    max-width: 900px; /* カード一覧の幅制限 */
+    margin: 0 auto;
+    padding-bottom: 60px;
+}
+
+
+/* ==================================================
+   Search & Filter (Existing Styles)
+   ================================================== */
 .search-area {
-    margin-bottom: 80px;
+    margin-bottom: 60px;
     text-align: center;
     width: 100%;
 }
@@ -80,6 +93,7 @@ html, body {
     border: none;
     outline: none;
     box-sizing: border-box;
+    border-radius: 0;
 }
 
 .search-input::placeholder {
@@ -111,15 +125,13 @@ html, body {
 }
 
 .search-btn:hover {
-    background: transparent;
     opacity: 0.6;
-    transform: translateY(-50%) translateX(-2px);
 }
 
-/* --- ジャンルフィルター --- */
+/* ジャンルフィルター */
 .genre-filter-area {
     max-width: 800px;
-    margin: 20px auto 0;
+    margin: 30px auto 0;
     text-align: center;
 }
 
@@ -127,7 +139,7 @@ html, body {
     font-size: 0.7rem; 
     font-weight: bold;
     color: #999;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     letter-spacing: 1px;
 }
 
@@ -149,8 +161,8 @@ html, body {
 
 .genre-name {
     display: inline-block;
-    padding: 4px 10px;
-    border: 1px solid #ddd;
+    padding: 6px 12px;
+    border: 1px solid #eee;
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: bold;
@@ -195,7 +207,10 @@ html, body {
     cursor: pointer;
 }
 
-/* --- 5. プロフィールカード (一覧) --- */
+
+/* ==================================================
+   Profile Grid & Card
+   ================================================== */
 .profile-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -331,7 +346,7 @@ html, body {
 
 
 /* ==================================================
-   ★現代アート風モーダル (Art Layout - Clean)
+   Modal Styles (Art Layout)
    ================================================== */
 
 .qr-modal-overlay {
@@ -378,7 +393,6 @@ html, body {
     transform: scale(1);
 }
 
-/* 閉じるボタン */
 .qr-modal-close {
     position: absolute;
     top: 0;
@@ -393,7 +407,6 @@ html, body {
 }
 
 .qr-modal-close:hover {
-    background: transparent;
     transform: rotate(90deg);
 }
 
@@ -407,18 +420,10 @@ html, body {
     height: 2px;
     background-color: #000; 
 }
+.qr-modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+.qr-modal-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
 
-.qr-modal-close::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.qr-modal-close::after {
-    transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.close-line { display: none; }
-
-/* 画像セクション */
+/* モーダル画像エリア */
 .art-image-section {
     flex: 0 0 40%;
     position: relative;
@@ -434,22 +439,7 @@ html, body {
     opacity: 0.95;
 }
 
-/* ★修正: モーダル内の役職バッジ（黒背景・白文字・位置調整） */
-.art-role-badge {
-    display: inline-block;
-    background: #000;
-    color: #fff;
-    font-size: 0.8rem;
-    font-weight: 900;
-    padding: 6px 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    transform: translateY(2px); 
-    box-shadow: none;
-}
-
-/* 情報セクション */
+/* モーダル情報エリア */
 .art-info-section {
     flex: 1;
     padding: 50px 60px;
@@ -460,7 +450,6 @@ html, body {
     box-sizing: border-box; 
 }
 
-/* ★修正: 名前とバッジを並べるラッパー */
 .art-name-wrapper {
     display: flex;
     align-items: center;
@@ -473,10 +462,23 @@ html, body {
     font-size: 3.5rem;
     font-weight: 900;
     line-height: 0.9;
-    margin: 0; /* ラッパーで余白管理 */
+    margin: 0;
     text-transform: uppercase;
     letter-spacing: -2px;
     color: #000;
+}
+
+.art-role-badge {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 900;
+    padding: 6px 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transform: translateY(2px); 
 }
 
 .art-meta-row {
@@ -489,18 +491,9 @@ html, body {
     margin-bottom: 30px;
 }
 
-.art-slash {
-    color: #ccc;
-    font-weight: 300;
-}
-
-.art-location, .art-genre {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.art-genre {
-    color: #666;
-}
+.art-slash { color: #ccc; font-weight: 300; }
+.art-genre { color: #666; text-transform: uppercase; }
+.art-location { text-transform: uppercase; letter-spacing: 1px; }
 
 .art-insta-link {
     text-decoration: none;
@@ -513,25 +506,14 @@ html, body {
     transition: border-bottom 0.3s;
     font-weight: bold;
 }
-.art-insta-link:hover {
-    border-bottom: 1px solid #000;
-}
+.art-insta-link:hover { border-bottom: 1px solid #000; }
 
 .insta-icon {
-    width: 18px; 
-    height: 18px;
-    object-fit: contain;
-    margin-right: 5px;
+    width: 18px; height: 18px; object-fit: contain; margin-right: 5px;
 }
 
 .insta-suffix {
-    color: #ccc; 
-    font-size: 0.8rem;
-    font-weight: 900;
-    letter-spacing: 1px;
-    margin-left: 10px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-transform: none; 
+    color: #ccc; font-size: 0.8rem; font-weight: 900; letter-spacing: 1px; margin-left: 10px;
 }
 
 .art-info-footer {
@@ -542,165 +524,53 @@ html, body {
     padding-top: 20px;
 }
 
-.art-qr-container img {
-    width: 100px;
-    height: 100px;
-    mix-blend-mode: multiply;
-}
+.art-qr-container img { width: 100px; height: 100px; mix-blend-mode: multiply; }
 
 .art-scan-text {
-    font-size: 0.8rem;
-    font-weight: 900;
-    color: #ccc;
-    letter-spacing: 2px;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    margin: 0;
+    font-size: 0.8rem; font-weight: 900; color: #ccc;
+    letter-spacing: 2px; writing-mode: vertical-rl; transform: rotate(180deg); margin: 0;
 }
 
-/* --- モーダルのレスポンシブ (スマホ対応) --- */
-/* --- モーダルのレスポンシブ (スマホ対応・サイズ再調整版) --- */
-/* ==================================================
-   ★スマホ対応 (ProMax用ゆとり設定 & iPhone12用縮小設定)
-   ================================================== */
 
-/* ① スマホ全般 (iPhone 16 Pro Max など大きいスマホ向け) */
-/* ここでは「元通り」に近い、少し大きめのサイズを指定します */
+/* ==================================================
+   Responsive (Smartphone)
+   ================================================== */
 @media (max-width: 768px) {
-    /* --- 共通レイアウト --- */
-    .dig-logo {
-        width: min(300px, 70vw);
-        top: 80px;
-    }
-    .dig-content {
-        padding-top: 300px;
-    }
+    /* コンテンツ幅調整 */
+    .explore-container { padding: 0 15px; }
+    
+    /* ロゴサイズ */
+    .explore-hero-logo img { width: 200px; }
+
+    /* グリッド: スマホでは3列キツイので2列または1列へ */
     .profile-list {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* 元の指定維持(小さくなる) */
         gap: 10px;
     }
+    /* さらに画面が狭い場合 */
+    @media (max-width: 500px) {
+        .profile-list { grid-template-columns: repeat(2, 1fr); }
+    }
+
     .profile-info { padding: 10px; }
-    .profile-name { font-size: 0.8rem; }
+    .profile-name { font-size: 0.9rem; }
     .profile-loc { font-size: 0.6rem; }
-    .profile-genre-text { display: none; }
+    .profile-genre-text { display: none; } /* スマホでは省略 */
     .profile-bottom-row { justify-content: center; gap: 10px; }
     .mini-qr { width: 20px; height: 20px; }
     .service-icon { width: 18px; height: 18px; }
-    .profile-card .role-badge { 
-        font-size: 0.5rem; 
-        padding: 2px 4px; 
-    }
-
-    /* --- モーダル (Pro Max用の大きめ設定) --- */
+    
+    /* モーダルレスポンシブ */
     .qr-modal-content.art-layout {
         flex-direction: column;
         height: auto;
-        max-height: 90vh; /* 余裕を持たせる */
-        width: 85%;
+        max-height: 90vh;
+        width: 90%;
         overflow-y: auto; 
     }
-
-    /* 画像: 大きめに戻す */
-    .art-image-section {
-        height: 280px; 
-        flex: none;
-    }
-
-    /* 余白: ゆったり */
-    .art-info-section {
-        padding: 30px;
-        flex: 1;
-        gap: 15px;
-        justify-content: space-between;
-    }
-
-    .art-name-wrapper {
-        gap: 12px;
-        margin-bottom: 15px;
-    }
-
-    /* 名前: 大きく */
-    .art-name {
-        font-size: 2.5rem;
-    }
-    
-    .art-role-badge {
-        font-size: 0.7rem;
-        padding: 5px 10px;
-        transform: translateY(0);
-    }
-
-    .art-meta-row {
-        margin-bottom: 20px;
-        font-size: 1rem;
-    }
-
-    .art-qr-container img {
-        width: 100px; /* 元のサイズ */
-        height: 100px;
-    }
-
-    .art-info-footer {
-        flex-direction: row-reverse;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
-    }
-    
-    .art-scan-text {
-        writing-mode: horizontal-tb;
-        transform: none;
-        font-size: 0.8rem;
-    }
-
-    .qr-modal-close::before,
-    .qr-modal-close::after {
-        background-color: #ccc; 
-    }
-}
-
-/* ② iPhone 12 / 13 / 14 / 15 (幅430px以下) 向けの縮小設定 */
-/* ここで、画面が狭い場合だけ要素を小さく上書きします */
-@media (max-width: 430px) {
-    
-    /* モーダル全体の高さを制限 */
-    .qr-modal-content.art-layout {
-        max-height: 88vh; 
-    }
-
-    /* 画像を縮小 (280px -> 200px) */
-    .art-image-section {
-        height: 200px; 
-    }
-
-    /* 余白を詰める (30px -> 20px) */
-    .art-info-section {
-        padding: 20px; 
-        gap: 10px;
-    }
-
-    .art-name-wrapper {
-        margin-bottom: 8px;
-    }
-
-    /* 文字サイズを縮小 (2.5rem -> 2.0rem) */
-    .art-name {
-        font-size: 2.0rem; 
-    }
-
-    .art-meta-row {
-        font-size: 0.85rem;
-        margin-bottom: 15px;
-    }
-
-    /* QRコードを少し小さく (100px -> 90px) */
-    .art-qr-container img {
-        width: 90px;
-        height: 90px;
-    }
-    
-    .art-info-footer {
-        padding-top: 15px;
-    }
+    .art-image-section { height: 250px; flex: none; }
+    .art-info-section { padding: 25px; flex: 1; gap: 15px; }
+    .art-name { font-size: 2.2rem; }
+    .art-info-footer { flex-direction: row-reverse; align-items: center; }
+    .art-scan-text { writing-mode: horizontal-tb; transform: none; font-size: 0.7rem; }
 }
