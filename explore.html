@@ -43,6 +43,7 @@
     </div>
 
     <div class="explore-container">
+        
         <div class="dig-content">
             <div class="search-area">
                 <div class="search-box">
@@ -71,37 +72,37 @@
             
             <div class="art-image-section">
                 <img src="" alt="Profile Photo" id="modalPhoto">
+                <span class="art-role-overlay" id="modalRole">DJ</span>
             </div>
 
             <div class="art-info-section">
+                
                 <div class="art-info-header">
-                    <div class="art-name-wrapper">
-                        <h2 class="art-name" id="modalName">NAME</h2>
-                        <span class="art-role-badge" id="modalRole">DJ</span>
-                    </div>
-                    
+                    <h2 class="art-name" id="modalName">NAME</h2>
                     <div class="art-meta-row">
                         <span class="art-location" id="modalLocation">TOKYO</span>
                         <span class="art-slash">/</span>
                         <span class="art-genre" id="modalGenre">GENRE</span>
                     </div>
-                    
-                    <div class="art-insta-wrapper" id="modalInstaArea">
-                        <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
-                            <img src="images/InstagramLogo.png" alt="IG" class="insta-icon">
-                            <span class="insta-val" id="modalInstaName">username</span>
-                            <span class="insta-suffix">Tap & Check the profile</span>
-                        </a>
-                    </div>
                 </div>
 
-                <div class="art-info-footer">
-                    <div class="art-qr-container">
+                <div class="art-qr-wrapper">
+                    <div class="art-qr-box">
                         <a id="modalQrLink" href="#" target="_blank" rel="noopener noreferrer">
                             <img src="" alt="QR Code" id="modalQr">
                         </a>
                     </div>
-                    <p class="art-scan-text">Tap or Scan the QR</p>
+                    <p class="art-instruction-text">Tap or Scan the QR</p>
+                </div>
+
+                <div class="art-info-footer" id="modalInstaArea">
+                    <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
+                        <div class="insta-left">
+                            <img src="images/InstagramLogo.png" alt="IG" class="insta-icon">
+                            <span class="insta-val" id="modalInstaName">username</span>
+                        </div>
+                        <span class="art-instruction-text">Tap & Check the profile</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -241,10 +242,27 @@
             modalPhoto.src = imageSrc;
             modalQr.src = qrSrc;
             modalQrLink.href = linkUrl;
-            if (role) { modalRole.textContent = role; modalRole.style.display = "block"; } else { modalRole.style.display = "none"; }
-            if (instaId) { modalInstaArea.style.display = "block"; modalInstaName.textContent = instaId; modalInstaLink.href = "https://instagram.com/" + instaId; } else { modalInstaArea.style.display = "none"; }
+            
+            // Roleの表示制御
+            if (role) { 
+                modalRole.textContent = role; 
+                modalRole.style.display = "block"; 
+            } else { 
+                modalRole.style.display = "none"; 
+            }
+            
+            // Instaの表示制御
+            if (instaId) { 
+                modalInstaArea.style.display = "flex"; // flexで表示
+                modalInstaName.textContent = instaId; 
+                modalInstaLink.href = "https://instagram.com/" + instaId; 
+            } else { 
+                modalInstaArea.style.display = "none"; 
+            }
+            
             modal.classList.add('active');
         };
+        
         window.closeQrModal = function() { modal.classList.remove('active'); };
         modal.addEventListener('click', (e) => { if (e.target === modal) closeQrModal(); });
         init();
