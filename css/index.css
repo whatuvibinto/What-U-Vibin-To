@@ -46,10 +46,18 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 0 6vw;
-    background: #F9F9F9; 
-    border-bottom: 1px solid #eee; /* 境界線も少し濃く */
-    /*background: rgba(255, 255, 255, 0.9);*/
-    backdrop-filter: blur(10px);
+    /*background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);*/
+    /* 1. 背景色: 完全な白ではなく、少し透けさせる */
+    background: rgba(255, 255, 255, 0.8); 
+    
+    /* 2. すりガラス効果: ぼかしを強める (10px -> 20px) */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px); /* Safari用 */
+
+    /* 3. 境界線: 下にうっすら線を入れて、メイン画面との区切りを作る */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
     z-index: 100;
 }
 
