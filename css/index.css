@@ -111,8 +111,8 @@ a { text-decoration: none; color: inherit; }
 /* Background Graphic (復元済み) */
 .hero-background {
     position: absolute; 
-    bottom: -5%; 
-    right: -50%; width: 140%; height: 70%;
+    bottom: 0%; 
+    right: -10%; width: 140%; height: 70%;
     z-index: 0; overflow: visible; pointer-events: none;
     transform: rotate(-20deg); transform-origin: center center;
 }
@@ -137,8 +137,8 @@ a { text-decoration: none; color: inherit; }
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    bottom: 40px; /* フッターの上、十分な余白エリア */
-    left: 6vw;    /* 画面左端のパディングに合わせる */
+    bottom: 120px; /* フッターの上、十分な余白エリア */
+    left: 10vw;    /* 画面左端のパディングに合わせる */
     width: auto;
     
     display: flex;
