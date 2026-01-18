@@ -277,28 +277,42 @@ a {
 }
 
 /* ==================================================
-   Background Graphic
+   Background Graphic (修正版)
    ================================================== */
 .hero-background {
     position: absolute;
-    bottom: 0;
-    right: -50%;
-    width: 80%;
-    height: 60%;
-    z-index: 1;
-    overflow: hidden;
+    
+    /* 画面上部へ移動 (bottomを上げて調整) */
+    bottom: 15%;
+    
+    /* 右側にはみ出させて端の切れ目を隠す */
+    right: -20%;
+    width: 140%; /* 幅を大きくしてカバー範囲を広げる */
+    height: 70%;
+    
+    z-index: 0;
+    overflow: visible;
     pointer-events: none;
-    transform: rotate(-20deg);
-    transform-origin: bottom right;
+    
+    /* 反時計回りに回転 */
+    transform: rotate(-5deg);
+    transform-origin: center center;
 }
 
 .bg-graphic {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: bottom right;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 50%, black 100%);
-    mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 50%, black 100%);
+    object-position: center;
+    
+    /* 左側(文字エリア)を透明にし、右に向かって徐々に濃くするグラデーション */
+    /* transparent 0% (左端) -> black 100% (右端) */
+    /* これにより文字と被る左半分が自然に消えます */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 45%, black 85%);
+    mask-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 45%, black 85%);
+    
+    /* 全体の強さを少し抑える */
+    opacity: 0.95;
 }
 
 /* ==================================================
@@ -341,4 +355,11 @@ a {
     
     .menu-link .en-text { font-size: 2.5rem; }
     .menu-link .jp-sub { font-size: 1rem; }
+    
+    /* PCでは背景位置を微調整 */
+    .hero-background {
+        width: 100%;
+        right: -10%;
+        bottom: 5%;
+    }
 }
