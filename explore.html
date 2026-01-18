@@ -72,13 +72,16 @@
             
             <div class="art-image-section">
                 <img src="" alt="Profile Photo" id="modalPhoto">
-                <span class="art-role-overlay" id="modalRole">DJ</span>
             </div>
 
             <div class="art-info-section">
                 
                 <div class="art-info-header">
-                    <h2 class="art-name" id="modalName">NAME</h2>
+                    <div class="art-name-row">
+                        <h2 class="art-name" id="modalName">NAME</h2>
+                        <span class="art-role-badge" id="modalRole">DJ</span>
+                    </div>
+
                     <div class="art-meta-row">
                         <span class="art-location" id="modalLocation">TOKYO</span>
                         <span class="art-slash">/</span>
@@ -246,14 +249,14 @@
             // Roleの表示制御
             if (role) { 
                 modalRole.textContent = role; 
-                modalRole.style.display = "block"; 
+                modalRole.style.display = "inline-block"; // inline-blockに変更
             } else { 
                 modalRole.style.display = "none"; 
             }
             
             // Instaの表示制御
             if (instaId) { 
-                modalInstaArea.style.display = "flex"; // flexで表示
+                modalInstaArea.style.display = "flex";
                 modalInstaName.textContent = instaId; 
                 modalInstaLink.href = "https://instagram.com/" + instaId; 
             } else { 
