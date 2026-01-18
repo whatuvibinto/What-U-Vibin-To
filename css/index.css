@@ -157,4 +157,211 @@ a {
     font-size: 0.85rem;
     font-weight: 400;
     color: #666;
-    letter-spacing: 0
+    letter-spacing: 0.05em;
+}
+
+/* ==================================================
+   Main Hero Section
+   ================================================== */
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    padding: 0 6vw;
+    z-index: 10;
+    position: relative;
+}
+
+.hero-text {
+    margin-top: 5vh;
+}
+
+.main-copy {
+    font-family: var(--font-jp);
+    font-size: 11vw;
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 2vh;
+    color: #000;
+}
+
+.sub-copy-jp {
+    font-size: 4vw;
+    font-weight: 700;
+    margin-bottom: 4vh;
+    color: #333;
+}
+
+.sub-copy-en {
+    font-family: var(--font-en);
+    font-size: 3.8vw;
+    font-weight: 400;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 6vh;
+}
+
+/* ==================================================
+   Hero Actions (Buttons & Support Text)
+   ================================================== */
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.action-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px; 
+}
+
+.btn-sub-text {
+    font-family: var(--font-jp);
+    font-size: 3vw;
+    font-weight: 500;
+    color: #888;
+    margin-left: 15px;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 4vw;
+    font-weight: 600;
+    transition: transform 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3);
+    width: auto;
+    min-width: 60%;
+}
+
+.btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 12px 28px;
+    font-size: 3.5vw;
+}
+
+.btn-secondary .arrow {
+    margin-left: 8px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/* ==================================================
+   Background Graphic (修正版: 自然なフェードと端の処理)
+   ================================================== */
+.hero-background {
+    position: absolute;
+    
+    /* 画面からはみ出すくらい大きく設定し、端を見せない */
+    width: 160%;
+    height: 120%;
+    
+    /* 位置調整: 右下に寄せる */
+    bottom: -20%;
+    right: -30%;
+    
+    z-index: 0;
+    overflow: visible;
+    pointer-events: none;
+    
+    /* 回転 */
+    transform: rotate(-10deg);
+    transform-origin: center center;
+}
+
+.bg-graphic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    
+    /* 左側(文字エリア)を完全透明にし、中央付近から徐々に画像を表示させる */
+    /* 0%〜25%: 完全透明 */
+    /* 25%〜60%: 徐々に表示 */
+    /* 60%〜: 画像本来の色 */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 25%, rgba(0,0,0,0.5) 45%, black 70%);
+    mask-image: linear-gradient(to right, transparent 0%, transparent 25%, rgba(0,0,0,0.5) 45%, black 70%);
+    
+    /* 全体を少し薄くして馴染ませる */
+    opacity: 0.9;
+}
+
+/* ==================================================
+   Bottom Footer (Fixed)
+   ================================================== */
+.site-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+    
+    text-align: center;
+    font-family: var(--font-en);
+    font-size: 0.65rem;
+    color: #999;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 200; 
+}
+
+/* ==================================================
+   Responsive Tweaks (Over 768px - Tablet/PC)
+   ================================================== */
+@media (min-width: 768px) {
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .main-copy { font-size: 3.5rem; }
+    .sub-copy-jp { font-size: 1.2rem; }
+    .sub-copy-en { font-size: 1rem; }
+    
+    .btn { font-size: 1rem; padding: 15px 40px; }
+    .btn-secondary { font-size: 0.9rem; }
+    .btn-sub-text { font-size: 0.8rem; margin-left: 20px; }
+    
+    .menu-link .en-text { font-size: 2.5rem; }
+    .menu-link .jp-sub { font-size: 1rem; }
+    
+    /* PCでは位置を微調整 */
+    .hero-background {
+        width: 120%;
+        height: 100%;
+        right: -10%;
+        bottom: -10%;
+    }
+}
