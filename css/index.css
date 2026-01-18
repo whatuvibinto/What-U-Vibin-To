@@ -277,25 +277,25 @@ a {
 }
 
 /* ==================================================
-   Background Graphic (修正版: 自然なフェードと端の処理)
+   Background Graphic (一つ前の状態に戻しました)
    ================================================== */
 .hero-background {
     position: absolute;
     
-    /* 画面からはみ出すくらい大きく設定し、端を見せない */
-    width: 160%;
-    height: 120%;
+    /* 画面上部へ移動 (0 -> 15% 程度) */
+    bottom: 15%;
     
-    /* 位置調整: 右下に寄せる */
-    bottom: -20%;
-    right: -30%;
+    /* 画像の端が見えないよう、幅を広げて右にはみ出させる */
+    right: -20%; 
+    width: 140%; 
+    height: 70%;
     
-    z-index: 0;
-    overflow: visible;
+    z-index: 0; /* 文字(z-index:10以上)の裏側に配置 */
+    overflow: visible; /* グラデーションを綺麗に見せるためvisible推奨 */
     pointer-events: none;
     
-    /* 回転 */
-    transform: rotate(-10deg);
+    /* 反時計回りに回転 */
+    transform: rotate(-5deg);
     transform-origin: center center;
 }
 
@@ -305,15 +305,13 @@ a {
     object-fit: cover;
     object-position: center;
     
-    /* 左側(文字エリア)を完全透明にし、中央付近から徐々に画像を表示させる */
-    /* 0%〜25%: 完全透明 */
-    /* 25%〜60%: 徐々に表示 */
-    /* 60%〜: 画像本来の色 */
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 25%, rgba(0,0,0,0.5) 45%, black 70%);
-    mask-image: linear-gradient(to right, transparent 0%, transparent 25%, rgba(0,0,0,0.5) 45%, black 70%);
+    /* 左側(文字エリア)を透明にし、右に向かって徐々に濃くするグラデーション */
+    /* to right: 左(透明) → 中央(薄い) → 右(はっきり) */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 45%, black 85%);
+    mask-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(0,0,0,0.5) 45%, black 85%);
     
-    /* 全体を少し薄くして馴染ませる */
-    opacity: 0.9;
+    /* 全体の強さを少し抑えて文字を読みやすくする */
+    opacity: 0.95;
 }
 
 /* ==================================================
@@ -357,7 +355,7 @@ a {
     .menu-link .en-text { font-size: 2.5rem; }
     .menu-link .jp-sub { font-size: 1rem; }
     
-    /* PCでは位置を微調整 */
+    /* PCでは背景位置を微調整 */
     .hero-background {
         width: 120%;
         height: 100%;
