@@ -13,7 +13,7 @@
 
     <header class="site-header">
         <div class="logo-container">
-            <a href="#" onclick="closeExplore()">
+            <a href="#" onclick="closeExplore(); return false;">
                 <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="header-logo">
             </a>
         </div>
@@ -73,8 +73,8 @@
         <div class="swipe-indicator-area" onclick="openExplore()">
             <div class="swipe-arrow"></div>
             <div class="swipe-text">
+                <span class="jp">スワイプアップして<br>あの人の"この時間"をのぞく</span>
                 <span class="en">Swipe up to Explore</span>
-                <span class="jp">あの人の"この時間"に聴いている曲をのぞく</span>
             </div>
         </div>
     </main>
@@ -169,9 +169,16 @@
         }
         menuBtn.addEventListener('click', toggleMenu);
 
+        // --- Explore開閉 (アニメーション連動) ---
         window.openExplore = function() {
+            // Exploreを表示
             exploreOverlay.classList.add('active');
+            
+            // Heroをアニメーションさせて隠す
+            heroSection.classList.add('hero-hidden');
+            
             isExploreOpen = true;
+            
             if (!window.exploreInitialized) {
                 initExplore();
                 window.exploreInitialized = true;
@@ -179,12 +186,17 @@
         };
 
         window.closeExplore = function() {
+            // Exploreを隠す
             exploreOverlay.classList.remove('active');
+            
+            // Heroをアニメーションさせて元に戻す
+            heroSection.classList.remove('hero-hidden');
+            
             isExploreOpen = false;
             setTimeout(() => { exploreOverlay.scrollTop = 0; }, 500);
         };
 
-        // --- ★修正: スワイプ検知 (画面下部のみ) ---
+        // --- スワイプ検知 (画面下部のみ) ---
         let touchStartY = 0;
         let touchEndY = 0;
 
@@ -202,16 +214,16 @@
             const threshold = 50; 
             const windowHeight = window.innerHeight;
             
-            // ★修正: 画面の下15%エリア (フッター付近) から開始した場合のみ判定
+            // 画面の下15%エリアから開始した場合のみ判定
             const isBottomTriggerArea = touchStartY > (windowHeight * 0.85);
 
             if (!isExploreOpen) {
-                // Exploreが開いていない時は、下部エリアでの上スワイプのみ反応
+                // 下部エリアでの上スワイプで開く
                 if (isBottomTriggerArea && swipeDistance > threshold) {
                     openExplore();
                 }
             } else {
-                // Exploreが開いている時は、上部からの下スワイプで閉じる
+                // 上部からの下スワイプで閉じる
                 if (exploreOverlay.scrollTop <= 0 && swipeDistance < -threshold) {
                     closeExplore();
                 }
