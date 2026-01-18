@@ -46,11 +46,14 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 0 6vw;
+    
     /* 背景色: 完全な白ではなく、少し透けさせる */
     background: rgba(255, 255, 255, 0.8); 
+    
     /* すりガラス効果: ぼかしを強める */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+
     /* 境界線: 下にうっすら線を入れてエリアを区切る */
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
@@ -58,4 +61,304 @@ a {
 }
 
 .header-logo {
-    height: 50px
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
+/* Hamburger Button */
+.menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 30px;
+    height: 24px;
+    position: relative;
+    z-index: 110;
+}
+
+.menu-btn span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #000;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s ease;
+}
+
+.menu-btn span:nth-child(1) { top: 0; }
+.menu-btn span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.menu-btn span:nth-child(3) { bottom: 0; }
+
+.menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg);
+    top: 11px;
+}
+.menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+.menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg);
+    bottom: 11px;
+}
+
+/* ==================================================
+   Slide Menu Panel
+   ================================================== */
+.menu-panel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* フッターと被らないよう下部に余白を設ける */
+    padding-bottom: 60px; 
+}
+
+.menu-panel.active {
+    right: 0;
+}
+
+.menu-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* アイテム間の余白 */
+    text-align: center;
+    width: 80%;
+}
+
+/* メニューリンクのレイアウト */
+.menu-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px; 
+    transition: opacity 0.3s;
+}
+
+.menu-link:hover {
+    opacity: 0.6;
+}
+
+/* メニュー: 英語メイン */
+.menu-link .en-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #000;
+    line-height: 1;
+}
+
+.menu-link.highlight .en-text {
+    color: var(--primary-color);
+}
+
+/* メニュー: 日本語サブ */
+.menu-link .jp-sub {
+    font-family: var(--font-jp);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #666;
+    letter-spacing: 0.05em;
+}
+
+/* ==================================================
+   Main Hero Section
+   ================================================== */
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 60px; /* フッター回避用 */
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    padding: 0 6vw;
+    z-index: 10;
+    position: relative;
+}
+
+.hero-text {
+    margin-top: 5vh;
+}
+
+.main-copy {
+    font-family: var(--font-jp);
+    font-size: 11vw;
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 2vh;
+    color: #000;
+}
+
+.sub-copy-jp {
+    font-size: 4vw;
+    font-weight: 700;
+    margin-bottom: 4vh;
+    color: #333;
+}
+
+.sub-copy-en {
+    font-family: var(--font-en);
+    font-size: 3.8vw;
+    font-weight: 400;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 6vh;
+}
+
+/* ==================================================
+   Hero Actions (Buttons & Support Text)
+   ================================================== */
+.hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* ボタンセット同士の間隔 */
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* ボタンと日本語テキストをまとめるグループ */
+.action-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px; /* ボタンと下の文字の間隔 */
+}
+
+/* ボタン下の日本語サポートテキスト */
+.btn-sub-text {
+    font-family: var(--font-jp);
+    font-size: 3vw; /* スマホで見やすい約12px前後 */
+    font-weight: 500;
+    color: #888;
+    margin-left: 15px; /* ボタンの丸みに合わせてインデント */
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* 共通ボタン設定 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 4vw; /* スマホで押しやすい約16px前後 */
+    font-weight: 600;
+    transition: transform 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* メインボタン (紫) */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3);
+    width: auto;
+    min-width: 60%;
+}
+
+/* サブボタン (グレー) */
+.btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 12px 28px;
+    font-size: 3.5vw; /* メインより少し小さく */
+}
+
+.btn-secondary .arrow {
+    margin-left: 8px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/* ==================================================
+   Background Graphic
+   ================================================== */
+.hero-background {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 80%;
+    height: 60%;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.bg-graphic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: bottom right;
+    /* 文字と被る左側をフェードアウトさせるマスク */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 50%, black 100%);
+    mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 50%, black 100%);
+}
+
+/* ==================================================
+   Bottom Footer (Fixed)
+   ================================================== */
+.site-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0;
+    
+    text-align: center;
+    font-family: var(--font-en);
+    font-size: 0.65rem;
+    color: #999;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+    
+    /* メニューが開いても最前面に表示 */
+    z-index: 200; 
+}
+
+/* ==================================================
+   Responsive Tweaks (Over 768px - Tablet/PC)
+   ================================================== */
+@media (min-width: 768px) {
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .main-copy { font-size: 3.5rem; }
+    .sub-copy-jp { font-size: 1.2rem; }
+    .sub-copy-en { font-size: 1rem; }
+    
+    /* PCでのボタン周り調整 */
+    .btn { font-size: 1rem; padding: 15px 40px; }
+    .btn-secondary { font-size: 0.9rem; }
+    .btn-sub-text { font-size: 0.8rem; margin-left: 20px; }
+    
+    /* PCでのメニュー調整 */
+    .menu-link .en-text { font-size: 2.5rem; }
+    .menu-link .jp-sub { font-size: 1rem; }
+}
