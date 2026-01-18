@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
 /* ==================================================
-   Explore Page Layout
+   Explore Page Layout (Mobile First)
    ================================================== */
 
-/* index.cssでのスクロール固定設定を解除してスクロール可能にする */
+/* index.cssでのスクロール固定設定を解除 */
 html, body {
     overflow: auto !important;
     height: auto !important;
@@ -13,55 +13,29 @@ html, body {
 
 .explore-page {
     background-color: #ffffff;
-    padding-top: 80px; /* 固定ヘッダーの分だけ下げる */
+    padding-top: 80px; /* ヘッダー分 */
 }
 
 .explore-container {
     width: 100%;
-    max-width: 1200px;
+    /* PCで広がりすぎないように制限 */
+    max-width: 800px; 
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 4vw; /* 左右余白をスマホ最適化 */
 }
 
-/* 中央配置の大きいロゴエリア */
-.explore-hero-logo {
-    text-align: center;
-    padding: 40px 0 30px; /* 上下の余白 */
-    width: 100%;
-}
-
-.explore-hero-logo img {
-    /* ロゴサイズ調整: 元のsvgが横長であることを想定 */
-    width: 300px;
-    max-width: 80%;
-    height: auto;
-    display: inline-block;
-    
-    /* 軽くフェードインアニメーション */
-    animation: fadeInLogo 1s ease-out;
-}
-
-@keyframes fadeInLogo {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* メインコンテンツエリア調整 */
+/* メインコンテンツエリア */
 .dig-content {
-    /* 固定パディングを削除し、自然な流れにする */
     padding-top: 20px; 
     width: 100%;
-    max-width: 900px; /* カード一覧の幅制限 */
-    margin: 0 auto;
-    padding-bottom: 60px;
+    padding-bottom: 80px; /* フッター被り防止 */
 }
 
-
 /* ==================================================
-   Search & Filter (Existing Styles)
+   Search & Filter
    ================================================== */
 .search-area {
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     text-align: center;
     width: 100%;
 }
@@ -69,42 +43,20 @@ html, body {
 .search-box {
     position: relative;
     display: inline-block;
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    border: none;
+    width: 90%; /* スマホで幅広く */
     border-bottom: 1px solid #e0e0e0;
-    background: transparent;
-    transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.search-box:focus-within {
-    border-bottom: 1px solid #000;
 }
 
 .search-input {
     width: 100%;
-    padding: 15px 90px 15px 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.2rem;
+    padding: 10px 80px 10px 0;
+    font-size: 1rem;
     font-weight: 500;
     color: #000;
     background: transparent;
     border: none;
     outline: none;
-    box-sizing: border-box;
     border-radius: 0;
-}
-
-.search-input::placeholder {
-    color: #ccc;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-    transition: opacity 0.3s;
-}
-
-.search-input:focus::placeholder {
-    opacity: 0.5;
 }
 
 .search-btn {
@@ -113,33 +65,24 @@ html, body {
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
-    color: #000;
     border: none;
-    padding: 0;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 900;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     cursor: pointer;
-    text-transform: uppercase;
-    transition: opacity 0.3s, transform 0.3s;
-}
-
-.search-btn:hover {
-    opacity: 0.6;
 }
 
 /* ジャンルフィルター */
 .genre-filter-area {
-    max-width: 800px;
-    margin: 30px auto 0;
+    margin: 20px auto 0;
     text-align: center;
 }
 
 .genre-label {
-    font-size: 0.7rem; 
+    font-size: 0.65rem; 
     font-weight: bold;
     color: #999;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     letter-spacing: 1px;
 }
 
@@ -147,51 +90,24 @@ html, body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px; 
+    gap: 6px; 
 }
 
-.genre-tag {
-    cursor: pointer;
-    user-select: none;
-}
-
-.genre-tag input[type="checkbox"] {
-    display: none;
-}
+.genre-tag input[type="checkbox"] { display: none; }
 
 .genre-name {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 5px 10px;
     border: 1px solid #eee;
     border-radius: 4px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: bold;
     color: #666;
     background: #fff;
-    transition: all 0.2s;
     text-transform: uppercase;
 }
 
-.genre-tag:hover .genre-name {
-    border-color: #000;
-    color: #000;
-}
-
 .genre-tag input[type="checkbox"]:checked + .genre-name {
-    background: #000;
-    color: #fff;
-    border-color: #000;
-}
-
-/* DJ MIXタグ */
-.genre-tag.special-tag .genre-name {
-    border: 2px solid #000; 
-    font-size: 0.85rem;     
-    padding: 5px 15px;      
-    color: #000;            
-}
-
-.genre-tag.special-tag input[type="checkbox"]:checked + .genre-name {
     background: #000;
     color: #fff;
     border-color: #000;
@@ -202,19 +118,19 @@ html, body {
     background: none;
     border: none;
     text-decoration: underline;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #888;
-    cursor: pointer;
 }
 
-
 /* ==================================================
-   Profile Grid & Card
+   Profile Grid (スマホ3列仕様)
    ================================================== */
 .profile-list {
     display: grid;
+    /* 強制的に3列表示 */
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px; 
+    /* 隙間を狭くして3列を収める */
+    gap: 2vw; 
     width: 100%;
 }
 
@@ -222,34 +138,27 @@ html, body {
     display: flex;
     flex-direction: column;
     background: #fff;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #eee;
+    border-radius: 6px;
     overflow: hidden;
-    border-radius: 8px;
+    position: relative; 
     cursor: pointer;
-    
+    /* アニメーション */
     opacity: 0; 
     animation: fadeInUpCard 0.6s ease-out forwards;
-    position: relative; 
-    height: 100%;
 }
 
 @keyframes fadeInUpCard {
-    0% { opacity: 0; transform: translateY(20px); }
+    0% { opacity: 0; transform: translateY(10px); }
     100% { opacity: 1; transform: translateY(0); }
 }
 
-.profile-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
+/* 画像エリア (正方形) */
 .profile-img {
     width: 100%;
     aspect-ratio: 1 / 1; 
     overflow: hidden;
-    background: #f0f0f0;
+    background: #f5f5f5;
     position: relative; 
 }
 
@@ -257,98 +166,74 @@ html, body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s;
 }
 
-.profile-card:hover .profile-img img {
-    transform: scale(1.05);
-}
-
-/* カード内の役割バッジ */
+/* 役割バッジ (左上に小さく) */
 .role-badge {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #000;
+    top: 4px;
+    right: 4px;
+    background: rgba(0,0,0,0.8);
     color: #fff;
-    font-size: 0.65rem;
-    font-weight: 900;
-    padding: 3px 6px;
+    font-size: 2.5vw; /* 文字サイズ極小 */
+    font-weight: 700;
+    padding: 2px 4px;
     border-radius: 2px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     z-index: 2;
 }
 
+/* カード情報エリア (3列用に極力コンパクト化) */
 .profile-info {
-    padding: 15px;
+    padding: 2vw; /* 狭いパディング */
     text-align: left;
-    flex-grow: 1; 
     display: flex;
     flex-direction: column;
+    gap: 2px;
 }
 
 .profile-name {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 3.2vw; /* iPhone12で約12px程度 */
     font-weight: 900;
     text-transform: uppercase;
     color: #000;
-    line-height: 1.2;
-}
-
-.profile-loc {
-    display: block;
-    font-size: 0.75rem;
-    color: #888;
-    margin-bottom: 8px;
-    font-weight: normal;
-}
-
-.profile-genre-text {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 15px;
+    line-height: 1.1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+.profile-loc {
+    display: block;
+    font-size: 2.5vw; /* かなり小さく */
+    color: #888;
+    font-weight: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 下部のアイコン列 */
 .profile-bottom-row {
     display: flex;
     align-items: center;
-    gap: 15px;
-    border-top: 1px dashed #eee;
-    padding-top: 10px;
-    margin-top: auto; 
+    gap: 1vw;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed #f0f0f0;
 }
 
-.mini-qr-wrapper, .service-icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mini-qr {
-    width: 30px;
-    height: 30px;
+.mini-qr, .service-icon {
+    width: 5vw; /* アイコンも小さく */
+    height: 5vw;
+    object-fit: contain;
     mix-blend-mode: multiply;
 }
 
-.service-icon {
-    width: 24px; 
-    height: 24px;
-    object-fit: contain;
-    transition: transform 0.3s;
-}
-
-
 /* ==================================================
-   Modal Styles (Art Layout)
+   Modal Styles (Art Layout - Mobile Optimized)
    ================================================== */
-
 .qr-modal-overlay {
     position: fixed;
     top: 0;
@@ -363,7 +248,7 @@ html, body {
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+    transition: all 0.3s;
 }
 
 .qr-modal-overlay.active {
@@ -373,20 +258,16 @@ html, body {
 
 .qr-modal-content.art-layout {
     display: flex;
-    width: 900px;
-    max-width: 90%;
-    height: 500px;
+    flex-direction: column; /* スマホ: 縦並び */
+    width: 88%;
+    max-height: 85vh;
     background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    overflow: hidden;
+    border-radius: 16px;
+    overflow-y: auto; /* 縦スクロール許可 */
     position: relative;
-    padding: 0;
-    box-sizing: border-box;
-    text-align: left;
-    
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     transform: scale(0.95);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s;
 }
 
 .qr-modal-overlay.active .qr-modal-content.art-layout {
@@ -397,180 +278,98 @@ html, body {
     position: absolute;
     top: 0;
     right: 0;
-    width: 60px;
-    height: 60px;
-    background: transparent; 
+    width: 50px;
+    height: 50px;
+    background: transparent;
     border: none;
-    cursor: pointer;
     z-index: 100;
-    transition: transform 0.3s;
 }
-
-.qr-modal-close:hover {
-    transform: rotate(90deg);
-}
-
-.qr-modal-close::before,
-.qr-modal-close::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 30px; 
-    height: 2px;
-    background-color: #000; 
+.qr-modal-close::before, .qr-modal-close::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 20px; height: 2px; background-color: #fff; /* 画像の上なら白 */
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
 .qr-modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
 .qr-modal-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
 
-/* モーダル画像エリア */
+/* モーダル画像 */
 .art-image-section {
-    flex: 0 0 40%;
-    position: relative;
-    background: #000;
-    height: 100%;
-}
-
-.art-image-section img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    opacity: 0.95;
+    height: 280px; /* 画像エリア高さ */
+    flex-shrink: 0;
+    background: #000;
+}
+.art-image-section img {
+    width: 100%; height: 100%; object-fit: cover; opacity: 0.9;
 }
 
-/* モーダル情報エリア */
+/* モーダル情報 */
 .art-info-section {
-    flex: 1;
-    padding: 50px 60px;
+    padding: 25px;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-    box-sizing: border-box; 
-}
-
-.art-name-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .art-name {
-    font-size: 3.5rem;
+    font-size: 2.2rem;
     font-weight: 900;
-    line-height: 0.9;
-    margin: 0;
+    line-height: 1;
+    margin: 0 0 5px 0;
     text-transform: uppercase;
-    letter-spacing: -2px;
     color: #000;
-}
-
-.art-role-badge {
-    display: inline-block;
-    background: #000;
-    color: #fff;
-    font-size: 0.8rem;
-    font-weight: 900;
-    padding: 6px 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    transform: translateY(2px); 
 }
 
 .art-meta-row {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
-    color: #000;
+    color: #333;
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 8px;
 }
 
-.art-slash { color: #ccc; font-weight: 300; }
-.art-genre { color: #666; text-transform: uppercase; }
-.art-location { text-transform: uppercase; letter-spacing: 1px; }
+.art-role-badge {
+    background: #000; color: #fff;
+    font-size: 0.7rem; padding: 4px 8px;
+    font-weight: 700; text-transform: uppercase;
+}
 
 .art-insta-link {
-    text-decoration: none;
-    font-size: 1rem;
-    color: #000;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    border-bottom: 1px solid transparent;
-    transition: border-bottom 0.3s;
-    font-weight: bold;
+    display: inline-flex; align-items: center;
+    text-decoration: none; color: #000; font-weight: bold;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #ddd; padding-bottom: 2px;
 }
-.art-insta-link:hover { border-bottom: 1px solid #000; }
-
-.insta-icon {
-    width: 18px; height: 18px; object-fit: contain; margin-right: 5px;
-}
-
-.insta-suffix {
-    color: #ccc; font-size: 0.8rem; font-weight: 900; letter-spacing: 1px; margin-left: 10px;
-}
+.insta-icon { width: 16px; margin-right: 5px; }
 
 .art-info-footer {
+    margin-top: auto;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
+    padding-top: 15px;
     border-top: 1px solid #eee;
-    padding-top: 20px;
 }
 
-.art-qr-container img { width: 100px; height: 100px; mix-blend-mode: multiply; }
+.art-qr-container img { width: 80px; height: 80px; mix-blend-mode: multiply; }
+.art-scan-text { font-size: 0.7rem; font-weight: 700; color: #ccc; letter-spacing: 1px; }
 
-.art-scan-text {
-    font-size: 0.8rem; font-weight: 900; color: #ccc;
-    letter-spacing: 2px; writing-mode: vertical-rl; transform: rotate(180deg); margin: 0;
-}
-
-
-/* ==================================================
-   Responsive (Smartphone)
-   ================================================== */
-@media (max-width: 768px) {
-    /* コンテンツ幅調整 */
-    .explore-container { padding: 0 15px; }
+/* PC画面用の最低限の調整 (拡大表示用) */
+@media (min-width: 769px) {
+    .explore-container { max-width: 1000px; padding: 0 20px; }
+    .profile-list { gap: 15px; }
+    .profile-info { padding: 15px; }
+    .profile-name { font-size: 1rem; }
+    .profile-loc { font-size: 0.75rem; }
+    .mini-qr, .service-icon { width: 24px; height: 24px; }
+    .role-badge { font-size: 0.6rem; padding: 3px 6px; }
     
-    /* ロゴサイズ */
-    .explore-hero-logo img { width: 200px; }
-
-    /* グリッド: スマホでは3列キツイので2列または1列へ */
-    .profile-list {
-        grid-template-columns: repeat(3, 1fr); /* 元の指定維持(小さくなる) */
-        gap: 10px;
-    }
-    /* さらに画面が狭い場合 */
-    @media (max-width: 500px) {
-        .profile-list { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    .profile-info { padding: 10px; }
-    .profile-name { font-size: 0.9rem; }
-    .profile-loc { font-size: 0.6rem; }
-    .profile-genre-text { display: none; } /* スマホでは省略 */
-    .profile-bottom-row { justify-content: center; gap: 10px; }
-    .mini-qr { width: 20px; height: 20px; }
-    .service-icon { width: 18px; height: 18px; }
-    
-    /* モーダルレスポンシブ */
+    /* モーダルPCレイアウト */
     .qr-modal-content.art-layout {
-        flex-direction: column;
-        height: auto;
-        max-height: 90vh;
-        width: 90%;
-        overflow-y: auto; 
+        flex-direction: row; height: 500px; width: 900px; overflow: hidden;
     }
-    .art-image-section { height: 250px; flex: none; }
-    .art-info-section { padding: 25px; flex: 1; gap: 15px; }
-    .art-name { font-size: 2.2rem; }
-    .art-info-footer { flex-direction: row-reverse; align-items: center; }
-    .art-scan-text { writing-mode: horizontal-tb; transform: none; font-size: 0.7rem; }
+    .art-image-section { width: 40%; height: 100%; }
+    .qr-modal-close::before, .qr-modal-close::after { background-color: #000; }
 }
