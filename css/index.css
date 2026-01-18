@@ -34,7 +34,7 @@ a {
 }
 
 /* ==================================================
-   Header (プロ仕様: すりガラス＆境界線)
+   Header
    ================================================== */
 .site-header {
     position: fixed;
@@ -46,17 +46,10 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 0 6vw;
-    
-    /* 背景色: 完全な白ではなく、少し透けさせる */
     background: rgba(255, 255, 255, 0.8); 
-    
-    /* すりガラス効果: ぼかしを強める */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-
-    /* 境界線: 下にうっすら線を入れてエリアを区切る */
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-
     z-index: 100;
 }
 
@@ -119,8 +112,6 @@ a {
     justify-content: center;
     align-items: center;
     transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    
-    /* フッターと被らないよう下部に余白を設ける */
     padding-bottom: 60px; 
 }
 
@@ -131,12 +122,11 @@ a {
 .menu-nav {
     display: flex;
     flex-direction: column;
-    gap: 40px; /* アイテム間の余白 */
+    gap: 40px;
     text-align: center;
     width: 80%;
 }
 
-/* メニューリンクのレイアウト */
 .menu-link {
     display: flex;
     flex-direction: column;
@@ -149,7 +139,6 @@ a {
     opacity: 0.6;
 }
 
-/* メニュー: 英語メイン */
 .menu-link .en-text {
     font-size: 1.8rem;
     font-weight: 700;
@@ -163,7 +152,6 @@ a {
     color: var(--primary-color);
 }
 
-/* メニュー: 日本語サブ */
 .menu-link .jp-sub {
     font-family: var(--font-jp);
     font-size: 0.85rem;
@@ -180,7 +168,7 @@ a {
     width: 100%;
     min-height: 100vh;
     padding-top: 100px;
-    padding-bottom: 60px; /* フッター回避用 */
+    padding-bottom: 60px;
     display: flex;
     flex-direction: column;
 }
@@ -227,39 +215,28 @@ a {
 .hero-actions {
     display: flex;
     flex-direction: column;
-    gap: 25px; /* ボタンセット同士の間隔 */
+    /* ボタン同士の間隔: 日本語が入る分少し広めに設定 */
+    gap: 20px;
     align-items: flex-start;
     width: 100%;
 }
 
-/* ボタンと日本語テキストをまとめるグループ */
+/* How it works用のグループ化スタイル */
 .action-group {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px; /* ボタンと下の文字の間隔 */
+    gap: 8px; /* ボタンと日本語の間隔 */
 }
 
-/* ボタン下の日本語サポートテキスト */
-.btn-sub-text {
-    font-family: var(--font-jp);
-    font-size: 3vw; /* スマホで見やすい約12px前後 */
-    font-weight: 500;
-    color: #888;
-    margin-left: 15px; /* ボタンの丸みに合わせてインデント */
-    letter-spacing: 0.02em;
-    line-height: 1;
-    white-space: nowrap;
-}
-
-/* 共通ボタン設定 */
+/* 共通ボタン設定: 元のサイズ感(padding:15px 30px)に戻しました */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 32px;
+    padding: 15px 30px;
     border-radius: 50px;
-    font-size: 4vw; /* スマホで押しやすい約16px前後 */
+    font-size: 4vw;
     font-weight: 600;
     transition: transform 0.2s;
     white-space: nowrap;
@@ -270,7 +247,6 @@ a {
     transform: scale(0.98);
 }
 
-/* メインボタン (紫) */
 .btn-primary {
     background-color: var(--primary-color);
     color: #fff;
@@ -279,18 +255,30 @@ a {
     min-width: 60%;
 }
 
-/* サブボタン (グレー) */
 .btn-secondary {
     background-color: #f0f0f0;
     color: #333;
+    /* Secondaryは少し控えめなサイズ感を維持 */
     padding: 12px 28px;
-    font-size: 3.5vw; /* メインより少し小さく */
+    font-size: 3.5vw;
 }
 
 .btn-secondary .arrow {
     margin-left: 8px;
     font-size: 0.8em;
     font-weight: bold;
+}
+
+/* How it works下の日本語 */
+.btn-sub-text {
+    font-family: var(--font-jp);
+    font-size: 3vw;
+    font-weight: 500;
+    color: #888;
+    margin-left: 15px;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 /* ==================================================
@@ -312,7 +300,6 @@ a {
     height: 100%;
     object-fit: cover;
     object-position: bottom right;
-    /* 文字と被る左側をフェードアウトさせるマスク */
     -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 50%, black 100%);
     mask-image: linear-gradient(to right, transparent 0%, transparent 10%, black 50%, black 100%);
 }
@@ -336,8 +323,6 @@ a {
     
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(5px);
-    
-    /* メニューが開いても最前面に表示 */
     z-index: 200; 
 }
 
@@ -358,7 +343,6 @@ a {
     .btn-secondary { font-size: 0.9rem; }
     .btn-sub-text { font-size: 0.8rem; margin-left: 20px; }
     
-    /* PCでのメニュー調整 */
     .menu-link .en-text { font-size: 2.5rem; }
     .menu-link .jp-sub { font-size: 1rem; }
 }
