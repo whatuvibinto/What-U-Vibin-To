@@ -19,14 +19,16 @@ html, body {
     color: var(--text-color);
     font-family: var(--font-en), var(--font-jp);
     overflow-x: hidden;
-    overflow-y: auto; /* 縦スクロール許可 */
+    overflow-y: auto; /* 縦スクロールは許可 */
     width: 100%; height: 100%;
     -webkit-font-smoothing: antialiased;
 }
 
 a { text-decoration: none; color: inherit; }
 
-/* Header */
+/* ==================================================
+   Header
+   ================================================== */
 .site-header {
     position: fixed; top: 0; left: 0; width: 100%; height: 80px;
     display: flex; justify-content: space-between; align-items: center; padding: 0 6vw;
@@ -49,7 +51,9 @@ a { text-decoration: none; color: inherit; }
 .menu-btn.active span:nth-child(2) { opacity: 0; }
 .menu-btn.active span:nth-child(3) { transform: rotate(-45deg); bottom: 11px; }
 
-/* Menu Panel */
+/* ==================================================
+   Menu Panel
+   ================================================== */
 .menu-panel {
     position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
     background: #fff; z-index: 90; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -63,25 +67,32 @@ a { text-decoration: none; color: inherit; }
 .menu-link.highlight .en-text { color: var(--primary-color); }
 .menu-link .jp-sub { font-family: var(--font-jp); font-size: 0.85rem; font-weight: 400; color: #666; letter-spacing: 0.05em; }
 
-/* Main Hero */
+/* ==================================================
+   Main Hero Section
+   ================================================== */
 .hero-section {
-    position: relative; width: 100%; min-height: 100vh; padding-top: 100px;
-    padding-bottom: 40vh; /* スクロール領域を確保 */
-    display: flex; flex-direction: column; overflow: hidden; 
-}
-/* ★修正: 滑らかな変形と透明度のアニメーション設定 */
+    position: relative; 
+    width: 100%; 
+    min-height: 100vh; 
+    padding-top: 100px;
+    padding-bottom: 45vh; /* 下に大きな余白を確保 */
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+
+    /* ★アニメーション設定: Exploreが開くときに変形・透過させる */
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
-    transform-origin: center top; /* 変形の基準点を上部に */
+    transform-origin: center top;
     opacity: 1;
 }
 
-/* ★追加: Exploreが開いている時のHeroの状態 */
+/* Exploreオープン時に付与されるクラス */
 .hero-section.hero-hidden {
-    /* 上に少し移動(-50px)し、少し縮小(0.95)して、透明になる */
-    transform: translateY(-50px) scale(0.95);
-    opacity: 0;
-    pointer-events: none; /* 裏側にあるボタン等を押せないようにする */
+    transform: translateY(-50px) scale(0.95); /* 少し上に移動して縮小 */
+    opacity: 0; /* フェードアウト */
+    pointer-events: none;
 }
+
 .container { padding: 0 6vw; z-index: 10; position: relative; }
 .hero-text { margin-top: 5vh; }
 .main-copy { font-family: var(--font-jp); font-size: 11vw; font-weight: 900; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 2vh; color: #000; }
@@ -97,17 +108,17 @@ a { text-decoration: none; color: inherit; }
 .btn-secondary { background-color: #f0f0f0; color: #333; padding: 12px 28px; font-size: 3.5vw; }
 .btn-secondary .arrow { margin-left: 8px; font-size: 0.8em; font-weight: bold; }
 
-/* Background Graphic (元に戻し、グラデーションを調整) */
+/* Background Graphic (復元済み) */
 .hero-background {
     position: absolute; 
-    bottom: 0%; 
-    right: -40%; width: 140%; height: 70%;
+    bottom: -5%; 
+    right: -50%; width: 140%; height: 70%;
     z-index: 0; overflow: visible; pointer-events: none;
     transform: rotate(-20deg); transform-origin: center center;
 }
 .bg-graphic {
     width: 100%; height: 100%; object-fit: cover; object-position: center;
-    /* 110deg: 左上から右下へのグラデーション。透明(左) -> 黒(右) */
+    /* 左下を自然にフェードアウトさせるグラデーション */
     -webkit-mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     opacity: 0.95;
@@ -122,12 +133,12 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   ★修正: Swipe Up Indicator (左端配置)
+   Swipe Up Indicator (左寄せ & 最下部配置)
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    bottom: 130px; /* フッターの上 */
-    left: 12vw; /* 画面の左パディングに揃える */
+    bottom: 40px; /* フッターの上、十分な余白エリア */
+    left: 6vw;    /* 画面左端のパディングに合わせる */
     width: auto;
     
     display: flex;
@@ -148,13 +159,13 @@ a { text-decoration: none; color: inherit; }
 
 .swipe-text { text-align: left; color: #888; line-height: 1.4; }
 .swipe-text .jp { display: block; font-family: var(--font-jp); font-size: 0.75rem; font-weight: 700; }
-.swipe-text .en { display: block; font-family: var(--font-en); font-size: 0.85rem; font-weight: 400; opacity: 0.7; }
+.swipe-text .en { display: block; font-family: var(--font-en); font-size: 0.65rem; font-weight: 400; opacity: 0.7; }
 
 .swipe-arrow {
-    width: 30px; height: 30px;
+    width: 20px; height: 20px;
     border-top: 2px solid #888; border-left: 2px solid #888;
     transform: rotate(45deg); 
-    margin-left: 5px; 
+    margin-left: 5px; /* 矢印の位置調整 */
     animation: bounceUp 2s infinite;
 }
 
@@ -164,7 +175,9 @@ a { text-decoration: none; color: inherit; }
     60% { transform: translateY(-5px) rotate(45deg); }
 }
 
-/* Explore Overlay */
+/* ==================================================
+   Explore Overlay
+   ================================================== */
 .explore-overlay {
     position: fixed; top: 100%; left: 0; width: 100%; height: 100%;
     background: #fff; z-index: 150; transition: top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
