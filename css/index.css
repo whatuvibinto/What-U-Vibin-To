@@ -18,14 +18,14 @@
     padding: 0;
 }
 
-/* ★修正: htmlにも overflow-x: hidden を適用してより強固にする */
+/* 横スクロール防止を強化 */
 html, body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-en), var(--font-jp);
-    overflow-x: hidden; /* 横スクロール禁止 */
+    overflow-x: hidden;
     width: 100%;
-    height: 100%;       /* height: 100vh だとアドレスバーの影響が出る場合があるため修正 */
+    height: 100%;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -172,9 +172,8 @@ a {
     padding-bottom: 60px;
     display: flex;
     flex-direction: column;
-    
-    /* ★修正: ここが重要。はみ出した背景画像を親要素でカットする */
-    overflow: hidden; 
+    /* 背景画像のはみ出しをここでカット */
+    overflow: hidden;
 }
 
 .container {
@@ -281,25 +280,23 @@ a {
 }
 
 /* ==================================================
-   Background Graphic (Pro版: ラジアルフェード)
+   Background Graphic (サイズ感維持 & 自然なフェード)
    ================================================== */
 .hero-background {
     position: absolute;
     
-    /* 高さを十分に確保し、画像の下端が物理的に切れないようにする */
-    width: 140%; 
-    height: 120%; /* 70% -> 120% に拡張 */
-    
-    /* 位置調整: 画面右下にふんわり配置 */
-    bottom: -30%; /* 下に余白を持たせる */
-    right: -40%;
+    /* ★修正: 元のサイズ感と配置に戻しました */
+    bottom: 0;
+    right: -50%;
+    width: 80%;
+    height: 60%;
     
     z-index: 0;
     overflow: visible;
     pointer-events: none;
     
-    /* 少し回転させて動きを出す */
-    transform: rotate(-15deg);
+    /* ★修正: 元の回転角度に戻しました */
+    transform: rotate(-20deg);
     transform-origin: center center;
 }
 
@@ -309,15 +306,13 @@ a {
     object-fit: cover;
     object-position: center;
     
-    /* ★重要: 中央から外側に向かって透明にする「ラジアル(円形)グラデーション」 */
-    /* ellipse at center: 中央を起点とした楕円 */
-    /* black 20%: 中央から20%の範囲はくっきり表示 */
-    /* transparent 70%: 70%の位置で完全に透明になる（＝端が見えなくなる） */
-    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
-    mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+    /* ★修正: 中央から外側へ向かって透明にする */
+    /* black 40%: 中心付近はくっきり表示 */
+    /* transparent 80%: 端(下側や左側)に行くにつれ自然に消える */
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
     
-    /* 全体の透明度 */
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 /* ==================================================
@@ -363,9 +358,9 @@ a {
     
     /* PCでは背景位置を微調整 */
     .hero-background {
-        width: 120%;
-        height: 100%;
+        width: 60%;
+        height: 80%;
         right: -10%;
-        bottom: -10%;
+        bottom: 0;
     }
 }
