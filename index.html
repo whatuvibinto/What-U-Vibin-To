@@ -58,8 +58,7 @@
                 </div>
 
                 <div class="hero-actions">
-                    <a href="getQR.html" class="btn btn-primary">Get your QR</a>
-
+                    <a href="getQR.html" class="btn btn-primary">Get your Sound QR</a>
                     <div class="action-group">
                         <a href="how.html" class="btn btn-secondary">How it works <span class="arrow">&gt;</span></a>
                         <span class="btn-sub-text">このQRの仕組み/使い方</span>
@@ -73,13 +72,12 @@
             <img src="images/background.svg" alt="" class="bg-graphic">
         </div>
 
-        <div class="hero-featured-slider">
-            <div class="slider-header">
-                <span class="slider-title">NOW VIBING</span>
-                <a href="explore.html" class="slider-more-link">View All <span class="arrow">→</span></a>
+        <div class="hero-card-slider-wrapper">
+            <div class="slider-header-link">
+                <a href="explore.html">View More Vibes <span class="arrow">→</span></a>
             </div>
-            
-            <div class="slider-track" id="featuredContainer">
+
+            <div class="card-slider-track" id="featuredContainer">
                 </div>
         </div>
     </main>
@@ -92,10 +90,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 1. スライダー生成ロジック ---
+            // --- スライダー生成 ---
             const container = document.getElementById('featuredContainer');
             
-            // データ取得 (dig_data.jsから)
             let profiles = [];
             if (typeof window.digData !== 'undefined') {
                 profiles = window.digData;
@@ -103,40 +100,40 @@
                 profiles = digData;
             }
 
-            // データがあれば表示、なければプレースホルダー
             if (profiles.length > 0) {
-                // 日付順などでソートしたい場合はここで sort()
-                // 最新の6人だけを表示
-                const featuredProfiles = profiles.slice(0, 6);
-
+                // 最新の5人
+                const featuredProfiles = profiles.slice(0, 5);
                 let html = '';
+
                 featuredProfiles.forEach(person => {
-                    // 名前が長すぎる場合は省略
-                    const displayName = person.name.length > 8 ? person.name.substring(0, 8) + '..' : person.name;
-                    // 役職がなければ VIBER
+                    const displayName = person.name.length > 10 ? person.name.substring(0, 10) + '..' : person.name;
                     const displayRole = person.role || 'VIBER';
                     
                     html += `
-                    <a href="explore.html" class="featured-card">
-                        <div class="f-card-img">
-                            <img src="${person.image}" alt="${person.name}">
-                            <div class="live-indicator"></div> 
-                        </div>
-                        <div class="f-card-info">
-                            <span class="f-card-name">${displayName}</span>
-                            <span class="f-card-role">${displayRole}</span>
+                    <a href="explore.html" class="hero-profile-card">
+                        <div class="card-inner">
+                            <div class="card-image-area">
+                                <img src="${person.image}" alt="${person.name}">
+                            </div>
+                            <div class="card-info-area">
+                                <span class="card-role">${displayRole}</span>
+                                <h3 class="card-name">${displayName}</h3>
+                                <div class="card-music-wave">
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
+                            </div>
                         </div>
                     </a>
                     `;
                 });
 
-                // 最後に「もっと見る」カードを追加
+                // 最後に「もっと見る」カード
                 html += `
-                <a href="explore.html" class="featured-card see-more-card">
-                    <div class="see-more-circle">
-                        <span>+</span>
+                <a href="explore.html" class="hero-profile-card see-more">
+                    <div class="card-inner see-more-inner">
+                        <div class="plus-icon">+</div>
+                        <span class="see-more-text">Explore All</span>
                     </div>
-                    <span class="see-more-text">Explore</span>
                 </a>
                 `;
 
@@ -144,7 +141,7 @@
             }
         });
 
-        // --- 2. メニュー開閉ロジック ---
+        // --- メニュー開閉 ---
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
         let isMenuOpen = false;
@@ -154,7 +151,7 @@
             if (isMenuOpen) {
                 menuPanel.classList.add('active');
                 menuBtn.classList.add('active');
-                document.body.style.overflow = 'hidden'; // 背景スクロール固定
+                document.body.style.overflow = 'hidden';
             } else {
                 menuPanel.classList.remove('active');
                 menuBtn.classList.remove('active');
