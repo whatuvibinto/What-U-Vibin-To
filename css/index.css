@@ -283,10 +283,10 @@ a {
     position: absolute;
     
     /* 画面上部へ移動 (0 -> 15% 程度) */
-    bottom: 15%;
+    bottom: 5%;
     
     /* 画像の端が見えないよう、幅を広げて右にはみ出させる */
-    right: -20%; 
+    right: -35%; 
     width: 140%; 
     height: 70%;
     
@@ -295,7 +295,7 @@ a {
     pointer-events: none;
     
     /* 反時計回りに回転 */
-    transform: rotate(-5deg);
+    transform: rotate(-20deg);
     transform-origin: center center;
 }
 
