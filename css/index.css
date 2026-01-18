@@ -112,7 +112,7 @@ a { text-decoration: none; color: inherit; }
 .hero-background {
     position: absolute; 
     bottom: 0%; 
-    right: -30%; width: 140%; height: 70%;
+    right: -40%; width: 140%; height: 70%;
     z-index: 0; overflow: visible; pointer-events: none;
     transform: rotate(-20deg); transform-origin: center center;
 }
