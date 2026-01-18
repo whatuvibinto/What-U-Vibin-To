@@ -87,8 +87,8 @@ a { text-decoration: none; color: inherit; }
 /* Background Graphic (元に戻し、グラデーションを調整) */
 .hero-background {
     position: absolute; 
-    bottom: -5%; 
-    right: -50%; width: 140%; height: 70%;
+    bottom: 0%; 
+    right: -40%; width: 140%; height: 70%;
     z-index: 0; overflow: visible; pointer-events: none;
     transform: rotate(-20deg); transform-origin: center center;
 }
