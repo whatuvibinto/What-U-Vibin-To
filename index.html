@@ -184,7 +184,7 @@
             setTimeout(() => { exploreOverlay.scrollTop = 0; }, 500);
         };
 
-        // --- ★修正: スワイプ検知ロジック ---
+        // --- ★修正: スワイプ検知 (画面下部のみ) ---
         let touchStartY = 0;
         let touchEndY = 0;
 
@@ -194,38 +194,24 @@
 
         document.addEventListener('touchend', e => {
             touchEndY = e.changedTouches[0].screenY;
-            handleSwipe(e);
+            handleSwipe();
         }, {passive: true});
 
-        // PCホイール操作
-        document.addEventListener('wheel', e => {
-            // 下スクロールで、かつ画面最下部にいる場合のみオープンするロジックも可だが、
-            // シンプルに「下スクロール」だけで開くと誤作動が多いため、PCではクリック推奨。
-            // 既存の動き維持
-            if (!isExploreOpen && e.deltaY > 50) {
-                // ここも「画面下部」判定を入れるとより良いが、一旦維持
-                openExplore();
-            } else if (isExploreOpen && exploreOverlay.scrollTop === 0 && e.deltaY < -50) {
-                closeExplore();
-            }
-        });
-
-        function handleSwipe(e) {
+        function handleSwipe() {
             const swipeDistance = touchStartY - touchEndY;
             const threshold = 50; 
-            
-            // 画面の高さ
             const windowHeight = window.innerHeight;
-            // タッチ開始位置が画面の下25%以内でなければ無視 (誤作動防止)
-            const isBottomArea = touchStartY > (windowHeight * 0.75);
+            
+            // ★修正: 画面の下15%エリア (フッター付近) から開始した場合のみ判定
+            const isBottomTriggerArea = touchStartY > (windowHeight * 0.85);
 
             if (!isExploreOpen) {
-                // ★修正: 画面下部エリアでのみ反応させる
-                if (isBottomArea && swipeDistance > threshold) {
+                // Exploreが開いていない時は、下部エリアでの上スワイプのみ反応
+                if (isBottomTriggerArea && swipeDistance > threshold) {
                     openExplore();
                 }
             } else {
-                // 閉じる動作はオーバーレイの上部など、どこでもOK (スクロールトップ時のみ)
+                // Exploreが開いている時は、上部からの下スワイプで閉じる
                 if (exploreOverlay.scrollTop <= 0 && swipeDistance < -threshold) {
                     closeExplore();
                 }
@@ -245,7 +231,6 @@
         const mInstaArea = document.getElementById('modalInstaArea');
         const mInstaLink = document.getElementById('modalInstaLink');
         const mInstaName = document.getElementById('modalInstaName');
-        
         const searchInput = document.getElementById('searchInput');
         const genreContainer = document.getElementById('genreCheckboxes');
         const resetBtn = document.getElementById('resetBtn');
