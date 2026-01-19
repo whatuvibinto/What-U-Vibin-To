@@ -32,6 +32,32 @@ html, body {
 }
 
 /* ==================================================
+   ★追加: Explore Hero (Logo & Copy)
+   ================================================== */
+.explore-hero {
+    text-align: center;
+    margin-bottom: 40px; /* 検索バーとの間隔 */
+    padding: 0 5vw;
+}
+
+.explore-hero-logo {
+    height: 60px; /* ロゴの大きさ */
+    width: auto;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.explore-hero-copy {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 0.95rem; /* スマホで見やすいサイズ */
+    font-weight: 700;   /* 太字で強調 */
+    line-height: 1.8;   /* 行間を広げて読みやすく */
+    color: #111;
+    margin: 0;
+    letter-spacing: 0.05em;
+}
+
+/* ==================================================
    Search & Filter
    ================================================== */
 .search-area {
@@ -318,10 +344,6 @@ html, body {
     display: block;
 }
 
-/* ★削除: 画像上のRoleバッジスタイルは不要 */
-/* .art-role-overlay { ... } */
-
-
 /* 情報エリア全体 */
 .art-info-section {
     flex: 1;
@@ -342,7 +364,7 @@ html, body {
     align-items: center;
 }
 
-/* ★追加: 名前とバッジの横並び用ラッパー */
+/* 名前とバッジの横並び用ラッパー */
 .art-name-row {
     display: flex;
     align-items: center;
@@ -361,7 +383,7 @@ html, body {
     letter-spacing: -0.02em;
 }
 
-/* ★追加: 名前の横に置くRoleバッジのスタイル */
+/* 名前の横に置くRoleバッジのスタイル */
 .art-role-badge {
     display: inline-block;
     background: #000;
@@ -468,22 +490,30 @@ html, body {
    ================================================== */
 @media (max-width: 430px) {
 
-    /* 1. モーダル幅を広げて高さを節約 */
+    /* モーダル幅を広げて高さを節約 */
     .qr-modal-content.art-layout {
         width: 94%; 
         max-height: 92vh; 
     }
 
-    /* 2. 画像エリアをさらに縮小 */
+    /* 画像エリアをさらに縮小 */
     .art-image-section {
-        height: 25vh;      /* 30vh -> 25vh に短縮 */
-        min-height: 180px; /* 最低高さを180pxまで許容 */
+        height: 25vh;      
+        min-height: 180px; 
     }
 
-    /* 3. 情報エリアの余白を最小限に */
+    /* 情報エリアの余白を最小限に */
     .art-info-section {
-        padding: 15px 12px; /* 左右の余白も少し詰める */
-        gap: 10px;          /* 要素間の隙間を詰める */
+        padding: 15px 12px; 
+        gap: 10px;          
+    }
+
+    .explore-hero-logo {
+        height: 50px;
+    }
+    
+    .explore-hero-copy {
+        font-size: 0.85rem;
     }
 
     .art-name-row {
@@ -491,36 +521,35 @@ html, body {
         gap: 8px;
     }
 
-    /* 4. 文字サイズを全体的にワンサイズダウン */
+    /* 文字サイズを全体的にワンサイズダウン */
     .art-name {
-        font-size: 1.5rem; /* 1.6rem -> 1.5rem */
+        font-size: 1.5rem; 
     }
     .art-meta-row {
-        font-size: 0.75rem; /* 0.8rem -> 0.75rem */
+        font-size: 0.75rem; 
     }
-    /* ★追加: 縮小時のバッジサイズ調整 */
     .art-role-badge {
         font-size: 0.65rem;
         padding: 3px 6px;
     }
 
-    /* 5. QRコードを一回り小さく (ここが効きます) */
+    /* QRコードを一回り小さく */
     .art-qr-wrapper {
         margin-bottom: 5px;
         padding: 5px 0;
     }
     .art-qr-box {
-        width: 115px;  /* 130px -> 115px */
+        width: 115px; 
         height: 115px;
         margin-bottom: 8px;
     }
 
-    /* 6. インストラクション文字を小さく */
+    /* インストラクション文字を小さく */
     .art-instruction-text {
         font-size: 0.55rem;
     }
 
-    /* 7. フッター(Instagram)もコンパクトに */
+    /* フッター(Instagram)もコンパクトに */
     .art-info-footer {
         padding-top: 10px;
     }
