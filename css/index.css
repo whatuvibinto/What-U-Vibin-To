@@ -159,7 +159,7 @@ a { text-decoration: none; color: inherit; }
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    bottom: calc(60px + env(safe-area-inset-bottom)); 
+    bottom: calc(50px + env(safe-area-inset-bottom)); 
     left: 50%;
     transform: translateX(-50%);
     
@@ -181,7 +181,7 @@ a { text-decoration: none; color: inherit; }
     );
     
     width: 320px; 
-    padding: 60px 0;
+    padding: 50px 0;
     border-radius: 50%; 
     
     border: none;
