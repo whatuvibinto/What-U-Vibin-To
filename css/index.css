@@ -75,12 +75,15 @@ a { text-decoration: none; color: inherit; }
     width: 100%; 
     min-height: 100vh; 
     padding-top: 100px;
-    padding-bottom: 45vh; /* 下に大きな余白を確保 */
+    
+    /* ★修正: 余白を削減 (45vh -> 20vh) */
+    padding-bottom: 20vh; 
+    
     display: flex; 
     flex-direction: column; 
     overflow: hidden; 
 
-    /* ★アニメーション設定: Exploreが開くときに変形・透過させる */
+    /* アニメーション設定 */
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
     transform-origin: center top;
     opacity: 1;
@@ -88,27 +91,45 @@ a { text-decoration: none; color: inherit; }
 
 /* Exploreオープン時に付与されるクラス */
 .hero-section.hero-hidden {
-    transform: translateY(-50px) scale(0.95); /* 少し上に移動して縮小 */
-    opacity: 0; /* フェードアウト */
+    transform: translateY(-50px) scale(0.95);
+    opacity: 0;
     pointer-events: none;
 }
 
 .container { padding: 0 6vw; z-index: 10; position: relative; }
+
 .hero-text { margin-top: 5vh; }
-.main-copy { font-family: var(--font-jp); font-size: 11vw; font-weight: 900; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 2vh; color: #000; }
-.sub-copy-jp { font-size: 4vw; font-weight: 700; margin-bottom: 4vh; color: #333; }
-.sub-copy-en { font-family: var(--font-en); font-size: 3.8vw; font-weight: 400; color: #555; line-height: 1.5; margin-bottom: 6vh; }
+
+/* ★修正: 文字の可読性向上 (text-shadow追加) */
+.main-copy { 
+    font-family: var(--font-jp); font-size: 11vw; font-weight: 900; 
+    line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 2vh; color: #000;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.6);
+}
+.sub-copy-jp { 
+    font-size: 4vw; font-weight: 700; margin-bottom: 4vh; color: #333;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 0 0 30px rgba(255, 255, 255, 0.6);
+}
+.sub-copy-en { 
+    font-family: var(--font-en); font-size: 3.8vw; font-weight: 400; color: #555; 
+    line-height: 1.5; margin-bottom: 6vh;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+}
 
 .hero-actions { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; width: 100%; }
 .action-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-.btn-sub-text { font-family: var(--font-jp); font-size: 3vw; font-weight: 500; color: #888; margin-left: 15px; letter-spacing: 0.02em; line-height: 1; white-space: nowrap; }
+.btn-sub-text { 
+    font-family: var(--font-jp); font-size: 3vw; font-weight: 500; color: #888; 
+    margin-left: 15px; letter-spacing: 0.02em; line-height: 1; white-space: nowrap;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+}
 .btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 30px; border-radius: 50px; font-size: 4vw; font-weight: 600; transition: transform 0.2s; white-space: nowrap; letter-spacing: 0.02em; }
 .btn:active { transform: scale(0.98); }
 .btn-primary { background-color: var(--primary-color); color: #fff; box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3); width: auto; min-width: 60%; }
 .btn-secondary { background-color: #f0f0f0; color: #333; padding: 12px 28px; font-size: 3.5vw; }
 .btn-secondary .arrow { margin-left: 8px; font-size: 0.8em; font-weight: bold; }
 
-/* Background Graphic (復元済み) */
+/* Background Graphic (修正: グラデーション削除) */
 .hero-background {
     position: absolute; 
     bottom: 9%; 
@@ -118,10 +139,10 @@ a { text-decoration: none; color: inherit; }
 }
 .bg-graphic {
     width: 100%; height: 100%; object-fit: cover; object-position: center;
-    /* 左下を自然にフェードアウトさせるグラデーション */
-    -webkit-mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
-    mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
-    opacity: 0.95;
+    /* ★修正: マスク（グラデーション）を削除し、不透明度を1に */
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 1;
 }
 
 /* Footer */
@@ -133,17 +154,18 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   Swipe Up Indicator (左寄せ & 最下部配置)
+   Swipe Up Indicator
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    bottom: 170px; /* フッターの上、十分な余白エリア */
-    left: 10vw;    /* 画面左端のパディングに合わせる */
+    /* ★修正: 余白削減に合わせて位置を調整 (170px -> 80px) */
+    bottom: 80px; 
+    left: 10vw;    
     width: auto;
     
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* 左揃え */
+    align-items: flex-start;
     gap: 10px;
     z-index: 50;
     cursor: pointer;
@@ -157,16 +179,22 @@ a { text-decoration: none; color: inherit; }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.swipe-text { text-align: left; color: #888; line-height: 1.4; }
+/* ★修正: 文字の可読性向上 */
+.swipe-text { 
+    text-align: left; color: #333; line-height: 1.4; 
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+}
 .swipe-text .jp { display: block; font-family: var(--font-jp); font-size: 0.75rem; font-weight: 700; }
-.swipe-text .en { display: block; font-family: var(--font-en); font-size: 0.85rem; font-weight: 400; opacity: 0.7; }
+.swipe-text .en { display: block; font-family: var(--font-en); font-size: 0.85rem; font-weight: 400; opacity: 0.8; }
 
 .swipe-arrow {
     width: 20px; height: 20px;
-    border-top: 2px solid #888; border-left: 2px solid #888;
+    border-top: 2px solid #333; border-left: 2px solid #333;
     transform: rotate(45deg); 
-    margin-left: 5px; /* 矢印の位置調整 */
+    margin-left: 5px; 
     animation: bounceUp 2s infinite;
+    /* 矢印にも白フチをつけて見やすく */
+    filter: drop-shadow(0 0 2px rgba(255,255,255,1));
 }
 
 @keyframes bounceUp {
