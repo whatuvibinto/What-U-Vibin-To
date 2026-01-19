@@ -129,17 +129,22 @@ a { text-decoration: none; color: inherit; }
 .btn-secondary { background-color: #f0f0f0; color: #333; padding: 12px 28px; font-size: 3.5vw; }
 .btn-secondary .arrow { margin-left: 8px; font-size: 0.8em; font-weight: bold; }
 
-/* Background Graphic (Revert: 元の位置とグラデーションに戻す) */
+/* Background Graphic (サイズ・配置をProMax/12両対応に調整) */
 .hero-background {
     position: absolute; 
+    /* 下部位置を少し調整 */
     bottom: -5%; 
-    right: -50%; width: 140%; height: 70%;
+    /* 右位置を維持 */
+    right: -50%; 
+    /* ★修正: 画面が縦長のProMaxでもカバーできるようサイズを拡大 */
+    width: 160%; 
+    height: 80%;
     z-index: 0; overflow: visible; pointer-events: none;
     transform: rotate(15deg); transform-origin: center center;
 }
 .bg-graphic {
     width: 100%; height: 100%; object-fit: cover; object-position: center;
-    /* グラデーションを復活 */
+    /* グラデーション (Keep) */
     -webkit-mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     opacity: 0.95;
@@ -154,13 +159,14 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   Swipe Up Indicator
+   Swipe Up Indicator (ProMax/12両対応の配置)
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    /* 余白削減に合わせて位置調整 (Keep) */
-    bottom: 80px; 
-    left: 10vw;    
+    /* ★修正: 安全領域(ホームバー)を考慮した配置 + 基本余白40px */
+    bottom: calc(40px + env(safe-area-inset-bottom)); 
+    /* ★修正: メインコンテンツのパディング(6vw)と左端を揃える */
+    left: 6vw;    
     width: auto;
     
     display: flex;
