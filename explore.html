@@ -45,6 +45,15 @@
     <div class="explore-container">
         
         <div class="dig-content">
+            
+            <div class="explore-hero">
+                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="explore-hero-logo">
+                <p class="explore-hero-copy">
+                    このQRは、生きている。<br>
+                    あの人の"この時間"に聴いている音を見てみよう。
+                </p>
+            </div>
+
             <div class="search-area">
                 <div class="search-box">
                     <input type="text" class="search-input" id="searchInput" placeholder="Name or Location...">
@@ -249,7 +258,7 @@
             // Roleの表示制御
             if (role) { 
                 modalRole.textContent = role; 
-                modalRole.style.display = "inline-block"; // inline-blockに変更
+                modalRole.style.display = "inline-block"; 
             } else { 
                 modalRole.style.display = "none"; 
             }
