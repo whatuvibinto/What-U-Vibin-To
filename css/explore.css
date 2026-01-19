@@ -4,7 +4,7 @@
    Explore Page Layout (Mobile First)
    ================================================== */
 
-/* index.cssでのスクロール固定設定を解除 */
+/* index.cssでのスクロール固定設定を強制解除 */
 html, body {
     overflow: auto !important;
     height: auto !important;
@@ -13,7 +13,8 @@ html, body {
 
 .explore-page {
     background-color: #ffffff;
-    padding-top: 80px; /* ヘッダー分 */
+    /* ヘッダー(80px) + 少しの余裕を持たせる */
+    padding-top: 100px; 
 }
 
 .explore-container {
@@ -26,18 +27,21 @@ html, body {
 
 /* メインコンテンツエリア */
 .dig-content {
-    padding-top: 20px; 
+    padding-top: 0; /* bodyのpaddingで確保したのでここは0でOK */
     width: 100%;
     padding-bottom: 80px; /* フッター被り防止 */
 }
 
 /* ==================================================
-   ★追加: Explore Hero (Logo & Copy)
+   Explore Hero (Logo & Copy)
    ================================================== */
 .explore-hero {
     text-align: center;
     margin-bottom: 40px; /* 検索バーとの間隔 */
     padding: 0 5vw;
+    /* 念のためz-indexを設定し、他の要素の下に隠れないようにする */
+    position: relative;
+    z-index: 10;
 }
 
 .explore-hero-logo {
