@@ -111,7 +111,7 @@ a { text-decoration: none; color: inherit; }
 /* Background Graphic (復元済み) */
 .hero-background {
     position: absolute; 
-    bottom: 15%; 
+    bottom: 10%; 
     right: -40%; width: 140%; height: 70%;
     z-index: 0; overflow: visible; pointer-events: none;
     transform: rotate(0eg); transform-origin: center center;
