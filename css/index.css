@@ -76,7 +76,7 @@ a { text-decoration: none; color: inherit; }
     min-height: 100vh; 
     padding-top: 100px;
     
-    /* ★修正: 余白を大きく戻す (下部エリアの確保) */
+    /* 下部余白を確保 (スワイプエリア用) */
     padding-bottom: 40vh; 
     
     display: flex; 
@@ -100,7 +100,7 @@ a { text-decoration: none; color: inherit; }
 
 .hero-text { margin-top: 5vh; }
 
-/* 文字の可読性向上 (Keep: text-shadow) */
+/* 文字の可読性向上 */
 .main-copy { 
     font-family: var(--font-jp); font-size: 11vw; font-weight: 900; 
     line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 2vh; color: #000;
@@ -129,22 +129,17 @@ a { text-decoration: none; color: inherit; }
 .btn-secondary { background-color: #f0f0f0; color: #333; padding: 12px 28px; font-size: 3.5vw; }
 .btn-secondary .arrow { margin-left: 8px; font-size: 0.8em; font-weight: bold; }
 
-/* Background Graphic (バランス維持) */
+/* Background Graphic (復元: 位置・グラデーション) */
 .hero-background {
     position: absolute; 
-    /* 下部位置調整 */
-    bottom: 5%; 
-    /* 右位置調整 */
-    right: -45%; 
-    /* ProMax/12両対応サイズ */
-    width: 140%; 
-    height: 70%;
+    bottom: 7%; 
+    right: -45%; width: 140%; height: 70%;
     z-index: 0; overflow: visible; pointer-events: none;
-    transform: rotate(20deg); transform-origin: center center;
+    transform: rotate(30deg); transform-origin: center center;
 }
 .bg-graphic {
     width: 100%; height: 100%; object-fit: cover; object-position: center;
-    /* グラデーション透過 (Keep) */
+    /* グラデーションマスク */
     -webkit-mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     opacity: 0.95;
@@ -159,76 +154,87 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   ★修正: Swipe Up Indicator (中央配置 & プロ仕様演出)
+   ★修正: Swipe Up Indicator (中央配置 & ミント装飾)
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    /* 画面下部から適切な距離（セーフエリア考慮） */
+    /* 画面下部から適切な距離 */
     bottom: calc(40px + env(safe-area-inset-bottom)); 
-    /* 左右中央揃え */
+    /* 左右中央配置 */
     left: 50%;
     transform: translateX(-50%);
-    width: auto;
     
+    /* レイアウト */
     display: flex;
     flex-direction: column;
-    align-items: center; /* 中央揃え */
-    gap: 12px;
+    align-items: center; /* 中身も中央揃え */
+    gap: 8px;
     z-index: 50;
     cursor: pointer;
     
-    /* 初期表示アニメーション */
+    /* ★修正: プロ仕様のミントカラー装飾 (Glassmorphism Pill) */
+    background: rgba(225, 250, 245, 0.7); /* 淡いミントの半透明 */
+    backdrop-filter: blur(10px);          /* 背景をぼかす */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6); /* 薄い白枠 */
+    padding: 12px 30px;                   /* カプセルの余白 */
+    border-radius: 50px;                  /* 丸い形状 */
+    box-shadow: 0 4px 20px rgba(160, 220, 200, 0.25); /* ふんわりしたミントの影 */
+    
+    /* 横幅の確保（文字が折り返さないように） */
+    width: auto;
+    min-width: 200px; 
+
+    /* 出現アニメーション */
     opacity: 0;
     animation: fadeInPosition 1.2s ease-out 0.5s forwards;
 }
 
+/* 中央配置用のアニメーション定義 */
 @keyframes fadeInPosition {
     from { opacity: 0; transform: translate(-50%, 20px); }
     to { opacity: 1; transform: translate(-50%, 0); }
 }
 
-/* 文字デザイン (より洗練された印象に) */
 .swipe-text { 
-    text-align: center; color: #333; line-height: 1.5; 
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+    text-align: center; color: #2a2a2a; line-height: 1.4; 
 }
 .swipe-text .en { 
     display: block; 
     font-family: var(--font-en); 
-    font-size: 0.85rem; /* 少し小さく上品に */
-    font-weight: 600; 
+    font-size: 0.75rem; 
+    font-weight: 700; 
     text-transform: uppercase; 
-    letter-spacing: 0.1em; /* 文字間を広げる */
-    opacity: 0.8; 
-    margin-bottom: 2px;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
 }
 .swipe-text .jp { 
     display: block; 
     font-family: var(--font-jp); 
-    font-size: 0.75rem; 
+    font-size: 0.7rem; 
     font-weight: 500; 
-    opacity: 0.6;
+    opacity: 0.8;
+    
+    /* ★修正: 強制的に1行にする */
+    white-space: nowrap; 
 }
 
-/* 矢印 (心理的に誘導するフローアニメーション) */
 .swipe-arrow {
-    width: 24px; height: 24px;
-    /* 線を細くしてモダンに */
-    border-top: 1.5px solid #333; 
-    border-left: 1.5px solid #333;
+    width: 20px; height: 20px;
+    border-top: 2px solid #444; 
+    border-left: 2px solid #444;
     transform: rotate(45deg); 
-    margin-bottom: 5px; 
+    margin-bottom: 2px; /* 位置微調整 */
     
-    /* ★修正: 「下から湧き上がり上に消える」動きでスワイプを誘導 */
+    /* フローアニメーション */
     animation: flowUp 2s infinite ease-in-out;
-    filter: drop-shadow(0 0 2px rgba(255,255,255,1));
 }
 
 @keyframes flowUp {
-    0% { opacity: 0; transform: translateY(10px) rotate(45deg); }
+    0% { opacity: 0; transform: translateY(8px) rotate(45deg); }
     30% { opacity: 1; transform: translateY(0) rotate(45deg); }
-    70% { opacity: 1; transform: translateY(-5px) rotate(45deg); }
-    100% { opacity: 0; transform: translateY(-15px) rotate(45deg); }
+    70% { opacity: 1; transform: translateY(-4px) rotate(45deg); }
+    100% { opacity: 0; transform: translateY(-12px) rotate(45deg); }
 }
 
 /* ==================================================
