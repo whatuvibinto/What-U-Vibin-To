@@ -155,17 +155,14 @@ a { text-decoration: none; color: inherit; }
 
 /* ==================================================
    ★修正: Swipe Up Indicator
-   (境目のない自然な発光 & 信号グリーン & 1行表示)
+   (Get your QRの紫より少し薄い発光 & テーマカラー文字)
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    /* 画面下部から適切な距離 */
     bottom: calc(40px + env(safe-area-inset-bottom)); 
-    /* 左右中央配置 */
     left: 50%;
     transform: translateX(-50%);
     
-    /* レイアウト */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -174,27 +171,24 @@ a { text-decoration: none; color: inherit; }
     z-index: 50;
     cursor: pointer;
     
-    /* ★プロ仕様の装飾: 境目のない自然な光 */
-    /* 信号機のような鮮やかな緑を中心から外へぼかす */
+    /* ★修正: 紫色（薄め）のラジアルグラデーション */
+    /* ボタンの色(#6a4cba)より少し明るい紫 (146, 126, 226) を使用 */
     background: radial-gradient(
         ellipse at center,
-        rgba(0, 255, 120, 0.6) 0%,    /* 中心: 鮮やかな緑 */
-        rgba(0, 255, 120, 0.2) 40%,   /* 中間: ふんわり薄くなる */
-        rgba(0, 255, 120, 0) 70%      /* 外側: 完全に透明（境目が消える） */
+        rgba(146, 126, 226, 0.6) 0%,    /* 中心: 薄い紫 */
+        rgba(146, 126, 226, 0.2) 40%,   /* 中間: ふんわり消える */
+        rgba(146, 126, 226, 0) 70%      /* 外側: 透明 */
     );
     
-    /* 光が切れないように余白を広めに取る */
     width: 320px; 
     padding: 40px 0;
-    border-radius: 50%; /* 丸く広げる */
+    border-radius: 50%; 
     
-    /* 不要な枠線やハードな背景を削除 */
     border: none;
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
 
-    /* 出現アニメーション */
     opacity: 0;
     animation: fadeInPosition 1.2s ease-out 0.5s forwards;
 }
@@ -206,17 +200,17 @@ a { text-decoration: none; color: inherit; }
 
 .swipe-text { 
     text-align: center; 
-    /* 背景が明るい緑なので、文字は濃い色にして視認性を確保 */
-    color: #004d26; 
+    /* ★修正: 文字色をボタンと同じ濃い紫に変更して統一感を出す */
+    color: #6a4cba; 
     line-height: 1.4; 
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
 }
 
 .swipe-text .en { 
     display: block; 
     font-family: var(--font-en); 
     font-size: 0.75rem; 
-    font-weight: 800; /* 太く */
+    font-weight: 800; 
     text-transform: uppercase; 
     letter-spacing: 0.1em;
     opacity: 1;
@@ -228,16 +222,14 @@ a { text-decoration: none; color: inherit; }
     font-size: 0.7rem; 
     font-weight: 700; 
     opacity: 0.9;
-    
-    /* ★修正: 強制的に1行にする設定 */
     white-space: nowrap; 
 }
 
 .swipe-arrow {
     width: 24px; height: 24px;
-    /* 矢印も緑に合う濃い色に */
-    border-top: 2.5px solid #004d26; 
-    border-left: 2.5px solid #004d26;
+    /* ★修正: 矢印の色も濃い紫に変更 */
+    border-top: 2.5px solid #6a4cba; 
+    border-left: 2.5px solid #6a4cba;
     transform: rotate(45deg); 
     margin-bottom: 2px; 
     
@@ -250,7 +242,6 @@ a { text-decoration: none; color: inherit; }
     70% { opacity: 1; transform: translateY(-4px) rotate(45deg); }
     100% { opacity: 0; transform: translateY(-12px) rotate(45deg); }
 }
-
 /* ==================================================
    Explore Overlay
    ================================================== */
