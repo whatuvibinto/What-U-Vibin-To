@@ -28,7 +28,7 @@
         <nav class="menu-nav">
             <a href="#" onclick="openExplore(); toggleMenu(); return false;" class="menu-link">
                 <span class="en-text">Explore</span>
-                <span class="jp-sub">あの人が"この時間"に聴いている曲をのぞく</span>
+                <span class="jp-sub">あの人が"この時間"に聞いている曲をのぞく</span>
             </a>
             <a href="how.html" class="menu-link">
                 <span class="en-text">How it works</span>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="hero-background">
-            <img src="images/background_3.PNG" alt="" class="bg-graphic">
+            <img src="images/background.svg" alt="" class="bg-graphic">
         </div>
 
         <div class="swipe-indicator-area" onclick="openExplore()">
@@ -80,15 +80,26 @@
     </main>
 
     <footer class="site-footer">
-        © 2026 WHAT U VIBIN TO / One QR, Different Vibes
+        © 2026 WHAT U VIBIN TO / One QR, different vibes
     </footer>
 
     <div class="explore-overlay" id="exploreOverlay">
+        
         <div class="explore-header-trigger" onclick="closeExplore()">
             <div class="drag-handle"></div>
         </div>
+
         <div class="explore-container">
             <div class="dig-content">
+                
+                <div class="explore-hero">
+                    <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="explore-hero-logo">
+                    <p class="explore-hero-copy">
+                        このQRは、生きている。<br>
+                        あの人の"この時間"に聴いている音を見てみよう。
+                    </p>
+                </div>
+
                 <div class="search-area">
                     <div class="search-box">
                         <input type="text" class="search-input" id="searchInput" placeholder="Name or Location...">
@@ -100,7 +111,9 @@
                         <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET (ALL)</button>
                     </div>
                 </div>
+
                 <div class="profile-list" id="profileContainer"></div>
+                
                 <div class="explore-footer">
                     KEEP DIGGING, KEEP VIBING.
                 </div>
@@ -171,14 +184,9 @@
 
         // --- Explore開閉 (アニメーション連動) ---
         window.openExplore = function() {
-            // Exploreを表示
             exploreOverlay.classList.add('active');
-            
-            // Heroをアニメーションさせて隠す
             heroSection.classList.add('hero-hidden');
-            
             isExploreOpen = true;
-            
             if (!window.exploreInitialized) {
                 initExplore();
                 window.exploreInitialized = true;
@@ -186,12 +194,8 @@
         };
 
         window.closeExplore = function() {
-            // Exploreを隠す
             exploreOverlay.classList.remove('active');
-            
-            // Heroをアニメーションさせて元に戻す
             heroSection.classList.remove('hero-hidden');
-            
             isExploreOpen = false;
             setTimeout(() => { exploreOverlay.scrollTop = 0; }, 500);
         };
@@ -213,17 +217,14 @@
             const swipeDistance = touchStartY - touchEndY;
             const threshold = 50; 
             const windowHeight = window.innerHeight;
-            
             // 画面の下15%エリアから開始した場合のみ判定
             const isBottomTriggerArea = touchStartY > (windowHeight * 0.85);
 
             if (!isExploreOpen) {
-                // 下部エリアでの上スワイプで開く
                 if (isBottomTriggerArea && swipeDistance > threshold) {
                     openExplore();
                 }
             } else {
-                // 上部からの下スワイプで閉じる
                 if (exploreOverlay.scrollTop <= 0 && swipeDistance < -threshold) {
                     closeExplore();
                 }
