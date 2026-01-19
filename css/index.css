@@ -154,7 +154,8 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   ★修正: Swipe Up Indicator (中央配置 & ミント装飾)
+   ★修正: Swipe Up Indicator
+   (境目のない自然な発光 & 信号グリーン & 1行表示)
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
@@ -167,66 +168,79 @@ a { text-decoration: none; color: inherit; }
     /* レイアウト */
     display: flex;
     flex-direction: column;
-    align-items: center; /* 中身も中央揃え */
+    align-items: center;
+    justify-content: center;
     gap: 8px;
     z-index: 50;
     cursor: pointer;
     
-    /* ★修正: プロ仕様のミントカラー装飾 (Glassmorphism Pill) */
-    background: rgba(225, 250, 245, 0.7); /* 淡いミントの半透明 */
-    backdrop-filter: blur(10px);          /* 背景をぼかす */
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6); /* 薄い白枠 */
-    padding: 12px 30px;                   /* カプセルの余白 */
-    border-radius: 50px;                  /* 丸い形状 */
-    box-shadow: 0 4px 20px rgba(160, 220, 200, 0.25); /* ふんわりしたミントの影 */
+    /* ★プロ仕様の装飾: 境目のない自然な光 */
+    /* 信号機のような鮮やかな緑を中心から外へぼかす */
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 255, 120, 0.6) 0%,    /* 中心: 鮮やかな緑 */
+        rgba(0, 255, 120, 0.2) 40%,   /* 中間: ふんわり薄くなる */
+        rgba(0, 255, 120, 0) 70%      /* 外側: 完全に透明（境目が消える） */
+    );
     
-    /* 横幅の確保（文字が折り返さないように） */
-    width: auto;
-    min-width: 200px; 
+    /* 光が切れないように余白を広めに取る */
+    width: 320px; 
+    padding: 40px 0;
+    border-radius: 50%; /* 丸く広げる */
+    
+    /* 不要な枠線やハードな背景を削除 */
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 
     /* 出現アニメーション */
     opacity: 0;
     animation: fadeInPosition 1.2s ease-out 0.5s forwards;
 }
 
-/* 中央配置用のアニメーション定義 */
 @keyframes fadeInPosition {
     from { opacity: 0; transform: translate(-50%, 20px); }
     to { opacity: 1; transform: translate(-50%, 0); }
 }
 
 .swipe-text { 
-    text-align: center; color: #2a2a2a; line-height: 1.4; 
+    text-align: center; 
+    /* 背景が明るい緑なので、文字は濃い色にして視認性を確保 */
+    color: #004d26; 
+    line-height: 1.4; 
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
 }
+
 .swipe-text .en { 
     display: block; 
     font-family: var(--font-en); 
     font-size: 0.75rem; 
-    font-weight: 700; 
+    font-weight: 800; /* 太く */
     text-transform: uppercase; 
-    letter-spacing: 0.05em;
-    opacity: 0.9;
+    letter-spacing: 0.1em;
+    opacity: 1;
 }
+
 .swipe-text .jp { 
     display: block; 
     font-family: var(--font-jp); 
     font-size: 0.7rem; 
-    font-weight: 500; 
-    opacity: 0.8;
+    font-weight: 700; 
+    opacity: 0.9;
     
-    /* ★修正: 強制的に1行にする */
+    /* ★修正: 強制的に1行にする設定 */
     white-space: nowrap; 
 }
 
 .swipe-arrow {
-    width: 20px; height: 20px;
-    border-top: 2px solid #444; 
-    border-left: 2px solid #444;
+    width: 24px; height: 24px;
+    /* 矢印も緑に合う濃い色に */
+    border-top: 2.5px solid #004d26; 
+    border-left: 2.5px solid #004d26;
     transform: rotate(45deg); 
-    margin-bottom: 2px; /* 位置微調整 */
+    margin-bottom: 2px; 
     
-    /* フローアニメーション */
     animation: flowUp 2s infinite ease-in-out;
 }
 
