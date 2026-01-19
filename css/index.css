@@ -76,8 +76,8 @@ a { text-decoration: none; color: inherit; }
     min-height: 100vh; 
     padding-top: 100px;
     
-    /* 余白削減 (Keep) */
-    padding-bottom: 20vh; 
+    /* ★修正: 余白を大きく戻す (下部エリアの確保) */
+    padding-bottom: 40vh; 
     
     display: flex; 
     flex-direction: column; 
@@ -129,22 +129,22 @@ a { text-decoration: none; color: inherit; }
 .btn-secondary { background-color: #f0f0f0; color: #333; padding: 12px 28px; font-size: 3.5vw; }
 .btn-secondary .arrow { margin-left: 8px; font-size: 0.8em; font-weight: bold; }
 
-/* Background Graphic (サイズ・配置をProMax/12両対応に調整) */
+/* Background Graphic (バランス維持) */
 .hero-background {
     position: absolute; 
-    /* 下部位置を少し調整 */
-    bottom: -5%; 
-    /* 右位置を維持 */
-    right: -50%; 
-    /* ★修正: 画面が縦長のProMaxでもカバーできるようサイズを拡大 */
-    width: 160%; 
-    height: 80%;
+    /* 下部位置調整 */
+    bottom: 5%; 
+    /* 右位置調整 */
+    right: -45%; 
+    /* ProMax/12両対応サイズ */
+    width: 140%; 
+    height: 70%;
     z-index: 0; overflow: visible; pointer-events: none;
-    transform: rotate(15deg); transform-origin: center center;
+    transform: rotate(20deg); transform-origin: center center;
 }
 .bg-graphic {
     width: 100%; height: 100%; object-fit: cover; object-position: center;
-    /* グラデーション (Keep) */
+    /* グラデーション透過 (Keep) */
     -webkit-mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     opacity: 0.95;
@@ -159,53 +159,76 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   Swipe Up Indicator (ProMax/12両対応の配置)
+   ★修正: Swipe Up Indicator (中央配置 & プロ仕様演出)
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    /* ★修正: 安全領域(ホームバー)を考慮した配置 + 基本余白40px */
+    /* 画面下部から適切な距離（セーフエリア考慮） */
     bottom: calc(40px + env(safe-area-inset-bottom)); 
-    /* ★修正: メインコンテンツのパディング(6vw)と左端を揃える */
-    left: 6vw;    
+    /* 左右中央揃え */
+    left: 50%;
+    transform: translateX(-50%);
     width: auto;
     
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center; /* 中央揃え */
+    gap: 12px;
     z-index: 50;
     cursor: pointer;
     
+    /* 初期表示アニメーション */
     opacity: 0;
-    animation: fadeInUp 1s ease-out 1s forwards;
+    animation: fadeInPosition 1.2s ease-out 0.5s forwards;
 }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInPosition {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
 }
 
-/* 文字可読性向上 (Keep) */
+/* 文字デザイン (より洗練された印象に) */
 .swipe-text { 
-    text-align: left; color: #333; line-height: 1.4; 
+    text-align: center; color: #333; line-height: 1.5; 
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
 }
-.swipe-text .jp { display: block; font-family: var(--font-jp); font-size: 0.75rem; font-weight: 700; }
-.swipe-text .en { display: block; font-family: var(--font-en); font-size: 0.85rem; font-weight: 400; opacity: 0.8; }
+.swipe-text .en { 
+    display: block; 
+    font-family: var(--font-en); 
+    font-size: 0.85rem; /* 少し小さく上品に */
+    font-weight: 600; 
+    text-transform: uppercase; 
+    letter-spacing: 0.1em; /* 文字間を広げる */
+    opacity: 0.8; 
+    margin-bottom: 2px;
+}
+.swipe-text .jp { 
+    display: block; 
+    font-family: var(--font-jp); 
+    font-size: 0.75rem; 
+    font-weight: 500; 
+    opacity: 0.6;
+}
 
+/* 矢印 (心理的に誘導するフローアニメーション) */
 .swipe-arrow {
-    width: 20px; height: 20px;
-    border-top: 2px solid #333; border-left: 2px solid #333;
+    width: 24px; height: 24px;
+    /* 線を細くしてモダンに */
+    border-top: 1.5px solid #333; 
+    border-left: 1.5px solid #333;
     transform: rotate(45deg); 
-    margin-left: 5px; 
-    animation: bounceUp 2s infinite;
+    margin-bottom: 5px; 
+    
+    /* ★修正: 「下から湧き上がり上に消える」動きでスワイプを誘導 */
+    animation: flowUp 2s infinite ease-in-out;
     filter: drop-shadow(0 0 2px rgba(255,255,255,1));
 }
 
-@keyframes bounceUp {
-    0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(45deg); }
-    40% { transform: translateY(-10px) rotate(45deg); }
-    60% { transform: translateY(-5px) rotate(45deg); }
+@keyframes flowUp {
+    0% { opacity: 0; transform: translateY(10px) rotate(45deg); }
+    30% { opacity: 1; transform: translateY(0) rotate(45deg); }
+    70% { opacity: 1; transform: translateY(-5px) rotate(45deg); }
+    100% { opacity: 0; transform: translateY(-15px) rotate(45deg); }
 }
 
 /* ==================================================
