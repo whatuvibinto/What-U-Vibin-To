@@ -76,7 +76,7 @@ a { text-decoration: none; color: inherit; }
     min-height: 100vh; 
     padding-top: 100px;
     
-    /* 下部余白を確保 (スワイプエリア用) */
+    /* 下部余白を大きめに確保 */
     padding-bottom: 40vh; 
     
     display: flex; 
@@ -129,7 +129,7 @@ a { text-decoration: none; color: inherit; }
 .btn-secondary { background-color: #f0f0f0; color: #333; padding: 12px 28px; font-size: 3.5vw; }
 .btn-secondary .arrow { margin-left: 8px; font-size: 0.8em; font-weight: bold; }
 
-/* Background Graphic (復元: 位置・グラデーション) */
+/* Background Graphic (元の状態に復元) */
 .hero-background {
     position: absolute; 
     bottom: 7%; 
@@ -139,7 +139,6 @@ a { text-decoration: none; color: inherit; }
 }
 .bg-graphic {
     width: 100%; height: 100%; object-fit: cover; object-position: center;
-    /* グラデーションマスク */
     -webkit-mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     mask-image: linear-gradient(110deg, transparent 0%, transparent 20%, black 80%);
     opacity: 0.95;
@@ -154,12 +153,15 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   ★修正: Swipe Up Indicator
-   (Get your QRの紫より少し薄い発光 & テーマカラー文字)
+   Swipe Up Indicator
+   (Get your QRの紫より少し薄い自然な発光 & テーマカラー文字 & 1行表示)
    ================================================== */
 .swipe-indicator-area {
     position: absolute;
-    bottom: calc(50px + env(safe-area-inset-bottom)); 
+    /* 位置 */
+    bottom: 40px; 
+    bottom: calc(40px + env(safe-area-inset-bottom)); 
+    /* 中央配置 */
     left: 50%;
     transform: translateX(-50%);
     
@@ -168,11 +170,10 @@ a { text-decoration: none; color: inherit; }
     align-items: center;
     justify-content: center;
     gap: 8px;
-    z-index: 50;
+    z-index: 100;
     cursor: pointer;
     
-    /* ★修正: 紫色（薄め）のラジアルグラデーション */
-    /* ボタンの色(#6a4cba)より少し明るい紫 (146, 126, 226) を使用 */
+    /* 自然な光の装飾（ラジアルグラデーション） */
     background: radial-gradient(
         ellipse at center,
         rgba(146, 126, 226, 0.6) 0%,    /* 中心: 薄い紫 */
@@ -181,7 +182,7 @@ a { text-decoration: none; color: inherit; }
     );
     
     width: 320px; 
-    padding: 50px 0;
+    padding: 40px 0;
     border-radius: 50%; 
     
     border: none;
@@ -189,18 +190,13 @@ a { text-decoration: none; color: inherit; }
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
 
-    opacity: 0;
-    animation: fadeInPosition 1.2s ease-out 0.5s forwards;
-}
-
-@keyframes fadeInPosition {
-    from { opacity: 0; transform: translate(-50%, 20px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
+    /* 強制表示 */
+    opacity: 1;
 }
 
 .swipe-text { 
     text-align: center; 
-    /* ★修正: 文字色をボタンと同じ濃い紫に変更して統一感を出す */
+    /* テーマカラー(濃い紫)で視認性確保 */
     color: #6a4cba; 
     line-height: 1.4; 
     text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
@@ -222,12 +218,13 @@ a { text-decoration: none; color: inherit; }
     font-size: 0.7rem; 
     font-weight: 700; 
     opacity: 0.9;
+    /* 日本語を1行にする */
     white-space: nowrap; 
 }
 
 .swipe-arrow {
     width: 24px; height: 24px;
-    /* ★修正: 矢印の色も濃い紫に変更 */
+    /* 矢印もテーマカラー */
     border-top: 2.5px solid #6a4cba; 
     border-left: 2.5px solid #6a4cba;
     transform: rotate(45deg); 
@@ -242,6 +239,7 @@ a { text-decoration: none; color: inherit; }
     70% { opacity: 1; transform: translateY(-4px) rotate(45deg); }
     100% { opacity: 0; transform: translateY(-12px) rotate(45deg); }
 }
+
 /* ==================================================
    Explore Overlay
    ================================================== */
@@ -262,6 +260,28 @@ a { text-decoration: none; color: inherit; }
 .explore-container { width: 100%; max-width: 800px; margin: 0 auto; padding: 0 4vw; }
 .dig-content { padding-top: 20px; width: 100%; padding-bottom: 80px; }
 .explore-footer { text-align: center; font-weight: 900; color: #eee; font-size: 1.5rem; margin-top: 50px; text-transform: uppercase; }
+
+/* Explore Hero (Overlay内用) */
+.explore-hero {
+    text-align: center;
+    margin-bottom: 30px; 
+    padding: 10px 5vw 0;
+}
+.explore-hero-logo {
+    height: 50px; 
+    width: auto;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+.explore-hero-copy {
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 0.85rem; 
+    font-weight: 700;   
+    line-height: 1.6;   
+    color: #333;
+    margin: 0;
+    letter-spacing: 0.05em;
+}
 
 /* Explore Integrated Styles */
 .search-area { margin-bottom: 40px; text-align: center; width: 100%; }
