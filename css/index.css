@@ -224,7 +224,7 @@ a { text-decoration: none; color: inherit; }
     height: 100%;
     
     background: #fff;
-    z-index: 150; 
+    z-index: 250; 
     
     /* 角丸なし */
     border-radius: 0; 
