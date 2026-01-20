@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>How it works | WHAT U VIBIN TO?</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="header-logo">
+            </a>
+        </div>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <div class="menu-panel" id="menuPanel">
+        <nav class="menu-nav">
+            <a href="index.html" class="menu-link">
+                <span class="en-text">Home</span>
+                <span class="jp-sub">トップページに戻る</span>
+            </a>
+            <a href="how.html" class="menu-link highlight">
+                <span class="en-text">How it works</span>
+                <span class="jp-sub">このQRの仕組み/使い方</span>
+            </a>
+            <a href="getQR.html" class="menu-link">
+                <span class="en-text">Get Your QR</span>
+                <span class="jp-sub">あなただけのQRをつくる</span>
+            </a>
+        </nav>
+    </div>
+
+    <main class="how-main">
+        <h1 class="how-title">How it works</h1>
+
+        <div class="how-tabs">
+            <button class="how-tab-btn active" onclick="switchTab('create')">
+                <div class="tab-icon-box">
+                    <img src="images/icon_create.svg" alt="Create" class="tab-icon-img" onerror="this.style.display='none'"> 
+                </div>
+                <span class="tab-label">Create</span>
+            </button>
+
+            <button class="how-tab-btn" onclick="switchTab('share')">
+                <div class="tab-icon-box">
+                    <img src="images/icon_share.svg" alt="Share" class="tab-icon-img" onerror="this.style.display='none'">
+                </div>
+                <span class="tab-label">Share</span>
+            </button>
+
+            <button class="how-tab-btn" onclick="switchTab('scan')">
+                <div class="tab-icon-box">
+                    <img src="images/icon_scan.svg" alt="Scan" class="tab-icon-img" onerror="this.style.display='none'">
+                </div>
+                <span class="tab-label">Scan</span>
+            </button>
+        </div>
+
+        <div class="how-content-wrapper">
+            
+            <div id="content-create" class="how-content-item active">
+                <img src="images/how_create_sample.jpg" alt="Create Your Vibe" class="content-image" onerror="this.style.display='none'">
+                <h2 class="content-headline">
+                    今のバイブスを<br>リンクさせる。
+                </h2>
+                <p class="content-desc">
+                    Apple MusicやSpotifyなど、あなたが普段聴いているサービスと連携。<br>
+                    朝のチルな時間、夜のアッパーな時間。<br>
+                    時間帯ごとに変わるあなたの「今」をQRコードに込めます。
+                </p>
+                <a href="getQR.html" class="btn btn-primary">Create Now</a>
+            </div>
+
+            <div id="content-share" class="how-content-item">
+                <img src="images/how_share_sample.jpg" alt="Share Your QR" class="content-image" onerror="this.style.display='none'">
+                <h2 class="content-headline">
+                    名刺代わりに、<br>音楽を渡そう。
+                </h2>
+                <p class="content-desc">
+                    生成されたQRコードは、SNSのプロフィールやステッカーに。<br>
+                    言葉で説明するよりも早く、深く。<br>
+                    あなたの感性を相手のスマホへ直接届けましょう。
+                </p>
+            </div>
+
+            <div id="content-scan" class="how-content-item">
+                <img src="images/how_scan_sample.jpg" alt="Scan and Dig" class="content-image" onerror="this.style.display='none'">
+                <h2 class="content-headline">
+                    あの人の時間を<br>ディグる体験。
+                </h2>
+                <p class="content-desc">
+                    街で見かけたQRをスキャンすれば、<br>
+                    その人が「今この瞬間」に聴いている曲やプレイリストにアクセス。<br>
+                    まだ知らない音楽との出会いが、ここから始まります。
+                </p>
+                <a href="index.html" class="btn btn-secondary">Explore Vibes <span class="arrow">&gt;</span></a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        © 2026 WHAT U VIBIN TO / One QR, Different Vibes
+    </footer>
+
+    <script>
+        // --- Menu Logic (共通) ---
+        const menuBtn = document.getElementById('menuBtn');
+        const menuPanel = document.getElementById('menuPanel');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                menuPanel.classList.add('active');
+                menuBtn.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menuPanel.classList.remove('active');
+                menuBtn.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+        menuBtn.addEventListener('click', toggleMenu);
+
+        // --- Tab Switching Logic (Howページ専用) ---
+        function switchTab(targetId) {
+            // 1. 全てのタブボタンから active を外す
+            const tabs = document.querySelectorAll('.how-tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // 2. クリックされたタブを active にする
+            // (onclickイベントから呼び出しているため、event.currentTargetを探すか、ループで判定)
+            // ここでは簡易的に引数で渡されたIDに対応する順番のボタンをアクティブ化するロジックでも良いが、
+            // HTML内のonclickでthisを渡していないため、event.currentTargetを使用します。
+            event.currentTarget.classList.add('active');
+
+            // 3. 全てのコンテンツを非表示にする
+            const contents = document.querySelectorAll('.how-content-item');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // 4. 対象のIDを持つコンテンツを表示する
+            const targetContent = document.getElementById('content-' + targetId);
+            if(targetContent) {
+                targetContent.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
