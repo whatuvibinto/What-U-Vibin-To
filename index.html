@@ -171,6 +171,10 @@
         const exploreOverlay = document.getElementById('exploreOverlay');
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
+        
+        // ★追加: スワイプ誘導要素を取得
+        const swipeIndicator = document.querySelector('.swipe-indicator-area');
+
         let isExploreOpen = false;
         let isMenuOpen = false;
 
@@ -179,15 +183,38 @@
             if (isMenuOpen) {
                 menuPanel.classList.add('active');
                 menuBtn.classList.add('active');
+                
+                // ★追加: メニューが開いたらスワイプ要素を消す & クリック無効化
+                if(swipeIndicator) {
+                    swipeIndicator.style.opacity = '0';
+                    swipeIndicator.style.pointerEvents = 'none';
+                    swipeIndicator.style.transition = 'opacity 0.3s ease';
+                }
+                
+                // メニューオープン時はスクロール禁止
+                document.body.style.overflow = 'hidden';
+
             } else {
                 menuPanel.classList.remove('active');
                 menuBtn.classList.remove('active');
+                
+                // ★追加: メニューが閉じたらスワイプ要素を戻す
+                if(swipeIndicator) {
+                    swipeIndicator.style.opacity = '1';
+                    swipeIndicator.style.pointerEvents = 'auto';
+                }
+
+                // メニュークローズ時はスクロール許可
+                document.body.style.overflow = 'auto';
             }
         }
         menuBtn.addEventListener('click', toggleMenu);
 
         // --- Explore開閉 (アニメーション連動) ---
         window.openExplore = function() {
+            // ★追加: メニューが開いている時は反応させない（クリック対策）
+            if (isMenuOpen) return;
+
             exploreOverlay.classList.add('active');
             heroSection.classList.add('hero-hidden');
             isExploreOpen = true;
@@ -204,7 +231,7 @@
             setTimeout(() => { exploreOverlay.scrollTop = 0; }, 500);
         };
 
-        // --- スワイプ検知 (画面下部のみ) ---
+        // --- スワイプ検知 ---
         let touchStartY = 0;
         let touchEndY = 0;
 
@@ -218,10 +245,12 @@
         }, {passive: true});
 
         function handleSwipe() {
+            // ★追加: メニューが開いている時はスワイプ検知を即座に終了
+            if (isMenuOpen) return;
+
             const swipeDistance = touchStartY - touchEndY;
             const threshold = 50; 
             const windowHeight = window.innerHeight;
-            // 画面の下15%エリアから開始した場合のみ判定
             const isBottomTriggerArea = touchStartY > (windowHeight * 0.85);
 
             if (!isExploreOpen) {
