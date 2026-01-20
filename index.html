@@ -67,7 +67,7 @@
         </div>
 
         <div class="hero-background">
-            <img src="images/background_3.PNG" alt="" class="bg-graphic">
+            <img src="images/background.svg" alt="" class="bg-graphic">
         </div>
 
         <div class="swipe-indicator-area" onclick="openExplore()">
@@ -94,7 +94,6 @@
                 
                 <div class="explore-hero">
                     <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="explore-hero-logo">
-    
                     <h2 class="explore-main-copy">
                         このQRは、生きている。
                     </h2>
@@ -171,8 +170,6 @@
         const exploreOverlay = document.getElementById('exploreOverlay');
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
-        
-        // ★追加: スワイプ誘導要素を取得
         const swipeIndicator = document.querySelector('.swipe-indicator-area');
 
         let isExploreOpen = false;
@@ -183,38 +180,27 @@
             if (isMenuOpen) {
                 menuPanel.classList.add('active');
                 menuBtn.classList.add('active');
-                
-                // ★追加: メニューが開いたらスワイプ要素を消す & クリック無効化
                 if(swipeIndicator) {
                     swipeIndicator.style.opacity = '0';
                     swipeIndicator.style.pointerEvents = 'none';
                     swipeIndicator.style.transition = 'opacity 0.3s ease';
                 }
-                
-                // メニューオープン時はスクロール禁止
                 document.body.style.overflow = 'hidden';
-
             } else {
                 menuPanel.classList.remove('active');
                 menuBtn.classList.remove('active');
-                
-                // ★追加: メニューが閉じたらスワイプ要素を戻す
                 if(swipeIndicator) {
                     swipeIndicator.style.opacity = '1';
                     swipeIndicator.style.pointerEvents = 'auto';
                 }
-
-                // メニュークローズ時はスクロール許可
                 document.body.style.overflow = 'auto';
             }
         }
         menuBtn.addEventListener('click', toggleMenu);
 
-        // --- Explore開閉 (アニメーション連動) ---
+        // --- Explore開閉 ---
         window.openExplore = function() {
-            // ★追加: メニューが開いている時は反応させない（クリック対策）
-            if (isMenuOpen) return;
-
+            // ★修正: メニューからのクリックでも開けるように、ここでのガード節は削除
             exploreOverlay.classList.add('active');
             heroSection.classList.add('hero-hidden');
             isExploreOpen = true;
@@ -245,7 +231,7 @@
         }, {passive: true});
 
         function handleSwipe() {
-            // ★追加: メニューが開いている時はスワイプ検知を即座に終了
+            // メニューが開いているときはスワイプ反応させない
             if (isMenuOpen) return;
 
             const swipeDistance = touchStartY - touchEndY;
