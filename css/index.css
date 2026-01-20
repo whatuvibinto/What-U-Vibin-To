@@ -382,3 +382,189 @@ a { text-decoration: none; color: inherit; }
     .art-qr-wrapper { margin-bottom: 5px; padding: 5px 0; } .art-qr-box { width: 115px; height: 115px; margin-bottom: 8px; }
     .art-instruction-text { font-size: 0.55rem; } .art-info-footer { padding-top: 10px; } .insta-icon { width: 16px; height: 16px; } .insta-val { font-size: 0.8rem; }
 }
+
+/* ==================================================
+   How It Works Page Styles
+   ================================================== */
+
+/* メインコンテナ: ヘッダーとフッターを避けて中央配置 */
+.how-main {
+    width: 100%;
+    min-height: 100vh;
+    padding: 100px 6vw 80px; /* Header 80px + 余白, Footer回避 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* ページタイトル */
+.how-title {
+    font-family: var(--font-en);
+    font-weight: 900;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    color: var(--text-color);
+    margin-bottom: 40px;
+    letter-spacing: -0.02em;
+    text-align: center;
+}
+
+/* --- タブナビゲーション (Create, Share, Scan) --- */
+.how-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.how-tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.how-tab-btn:hover {
+    opacity: 0.8;
+}
+
+.how-tab-btn.active {
+    opacity: 1;
+    transform: translateY(-5px);
+}
+
+/* タブのアクティブ線 */
+.how-tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.how-tab-btn.active::after {
+    width: 50%;
+}
+
+/* アイコン円形エリア */
+.tab-icon-box {
+    width: 16vw;
+    height: 16vw;
+    max-width: 80px;
+    max-height: 80px;
+    background: #f0f0f5;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.how-tab-btn.active .tab-icon-box {
+    background: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(106, 76, 186, 0.4);
+}
+
+.tab-icon-img {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+    filter: grayscale(100%);
+    transition: filter 0.3s;
+}
+
+/* アクティブ時はアイコンを白くする（SVGや透過PNG想定） */
+.how-tab-btn.active .tab-icon-img {
+    filter: brightness(0) invert(1); 
+}
+
+/* タブのテキスト */
+.tab-label {
+    font-family: var(--font-en);
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-color);
+}
+
+/* --- コンテンツエリア (切り替わる部分) --- */
+.how-content-wrapper {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    min-height: 300px; /* ガタつき防止の最小高さ */
+}
+
+.how-content-item {
+    display: none; /* デフォルト非表示 */
+    text-align: center;
+    animation: fadeInSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.how-content-item.active {
+    display: block;
+}
+
+/* コンテンツ内デザイン */
+.content-headline {
+    font-family: var(--font-jp);
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.content-desc {
+    font-family: var(--font-jp);
+    font-size: 1rem;
+    font-weight: 400;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.content-image {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* アニメーション定義 */
+@keyframes fadeInSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* レスポンシブ調整 */
+@media (min-width: 768px) {
+    .how-tabs { gap: 60px; }
+    .tab-icon-box { width: 100px; height: 100px; }
+    .tab-label { font-size: 1.2rem; }
+    .content-headline { font-size: 2rem; }
+    .how-content-wrapper { max-width: 700px; }
+}
