@@ -80,18 +80,17 @@ a { text-decoration: none; color: inherit; }
     flex-direction: column; 
     overflow: hidden; 
 
-    /* ★修正: パネルが開いた時の背景縮小アニメーションを滑らかに */
+    /* Animation */
     transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s ease;
     transform-origin: center top;
     opacity: 1;
 }
 
 .hero-section.hero-hidden {
-    /* iOSのタスクスイッチャーのように奥に引っ込む動き */
     transform: scale(0.92) translateY(-20px);
-    opacity: 0.5; /* 完全には消さず、奥にある気配を残す */
+    opacity: 0.5;
     pointer-events: none;
-    border-radius: 20px; /* 縮小時に角を丸くしてカード感 */
+    border-radius: 0; /* 縮小時も角丸なし */
     overflow: hidden;
 }
 
@@ -115,11 +114,25 @@ a { text-decoration: none; color: inherit; }
 
 .hero-actions { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; width: 100%; }
 .action-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+
+/* ★修正: 背景画像と被っても見えるように強化 */
 .btn-sub-text { 
-    font-family: var(--font-jp); font-size: 3vw; font-weight: 500; color: #888; 
-    margin-left: 15px; letter-spacing: 0.02em; line-height: 1; white-space: nowrap;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+    font-family: var(--font-jp); 
+    font-size: 3vw; 
+    font-weight: 700; /* 太字にして視認性アップ */
+    color: #111;      /* 濃い黒に変更 (#888 -> #111) */
+    margin-left: 15px; 
+    letter-spacing: 0.02em; 
+    line-height: 1; 
+    white-space: nowrap;
+    
+    /* 強力な白フチ（光彩）をつけて背景から浮かせる */
+    text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 15px #fff;
 }
+
 .btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 30px; border-radius: 50px; font-size: 4vw; font-weight: 600; transition: transform 0.2s; white-space: nowrap; letter-spacing: 0.02em; }
 .btn:active { transform: scale(0.98); }
 .btn-primary { background-color: var(--primary-color); color: #fff; box-shadow: 0 4px 15px rgba(106, 76, 186, 0.3); width: auto; min-width: 60%; }
@@ -203,49 +216,38 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   Explore Overlay (物理挙動＆角丸カードスタイル)
+   Explore Overlay
    ================================================== */
 .explore-overlay {
     position: fixed; 
-    
-    /* ★修正: 画面最上部ではなく、少し下から開始して角丸を見せる（カード感） */
-    /* top: 0 ではなく height で制御し、下からスライドさせる */
     top: 0;
     left: 0;
     width: 100%; 
     height: 100%;
     
-    /* 背景と形状 */
     background: #fff;
     z-index: 150; 
     
-    /* ★修正: 角丸を強調 */
-    border-top-left-radius: 32px;
-    border-top-right-radius: 32px;
+    /* ★修正: 角丸を削除 */
+    border-radius: 0; 
     
-    /* 影をつけて浮遊感を出す */
     box-shadow: 0 -10px 40px rgba(0,0,0,0.15); 
 
-    /* ★修正: アニメーションを `top` ではなく `transform` で行う（ヌルヌル動く） */
     transform: translateY(100%);
-    /* iOSのシートのような弾性のあるカーブ */
+    /* 滑らかな物理挙動 */
     transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
     
-    /* ★修正: 内部スクロールの指触りをネイティブ化 */
     overflow-y: auto; 
-    -webkit-overflow-scrolling: touch; /* 慣性スクロール */
-    overscroll-behavior-y: contain;    /* 引っ張りすぎ防止 */
+    -webkit-overflow-scrolling: touch; 
+    overscroll-behavior-y: contain;    
     
-    /* ヘッダーエリア分の余白 */
     padding-top: 60px; 
 }
 
-/* アクティブ時は画面内にスライドイン */
 .explore-overlay.active { 
     transform: translateY(0); 
 }
 
-/* ドラッグハンドルエリア */
 .explore-header-trigger {
     position: absolute; 
     top: 0; 
@@ -255,18 +257,13 @@ a { text-decoration: none; color: inherit; }
     display: flex; 
     justify-content: center; 
     align-items: center;
-    
-    /* 背景を少し透過させて高級感を出す */
     background: rgba(255,255,255,0.95); 
     backdrop-filter: blur(10px);
     z-index: 160; 
     cursor: pointer;
     
-    /* ★修正: 親要素に合わせて角丸にする */
-    border-top-left-radius: 32px;
-    border-top-right-radius: 32px;
-    
-    /* 下線を引かない（シームレスな一体感） */
+    /* ★修正: ヘッダー部分の角丸も削除 */
+    border-radius: 0;
 }
 
 .drag-handle { 
@@ -281,7 +278,7 @@ a { text-decoration: none; color: inherit; }
 .explore-footer { text-align: center; font-weight: 900; color: #eee; font-size: 1.5rem; margin-top: 50px; text-transform: uppercase; }
 
 /* ==================================================
-   Explore Hero (Overlay内: テキスト階層化)
+   Explore Hero (Overlay内)
    ================================================== */
 .explore-hero {
     text-align: center;
@@ -290,13 +287,12 @@ a { text-decoration: none; color: inherit; }
 }
 
 .explore-hero-logo {
-    height: 50px; 
+    height: 75px; 
     width: auto;
     display: inline-block;
     margin-bottom: 15px;
 }
 
-/* メインコピー (大きく強調) */
 .explore-main-copy {
     font-family: var(--font-jp);
     font-size: 1.3rem; 
@@ -307,7 +303,6 @@ a { text-decoration: none; color: inherit; }
     letter-spacing: 0.05em;
 }
 
-/* サブコピー (薄く小さく) */
 .explore-sub-copy {
     font-family: var(--font-jp);
     font-size: 0.8rem;
@@ -376,6 +371,7 @@ a { text-decoration: none; color: inherit; }
     .sub-copy-jp { font-size: 1.2rem; }
     .sub-copy-en { font-size: 1rem; }
     .btn { font-size: 1rem; padding: 15px 40px; }
+    .btn-sub-text { font-size: 0.8rem; margin-left: 20px; }
     .menu-link .en-text { font-size: 2.5rem; }
     .hero-background { width: 120%; height: 100%; right: -10%; bottom: -10%; }
     .profile-list { gap: 15px; } .profile-info { padding: 15px; } .profile-name { font-size: 1rem; } .profile-loc { font-size: 0.75rem; } .mini-qr, .service-icon { width: 24px; height: 24px; } .profile-card .role-badge { font-size: 0.6rem; padding: 3px 6px; }
