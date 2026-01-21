@@ -366,6 +366,21 @@
         };
         window.closeQrModal = function() { modal.classList.remove('active'); };
         modal.addEventListener('click', (e) => { if (e.target === modal) closeQrModal(); });
+        /* ==================================================
+           ★追加: 他のページから戻ってきた時に自動でExploreを開く処理
+           ================================================== */
+        window.addEventListener('load', () => {
+            // URLのパラメータ(?open=explore)を取得
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('open') === 'explore') {
+                // 少しだけ待ってから開く（読み込み直後の動作安定のため）
+                setTimeout(() => {
+                    openExplore();
+                }, 300);
+            }
+        });
+
+        init();
     </script>
 </body>
 </html>
