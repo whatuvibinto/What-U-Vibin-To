@@ -13,7 +13,7 @@
 
     <header class="site-header">
         <div class="logo-container">
-            <a href="#">
+            <a href="#" onclick="closeExplore(); return false;">
                 <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="header-logo">
             </a>
         </div>
@@ -26,11 +26,7 @@
 
     <div class="menu-panel" id="menuPanel">
         <nav class="menu-nav">
-            <a href="#" onclick="scrollToTop(); toggleMenu(); return false;" class="menu-link">
-                <span class="en-text">Home</span>
-                <span class="jp-sub">トップページに戻る</span>
-            </a>
-            <a href="#exploreSection" onclick="scrollToExplore(); toggleMenu(); return false;" class="menu-link">
+            <a href="#" onclick="openExplore(); toggleMenu(); return false;" class="menu-link">
                 <span class="en-text">Explore</span>
                 <span class="jp-sub">あの人が"この時間"に聞いている曲をのぞく</span>
             </a>
@@ -46,46 +42,53 @@
     </div>
 
     <main class="hero-section" id="heroSection">
-        <div class="hero-content-wrapper" id="heroContentWrapper">
-            <div class="container">
-                <div class="hero-text">
-                    <h1 class="main-copy">
-                        自己紹介は、<br>
-                        音楽でもアリ。
-                    </h1>
-                    <p class="sub-copy-jp">
-                        あなたの"時間帯で変わるバイブス"を、<br>QRひとつで。
-                    </p>
-                    <div class="sub-copy-en">
-                        <p>Your intro can be music.</p>
-                        <p>One QR, different vibes.</p>
-                    </div>
+        <div class="container">
+            <div class="hero-text">
+                <h1 class="main-copy">
+                    自己紹介は、<br>
+                    音楽でもアリ。
+                </h1>
+                <p class="sub-copy-jp">
+                    あなたの"時間帯で変わるバイブス"を、<br>QRひとつで。
+                </p>
+                <div class="sub-copy-en">
+                    <p>Your intro can be music.</p>
+                    <p>One QR, different vibes.</p>
+                </div>
 
-                    <div class="hero-actions">
-                        <a href="getQR.html" class="btn btn-primary">Get your QR</a>
-                        <div class="action-group">
-                            <a href="how.html" class="btn btn-secondary">How it works <span class="arrow">&gt;</span></a>
-                            <span class="btn-sub-text">このQRの仕組み/使い方</span>
-                        </div>
+                <div class="hero-actions">
+                    <a href="getQR.html" class="btn btn-primary">Get your QR</a>
+                    <div class="action-group">
+                        <a href="how.html" class="btn btn-secondary">How it works <span class="arrow">&gt;</span></a>
+                        <span class="btn-sub-text">このQRの仕組み/使い方</span>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="hero-background">
-                <img src="images/background_3.svg" alt="" class="bg-graphic">
-            </div>
+        <div class="hero-background">
+            <img src="images/background_3.svg" alt="" class="bg-graphic">
+        </div>
 
-            <div class="swipe-indicator-area" onclick="scrollToExplore()">
-                <div class="swipe-arrow"></div>
-                <div class="swipe-text">
-                    <span class="en">Swipe up to Explore</span>
-                    <span class="jp">あの人の"この時間"に聴いている曲をのぞく</span>
-                </div>
+        <div class="swipe-indicator-area" onclick="openExplore()">
+            <div class="swipe-arrow"></div>
+            <div class="swipe-text">
+                <span class="en">Swipe up to Explore</span>
+                <span class="jp">あの人の"この時間"に聴いている曲をのぞく</span>
             </div>
         </div>
     </main>
 
-    <section class="explore-section" id="exploreSection">
+    <footer class="site-footer">
+        © 2026 WHAT U VIBIN TO / One QR, Different Vibes
+    </footer>
+
+    <div class="explore-overlay" id="exploreOverlay">
+        
+        <div class="explore-header-trigger" onclick="closeExplore()">
+            <div class="drag-handle"></div>
+        </div>
+
         <div class="explore-container">
             <div class="dig-content">
                 
@@ -119,11 +122,7 @@
                 </div>
             </div>
         </div>
-    </section>
-
-    <footer class="site-footer">
-        © 2026 WHAT U VIBIN TO / One QR, different vibes
-    </footer>
+    </div>
 
     <div class="qr-modal-overlay" id="qrModal">
         <div class="qr-modal-content art-layout">
@@ -167,10 +166,13 @@
     <script src="js/dig_data.js"></script>
 
     <script>
-        const heroWrapper = document.getElementById('heroContentWrapper');
+        const heroSection = document.getElementById('heroSection');
+        const exploreOverlay = document.getElementById('exploreOverlay');
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
         const swipeIndicator = document.querySelector('.swipe-indicator-area');
+
+        let isExploreOpen = false;
         let isMenuOpen = false;
 
         function toggleMenu() {
@@ -181,6 +183,7 @@
                 if(swipeIndicator) {
                     swipeIndicator.style.opacity = '0';
                     swipeIndicator.style.pointerEvents = 'none';
+                    swipeIndicator.style.transition = 'opacity 0.3s ease';
                 }
                 document.body.style.overflow = 'hidden';
             } else {
@@ -195,43 +198,57 @@
         }
         menuBtn.addEventListener('click', toggleMenu);
 
-        // --- スクロールアニメーション (Heroフェードアウト) ---
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
+        // --- Explore開閉 ---
+        window.openExplore = function() {
+            // ★修正: メニューからのクリックでも開けるように、ここでのガード節は削除
+            exploreOverlay.classList.add('active');
+            heroSection.classList.add('hero-hidden');
+            isExploreOpen = true;
+            if (!window.exploreInitialized) {
+                initExplore();
+                window.exploreInitialized = true;
+            }
+        };
+
+        window.closeExplore = function() {
+            exploreOverlay.classList.remove('active');
+            heroSection.classList.remove('hero-hidden');
+            isExploreOpen = false;
+            setTimeout(() => { exploreOverlay.scrollTop = 0; }, 500);
+        };
+
+        // --- スワイプ検知 ---
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, {passive: true});
+
+        document.addEventListener('touchend', e => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            // メニューが開いているときはスワイプ反応させない
+            if (isMenuOpen) return;
+
+            const swipeDistance = touchStartY - touchEndY;
+            const threshold = 50; 
             const windowHeight = window.innerHeight;
-            
-            // スクロール量に応じて透明度を下げる
-            const fadeStart = 0;
-            const fadeEnd = windowHeight * 0.7; 
-            let opacity = 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart);
-            
-            if (opacity < 0) opacity = 0;
-            if (opacity > 1) opacity = 1;
+            const isBottomTriggerArea = touchStartY > (windowHeight * 0.85);
 
-            // 少し上へ移動する効果
-            const translateY = -(scrollY * 0.5);
-
-            if (heroWrapper) {
-                heroWrapper.style.opacity = opacity;
-                heroWrapper.style.transform = `translateY(${translateY}px)`;
-                // 完全に消えたらクリック判定を消す (ボタン誤反応防止)
-                if (opacity <= 0) {
-                    heroWrapper.classList.add('faded-out');
-                } else {
-                    heroWrapper.classList.remove('faded-out');
+            if (!isExploreOpen) {
+                if (isBottomTriggerArea && swipeDistance > threshold) {
+                    openExplore();
+                }
+            } else {
+                if (exploreOverlay.scrollTop <= 0 && swipeDistance < -threshold) {
+                    closeExplore();
                 }
             }
-        });
-
-        // --- スムーズスクロール機能 ---
-        window.scrollToExplore = function() {
-            const exploreSec = document.getElementById('exploreSection');
-            exploreSec.scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.scrollToTop = function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
+        }
 
         // --- Explore機能 ---
         const container = document.getElementById('profileContainer');
@@ -254,8 +271,6 @@
         let selectedGenres = []; 
         let profileData = [];
         
-        initExplore();
-
         function initExplore() {
             if (typeof window.digData !== 'undefined') profileData = window.digData;
             else if (typeof digData !== 'undefined') profileData = digData;
