@@ -49,6 +49,7 @@
 
     <main class="how-main">
         <h1 class="how-title">How it works</h1>
+        <p class="how-subtitle">このQRの仕組み/使い方</p>
 
         <div class="how-tabs">
             <button class="how-tab-btn active" onclick="switchTab('create')">
@@ -147,9 +148,6 @@
             tabs.forEach(tab => tab.classList.remove('active'));
 
             // 2. クリックされたタブを active にする
-            // (onclickイベントから呼び出しているため、event.currentTargetを探すか、ループで判定)
-            // ここでは簡易的に引数で渡されたIDに対応する順番のボタンをアクティブ化するロジックでも良いが、
-            // HTML内のonclickでthisを渡していないため、event.currentTargetを使用します。
             event.currentTarget.classList.add('active');
 
             // 3. 全てのコンテンツを非表示にする
