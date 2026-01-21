@@ -34,6 +34,8 @@ a { text-decoration: none; color: inherit; }
     display: flex; justify-content: space-between; align-items: center; padding: 0 6vw;
     background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    
+    /* ★修正: メニューパネル(200)より手前に表示 */
     z-index: 210;
 }
 .header-logo { height: 50px; width: auto; display: block; }
@@ -56,7 +58,9 @@ a { text-decoration: none; color: inherit; }
    ================================================== */
 .menu-panel {
     position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
-    background: #fff; z-index: 200; 
+    background: #fff; 
+    /* Headerより後ろ、コンテンツより前 */
+    z-index: 200; 
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 60px; 
 }
@@ -69,34 +73,30 @@ a { text-decoration: none; color: inherit; }
 .menu-link .jp-sub { font-family: var(--font-jp); font-size: 0.85rem; font-weight: 400; color: #666; letter-spacing: 0.05em; }
 
 /* ==================================================
-   Main Hero Section (修正)
+   Main Hero Section
    ================================================== */
 .hero-section {
     position: relative; 
     width: 100%; 
-    height: 100vh; /* 画面いっぱいに固定 */
+    min-height: 100vh; 
+    padding-top: 100px;
+    padding-bottom: 40vh; 
     display: flex; 
     flex-direction: column; 
-    /* overflow: hidden;  <- スクロールさせるので削除 */
-    
-    /* 背景として機能させるため固定気味に配置 */
-    z-index: 1;
+    overflow: hidden; 
+
+    /* Animation */
+    transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s ease;
+    transform-origin: center top;
+    opacity: 1;
 }
 
-/* スクロール時にフェードアウトさせるラッパー */
-.hero-content-wrapper {
-    width: 100%;
-    height: 100%;
-    padding-top: 100px;
-    padding-bottom: 40px;
-    display: flex; 
-    flex-direction: column;
-    position: fixed; /* 固定してスクロール時にその場にとどまらせる */
-    top: 0;
-    left: 0;
-    z-index: 5;
-    /* フェードアウトアニメーションの起点 */
-    transition: opacity 0.1s linear, transform 0.1s linear;
+.hero-section.hero-hidden {
+    transform: scale(0.92) translateY(-20px);
+    opacity: 0.5;
+    pointer-events: none;
+    border-radius: 0;
+    overflow: hidden;
 }
 
 .container { padding: 0 6vw; z-index: 10; position: relative; }
@@ -120,8 +120,14 @@ a { text-decoration: none; color: inherit; }
 .hero-actions { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; width: 100%; }
 .action-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .btn-sub-text { 
-    font-family: var(--font-jp); font-size: 3vw; font-weight: 700; color: #111; 
-    margin-left: 15px; letter-spacing: 0.02em; line-height: 1; white-space: nowrap;
+    font-family: var(--font-jp); 
+    font-size: 3vw; 
+    font-weight: 700; 
+    color: #111;      
+    margin-left: 15px; 
+    letter-spacing: 0.02em; 
+    line-height: 1; 
+    white-space: nowrap;
     text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff;
 }
 .btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 30px; border-radius: 50px; font-size: 4vw; font-weight: 600; transition: transform 0.2s; white-space: nowrap; letter-spacing: 0.02em; }
@@ -145,12 +151,12 @@ a { text-decoration: none; color: inherit; }
     opacity: 0.95;
 }
 
-/* Footer (修正: Exploreの下に配置するためstaticに戻す) */
+/* Footer */
 .site-footer {
-    width: 100%; padding: 20px 0;
+    position: fixed; bottom: 0; left: 0; width: 100%; padding: 10px 0;
     text-align: center; font-family: var(--font-en); font-size: 0.65rem; color: #999;
-    letter-spacing: 0.05em; font-weight: 500; background: #fff;
-    z-index: 200; 
+    letter-spacing: 0.05em; font-weight: 500; background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px); z-index: 200; 
 }
 
 /* ==================================================
@@ -186,6 +192,7 @@ a { text-decoration: none; color: inherit; }
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     opacity: 1;
+    transition: opacity 0.3s ease; /* フェードアウト用 */
 }
 
 .swipe-text { text-align: center; color: #6a4cba; line-height: 1.4; text-shadow: 0 0 15px rgba(255, 255, 255, 0.9); }
@@ -207,26 +214,66 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ==================================================
-   Explore Section (修正: 通常フロー配置)
+   Explore Overlay
    ================================================== */
-.explore-section {
-    position: relative; 
+.explore-overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
     width: 100%; 
-    background: #fff;
-    z-index: 10; /* Heroより上に配置 */
+    height: 100%;
     
-    /* トップページ(100vh)分の余白を空けて、下に配置されるようにする */
-    margin-top: 100vh; 
-    padding-top: 60px;
-    min-height: 100vh;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.05); /* 上部に影 */
+    background: #fff;
+    z-index: 250; 
+    
+    /* 角丸なし */
+    border-radius: 0; 
+    
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.15); 
+
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+    
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch; 
+    overscroll-behavior-y: contain;    
+    
+    padding-top: 60px; 
+}
+
+.explore-overlay.active { 
+    transform: translateY(0); 
+}
+
+.explore-header-trigger {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 60px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    background: rgba(255,255,255,0.95); 
+    backdrop-filter: blur(10px);
+    z-index: 160; 
+    cursor: pointer;
+    
+    border-radius: 0;
+}
+
+.drag-handle { 
+    width: 48px; 
+    height: 5px; 
+    background: #e0e0e0; 
+    border-radius: 10px; 
 }
 
 .explore-container { width: 100%; max-width: 800px; margin: 0 auto; padding: 0 4vw; }
 .dig-content { padding-top: 20px; width: 100%; padding-bottom: 80px; }
 .explore-footer { text-align: center; font-weight: 900; color: #eee; font-size: 1.5rem; margin-top: 50px; text-transform: uppercase; }
 
-/* Explore Hero (Section内) */
+/* Explore Hero (Overlay内) */
 .explore-hero {
     text-align: center;
     margin-bottom: 30px; 
@@ -234,7 +281,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .explore-hero-logo {
-    height: 50px; 
+    height: 75px; 
     width: auto;
     display: inline-block;
     margin-bottom: 15px;
@@ -334,4 +381,190 @@ a { text-decoration: none; color: inherit; }
     .art-name { font-size: 1.5rem; } .art-meta-row { font-size: 0.75rem; } .art-role-badge { font-size: 0.65rem; padding: 3px 6px; }
     .art-qr-wrapper { margin-bottom: 5px; padding: 5px 0; } .art-qr-box { width: 115px; height: 115px; margin-bottom: 8px; }
     .art-instruction-text { font-size: 0.55rem; } .art-info-footer { padding-top: 10px; } .insta-icon { width: 16px; height: 16px; } .insta-val { font-size: 0.8rem; }
+}
+
+/* ==================================================
+   How It Works Page Styles
+   ================================================== */
+
+/* メインコンテナ: ヘッダーとフッターを避けて中央配置 */
+.how-main {
+    width: 100%;
+    min-height: 100vh;
+    padding: 100px 6vw 80px; /* Header 80px + 余白, Footer回避 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* ページタイトル */
+.how-title {
+    font-family: var(--font-en);
+    font-weight: 900;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    color: var(--text-color);
+    margin-bottom: 40px;
+    letter-spacing: -0.02em;
+    text-align: center;
+}
+
+/* --- タブナビゲーション (Create, Share, Scan) --- */
+.how-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.how-tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.how-tab-btn:hover {
+    opacity: 0.8;
+}
+
+.how-tab-btn.active {
+    opacity: 1;
+    transform: translateY(-5px);
+}
+
+/* タブのアクティブ線 */
+.how-tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.how-tab-btn.active::after {
+    width: 50%;
+}
+
+/* アイコン円形エリア */
+.tab-icon-box {
+    width: 16vw;
+    height: 16vw;
+    max-width: 80px;
+    max-height: 80px;
+    background: #f0f0f5;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.how-tab-btn.active .tab-icon-box {
+    background: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(106, 76, 186, 0.4);
+}
+
+.tab-icon-img {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+    filter: grayscale(100%);
+    transition: filter 0.3s;
+}
+
+/* アクティブ時はアイコンを白くする（SVGや透過PNG想定） */
+.how-tab-btn.active .tab-icon-img {
+    filter: brightness(0) invert(1); 
+}
+
+/* タブのテキスト */
+.tab-label {
+    font-family: var(--font-en);
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-color);
+}
+
+/* --- コンテンツエリア (切り替わる部分) --- */
+.how-content-wrapper {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    min-height: 300px; /* ガタつき防止の最小高さ */
+}
+
+.how-content-item {
+    display: none; /* デフォルト非表示 */
+    text-align: center;
+    animation: fadeInSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.how-content-item.active {
+    display: block;
+}
+
+/* コンテンツ内デザイン */
+.content-headline {
+    font-family: var(--font-jp);
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.content-desc {
+    font-family: var(--font-jp);
+    font-size: 1rem;
+    font-weight: 400;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.content-image {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* アニメーション定義 */
+@keyframes fadeInSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* レスポンシブ調整 */
+@media (min-width: 768px) {
+    .how-tabs { gap: 60px; }
+    .tab-icon-box { width: 100px; height: 100px; }
+    .tab-label { font-size: 1.2rem; }
+    .content-headline { font-size: 2rem; }
+    .how-content-wrapper { max-width: 700px; }
 }
