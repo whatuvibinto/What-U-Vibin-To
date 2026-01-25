@@ -24,9 +24,6 @@
                         sans: ['Inter', 'sans-serif'],
                         jp: ['Noto Sans JP', 'sans-serif'],
                     },
-                    backgroundImage: {
-                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                    },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                     },
@@ -42,33 +39,24 @@
     </script>
 
     <style>
-        body {
-            /* スクロールバーを隠すなど、必要最低限の設定 */
-            -webkit-font-smoothing: antialiased;
-        }
-        /* 画像の色反転（黒背景用にロゴを白くする） */
-        .invert-white {
-            filter: invert(1) brightness(2);
-        }
-        /* メニュー開閉用のアニメーションクラス */
-        .menu-open {
-            transform: translateX(0) !important;
-        }
+        body { -webkit-font-smoothing: antialiased; }
+        /* ロゴ反転用クラスは削除しました */
+        .menu-open { transform: translateX(0) !important; }
     </style>
 </head>
 <body class="bg-black text-white overflow-x-hidden selection:bg-neon selection:text-white">
 
-    <header class="fixed top-0 left-0 w-full h-20 flex justify-between items-center px-6 md:px-12 z-50 bg-black/60 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+    <header class="fixed top-0 left-0 w-full h-20 flex justify-between items-center px-6 md:px-12 z-50 bg-white/80 backdrop-blur-md border-b border-black/5 transition-all duration-300">
         <div class="logo-container">
             <a href="index.html" class="block">
-                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="h-10 w-auto invert-white opacity-90 hover:opacity-100 transition-opacity">
+                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity">
             </a>
         </div>
         
         <button id="menuBtn" class="relative z-[60] w-8 h-6 flex flex-col justify-between items-end group focus:outline-none" aria-label="Menu">
-            <span class="w-full h-[2px] bg-white transition-all duration-300 group-[.active]:rotate-45 group-[.active]:translate-y-[11px]"></span>
-            <span class="w-2/3 h-[2px] bg-white transition-all duration-300 group-[.active]:opacity-0"></span>
-            <span class="w-full h-[2px] bg-white transition-all duration-300 group-[.active]:-rotate-45 group-[.active]:-translate-y-[11px]"></span>
+            <span class="w-full h-[2px] bg-black transition-all duration-300 group-[.active]:rotate-45 group-[.active]:translate-y-[11px] group-[.active]:bg-white"></span>
+            <span class="w-2/3 h-[2px] bg-black transition-all duration-300 group-[.active]:opacity-0"></span>
+            <span class="w-full h-[2px] bg-black transition-all duration-300 group-[.active]:-rotate-45 group-[.active]:-translate-y-[11px] group-[.active]:bg-white"></span>
         </button>
     </header>
 
@@ -124,7 +112,7 @@
                             <span class="font-sans font-bold text-sm tracking-widest uppercase text-white group-hover:text-neon transition-colors">How it works</span>
                             <span class="ml-2 text-neon transform group-hover:translate-x-1 transition-transform">&gt;</span>
                         </a>
-                        </div>
+                    </div>
                     
                     <a href="getQR.html" class="group relative flex items-center justify-center px-10 py-4 rounded-full bg-neon hover:bg-neonHover transition-all duration-300 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:scale-105 w-full md:w-auto">
                         <span class="font-sans font-black text-sm tracking-widest uppercase text-white">Get your QR</span>
@@ -150,12 +138,10 @@
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if (isMenuOpen) {
-                // Open
                 menuPanel.classList.add('menu-open');
                 menuBtn.classList.add('active');
                 document.body.style.overflow = 'hidden';
             } else {
-                // Close
                 closeMenu();
             }
         }
