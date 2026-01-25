@@ -635,3 +635,108 @@
     .art-info-section { padding: 24px 16px 16px; }
     .art-qr-box { width: 140px; height: 140px; }
 }
+/* ================================
+   ARTIST MODAL PRO VERSION
+================================ */
+
+.art-layout {
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+/* 背景 */
+
+.art-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.art-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+
+/* グラデーション */
+
+.art-overlay {
+  position: relative;
+  z-index: 5;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32px 24px;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.95),
+    rgba(0,0,0,0.6),
+    transparent
+  );
+}
+
+/* タイトル */
+
+.art-header {
+  margin-top: auto;
+  text-align: center;
+}
+
+.art-title {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.art-meta {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  opacity: .8;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* QR */
+
+.art-qr-section {
+  margin-top: 28px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+
+.art-qr-section img {
+  width: 160px;
+  filter: invert(1);
+}
+
+.qr-caption {
+  margin-top: 10px;
+  font-size: 0.65rem;
+  letter-spacing: .1em;
+  opacity: .7;
+}
+
+/* SNS */
+
+.art-social {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  text-decoration: none;
+  color: white;
+}
+
+.art-social img {
+  width: 20px;
+}
