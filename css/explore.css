@@ -740,3 +740,11 @@
 .art-social img {
   width: 20px;
 }
+.qr-modal {
+  display: none;
+}
+
+.qr-modal.active {
+  display: flex;
+}
+
