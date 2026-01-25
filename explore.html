@@ -2,15 +2,16 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EXPLORE - WHAT U VIBIN TO?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EXPLORE | WHAT U VIBIN TO?</title>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/explore.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-<body class="explore-page">
+<body class="explore-page-body">
 
     <header class="site-header">
         <div class="logo-container">
@@ -27,6 +28,10 @@
 
     <div class="menu-panel" id="menuPanel">
         <nav class="menu-nav">
+            <a href="index.html" class="menu-link">
+                <span class="en-text">Home</span>
+                <span class="jp-sub">トップページに戻る</span>
+            </a>
             <a href="explore.html" class="menu-link highlight">
                 <span class="en-text">Explore</span>
                 <span class="jp-sub">あの人が"この時間"に聞いている曲をのぞく</span>
@@ -42,62 +47,64 @@
         </nav>
     </div>
 
-    <div class="explore-container">
-        
-        <div class="dig-content">
-            
-            <div class="explore-hero">
-                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="explore-hero-logo">
-                <p class="explore-hero-copy">
-                    このQRは、生きている。<br>
-                    あの人の"この時間"に聴いている音を見てみよう。
-                </p>
-            </div>
-
-            <div class="search-area">
-                <div class="search-box">
-                    <input type="text" class="search-input" id="searchInput" placeholder="Name or Location...">
-                    <button class="search-btn">SEARCH</button>
-                </div>
+    <main class="explore-main-content">
+        <div class="explore-container">
+            <div class="dig-content">
                 
-                <div class="genre-filter-area">
-                    <div class="genre-label">FILTER BY GENRE:</div>
-                    <div class="genre-checkboxes" id="genreCheckboxes"></div>
-                    <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET (ALL)</button>
+                <div class="explore-hero">
+                    <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="explore-hero-logo">
+                    <h2 class="explore-main-copy">
+                        このQRは、生きている。
+                    </h2>
+                    <p class="explore-sub-copy">
+                        「時間帯によって変わる」「更新され続ける」<br>
+                        あの人のミュージックプレイリストをチェック
+                    </p>
+                </div>
+
+                <div class="search-area">
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Name or Location...">
+                        <button class="search-btn">SEARCH</button>
+                    </div>
+                    <div class="genre-filter-area">
+                        <div class="genre-label">FILTER BY GENRE:</div>
+                        <div class="genre-checkboxes" id="genreCheckboxes"></div>
+                        <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET (ALL)</button>
+                    </div>
+                </div>
+
+                <div class="profile-list" id="profileContainer"></div>
+                
+                <div class="explore-footer">
+                    KEEP DIGGING, KEEP VIBING.
                 </div>
             </div>
-
-            <div class="profile-list" id="profileContainer"></div>
         </div>
+    </main>
 
-        <footer class="site-footer">
-            © 2026 WHAT U VIBIN TO / One QR, different vibes
-        </footer>
-    </div>
+    <footer class="site-footer">
+        © 2026 WHAT U VIBIN TO / One QR, Different Vibes
+    </footer>
 
     <div class="qr-modal-overlay" id="qrModal">
         <div class="qr-modal-content art-layout">
             <button class="qr-modal-close" onclick="closeQrModal()"></button>
-            
             <div class="art-image-section">
                 <img src="" alt="Profile Photo" id="modalPhoto">
             </div>
-
             <div class="art-info-section">
-                
                 <div class="art-info-header">
                     <div class="art-name-row">
                         <h2 class="art-name" id="modalName">NAME</h2>
                         <span class="art-role-badge" id="modalRole">DJ</span>
                     </div>
-
                     <div class="art-meta-row">
                         <span class="art-location" id="modalLocation">TOKYO</span>
                         <span class="art-slash">/</span>
                         <span class="art-genre" id="modalGenre">GENRE</span>
                     </div>
                 </div>
-
                 <div class="art-qr-wrapper">
                     <div class="art-qr-box">
                         <a id="modalQrLink" href="#" target="_blank" rel="noopener noreferrer">
@@ -106,7 +113,6 @@
                     </div>
                     <p class="art-instruction-text">Tap or Scan the QR</p>
                 </div>
-
                 <div class="art-info-footer" id="modalInstaArea">
                     <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
                         <div class="insta-left">
@@ -123,11 +129,12 @@
     <script src="js/dig_data.js"></script>
 
     <script>
+        // --- メニュー開閉 ---
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
         let isMenuOpen = false;
 
-        menuBtn.addEventListener('click', () => {
+        function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if (isMenuOpen) {
                 menuPanel.classList.add('active');
@@ -136,24 +143,24 @@
             } else {
                 menuPanel.classList.remove('active');
                 menuBtn.classList.remove('active');
-                document.body.style.overflow = '';
+                document.body.style.overflow = 'auto';
             }
-        });
-    </script>
+        }
+        menuBtn.addEventListener('click', toggleMenu);
 
-    <script>
+        // --- Explore機能 ---
         const container = document.getElementById('profileContainer');
         const modal = document.getElementById('qrModal');
-        const modalName = document.getElementById('modalName');
-        const modalGenre = document.getElementById('modalGenre');
-        const modalPhoto = document.getElementById('modalPhoto');
-        const modalQr = document.getElementById('modalQr');
-        const modalQrLink = document.getElementById('modalQrLink');
-        const modalRole = document.getElementById('modalRole');
-        const modalLocation = document.getElementById('modalLocation');
-        const modalInstaArea = document.getElementById('modalInstaArea');
-        const modalInstaLink = document.getElementById('modalInstaLink');
-        const modalInstaName = document.getElementById('modalInstaName');
+        const mName = document.getElementById('modalName');
+        const mGenre = document.getElementById('modalGenre');
+        const mPhoto = document.getElementById('modalPhoto');
+        const mQr = document.getElementById('modalQr');
+        const mQrLink = document.getElementById('modalQrLink');
+        const mRole = document.getElementById('modalRole');
+        const mLocation = document.getElementById('modalLocation');
+        const mInstaArea = document.getElementById('modalInstaArea');
+        const mInstaLink = document.getElementById('modalInstaLink');
+        const mInstaName = document.getElementById('modalInstaName');
         const searchInput = document.getElementById('searchInput');
         const genreContainer = document.getElementById('genreCheckboxes');
         const resetBtn = document.getElementById('resetBtn');
@@ -162,13 +169,12 @@
         let selectedGenres = []; 
         let profileData = [];
         
-        if (typeof window.digData !== 'undefined') {
-            profileData = window.digData;
-        } else if (typeof digData !== 'undefined') {
-            profileData = digData;
-        }
+        initExplore();
 
-        function init() {
+        function initExplore() {
+            if (typeof window.digData !== 'undefined') profileData = window.digData;
+            else if (typeof digData !== 'undefined') profileData = digData;
+
             if(profileData.length > 0) {
                 profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
                 generateGenreCheckboxes(); 
@@ -193,7 +199,7 @@
 
         function renderProfiles(data) {
             if (data.length === 0) {
-                container.innerHTML = '<p style="text-align:center; width:100%; grid-column:1/-1; margin-top:50px; font-weight:bold;">NO VIBES FOUND...</p>';
+                container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;margin-top:50px;font-weight:bold;">NO VIBES FOUND...</p>';
                 return;
             }
             let html = '';
@@ -248,36 +254,18 @@
         });
 
         window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
-            modalName.textContent = name;
-            modalGenre.textContent = genre;
-            modalLocation.textContent = location;
-            modalPhoto.src = imageSrc;
-            modalQr.src = qrSrc;
-            modalQrLink.href = linkUrl;
-            
-            // Roleの表示制御
-            if (role) { 
-                modalRole.textContent = role; 
-                modalRole.style.display = "inline-block"; 
-            } else { 
-                modalRole.style.display = "none"; 
-            }
-            
-            // Instaの表示制御
-            if (instaId) { 
-                modalInstaArea.style.display = "flex";
-                modalInstaName.textContent = instaId; 
-                modalInstaLink.href = "https://instagram.com/" + instaId; 
-            } else { 
-                modalInstaArea.style.display = "none"; 
-            }
-            
+            mName.textContent = name;
+            mGenre.textContent = genre;
+            mLocation.textContent = location;
+            mPhoto.src = imageSrc;
+            mQr.src = qrSrc;
+            mQrLink.href = linkUrl;
+            if (role) { mRole.textContent = role; mRole.style.display = "inline-block"; } else { mRole.style.display = "none"; }
+            if (instaId) { mInstaArea.style.display = "flex"; mInstaName.textContent = instaId; mInstaLink.href = "https://instagram.com/" + instaId; } else { mInstaArea.style.display = "none"; }
             modal.classList.add('active');
         };
-        
         window.closeQrModal = function() { modal.classList.remove('active'); };
         modal.addEventListener('click', (e) => { if (e.target === modal) closeQrModal(); });
-        init();
     </script>
 </body>
 </html>
