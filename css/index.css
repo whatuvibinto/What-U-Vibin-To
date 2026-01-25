@@ -12,7 +12,6 @@
     --color-gray-300: #d1d5db;
     --color-gray-500: #6b7280;
     
-    /* ★修正: 英語はInter、日本語はNoto Sans JPを強制的に使用する設定に変更 */
     --font-sans: 'Inter', 'Noto Sans JP', sans-serif;
     --font-jp: 'Noto Sans JP', sans-serif;
     
@@ -28,7 +27,6 @@
 html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
-    /* ★追加: スマホでの文字サイズ自動調整を無効化（PCとサイズ感を合わせる） */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
 }
@@ -36,7 +34,6 @@ html {
 body {
     background-color: var(--color-black);
     color: var(--color-white);
-    /* ここで定義した統合フォントセットを適用 */
     font-family: var(--font-sans);
     overflow-x: hidden;
     width: 100%;
@@ -66,23 +63,11 @@ a {
     align-items: center;
     padding: 0 32px; 
     z-index: 50;
-
-    /* --- 高級感のポイント --- */
-    
-    /* 1. 背景色の透明度を下げる (黒を薄く) */
     background-color: rgba(5, 5, 5, 0.3); 
-    
-    /* 2. 強烈なブラーと彩度調整で「磨りガラス」感を出す */
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
-    
-    /* 3. 上下に極薄のホワイトラインを入れて「ガラスの厚み」を表現 */
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    /* border-top: 1px solid rgba(255, 255, 255, 0.05);Optional: 上部にも入れるとより立体的 */
-    
-    /* 4. 柔らかい影で浮遊感を出す */
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -93,13 +78,10 @@ a {
 }
 
 .header-logo {
-    height: 40px; 
+    height: 50px; 
     width: auto;
-    /* ガラスの上に乗っているような質感 */
     opacity: 0.95; 
     transition: transform 0.3s ease;
-    /* もしロゴが黒色画像で見えない場合は、以下のコメントアウトを外して白く反転させてください */
-    /* filter: invert(1); */
 }
 
 .header-logo:hover {
@@ -107,36 +89,6 @@ a {
     opacity: 1;
 }
 
-/* ハンバーガーメニュー周りの微調整 */
-.menu-btn {
-    position: relative;
-    z-index: 60;
-    width: 32px; 
-    height: 24px; 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-end;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.menu-btn span {
-    display: block;
-    height: 2px;
-    background-color: var(--color-white);
-    box-shadow: 0 0 2px rgba(0,0,0,0.5); /* 視認性を高める微細な影 */
-    transition: all 0.3s ease;
-}
-
-/* スマホ対応 */
-@media (max-width: 768px) {
-    .site-header {
-        padding: 0 20px;
-        /* スマホではブラーを少し弱めてパフォーマンス配慮しても良いが、高級感優先でそのまま */
-    }
-}
 /* Hamburger Button */
 .menu-btn {
     position: relative;
@@ -156,6 +108,7 @@ a {
     display: block;
     height: 2px;
     background-color: var(--color-white);
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
     transition: all 0.3s ease;
 }
 
@@ -171,6 +124,13 @@ a {
 }
 .menu-btn.active span:nth-child(3) {
     transform: rotate(-45deg) translateY(-11px);
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+    .site-header {
+        padding: 0 20px;
+    }
 }
 
 /* ==================================================
@@ -262,14 +222,15 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 50px; 
+    padding-top: 80px; 
     padding-bottom: 40px; 
     overflow: hidden;
-    @media screen and (min-height: 880px) {
-     .hero-section {
-        /* 下の余白を強制的に増やすことで、中央揃えの重心を上に押し上げる */
+}
+
+/* ★縦長画面用の上ズレ調整（そのまま維持） */
+@media screen and (min-height: 880px) {
+    .hero-section {
         padding-bottom: 180px; 
-     } 
     }
 }
 
@@ -282,14 +243,21 @@ a {
     overflow: hidden;
 }
 
+/* ★修正: 画像をhero-content内に移動したため、ここでの配置指定を変更 */
 .bg-image {
     position: absolute;
-    bottom: 0%;
+    /* ボタンの右横あたりに配置するための座標 */
+    bottom: -10%;
     right: -20%;
+    /* コンテンツ幅に対するサイズ指定 */
     width: 78%;
+    max-width: none; /* 親要素からはみ出させる */
+    
     opacity: 0.4;
     mix-blend-mode: screen;
     animation: float 6s ease-in-out infinite;
+    z-index: -1; /* 文字の裏側に回す */
+    pointer-events: none;
 }
 
 /* Glow Effects */
@@ -338,10 +306,12 @@ a {
 }
 
 .hero-content {
+    /* ★追加: 画像の配置基準にするため relative を指定 */
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 48px; 
+    gap: 24px; 
 }
 
 /* Typography Adjustments */
@@ -352,7 +322,6 @@ a {
 }
 
 .main-copy {
-    /* フォント指定を var(--font-sans) に統一することでNoto Sans JPを適用 */
     font-family: var(--font-sans); 
     font-weight: 900;
     font-size: 2.00rem; 
@@ -365,7 +334,6 @@ a {
 .main-copy span {
     display: block;
     margin-bottom: 8px;
-   /* ★これを追加：勝手な改行（折り返し）を禁止する */
     white-space: nowrap;
 }
 
@@ -377,7 +345,7 @@ a {
 }
 
 .sub-copy-jp {
-    font-family: var(--font-sans); /* こちらも統一 */
+    font-family: var(--font-sans);
     font-weight: 500; 
     font-size: 1.00rem; 
     line-height: 1.1; 
@@ -403,10 +371,10 @@ a {
 .action-buttons {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; 
+    align-items: flex-start;
     gap: 16px;
     width: 100%; 
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 .btn-group {
@@ -421,19 +389,11 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    /* 余白を少し減らしてコンパクトに */
     padding: 10px 20px; 
-    
     border-radius: 9999px;
-    
-    /* ★修正: width: 100% を削除し、自動サイズにする */
     width: auto; 
-    /* もし短すぎると感じる場合は min-width: 140px; などを追加 */
-    
     transition: all 0.3s ease;
     font-size: 0.75rem; 
-    
 }
 
 .btn-secondary {
@@ -536,7 +496,6 @@ a {
    Animations
    ================================================== */
 @keyframes float {
-    /* rotate(10deg) を追加して、常に10度傾いた状態で上下に動かします */
     0%, 100% { transform: translateY(0) rotate(18deg); }
     50% { transform: translateY(-10px) rotate(18deg); }
 }
@@ -552,14 +511,16 @@ a {
 @media (min-width: 768px) {
     .site-header { padding: 0 48px; }
     
+    /* PC版の画像位置調整 */
     .bg-image {
         width: 80%;
-        right: -10%;
+        bottom: -20%;
+        right: -30%;
     }
     
     .hero-content {
         width: 60%; 
-        gap: 56px; 
+        gap: 32px; 
     }
     
     .main-copy {
