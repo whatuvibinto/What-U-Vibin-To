@@ -403,6 +403,7 @@ a {
 .action-buttons {
     display: flex;
     flex-direction: column;
+    align-items: flex-start; 
     gap: 16px;
     width: 100%; 
     padding-top: 0px;
@@ -433,18 +434,6 @@ a {
     transition: all 0.3s ease;
     font-size: 0.75rem; 
     
-    /* 左寄せ配置にするため、margin-rightなどを調整（親要素がflex-startならこれだけでOK） */
-}
-
-/* ボタン親要素の調整（念のため確認） */
-.action-buttons {
-    display: flex;
-    flex-direction: column;
-    /* 左寄せ（既に flex-start になっているはずですが、明示しておきます） */
-    align-items: flex-start; 
-    gap: 16px;
-    width: 100%; 
-    padding-top: 16px;
 }
 
 .btn-secondary {
