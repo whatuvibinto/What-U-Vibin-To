@@ -265,6 +265,12 @@ a {
     padding-top: 80px; 
     padding-bottom: 40px; 
     overflow: hidden;
+    @media screen and (min-height: 880px) {
+     .hero-section {
+        /* 下の余白を強制的に増やすことで、中央揃えの重心を上に押し上げる */
+        padding-bottom: 180px; 
+     } 
+    }
 }
 
 /* Background Effects */
