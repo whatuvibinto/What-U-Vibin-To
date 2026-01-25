@@ -279,7 +279,7 @@ a {
 .bg-image {
     position: absolute;
     bottom: 20%;
-    right: -10%;
+    right: -20%;
     width: 70%;
     opacity: 0.4;
     mix-blend-mode: screen;
@@ -522,8 +522,8 @@ a {
    ================================================== */
 @keyframes float {
     /* rotate(10deg) を追加して、常に10度傾いた状態で上下に動かします */
-    0%, 100% { transform: translateY(0) rotate(15deg); }
-    50% { transform: translateY(-10px) rotate(15deg); }
+    0%, 100% { transform: translateY(0) rotate(18deg); }
+    50% { transform: translateY(-10px) rotate(18deg); }
 }
 
 @keyframes pulse-slow {
