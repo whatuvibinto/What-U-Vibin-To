@@ -53,7 +53,7 @@ a {
 }
 
 /* ==================================================
-   Header (Black Glass Style)
+   Header (Premium Dark Glass)
    ================================================== */
 .site-header {
     position: fixed;
@@ -66,10 +66,23 @@ a {
     align-items: center;
     padding: 0 32px; 
     z-index: 50;
-    background-color: rgba(5, 5, 5, 0.7); 
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    /* --- 高級感のポイント --- */
+    
+    /* 1. 背景色の透明度を下げる (黒を薄く) */
+    background-color: rgba(5, 5, 5, 0.3); 
+    
+    /* 2. 強烈なブラーと彩度調整で「磨りガラス」感を出す */
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    
+    /* 3. 上下に極薄のホワイトラインを入れて「ガラスの厚み」を表現 */
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    /* border-top: 1px solid rgba(255, 255, 255, 0.05);Optional: 上部にも入れるとより立体的 */
+    
+    /* 4. 柔らかい影で浮遊感を出す */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -82,14 +95,48 @@ a {
 .header-logo {
     height: 32px; 
     width: auto;
-    opacity: 1; 
+    /* ガラスの上に乗っているような質感 */
+    opacity: 0.95; 
     transition: transform 0.3s ease;
+    /* もしロゴが黒色画像で見えない場合は、以下のコメントアウトを外して白く反転させてください */
+    /* filter: invert(1); */
 }
 
 .header-logo:hover {
     transform: scale(1.02);
+    opacity: 1;
 }
 
+/* ハンバーガーメニュー周りの微調整 */
+.menu-btn {
+    position: relative;
+    z-index: 60;
+    width: 32px; 
+    height: 24px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-btn span {
+    display: block;
+    height: 2px;
+    background-color: var(--color-white);
+    box-shadow: 0 0 2px rgba(0,0,0,0.5); /* 視認性を高める微細な影 */
+    transition: all 0.3s ease;
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+    .site-header {
+        padding: 0 20px;
+        /* スマホではブラーを少し弱めてパフォーマンス配慮しても良いが、高級感優先でそのまま */
+    }
+}
 /* Hamburger Button */
 .menu-btn {
     position: relative;
