@@ -78,7 +78,7 @@ a {
 }
 
 .header-logo {
-    height: 50px; 
+    height: 40px; 
     width: auto;
     opacity: 0.95; 
     transition: transform 0.3s ease;
@@ -366,7 +366,7 @@ a {
     flex-direction: column;
     gap: 4px;
     margin-top: 8px;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
 }
 
 /* Buttons (Compact & Left Aligned) */
