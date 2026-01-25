@@ -351,6 +351,7 @@ a {
     line-height: 1.1; 
     color: var(--color-gray-300);
     letter-spacing: 0.05em;
+    margin-bottom: 50px;
 }
 
 .sub-copy-en {
@@ -365,7 +366,6 @@ a {
     flex-direction: column;
     gap: 4px;
     margin-top: 8px;
-    margin-bottom: 40px;
 }
 
 /* Buttons (Compact & Left Aligned) */
