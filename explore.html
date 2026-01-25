@@ -16,7 +16,7 @@
     <header class="site-header">
         <div class="logo-container">
             <a href="index.html" class="logo-link">
-                <img src="images/white_logo.png" alt="WHAT U VIBIN TO?" class="header-logo">
+                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="header-logo">
             </a>
         </div>
         
@@ -49,9 +49,8 @@
     </div>
 
     <main class="explore-main-content">
-
         <div class="bg-layer">
-            <!--<img src="images/whiteQR_background.PNG" alt="" class="bg-image">-->
+            <img src="images/whiteQR_background.PNG" alt="" class="bg-image">
             <div class="glow-spot-1"></div>
             <div class="glow-spot-2"></div>
             <div class="glow-bottom"></div>
@@ -101,40 +100,39 @@
         <div class="qr-modal-content art-layout">
             <button class="qr-modal-close" onclick="closeQrModal()"></button>
 
-              <!-- Background Image -->
-              <div class="art-bg">
+            <div class="art-bg">
                 <img id="modalPhoto" src="">
-              </div>
+            </div>
 
-  <!-- Overlay Content -->
-              <div class="art-overlay">
+            <div class="art-overlay">
 
-    <!-- Artist Header -->
                 <div class="art-header">
-                  <h1 id="modalName" class="art-title">DJ NAME</h1>
-                  <div class="art-meta">
-                    <span id="modalLocation">TOKYO</span>
-                    <span>—</span>
-                    <span id="modalGenre">HOUSE</span>
-                  </div>
+                    <div class="art-title-row">
+                        <h1 id="modalName" class="art-title">DJ NAME</h1>
+                        <span id="modalRole" class="art-role-badge">DJ</span>
+                    </div>
+                    <div class="art-meta">
+                        <span id="modalLocation">TOKYO</span>
+                        <span>—</span>
+                        <span id="modalGenre">HOUSE</span>
+                    </div>
                 </div>
 
-    <!-- QR Area -->
                 <div class="art-qr-section">
-                  <a id="modalQrLink" target="_blank">
-                    <img id="modalQr" src="">
-                  </a>
-                  <p class="qr-caption">SCAN TO FEEL CURRENT VIBE</p>
+                    <a id="modalQrLink" target="_blank">
+                        <img id="modalQr" src="">
+                    </a>
+                    <p class="qr-caption">SCAN TO FEEL CURRENT VIBE</p>
                 </div>
 
-    <!-- Social -->
                 <a id="modalInstaLink" target="_blank" class="art-social">
-                  <img src="images/InstagramLogo.png">
-                  <span id="modalInstaName">@username</span>
+                    <img src="images/InstagramLogo.png" class="insta-icon">
+                    <span id="modalInstaName" class="social-id">@username</span>
+                    <span id="modalInstaArea" style="display:none;"></span>
                 </a>
 
-              </div>
-            </div>  
+            </div>
+        </div>  
     </div>
 
     <script src="js/dig_data.js"></script>
@@ -166,16 +164,19 @@
         // --- Explore Logic ---
         const container = document.getElementById('profileContainer');
         const modal = document.getElementById('qrModal');
+        
+        // Modal Elements
         const mName = document.getElementById('modalName');
         const mGenre = document.getElementById('modalGenre');
         const mPhoto = document.getElementById('modalPhoto');
         const mQr = document.getElementById('modalQr');
         const mQrLink = document.getElementById('modalQrLink');
-        const mRole = document.getElementById('modalRole');
+        const mRole = document.getElementById('modalRole'); // ★これでエラー回避
         const mLocation = document.getElementById('modalLocation');
-        const mInstaArea = document.getElementById('modalInstaArea');
         const mInstaLink = document.getElementById('modalInstaLink');
         const mInstaName = document.getElementById('modalInstaName');
+        
+        // Search Elements
         const searchInput = document.getElementById('searchInput');
         const genreContainer = document.getElementById('genreCheckboxes');
         const resetBtn = document.getElementById('resetBtn');
@@ -268,19 +269,50 @@
             applyFilters();
         });
 
+        // --- Open Modal Logic (Fixed) ---
         window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
-            mName.textContent = name;
-            mGenre.textContent = genre;
-            mLocation.textContent = location;
-            mPhoto.src = imageSrc;
-            mQr.src = qrSrc;
-            mQrLink.href = linkUrl;
-            if (role) { mRole.textContent = role; mRole.style.display = "inline-block"; } else { mRole.style.display = "none"; }
-            if (instaId) { mInstaArea.style.display = "flex"; mInstaName.textContent = instaId; mInstaLink.href = "https://instagram.com/" + instaId; } else { mInstaArea.style.display = "none"; }
-            modal.classList.add('active');
+            // 要素が存在するか確認してから値をセット
+            if(mName) mName.textContent = name;
+            if(mGenre) mGenre.textContent = genre;
+            if(mLocation) mLocation.textContent = location;
+            if(mPhoto) mPhoto.src = imageSrc;
+            if(mQr) mQr.src = qrSrc;
+            if(mQrLink) mQrLink.href = linkUrl;
+            
+            // Role Badge Control
+            if (mRole) {
+                if (role) { 
+                    mRole.textContent = role; 
+                    mRole.style.display = "inline-block"; 
+                } else { 
+                    mRole.style.display = "none"; 
+                }
+            }
+
+            // Insta Link Control
+            if (mInstaLink) {
+                if (instaId) {
+                    mInstaLink.style.display = "flex";
+                    if(mInstaName) mInstaName.textContent = "@" + instaId;
+                    mInstaLink.href = "https://instagram.com/" + instaId;
+                } else {
+                    mInstaLink.style.display = "none";
+                }
+            }
+            
+            // Show Modal
+            if(modal) modal.classList.add('active');
         };
-        window.closeQrModal = function() { modal.classList.remove('active'); };
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeQrModal(); });
+
+        window.closeQrModal = function() { 
+            if(modal) modal.classList.remove('active'); 
+        };
+        
+        if(modal) {
+            modal.addEventListener('click', (e) => { 
+                if (e.target === modal) closeQrModal(); 
+            });
+        }
     </script>
 </body>
 </html>
