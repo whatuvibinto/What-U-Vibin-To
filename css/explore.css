@@ -1,34 +1,606 @@
 @charset "UTF-8";
 
 /* ==================================================
-   Explore Page Specific Styles
+   Explore Page Layout & Theme
    ================================================== */
 
-/* ヘッダーの高さ分、コンテンツを下げる */
 .explore-page-body {
-    padding-top: 80px; 
-    background-color: #ffffff;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    padding-top: var(--header-height);
 }
 
-/* メインコンテンツエリア */
 .explore-main-content {
+    position: relative;
     width: 100%;
     min-height: 100vh;
     padding-bottom: 80px;
+    /* 背景エフェクトの上にコンテンツを表示 */
+    z-index: 10;
 }
 
-/* コンテナ幅など */
 .explore-container {
+    position: relative;
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 20px 4vw 0;
+    padding: 20px 24px 0;
+    z-index: 20;
 }
 
-/* Explore用のロゴとコピーの余白調整 */
+/* ==================================================
+   Explore Hero
+   ================================================== */
 .explore-hero {
-    margin-top: 20px;
-    margin-bottom: 40px;
+    text-align: center;
+    margin-bottom: 48px;
+    margin-top: 40px;
 }
 
-/* その他、index.cssのスタイルを継承しつつ微調整が必要な場合ここに追記 */
+.explore-main-copy {
+    font-family: var(--font-sans);
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--color-white);
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.3); /* ネオンの影 */
+}
+
+.explore-sub-copy {
+    font-family: var(--font-jp);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-300);
+    line-height: 1.8;
+}
+
+/* ==================================================
+   Search & Filter (Dark Mode)
+   ================================================== */
+.search-area {
+    margin-bottom: 60px;
+    text-align: center;
+    width: 100%;
+}
+
+.search-box {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 24px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 16px 20px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--color-white);
+    
+    /* 黒ガラス風の入力欄 */
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: var(--color-gray-500);
+}
+
+.search-input:focus {
+    border-color: var(--color-neon);
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+.search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-neon);
+    cursor: pointer;
+    padding: 8px 16px;
+    transition: color 0.3s;
+}
+
+.search-btn:hover {
+    color: var(--color-white);
+}
+
+/* Genre Filters */
+.genre-filter-area {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.genre-label {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--color-gray-500);
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+}
+
+.genre-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.genre-tag input[type="checkbox"] { display: none; }
+
+.genre-name {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-gray-300);
+    background: transparent;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.genre-tag:hover .genre-name {
+    border-color: var(--color-white);
+    color: var(--color-white);
+}
+
+/* Checked State */
+.genre-tag input[type="checkbox"]:checked + .genre-name {
+    background: var(--color-neon);
+    color: var(--color-white);
+    border-color: var(--color-neon);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+}
+
+.filter-reset-btn {
+    margin-top: 20px;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 0.75rem;
+    color: var(--color-gray-500);
+    cursor: pointer;
+}
+
+/* ==================================================
+   Profile Grid (Dark Cards)
+   ================================================== */
+.profile-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px; /* gap-4 */
+    width: 100%;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    /* カード背景をダークガラスに */
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeInUpCard 0.6s ease-out forwards;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-neon);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+@keyframes fadeInUpCard {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Image Area */
+.profile-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #1a1a1a;
+    position: relative;
+}
+
+.profile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.profile-card:hover .profile-img img {
+    transform: scale(1.05);
+}
+
+/* Badge */
+.role-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--color-white);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    z-index: 2;
+}
+
+/* Card Info */
+.profile-info {
+    padding: 12px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-name {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-white);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-loc {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    color: var(--color-gray-500);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.mini-qr, .service-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: invert(1); /* 黒アイコンを白反転 */
+    opacity: 0.7;
+}
+
+/* ==================================================
+   Footer
+   ================================================== */
+.explore-footer {
+    text-align: center;
+    font-family: var(--font-sans);
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.1);
+    font-size: 1.5rem;
+    margin-top: 80px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ==================================================
+   Modal (Dark Theme)
+   ================================================== */
+.qr-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(15px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qr-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.qr-modal-content.art-layout {
+    display: flex;
+    flex-direction: column;
+    width: 88%;
+    max-width: 400px;
+    max-height: 85vh;
+    
+    /* モーダル背景をダークに */
+    background: #111;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qr-modal-overlay.active .qr-modal-content.art-layout {
+    transform: scale(1) translateY(0);
+}
+
+.qr-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    border: none;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.qr-modal-close::before, .qr-modal-close::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 1px;
+}
+.qr-modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+.qr-modal-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.art-image-section {
+    width: 100%;
+    height: 35vh;
+    min-height: 250px;
+    position: relative;
+    background: #000;
+}
+
+.art-image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.9;
+}
+
+.art-info-section {
+    flex: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #111; /* 黒背景 */
+    color: #fff;
+}
+
+.art-info-header {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.art-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.art-name {
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 0;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.art-role-badge {
+    display: inline-block;
+    background: var(--color-neon);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.art-meta-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-gray-500);
+}
+
+.art-qr-wrapper {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 20px 0;
+    /* QRコードは見やすく白っぽい背景にする */
+    background: rgba(255,255,255,0.05); 
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+}
+
+.art-qr-box {
+    width: 160px;
+    height: 160px;
+    margin-bottom: 12px;
+}
+
+.art-qr-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* QRコードが黒の場合、反転させて白く見せる */
+    filter: invert(1);
+    opacity: 0.9;
+}
+
+.art-instruction-text {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--color-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.art-info-footer {
+    width: 100%;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 15px;
+}
+
+.art-insta-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    width: 100%;
+}
+
+.insta-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.insta-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: invert(1); /* アイコン白化 */
+}
+
+.insta-val {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+/* ==================================================
+   Responsive
+   ================================================== */
+@media (min-width: 768px) {
+    .explore-container { max-width: 1000px; padding: 0 48px; }
+    .profile-list { gap: 24px; }
+    .profile-info { padding: 16px; }
+    .profile-name { font-size: 1rem; }
+    .profile-loc { font-size: 0.75rem; }
+    .mini-qr, .service-icon { width: 24px; height: 24px; }
+    
+    .qr-modal-content.art-layout {
+        flex-direction: row;
+        width: 800px;
+        max-width: 90%;
+        height: 500px;
+        max-height: none;
+    }
+    
+    .art-image-section {
+        width: 45%;
+        height: 100%;
+    }
+    
+    .art-info-section {
+        width: 55%;
+        padding: 40px;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .art-info-header { 
+        align-items: flex-start;
+    }
+    .art-qr-wrapper {
+        flex-grow: 0;
+        background: transparent;
+        padding: 0;
+        margin: auto 0;
+        align-items: flex-start;
+        border: none;
+    }
+    .art-qr-box {
+        margin-left: 0;
+    }
+    .art-info-footer {
+        margin-top: auto;
+    }
+}
+
+@media (max-width: 430px) {
+    .explore-main-copy { font-size: 2rem; }
+    .profile-list { gap: 8px; }
+    
+    .qr-modal-content.art-layout { width: 94%; max-height: 92vh; }
+    .art-image-section { height: 25vh; min-height: 180px; }
+    .art-info-section { padding: 16px; gap: 10px; }
+    .art-name { font-size: 1.5rem; }
+    .art-qr-wrapper { margin-bottom: 5px; padding: 10px 0; }
+    .art-qr-box { width: 120px; height: 120px; margin-bottom: 8px; }
+    .art-info-footer { padding-top: 10px; }
+}
