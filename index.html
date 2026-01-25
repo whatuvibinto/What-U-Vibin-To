@@ -1,84 +1,145 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WHAT U VIBIN TO?</title>
-    <link rel="stylesheet" href="css/index.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <header class="site-header">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        black: '#050505',
+                        dark: '#0a0a0a',
+                        neon: '#a855f7', /* Neon Purple */
+                        neonHover: '#9333ea',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        jp: ['Noto Sans JP', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            /* スクロールバーを隠すなど、必要最低限の設定 */
+            -webkit-font-smoothing: antialiased;
+        }
+        /* 画像の色反転（黒背景用にロゴを白くする） */
+        .invert-white {
+            filter: invert(1) brightness(2);
+        }
+        /* メニュー開閉用のアニメーションクラス */
+        .menu-open {
+            transform: translateX(0) !important;
+        }
+    </style>
+</head>
+<body class="bg-black text-white overflow-x-hidden selection:bg-neon selection:text-white">
+
+    <header class="fixed top-0 left-0 w-full h-20 flex justify-between items-center px-6 md:px-12 z-50 bg-black/60 backdrop-blur-md border-b border-white/10 transition-all duration-300">
         <div class="logo-container">
-            <a href="index.html">
-                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="header-logo">
+            <a href="index.html" class="block">
+                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="h-10 w-auto invert-white opacity-90 hover:opacity-100 transition-opacity">
             </a>
         </div>
-        <button class="menu-btn" id="menuBtn" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
+        
+        <button id="menuBtn" class="relative z-[60] w-8 h-6 flex flex-col justify-between items-end group focus:outline-none" aria-label="Menu">
+            <span class="w-full h-[2px] bg-white transition-all duration-300 group-[.active]:rotate-45 group-[.active]:translate-y-[11px]"></span>
+            <span class="w-2/3 h-[2px] bg-white transition-all duration-300 group-[.active]:opacity-0"></span>
+            <span class="w-full h-[2px] bg-white transition-all duration-300 group-[.active]:-rotate-45 group-[.active]:-translate-y-[11px]"></span>
         </button>
     </header>
 
-    <div class="menu-panel" id="menuPanel">
-        <nav class="menu-nav">
-            <a href="index.html" class="menu-link highlight">
-                <span class="en-text">Home</span>
-                <span class="jp-sub">トップページに戻る</span>
+    <div id="menuPanel" class="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl flex flex-col justify-center items-center transform translate-x-full transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1)">
+        <nav class="flex flex-col gap-10 text-center w-full max-w-md px-6">
+            <a href="index.html" class="group flex flex-col items-center gap-2" onclick="closeMenu()">
+                <span class="font-sans text-4xl font-black uppercase tracking-widest text-neon drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">Home</span>
+                <span class="font-jp text-sm text-gray-400 tracking-wider">トップページに戻る</span>
             </a>
-            <a href="explore.html" class="menu-link">
-                <span class="en-text">Explore</span>
-                <span class="jp-sub">あの人が"この時間"に聞いている曲をのぞく</span>
+            <a href="explore.html" class="group flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity" onclick="closeMenu()">
+                <span class="font-sans text-3xl font-bold uppercase tracking-widest text-white group-hover:text-neon transition-colors">Explore</span>
+                <span class="font-jp text-xs text-gray-500 group-hover:text-gray-300">あの人の"この時間"をのぞく</span>
             </a>
-            <a href="how.html" class="menu-link">
-                <span class="en-text">How it works</span>
-                <span class="jp-sub">このQRの仕組み/使い方</span>
+            <a href="how.html" class="group flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity" onclick="closeMenu()">
+                <span class="font-sans text-3xl font-bold uppercase tracking-widest text-white group-hover:text-neon transition-colors">How it works</span>
+                <span class="font-jp text-xs text-gray-500 group-hover:text-gray-300">仕組み / 使い方</span>
             </a>
-            <a href="getQR.html" class="menu-link">
-                <span class="en-text">Get Your QR</span>
-                <span class="jp-sub">あなただけのQRをつくる</span>
+            <a href="getQR.html" class="group flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity" onclick="closeMenu()">
+                <span class="font-sans text-3xl font-bold uppercase tracking-widest text-white group-hover:text-neon transition-colors">Get QR</span>
+                <span class="font-jp text-xs text-gray-500 group-hover:text-gray-300">あなただけのQRをつくる</span>
             </a>
         </nav>
     </div>
 
-    <main class="hero-section">
-        <div class="container">
-            <div class="hero-text">
-                <h1 class="main-copy">
-                    自己紹介は、<br>
-                    音楽でもアリ。
-                </h1>
-                <p class="sub-copy-jp">
-                    あなたの"時間帯で変わるバイブス"を、<br>QRひとつで。
-                </p>
-                <div class="sub-copy-en">
+    <main class="relative w-full min-h-[100dvh] flex flex-col justify-center pt-20 pb-10 overflow-hidden">
+        
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <img src="images/background_3.svg" alt="" class="absolute bottom-[-10%] right-[-30%] w-[140%] md:w-[80%] md:right-[-10%] opacity-40 mix-blend-screen animate-float">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-neon/20 rounded-full blur-[100px]"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 max-w-4xl">
+            <div class="flex flex-col items-start space-y-8 md:space-y-12">
+                
+                <div class="space-y-4">
+                    <h1 class="font-jp font-black text-5xl md:text-7xl lg:text-8xl leading-[1.1] tracking-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                        <span class="block">自己紹介は、</span>
+                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">音楽でもアリ。</span>
+                    </h1>
+                    <p class="font-jp font-bold text-lg md:text-2xl text-gray-300 leading-relaxed">
+                        あなたの"時間帯で変わるバイブス"を、<br class="md:hidden">QRひとつで。
+                    </p>
+                </div>
+
+                <div class="font-sans font-light text-sm md:text-base text-gray-500 tracking-wide space-y-1 border-l-2 border-neon pl-4">
                     <p>Your intro can be music.</p>
                     <p>One QR, different vibes.</p>
                 </div>
 
-                <div class="hero-actions">
-                    <div class="action-group">
-                        <a href="how.html" class="btn btn-secondary">How it works <span class="arrow">&gt;</span></a>
-                        <!--<span class="btn-sub-text">このQRの仕組み/使い方</span>-->
-                    </div>
+                <div class="flex flex-col md:flex-row gap-6 w-full md:w-auto pt-4">
+                    <div class="flex flex-col items-start gap-2">
+                        <a href="how.html" class="group flex items-center justify-center px-8 py-4 rounded-full border border-white/30 bg-white/5 hover:bg-white/10 hover:border-neon backdrop-blur-sm transition-all duration-300 w-full md:w-auto">
+                            <span class="font-sans font-bold text-sm tracking-widest uppercase text-white group-hover:text-neon transition-colors">How it works</span>
+                            <span class="ml-2 text-neon transform group-hover:translate-x-1 transition-transform">&gt;</span>
+                        </a>
+                        </div>
                     
-                    <a href="getQR.html" class="btn btn-primary">Get your QR</a>
-                    <!--<span class="btn-sub-text">あなただけのQRをつくる</span>-->
+                    <a href="getQR.html" class="group relative flex items-center justify-center px-10 py-4 rounded-full bg-neon hover:bg-neonHover transition-all duration-300 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:scale-105 w-full md:w-auto">
+                        <span class="font-sans font-black text-sm tracking-widest uppercase text-white">Get your QR</span>
+                        <div class="absolute inset-0 rounded-full ring-2 ring-white/20 group-hover:ring-white/40 transition-all"></div>
+                    </a>
                 </div>
-            </div>
-        </div>
 
-        <div class="hero-background">
-            <img src="images/background_3.svg" alt="" class="bg-graphic">
+            </div>
         </div>
     </main>
 
-    <footer class="site-footer">
-        © 2026 WHAT U VIBIN TO / One QR, Different Vibes
+    <footer class="absolute bottom-0 w-full py-6 text-center z-20 border-t border-white/5 bg-black/80 backdrop-blur-sm">
+        <p class="font-sans text-[10px] md:text-xs font-medium text-gray-600 tracking-widest uppercase">
+            © 2026 WHAT U VIBIN TO / One QR, Different Vibes
+        </p>
     </footer>
 
     <script>
@@ -89,15 +150,23 @@
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if (isMenuOpen) {
-                menuPanel.classList.add('active');
+                // Open
+                menuPanel.classList.add('menu-open');
                 menuBtn.classList.add('active');
                 document.body.style.overflow = 'hidden';
             } else {
-                menuPanel.classList.remove('active');
-                menuBtn.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                // Close
+                closeMenu();
             }
         }
+
+        function closeMenu() {
+            isMenuOpen = false;
+            menuPanel.classList.remove('menu-open');
+            menuBtn.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
         menuBtn.addEventListener('click', toggleMenu);
     </script>
 </body>
