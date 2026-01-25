@@ -12,6 +12,10 @@
     --color-gray-300: #d1d5db;
     --color-gray-500: #6b7280;
     
+    /* ★修正: 英語はInter、日本語はNoto Sans JPを強制的に使用する設定に変更 */
+    --font-sans: 'Inter', 'Noto Sans JP', sans-serif;
+    --font-jp: 'Noto Sans JP', sans-serif;
+    
     --header-height: 64px; 
 }
 
@@ -24,11 +28,15 @@
 html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
+    /* ★追加: スマホでの文字サイズ自動調整を無効化（PCとサイズ感を合わせる） */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 body {
     background-color: var(--color-black);
     color: var(--color-white);
+    /* ここで定義した統合フォントセットを適用 */
     font-family: var(--font-sans);
     overflow-x: hidden;
     width: 100%;
@@ -271,7 +279,7 @@ a {
     position: relative;
     z-index: 10;
     width: 100%;
-    max-width: 1000px; /* 全体の幅を少し制限 */
+    max-width: 1000px; 
     margin: 0 auto;
     padding: 0 32px;
 }
@@ -280,31 +288,30 @@ a {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* テキスト群とボタン群の間隔 */
     gap: 48px; 
 }
 
-/* Typography Adjustments (Smaller & More Spacing) */
+/* Typography Adjustments */
 .copy-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 24px; /* コピーとサブコピーの間隔を広げる */
+    gap: 24px;
 }
 
 .main-copy {
-    font-family: var(--font-jp);
+    /* フォント指定を var(--font-sans) に統一することでNoto Sans JPを適用 */
+    font-family: var(--font-sans); 
     font-weight: 900;
-    /* フォントサイズを縮小して上品に */
     font-size: 2.25rem; 
-    line-height: 1.4; /* 行間を広げて余白を作る */
-    letter-spacing: 0.05em; /* 文字間隔を広げる */
+    line-height: 1.4; 
+    letter-spacing: 0.05em; 
     color: var(--color-white);
     filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
 }
 
 .main-copy span {
     display: block;
-    margin-bottom: 8px; /* 行ごとの間隔 */
+    margin-bottom: 8px;
 }
 
 .text-gradient {
@@ -315,10 +322,10 @@ a {
 }
 
 .sub-copy-jp {
-    font-family: var(--font-jp);
-    font-weight: 500; /* 太さを抑える */
-    font-size: 0.875rem; /* 小さくする */
-    line-height: 2; /* 行間をたっぷりとる */
+    font-family: var(--font-sans); /* こちらも統一 */
+    font-weight: 500; 
+    font-size: 0.875rem; 
+    line-height: 2; 
     color: var(--color-gray-300);
     letter-spacing: 0.05em;
 }
@@ -329,7 +336,7 @@ a {
     font-size: 0.75rem; 
     color: var(--color-gray-500);
     letter-spacing: 0.1em;
-    border-left: 1px solid var(--color-neon); /* 線を細く */
+    border-left: 1px solid var(--color-neon); 
     padding-left: 16px;
     display: flex;
     flex-direction: column;
@@ -342,7 +349,7 @@ a {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    width: 100%; /* スマホでは幅いっぱい */
+    width: 100%; 
     padding-top: 16px;
 }
 
@@ -358,12 +365,10 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* パディングを減らしてコンパクトに */
     padding: 12px 28px; 
     border-radius: 9999px;
-    width: 100%; /* スマホでは幅いっぱい */
+    width: 100%; 
     transition: all 0.3s ease;
-    /* フォントサイズを小さく */
     font-size: 0.75rem; 
 }
 
@@ -488,13 +493,11 @@ a {
     }
     
     .hero-content {
-        /* PCでは左寄せ・幅制限して左半分に配置 */
         width: 60%; 
         gap: 56px; 
     }
     
     .main-copy {
-        /* PCでも少し控えめなサイズに */
         font-size: 3.5rem; 
     }
     
@@ -506,17 +509,16 @@ a {
         display: none;
     }
     
-    /* PCではボタンを横並びにするが、サイズはコンパクトのまま */
     .action-buttons {
         flex-direction: row;
-        width: auto; /* 幅いっぱいから自動幅へ */
+        width: auto; 
         gap: 20px;
     }
     
     .btn-secondary,
     .btn-primary {
-        width: auto; /* ボタン自体の幅も自動調整 */
-        padding: 12px 32px; /* 横幅だけ少し余裕を持たせる */
+        width: auto; 
+        padding: 12px 32px; 
     }
     
     .copyright {
