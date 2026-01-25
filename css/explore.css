@@ -15,7 +15,6 @@
     width: 100%;
     min-height: 100vh;
     padding-bottom: 80px;
-    /* 背景エフェクトの上にコンテンツを表示 */
     z-index: 10;
 }
 
@@ -46,7 +45,7 @@
     letter-spacing: -0.02em;
     margin-bottom: 16px;
     text-transform: uppercase;
-    text-shadow: 0 0 20px rgba(168, 85, 247, 0.3); /* ネオンの影 */
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
 }
 
 .explore-sub-copy {
@@ -80,8 +79,6 @@
     font-family: var(--font-sans);
     font-size: 1rem;
     color: var(--color-white);
-    
-    /* 黒ガラス風の入力欄 */
     background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 9999px;
@@ -164,7 +161,6 @@
     color: var(--color-white);
 }
 
-/* Checked State */
 .genre-tag input[type="checkbox"]:checked + .genre-name {
     background: var(--color-neon);
     color: var(--color-white);
@@ -188,19 +184,17 @@
 .profile-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px; /* gap-4 */
+    gap: 16px;
     width: 100%;
 }
 
 .profile-card {
     display: flex;
     flex-direction: column;
-    /* カード背景をダークガラスに */
     background: rgba(20, 20, 20, 0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    
     border-radius: 12px;
     overflow: hidden;
     position: relative;
@@ -221,7 +215,6 @@
     100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Image Area */
 .profile-img {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -241,7 +234,6 @@
     transform: scale(1.05);
 }
 
-/* Badge */
 .role-badge {
     position: absolute;
     top: 6px;
@@ -257,7 +249,6 @@
     z-index: 2;
 }
 
-/* Card Info */
 .profile-info {
     padding: 12px;
     text-align: left;
@@ -299,12 +290,13 @@
     border-top: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
+/* ★修正: アイコンの色を反転させず、元の色のままにする */
 .mini-qr, .service-icon {
     width: 20px;
     height: 20px;
     object-fit: contain;
-    filter: invert(1); /* 黒アイコンを白反転 */
-    opacity: 0.7;
+    filter: none; /* 色変更なし */
+    opacity: 1;
 }
 
 /* ==================================================
@@ -322,7 +314,7 @@
 }
 
 /* ==================================================
-   Modal (Dark Theme)
+   Modal (Reverted to WHITE Theme)
    ================================================== */
 .qr-modal-overlay {
     position: fixed;
@@ -330,7 +322,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.85); /* 背景は暗く */
     backdrop-filter: blur(15px);
     z-index: 2000;
     display: flex;
@@ -346,6 +338,7 @@
     visibility: visible;
 }
 
+/* ★修正: モーダルの中身を「白背景・黒文字」に戻す */
 .qr-modal-content.art-layout {
     display: flex;
     flex-direction: column;
@@ -353,14 +346,14 @@
     max-width: 400px;
     max-height: 85vh;
     
-    /* モーダル背景をダークに */
-    background: #111;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #ffffff; /* 白背景 */
+    color: #000000;      /* 黒文字 */
+    border: none;
     
     border-radius: 20px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
     transform: scale(0.95) translateY(10px);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -369,17 +362,22 @@
     transform: scale(1) translateY(0);
 }
 
+/* 閉じるボタン (白背景で見えるように暗くする) */
 .qr-modal-close {
     position: absolute;
     top: 10px;
     right: 10px;
     width: 40px;
     height: 40px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.1);
     border-radius: 50%;
     border: none;
     z-index: 100;
     cursor: pointer;
+    transition: background 0.2s;
+}
+.qr-modal-close:hover {
+    background: rgba(0,0,0,0.2);
 }
 
 .qr-modal-close::before, .qr-modal-close::after {
@@ -389,7 +387,7 @@
     left: 50%;
     width: 16px;
     height: 2px;
-    background-color: #fff;
+    background-color: #333; /* 黒い線 */
     border-radius: 1px;
 }
 .qr-modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
@@ -400,7 +398,7 @@
     height: 35vh;
     min-height: 250px;
     position: relative;
-    background: #000;
+    background: #f0f0f0;
 }
 
 .art-image-section img {
@@ -408,9 +406,9 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    opacity: 0.9;
 }
 
+/* 情報エリア (白背景) */
 .art-info-section {
     flex: 1;
     padding: 24px;
@@ -418,8 +416,8 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background: #111; /* 黒背景 */
-    color: #fff;
+    background: #ffffff;
+    color: #000000;
 }
 
 .art-info-header {
@@ -444,12 +442,13 @@
     line-height: 1.1;
     margin: 0;
     text-transform: uppercase;
-    color: #fff;
+    color: #000; /* 黒文字 */
 }
 
+/* バッジは黒背景・白文字でアクセントに */
 .art-role-badge {
     display: inline-block;
-    background: var(--color-neon);
+    background: #000;
     color: #fff;
     font-family: var(--font-sans);
     font-size: 0.75rem;
@@ -466,9 +465,10 @@
     gap: 8px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--color-gray-500);
+    color: #666; /* グレー文字 */
 }
 
+/* QRエリア */
 .art-qr-wrapper {
     flex-grow: 1;
     width: 100%;
@@ -478,9 +478,7 @@
     justify-content: center;
     margin-bottom: 20px;
     padding: 20px 0;
-    /* QRコードは見やすく白っぽい背景にする */
-    background: rgba(255,255,255,0.05); 
-    border: 1px solid rgba(255,255,255,0.1);
+    background: #f9f9f9; /* 薄いグレー */
     border-radius: 16px;
 }
 
@@ -494,24 +492,23 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    /* QRコードが黒の場合、反転させて白く見せる */
-    filter: invert(1);
-    opacity: 0.9;
+    mix-blend-mode: multiply; /* 白背景に馴染ませる */
 }
 
 .art-instruction-text {
     font-family: var(--font-sans);
     font-size: 0.65rem;
     font-weight: 700;
-    color: var(--color-gray-500);
+    color: #999;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 0;
 }
 
+/* モーダル内フッター */
 .art-info-footer {
     width: 100%;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid #eee;
     padding-top: 15px;
 }
 
@@ -520,7 +517,7 @@
     justify-content: space-between;
     align-items: center;
     text-decoration: none;
-    color: #fff;
+    color: #000;
     width: 100%;
 }
 
@@ -530,11 +527,12 @@
     gap: 8px;
 }
 
+/* ★修正: モーダル内のアイコンも色を変えない */
 .insta-icon {
     width: 20px;
     height: 20px;
     object-fit: contain;
-    filter: invert(1); /* アイコン白化 */
+    filter: none;
 }
 
 .insta-val {
