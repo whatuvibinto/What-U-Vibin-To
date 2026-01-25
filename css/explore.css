@@ -7,6 +7,7 @@
 .explore-page-body {
     background-color: var(--color-black);
     color: var(--color-white);
+    /* ヘッダーの高さ分、コンテンツを下げる */
     padding-top: var(--header-height);
 }
 
@@ -23,7 +24,8 @@
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
-    padding: 20px 24px 0;
+    /* ヘッダー直下だと窮屈なので、さらに+40pxの余白を追加 */
+    padding: 40px 24px 0;
     z-index: 20;
 }
 
@@ -33,7 +35,6 @@
 .explore-hero {
     text-align: center;
     margin-bottom: 48px;
-    margin-top: 40px;
 }
 
 .explore-main-copy {
@@ -57,7 +58,7 @@
 }
 
 /* ==================================================
-   Search & Filter (Dark Mode)
+   Search & Filter
    ================================================== */
 .search-area {
     margin-bottom: 60px;
@@ -179,7 +180,7 @@
 }
 
 /* ==================================================
-   Profile Grid (Dark Cards)
+   Profile Grid
    ================================================== */
 .profile-list {
     display: grid;
@@ -191,10 +192,12 @@
 .profile-card {
     display: flex;
     flex-direction: column;
+    /* カード背景をダークガラスに統一 */
     background: rgba(20, 20, 20, 0.6);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    
     border-radius: 12px;
     overflow: hidden;
     position: relative;
@@ -290,17 +293,17 @@
     border-top: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
-/* ★修正: アイコンの色を反転させず、元の色のままにする */
+/* アイコンは元の色を維持（反転しない） */
 .mini-qr, .service-icon {
     width: 20px;
     height: 20px;
     object-fit: contain;
-    filter: none; /* 色変更なし */
+    filter: none;
     opacity: 1;
 }
 
 /* ==================================================
-   Footer
+   Footer (In-content)
    ================================================== */
 .explore-footer {
     text-align: center;
@@ -314,7 +317,7 @@
 }
 
 /* ==================================================
-   Modal (Reverted to WHITE Theme)
+   Modal (Immersive Gradient Layout)
    ================================================== */
 .qr-modal-overlay {
     position: fixed;
@@ -322,7 +325,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* 背景は暗く */
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(15px);
     z-index: 2000;
     display: flex;
@@ -338,21 +341,22 @@
     visibility: visible;
 }
 
-/* ★修正: モーダルの中身を「白背景・黒文字」に戻す */
+/* モーダル全体枠 */
 .qr-modal-content.art-layout {
     display: flex;
     flex-direction: column;
     width: 88%;
-    max-width: 400px;
-    max-height: 85vh;
+    max-width: 480px; /* 幅を少し広げてバランス調整 */
+    height: 80vh;     /* 高さを固定して縦長に */
+    max-height: 700px;
     
-    background: #ffffff; /* 白背景 */
-    color: #000000;      /* 黒文字 */
-    border: none;
+    background: var(--color-black);
+    color: var(--color-white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     
     border-radius: 20px;
     overflow: hidden;
-    position: relative;
+    position: relative; /* 子要素の絶対配置の基準 */
     box-shadow: 0 30px 60px rgba(0,0,0,0.6);
     transform: scale(0.95) translateY(10px);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -362,22 +366,24 @@
     transform: scale(1) translateY(0);
 }
 
-/* 閉じるボタン (白背景で見えるように暗くする) */
+/* 閉じるボタン */
 .qr-modal-close {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 16px;
+    right: 16px;
     width: 40px;
     height: 40px;
-    background: rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.3); /* 背景を半透明の黒に */
+    backdrop-filter: blur(4px);
     border-radius: 50%;
     border: none;
     z-index: 100;
     cursor: pointer;
     transition: background 0.2s;
 }
+
 .qr-modal-close:hover {
-    background: rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.5);
 }
 
 .qr-modal-close::before, .qr-modal-close::after {
@@ -387,18 +393,21 @@
     left: 50%;
     width: 16px;
     height: 2px;
-    background-color: #333; /* 黒い線 */
+    background-color: var(--color-white); /* 白い線 */
     border-radius: 1px;
 }
 .qr-modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
 .qr-modal-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
 
+/* 写真エリア（全面背景化） */
 .art-image-section {
+    position: absolute; /* 絶対配置で全面に広げる */
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 35vh;
-    min-height: 250px;
-    position: relative;
-    background: #f0f0f0;
+    height: 100%;
+    z-index: 0; /* 最背面に */
+    background: var(--color-black);
 }
 
 .art-image-section img {
@@ -406,26 +415,33 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    opacity: 0.9;
 }
 
-/* 情報エリア (白背景) */
+/* 情報エリア（グラデーションで重ねる） */
 .art-info-section {
+    position: relative; /* 写真の上に重ねる */
+    z-index: 1;
     flex: 1;
-    padding: 24px;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end; /* 下寄せに配置 */
     align-items: center;
     text-align: center;
-    background: #ffffff;
-    color: #000000;
+    padding: 32px 24px 24px;
+    
+    /* 下から上への黒いグラデーションで写真と自然に繋げる */
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 60%, transparent 100%);
+    color: var(--color-white);
 }
 
 .art-info-header {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* 文字の視認性を高める影 */
 }
 
 .art-name-row {
@@ -437,19 +453,18 @@
 }
 
 .art-name {
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 900;
     line-height: 1.1;
     margin: 0;
     text-transform: uppercase;
-    color: #000; /* 黒文字 */
+    color: var(--color-white);
 }
 
-/* バッジは黒背景・白文字でアクセントに */
 .art-role-badge {
     display: inline-block;
-    background: #000;
-    color: #fff;
+    background: var(--color-neon);
+    color: var(--color-white);
     font-family: var(--font-sans);
     font-size: 0.75rem;
     font-weight: 700;
@@ -463,23 +478,25 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    color: #666; /* グレー文字 */
+    color: var(--color-gray-300);
 }
 
 /* QRエリア */
 .art-qr-wrapper {
-    flex-grow: 1;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     padding: 20px 0;
-    background: #f9f9f9; /* 薄いグレー */
+    /* 半透明の黒背景で視認性を確保 */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
+    backdrop-filter: blur(4px);
 }
 
 .art-qr-box {
@@ -492,33 +509,43 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    mix-blend-mode: multiply; /* 白背景に馴染ませる */
+    /* 黒いQRを白く反転させて見やすくする */
+    filter: invert(1);
+    opacity: 0.9;
 }
 
 .art-instruction-text {
     font-family: var(--font-sans);
     font-size: 0.65rem;
     font-weight: 700;
-    color: #999;
+    color: var(--color-gray-500);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 0;
 }
 
-/* モーダル内フッター */
+/* モーダル内フッター (Instagramリンク) */
 .art-info-footer {
     width: 100%;
-    border-top: 1px solid #eee;
-    padding-top: 15px;
+    padding-top: 0;
 }
 
 .art-insta-link {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 12px;
     text-decoration: none;
-    color: #000;
+    color: var(--color-white);
     width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 9999px;
+    transition: background 0.3s;
+}
+
+.art-insta-link:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .insta-left {
@@ -527,7 +554,7 @@
     gap: 8px;
 }
 
-/* ★修正: モーダル内のアイコンも色を変えない */
+/* アイコンは色を維持 (filter: none) */
 .insta-icon {
     width: 20px;
     height: 20px;
@@ -540,65 +567,71 @@
     font-weight: 700;
 }
 
+/* Instagramリンク内の説明テキストは非表示にする（シンプルにするため） */
+.art-insta-link .art-instruction-text {
+    display: none;
+}
+
 /* ==================================================
-   Responsive
+   Responsive (PCでもスマホと同じレイアウトを維持)
    ================================================== */
 @media (min-width: 768px) {
-    .explore-container { max-width: 1000px; padding: 0 48px; }
+    .explore-container { max-width: 1000px; padding: 40px 48px 0; }
     .profile-list { gap: 24px; }
     .profile-info { padding: 16px; }
     .profile-name { font-size: 1rem; }
     .profile-loc { font-size: 0.75rem; }
     .mini-qr, .service-icon { width: 24px; height: 24px; }
     
+    /* PCでのモーダル設定 */
     .qr-modal-content.art-layout {
-        flex-direction: row;
-        width: 800px;
-        max-width: 90%;
-        height: 500px;
-        max-height: none;
+        flex-direction: column; /* 縦並びを維持 */
+        width: 480px; /* 幅を固定 */
+        height: 85vh;
+        max-height: 700px;
     }
     
     .art-image-section {
-        width: 45%;
+        width: 100%;
         height: 100%;
+        position: absolute;
     }
     
     .art-info-section {
-        width: 55%;
-        padding: 40px;
-        align-items: flex-start;
-        text-align: left;
+        width: 100%;
+        padding: 32px 24px 24px;
+        align-items: center;
+        text-align: center;
+        justify-content: flex-end;
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 60%, transparent 100%);
     }
 
-    .art-info-header { 
-        align-items: flex-start;
-    }
+    .art-info-header { align-items: center; }
+    .art-name-row { justify-content: center; }
+    .art-meta-row { justify-content: center; }
+    
     .art-qr-wrapper {
         flex-grow: 0;
-        background: transparent;
-        padding: 0;
-        margin: auto 0;
-        align-items: flex-start;
-        border: none;
+        width: 100%;
+        margin-bottom: 24px;
+        padding: 20px 0;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        align-items: center;
     }
-    .art-qr-box {
-        margin-left: 0;
-    }
-    .art-info-footer {
-        margin-top: auto;
-    }
+    .art-qr-box { margin-left: 0; }
+    .art-info-footer { margin-top: 0; }
 }
 
 @media (max-width: 430px) {
     .explore-main-copy { font-size: 2rem; }
     .profile-list { gap: 8px; }
     
-    .qr-modal-content.art-layout { width: 94%; max-height: 92vh; }
-    .art-image-section { height: 25vh; min-height: 180px; }
-    .art-info-section { padding: 16px; gap: 10px; }
-    .art-name { font-size: 1.5rem; }
-    .art-qr-wrapper { margin-bottom: 5px; padding: 10px 0; }
-    .art-qr-box { width: 120px; height: 120px; margin-bottom: 8px; }
-    .art-info-footer { padding-top: 10px; }
+    .qr-modal-content.art-layout {
+        width: 92%;
+        height: 85vh;
+    }
+    .art-name { font-size: 1.75rem; }
+    .art-info-section { padding: 24px 16px 16px; }
+    .art-qr-box { width: 140px; height: 140px; }
 }
