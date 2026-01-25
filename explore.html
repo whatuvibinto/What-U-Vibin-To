@@ -9,71 +9,76 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body class="explore-page-body">
 
     <header class="site-header">
         <div class="logo-container">
-            <a href="index.html">
+            <a href="index.html" class="logo-link">
                 <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="header-logo">
             </a>
         </div>
-        <button class="menu-btn" id="menuBtn" aria-label="Menu">
+        
+        <button id="menuBtn" class="menu-btn" aria-label="Menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
     </header>
 
-    <div class="menu-panel" id="menuPanel">
+    <div id="menuPanel" class="menu-panel">
         <nav class="menu-nav">
-            <a href="index.html" class="menu-link">
-                <span class="en-text">Home</span>
-                <span class="jp-sub">トップページに戻る</span>
+            <a href="index.html" class="nav-link" onclick="closeMenu()">
+                <span class="nav-en">Home</span>
+                <span class="nav-jp">トップページに戻る</span>
             </a>
-            <a href="explore.html" class="menu-link highlight">
-                <span class="en-text">Explore</span>
-                <span class="jp-sub">あの人が"この時間"に聞いている曲をのぞく</span>
+            <a href="explore.html" class="nav-link highlight" onclick="closeMenu()">
+                <span class="nav-en">Explore</span>
+                <span class="nav-jp">あの人の"この時間"をのぞく</span>
             </a>
-            <a href="how.html" class="menu-link">
-                <span class="en-text">How it works</span>
-                <span class="jp-sub">このQRの仕組み/使い方</span>
+            <a href="how.html" class="nav-link" onclick="closeMenu()">
+                <span class="nav-en">How it works</span>
+                <span class="nav-jp">仕組み / 使い方</span>
             </a>
-            <a href="getQR.html" class="menu-link">
-                <span class="en-text">Get Your QR</span>
-                <span class="jp-sub">あなただけのQRをつくる</span>
+            <a href="getQR.html" class="nav-link" onclick="closeMenu()">
+                <span class="nav-en">Get QR</span>
+                <span class="nav-jp">あなただけのQRをつくる</span>
             </a>
         </nav>
     </div>
 
     <main class="explore-main-content">
+        
+        <div class="bg-layer">
+            <img src="images/whiteQR_background.PNG" alt="" class="bg-image">
+            <div class="glow-spot-1"></div>
+            <div class="glow-spot-2"></div>
+            <div class="glow-bottom"></div>
+        </div>
+
         <div class="explore-container">
             <div class="dig-content">
                 
                 <div class="explore-hero">
-                    <!--<img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="explore-hero-logo">-->
                     <h2 class="explore-main-copy">
                         THIS QR IS ALIVE.
                     </h2>
-                    <h2 class="explore-main-copy">
-                        このQRは、生きている。
-                    </h2>
                     <p class="explore-sub-copy">
-                        「時間帯によって変わる」「更新され続ける」<br>
-                        あの人のミュージックプレイリストをチェック
+                        時間帯で変わる、<br>
+                        リアルタイムなバイブスをチェック。
                     </p>
                 </div>
 
                 <div class="search-area">
                     <div class="search-box">
-                        <input type="text" class="search-input" id="searchInput" placeholder="Name or Location...">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Name, Location or Genre...">
                         <button class="search-btn">SEARCH</button>
                     </div>
                     <div class="genre-filter-area">
                         <div class="genre-label">FILTER BY GENRE:</div>
                         <div class="genre-checkboxes" id="genreCheckboxes"></div>
-                        <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET (ALL)</button>
+                        <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET ALL</button>
                     </div>
                 </div>
 
@@ -87,7 +92,9 @@
     </main>
 
     <footer class="site-footer">
-        © 2026 WHAT U VIBIN TO / One QR, Different Vibes
+        <p class="copyright">
+            © 2026 WHAT U VIBIN TO
+        </p>
     </footer>
 
     <div class="qr-modal-overlay" id="qrModal">
@@ -122,7 +129,7 @@
                             <img src="images/InstagramLogo.png" alt="IG" class="insta-icon">
                             <span class="insta-val" id="modalInstaName">username</span>
                         </div>
-                        <span class="art-instruction-text">Tap & Check the profile</span>
+                        <span class="art-instruction-text">Check Profile</span>
                     </a>
                 </div>
             </div>
@@ -132,7 +139,7 @@
     <script src="js/dig_data.js"></script>
 
     <script>
-        // --- メニュー開閉 ---
+        // --- Menu Logic ---
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
         let isMenuOpen = false;
@@ -140,18 +147,22 @@
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if (isMenuOpen) {
-                menuPanel.classList.add('active');
+                menuPanel.classList.add('menu-open');
                 menuBtn.classList.add('active');
                 document.body.style.overflow = 'hidden';
             } else {
-                menuPanel.classList.remove('active');
-                menuBtn.classList.remove('active');
-                document.body.style.overflow = 'auto';
+                closeMenu();
             }
+        }
+        function closeMenu() {
+            isMenuOpen = false;
+            menuPanel.classList.remove('menu-open');
+            menuBtn.classList.remove('active');
+            document.body.style.overflow = 'auto';
         }
         menuBtn.addEventListener('click', toggleMenu);
 
-        // --- Explore機能 ---
+        // --- Explore Logic ---
         const container = document.getElementById('profileContainer');
         const modal = document.getElementById('qrModal');
         const mName = document.getElementById('modalName');
@@ -202,7 +213,7 @@
 
         function renderProfiles(data) {
             if (data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;margin-top:50px;font-weight:bold;">NO VIBES FOUND...</p>';
+                container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;margin-top:50px;font-weight:bold;color:#fff;">NO VIBES FOUND...</p>';
                 return;
             }
             let html = '';
