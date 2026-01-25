@@ -247,7 +247,7 @@ a {
 .bg-image {
     position: absolute;
     /* ボタンの右横あたりに配置するための座標 */
-    bottom: -20%;
+    bottom: -27%;
     right: -30%;
     /* コンテンツ幅に対するサイズ指定 */
     width: 80%;
@@ -365,6 +365,7 @@ a {
     flex-direction: column;
     gap: 4px;
     margin-top: 8px;
+    margin-bottom: 40px;
 }
 
 /* Buttons (Compact & Left Aligned) */
