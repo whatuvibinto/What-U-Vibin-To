@@ -359,6 +359,8 @@ a {
 .main-copy span {
     display: block;
     margin-bottom: 8px;
+   /* ★これを追加：勝手な改行（折り返し）を禁止する */
+    white-space: nowrap;
 }
 
 .text-gradient {
@@ -372,7 +374,7 @@ a {
     font-family: var(--font-sans); /* こちらも統一 */
     font-weight: 500; 
     font-size: 1.00rem; 
-    line-height: 2; 
+    line-height: 1.1; 
     color: var(--color-gray-300);
     letter-spacing: 0.05em;
 }
