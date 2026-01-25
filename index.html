@@ -1,386 +1,305 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WHAT U VIBIN TO?</title>
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WHAT U VIBIN TO?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================
+   DESIGN SYSTEM
+========================= */
+
+:root {
+  --primary: #8b7bff;
+  --bg-main: #0a0a0d;
+  --bg-panel: #111118;
+  --border: rgba(255,255,255,0.08);
+  --text-main: #f5f5f7;
+  --text-sub: #a1a1aa;
+}
+
+/* =========================
+   BASE
+========================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: radial-gradient(circle at top,#111118 0%,#0a0a0d 60%);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(10,10,15,0.75);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 20px 40px;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem,5vw,4rem);
+  letter-spacing: .04em;
+  text-shadow: 0 0 20px rgba(120,120,255,.15);
+}
+
+.hero p.jp {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #d1d1d8;
+}
+
+.hero p.en {
+  margin-top: 8px;
+  font-size: .95rem;
+  color: #9a9aa6;
+}
+
+.cta {
+  margin-top: 36px;
+}
+
+.cta button {
+  padding: 14px 36px;
+  font-size: 15px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(135deg,#8b7bff,#6a5cff);
+  color: white;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.cta button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(140,130,255,.3);
+}
+
+/* =========================
+   PROFILE GRID
+========================= */
+
+.section-title {
+  text-align: center;
+  margin-top: 80px;
+  font-size: 1.4rem;
+}
+
+.grid {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap: 24px;
+}
+
+/* =========================
+   PROFILE CARD
+========================= */
+
+.card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  border-radius: 26px;
+  padding: 22px;
+  transition: .3s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 40px rgba(0,0,0,.6);
+}
+
+.card h3 {
+  font-size: 1.1rem;
+}
+
+.card span {
+  display: block;
+  font-size: .85rem;
+  color: var(--text-sub);
+  margin-top: 4px;
+}
+
+.qr-box {
+  margin-top: 16px;
+  background: rgba(255,255,255,.05);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+
+.qr-box img {
+  width: 120px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--bg-panel);
+  border-radius: 28px;
+  padding: 28px;
+  width: 90%;
+  max-width: 360px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 6px;
+}
+
+.modal-content p {
+  color: var(--text-sub);
+  font-size: .9rem;
+  margin-bottom: 16px;
+}
+
+.modal-content img {
+  width: 180px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: #777;
+  border-top: 1px solid var(--border);
+  background: #08080c;
+}
+
+</style>
 </head>
+
 <body>
 
-    <header class="site-header">
-        <div class="logo-container">
-            <a href="#" onclick="closeExplore(); return false;">
-                <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="header-logo">
-            </a>
-        </div>
-        <button class="menu-btn" id="menuBtn" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </header>
+<header>
+  <div class="logo">WHAT U VIBIN TO?</div>
+</header>
 
-    <div class="menu-panel" id="menuPanel">
-        <nav class="menu-nav">
-            <a href="#" onclick="openExplore(); toggleMenu(); return false;" class="menu-link">
-                <span class="en-text">Explore</span>
-                <span class="jp-sub">あの人が"この時間"に聞いている曲をのぞく</span>
-            </a>
-            <a href="how.html" class="menu-link">
-                <span class="en-text">How it works</span>
-                <span class="jp-sub">このQRの仕組み/使い方</span>
-            </a>
-            <a href="getQR.html" class="menu-link highlight">
-                <span class="en-text">Get Your QR</span>
-                <span class="jp-sub">あなただけのQRをつくる</span>
-            </a>
-        </nav>
+<section class="hero">
+  <div>
+    <h1>THIS QR IS ALIVE.</h1>
+    <p class="jp">自己紹介は、音楽でもアリ。</p>
+    <p class="en">One QR. Different vibes.</p>
+
+    <div class="cta">
+      <button>Create Your DJ QR</button>
     </div>
+  </div>
+</section>
 
-    <main class="hero-section" id="heroSection">
-        <div class="container">
-            <div class="hero-text">
-                <h1 class="main-copy">
-                    自己紹介は、<br>
-                    音楽でもアリ。
-                </h1>
-                <p class="sub-copy-jp">
-                    あなたの"時間帯で変わるバイブス"を、<br>QRひとつで。
-                </p>
-                <div class="sub-copy-en">
-                    <p>Your intro can be music.</p>
-                    <p>One QR, different vibes.</p>
-                </div>
+<h2 class="section-title">Featured DJs</h2>
 
-                <div class="hero-actions">
-                    <a href="getQR.html" class="btn btn-primary">Get your QR</a>
-                    <div class="action-group">
-                        <a href="how.html" class="btn btn-secondary">How it works <span class="arrow">&gt;</span></a>
-                        <span class="btn-sub-text">このQRの仕組み/使い方</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section class="grid">
 
-        <div class="hero-background">
-            <img src="images/background_3.svg" alt="" class="bg-graphic">
-        </div>
+<div class="card" onclick="openModal()">
+  <h3>LUCY</h3>
+  <span>Tokyo / Hip Hop, R&B</span>
+  <div class="qr-box">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://spotify.com" />
+  </div>
+</div>
 
-        <div class="swipe-indicator-area" onclick="openExplore()">
-            <div class="swipe-arrow"></div>
-            <div class="swipe-text">
-                <span class="en">Swipe up to Explore</span>
-                <span class="jp">あの人の"この時間"に聴いている曲をのぞく</span>
-            </div>
-        </div>
-    </main>
+<div class="card" onclick="openModal()">
+  <h3>KAI</h3>
+  <span>Osaka / Techno</span>
+  <div class="qr-box">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://spotify.com" />
+  </div>
+</div>
 
-    <footer class="site-footer">
-        © 2026 WHAT U VIBIN TO / One QR, Different Vibes
-    </footer>
+<div class="card" onclick="openModal()">
+  <h3>YUTO</h3>
+  <span>Berlin / House</span>
+  <div class="qr-box">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://spotify.com" />
+  </div>
+</div>
 
-    <div class="explore-overlay" id="exploreOverlay">
-        
-        <div class="explore-header-trigger" onclick="closeExplore()">
-            <div class="drag-handle"></div>
-        </div>
+</section>
 
-        <div class="explore-container">
-            <div class="dig-content">
-                
-                <div class="explore-hero">
-                    <img src="images/3D_newLogo.svg" alt="WHAT U VIBIN TO?" class="explore-hero-logo">
-                    <h2 class="explore-main-copy">
-                        このQRは、生きている。
-                    </h2>
-                    <p class="explore-sub-copy">
-                        「時間帯によって変わる」「更新され続ける」<br>
-                        あの人のミュージックプレイリストをチェック
-                    </p>
-                </div>
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h2>LUCY</h2>
+    <p>Scan to unlock today's vibe</p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://spotify.com" />
+  </div>
+</div>
 
-                <div class="search-area">
-                    <div class="search-box">
-                        <input type="text" class="search-input" id="searchInput" placeholder="Name or Location...">
-                        <button class="search-btn">SEARCH</button>
-                    </div>
-                    <div class="genre-filter-area">
-                        <div class="genre-label">FILTER BY GENRE:</div>
-                        <div class="genre-checkboxes" id="genreCheckboxes"></div>
-                        <button class="filter-reset-btn" id="resetBtn" style="display:none;">RESET (ALL)</button>
-                    </div>
-                </div>
+<footer>
+© WHAT U VIBIN TO? 2026
+</footer>
 
-                <div class="profile-list" id="profileContainer"></div>
-                
-                <div class="explore-footer">
-                    KEEP DIGGING, KEEP VIBING.
-                </div>
-            </div>
-        </div>
-    </div>
+<script>
+function openModal(){
+  document.getElementById("modal").classList.add("active")
+}
 
-    <div class="qr-modal-overlay" id="qrModal">
-        <div class="qr-modal-content art-layout">
-            <button class="qr-modal-close" onclick="closeQrModal()"></button>
-            <div class="art-image-section">
-                <img src="" alt="Profile Photo" id="modalPhoto">
-            </div>
-            <div class="art-info-section">
-                <div class="art-info-header">
-                    <div class="art-name-row">
-                        <h2 class="art-name" id="modalName">NAME</h2>
-                        <span class="art-role-badge" id="modalRole">DJ</span>
-                    </div>
-                    <div class="art-meta-row">
-                        <span class="art-location" id="modalLocation">TOKYO</span>
-                        <span class="art-slash">/</span>
-                        <span class="art-genre" id="modalGenre">GENRE</span>
-                    </div>
-                </div>
-                <div class="art-qr-wrapper">
-                    <div class="art-qr-box">
-                        <a id="modalQrLink" href="#" target="_blank" rel="noopener noreferrer">
-                            <img src="" alt="QR Code" id="modalQr">
-                        </a>
-                    </div>
-                    <p class="art-instruction-text">Tap or Scan the QR</p>
-                </div>
-                <div class="art-info-footer" id="modalInstaArea">
-                    <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
-                        <div class="insta-left">
-                            <img src="images/InstagramLogo.png" alt="IG" class="insta-icon">
-                            <span class="insta-val" id="modalInstaName">username</span>
-                        </div>
-                        <span class="art-instruction-text">Tap & Check the profile</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+document.getElementById("modal").onclick = () => {
+  document.getElementById("modal").classList.remove("active")
+}
+</script>
 
-    <script src="js/dig_data.js"></script>
-
-    <script>
-        const heroSection = document.getElementById('heroSection');
-        const exploreOverlay = document.getElementById('exploreOverlay');
-        const menuBtn = document.getElementById('menuBtn');
-        const menuPanel = document.getElementById('menuPanel');
-        const swipeIndicator = document.querySelector('.swipe-indicator-area');
-
-        let isExploreOpen = false;
-        let isMenuOpen = false;
-
-        function toggleMenu() {
-            isMenuOpen = !isMenuOpen;
-            if (isMenuOpen) {
-                menuPanel.classList.add('active');
-                menuBtn.classList.add('active');
-                if(swipeIndicator) {
-                    swipeIndicator.style.opacity = '0';
-                    swipeIndicator.style.pointerEvents = 'none';
-                    swipeIndicator.style.transition = 'opacity 0.3s ease';
-                }
-                document.body.style.overflow = 'hidden';
-            } else {
-                menuPanel.classList.remove('active');
-                menuBtn.classList.remove('active');
-                if(swipeIndicator) {
-                    swipeIndicator.style.opacity = '1';
-                    swipeIndicator.style.pointerEvents = 'auto';
-                }
-                document.body.style.overflow = 'auto';
-            }
-        }
-        menuBtn.addEventListener('click', toggleMenu);
-
-        // --- Explore開閉 ---
-        window.openExplore = function() {
-            // ★修正: メニューからのクリックでも開けるように、ここでのガード節は削除
-            exploreOverlay.classList.add('active');
-            heroSection.classList.add('hero-hidden');
-            isExploreOpen = true;
-            if (!window.exploreInitialized) {
-                initExplore();
-                window.exploreInitialized = true;
-            }
-        };
-
-        window.closeExplore = function() {
-            exploreOverlay.classList.remove('active');
-            heroSection.classList.remove('hero-hidden');
-            isExploreOpen = false;
-            setTimeout(() => { exploreOverlay.scrollTop = 0; }, 500);
-        };
-
-        // --- スワイプ検知 ---
-        let touchStartY = 0;
-        let touchEndY = 0;
-
-        document.addEventListener('touchstart', e => {
-            touchStartY = e.changedTouches[0].screenY;
-        }, {passive: true});
-
-        document.addEventListener('touchend', e => {
-            touchEndY = e.changedTouches[0].screenY;
-            handleSwipe();
-        }, {passive: true});
-
-        function handleSwipe() {
-            // メニューが開いているときはスワイプ反応させない
-            if (isMenuOpen) return;
-
-            const swipeDistance = touchStartY - touchEndY;
-            const threshold = 50; 
-            const windowHeight = window.innerHeight;
-            const isBottomTriggerArea = touchStartY > (windowHeight * 0.85);
-
-            if (!isExploreOpen) {
-                if (isBottomTriggerArea && swipeDistance > threshold) {
-                    openExplore();
-                }
-            } else {
-                if (exploreOverlay.scrollTop <= 0 && swipeDistance < -threshold) {
-                    closeExplore();
-                }
-            }
-        }
-
-        // --- Explore機能 ---
-        const container = document.getElementById('profileContainer');
-        const modal = document.getElementById('qrModal');
-        const mName = document.getElementById('modalName');
-        const mGenre = document.getElementById('modalGenre');
-        const mPhoto = document.getElementById('modalPhoto');
-        const mQr = document.getElementById('modalQr');
-        const mQrLink = document.getElementById('modalQrLink');
-        const mRole = document.getElementById('modalRole');
-        const mLocation = document.getElementById('modalLocation');
-        const mInstaArea = document.getElementById('modalInstaArea');
-        const mInstaLink = document.getElementById('modalInstaLink');
-        const mInstaName = document.getElementById('modalInstaName');
-        const searchInput = document.getElementById('searchInput');
-        const genreContainer = document.getElementById('genreCheckboxes');
-        const resetBtn = document.getElementById('resetBtn');
-
-        let currentSearchTerm = '';
-        let selectedGenres = []; 
-        let profileData = [];
-        
-        function initExplore() {
-            if (typeof window.digData !== 'undefined') profileData = window.digData;
-            else if (typeof digData !== 'undefined') profileData = digData;
-
-            if(profileData.length > 0) {
-                profileData.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-                generateGenreCheckboxes(); 
-                renderProfiles(profileData); 
-            }
-        }
-
-        function generateGenreCheckboxes() {
-            let allGenres = [...new Set(profileData.flatMap(person => person.genre))].sort();
-            const mixTag = "DJ MIX";
-            if (allGenres.includes(mixTag)) {
-                allGenres = allGenres.filter(g => g !== mixTag); 
-                allGenres.unshift(mixTag); 
-            }
-            let html = '';
-            allGenres.forEach(genre => {
-                const specialClass = (genre === mixTag) ? 'special-tag' : '';
-                html += `<label class="genre-tag ${specialClass}"><input type="checkbox" value="${genre}" onchange="handleGenreChange(this)"><span class="genre-name">${genre}</span></label>`;
-            });
-            genreContainer.innerHTML = html;
-        }
-
-        function renderProfiles(data) {
-            if (data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;margin-top:50px;font-weight:bold;">NO VIBES FOUND...</p>';
-                return;
-            }
-            let html = '';
-            data.forEach((person, index) => {
-                const delay = index * 0.05; 
-                const genreText = person.genre.join(', ');
-                const serviceIconUrl = person.serviceIcon || "images/default_icon.png"; 
-                const role = person.role || "";
-                const roleBadge = role ? `<span class="role-badge">${role}</span>` : "";
-                let linkUrl = person.id ? `profile.html?id=${person.id}` : (person.qrLink || "#");
-                const instaId = person.instagram || "";
-                const location = person.location || "";
-
-                html += `
-                <div class="profile-card" style="animation-delay: ${delay}s" 
-                     onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}', '${instaId}', '${role}', '${location}')">
-                    <div class="profile-img"><img src="${person.image}" alt="${person.name}">${roleBadge}</div>
-                    <div class="profile-info">
-                        <h2 class="profile-name">${person.name}</h2>
-                        <span class="profile-loc">${person.location}</span>
-                        <div class="profile-bottom-row">
-                            <div class="mini-qr-wrapper"><img src="${person.qr}" alt="QR" class="mini-qr"></div>
-                            <div class="service-icon-wrapper"><img src="${serviceIconUrl}" alt="Service" class="service-icon"></div>
-                        </div>
-                    </div>
-                </div>`;
-            });
-            container.innerHTML = html;
-        }
-
-        function applyFilters() {
-            const filtered = profileData.filter(person => {
-                const term = currentSearchTerm.toLowerCase();
-                const textMatch = !term || person.name.toLowerCase().includes(term) || person.location.toLowerCase().includes(term) || person.genre.some(g => g.toLowerCase().includes(term));
-                const genreMatch = selectedGenres.length === 0 || person.genre.some(g => selectedGenres.includes(g));
-                return textMatch && genreMatch;
-            });
-            renderProfiles(filtered);
-            resetBtn.style.display = selectedGenres.length > 0 ? 'inline-block' : 'none';
-        }
-
-        searchInput.addEventListener('input', (e) => { currentSearchTerm = e.target.value; applyFilters(); });
-        window.handleGenreChange = function(checkbox) {
-            const val = checkbox.value;
-            if (checkbox.checked) selectedGenres.push(val); else selectedGenres = selectedGenres.filter(g => g !== val);
-            applyFilters();
-        };
-        resetBtn.addEventListener('click', () => {
-            selectedGenres = [];
-            genreContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-            applyFilters();
-        });
-
-        window.openQrModal = function(name, genre, imageSrc, qrSrc, linkUrl, instaId, role, location) {
-            mName.textContent = name;
-            mGenre.textContent = genre;
-            mLocation.textContent = location;
-            mPhoto.src = imageSrc;
-            mQr.src = qrSrc;
-            mQrLink.href = linkUrl;
-            if (role) { mRole.textContent = role; mRole.style.display = "inline-block"; } else { mRole.style.display = "none"; }
-            if (instaId) { mInstaArea.style.display = "flex"; mInstaName.textContent = instaId; mInstaLink.href = "https://instagram.com/" + instaId; } else { mInstaArea.style.display = "none"; }
-            modal.classList.add('active');
-        };
-        window.closeQrModal = function() { modal.classList.remove('active'); };
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeQrModal(); });
-        /* ==================================================
-           ★追加: 他のページから戻ってきた時に自動でExploreを開く処理
-           ================================================== */
-        window.addEventListener('load', () => {
-            // URLのパラメータ(?open=explore)を取得
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('open') === 'explore') {
-                // 少しだけ待ってから開く（読み込み直後の動作安定のため）
-                setTimeout(() => {
-                    openExplore();
-                }, 300);
-            }
-        });
-
-        init();
-    </script>
 </body>
 </html>
