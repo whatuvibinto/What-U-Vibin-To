@@ -420,11 +420,31 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 28px; 
+    
+    /* 余白を少し減らしてコンパクトに */
+    padding: 10px 20px; 
+    
     border-radius: 9999px;
-    width: 100%; 
+    
+    /* ★修正: width: 100% を削除し、自動サイズにする */
+    width: auto; 
+    /* もし短すぎると感じる場合は min-width: 140px; などを追加 */
+    
     transition: all 0.3s ease;
     font-size: 0.75rem; 
+    
+    /* 左寄せ配置にするため、margin-rightなどを調整（親要素がflex-startならこれだけでOK） */
+}
+
+/* ボタン親要素の調整（念のため確認） */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    /* 左寄せ（既に flex-start になっているはずですが、明示しておきます） */
+    align-items: flex-start; 
+    gap: 16px;
+    width: 100%; 
+    padding-top: 16px;
 }
 
 .btn-secondary {
