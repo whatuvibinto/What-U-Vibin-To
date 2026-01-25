@@ -247,8 +247,8 @@ a {
 .bg-image {
     position: absolute;
     /* ボタンの右横あたりに配置するための座標 */
-    bottom: -10%;
-    right: -20%;
+    bottom: 3%;
+    right: -30%;
     /* コンテンツ幅に対するサイズ指定 */
     width: 78%;
     max-width: none; /* 親要素からはみ出させる */
