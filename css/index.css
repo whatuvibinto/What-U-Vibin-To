@@ -58,16 +58,10 @@ a {
     align-items: center;
     padding: 0 32px; 
     z-index: 50;
-    
-    /* 黒ベースのすりガラスに変更 */
     background-color: rgba(5, 5, 5, 0.7); 
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    
-    /* 境界線を白の極薄ラインに変更して高級感を出す */
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: none;
-    
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -80,7 +74,7 @@ a {
 .header-logo {
     height: 32px; 
     width: auto;
-    opacity: 1; /* 黒背景で見やすくするため透過なしに */
+    opacity: 1; 
     transition: transform 0.3s ease;
 }
 
@@ -106,7 +100,6 @@ a {
 .menu-btn span {
     display: block;
     height: 2px;
-    /* 背景が黒になったので、線を白に変更 */
     background-color: var(--color-white);
     transition: all 0.3s ease;
 }
@@ -115,17 +108,14 @@ a {
 .menu-btn span:nth-child(2) { width: 66%; }
 .menu-btn span:nth-child(3) { width: 100%; }
 
-/* Menu Active State */
 .menu-btn.active span:nth-child(1) {
     transform: rotate(45deg) translateY(11px);
-    background-color: var(--color-white);
 }
 .menu-btn.active span:nth-child(2) {
     opacity: 0;
 }
 .menu-btn.active span:nth-child(3) {
     transform: rotate(-45deg) translateY(-11px);
-    background-color: var(--color-white);
 }
 
 /* ==================================================
@@ -281,31 +271,40 @@ a {
     position: relative;
     z-index: 10;
     width: 100%;
-    max-width: 896px; 
+    max-width: 1000px; /* 全体の幅を少し制限 */
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 32px;
 }
 
 .hero-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 32px; 
+    /* テキスト群とボタン群の間隔 */
+    gap: 48px; 
 }
 
-/* Typography */
+/* Typography Adjustments (Smaller & More Spacing) */
+.copy-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* コピーとサブコピーの間隔を広げる */
+}
+
 .main-copy {
     font-family: var(--font-jp);
     font-weight: 900;
-    font-size: 3rem; 
-    line-height: 1.1;
-    letter-spacing: -0.025em;
+    /* フォントサイズを縮小して上品に */
+    font-size: 2.25rem; 
+    line-height: 1.4; /* 行間を広げて余白を作る */
+    letter-spacing: 0.05em; /* 文字間隔を広げる */
     color: var(--color-white);
     filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
 }
 
 .main-copy span {
     display: block;
+    margin-bottom: 8px; /* 行ごとの間隔 */
 }
 
 .text-gradient {
@@ -317,31 +316,33 @@ a {
 
 .sub-copy-jp {
     font-family: var(--font-jp);
-    font-weight: 700;
-    font-size: 1.125rem; 
-    line-height: 1.625;
+    font-weight: 500; /* 太さを抑える */
+    font-size: 0.875rem; /* 小さくする */
+    line-height: 2; /* 行間をたっぷりとる */
     color: var(--color-gray-300);
+    letter-spacing: 0.05em;
 }
 
 .sub-copy-en {
     font-family: var(--font-sans);
     font-weight: 300;
-    font-size: 0.875rem; 
+    font-size: 0.75rem; 
     color: var(--color-gray-500);
-    letter-spacing: 0.025em;
-    border-left: 2px solid var(--color-neon);
+    letter-spacing: 0.1em;
+    border-left: 1px solid var(--color-neon); /* 線を細く */
     padding-left: 16px;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    margin-top: 8px;
 }
 
-/* Buttons */
+/* Buttons (Compact & Left Aligned) */
 .action-buttons {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    width: 100%;
+    gap: 16px;
+    width: 100%; /* スマホでは幅いっぱい */
     padding-top: 16px;
 }
 
@@ -349,28 +350,33 @@ a {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
 }
 
-/* How Button (Outline) */
-.btn-secondary {
+/* Common Button Styles (Smaller) */
+.btn-secondary,
+.btn-primary {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px 32px;
+    /* パディングを減らしてコンパクトに */
+    padding: 12px 28px; 
     border-radius: 9999px;
+    width: 100%; /* スマホでは幅いっぱい */
+    transition: all 0.3s ease;
+    /* フォントサイズを小さく */
+    font-size: 0.75rem; 
+}
+
+.btn-secondary {
     border: 1px solid rgba(255, 255, 255, 0.3);
     background-color: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    width: 100%;
-    transition: all 0.3s ease;
 }
 
 .btn-secondary span {
     font-family: var(--font-sans);
     font-weight: 700;
-    font-size: 0.875rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-white);
@@ -396,18 +402,11 @@ a {
     transform: translateX(4px);
 }
 
-/* Get QR Button (Solid Neon) */
+/* Get QR Button */
 .btn-primary {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 40px;
-    border-radius: 9999px;
     background-color: var(--color-neon);
-    width: 100%;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
 }
 
 .btn-primary span {
@@ -415,13 +414,11 @@ a {
     z-index: 10;
     font-family: var(--font-sans);
     font-weight: 900;
-    font-size: 0.875rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-white);
 }
 
-/* Inner Ring Effect */
 .btn-primary::after {
     content: '';
     position: absolute;
@@ -433,8 +430,8 @@ a {
 
 .btn-primary:hover {
     background-color: var(--color-neon-hover);
-    box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
-    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+    transform: scale(1.02);
 }
 
 .btn-primary:hover::after {
@@ -485,41 +482,41 @@ a {
 @media (min-width: 768px) {
     .site-header { padding: 0 48px; }
     
-    /* PCではメニューボタンを少し大きくするなど必要であれば調整 */
-    
     .bg-image {
         width: 80%;
         right: -10%;
     }
     
     .hero-content {
-        gap: 48px; 
+        /* PCでは左寄せ・幅制限して左半分に配置 */
+        width: 60%; 
+        gap: 56px; 
     }
     
     .main-copy {
-        font-size: 4.5rem; 
+        /* PCでも少し控えめなサイズに */
+        font-size: 3.5rem; 
     }
     
     .sub-copy-jp {
-        font-size: 1.5rem; 
+        font-size: 1rem; 
     }
     
     .sub-copy-jp br {
         display: none;
     }
     
-    .sub-copy-en {
-        font-size: 1rem; 
-    }
-    
+    /* PCではボタンを横並びにするが、サイズはコンパクトのまま */
     .action-buttons {
         flex-direction: row;
-        width: auto;
+        width: auto; /* 幅いっぱいから自動幅へ */
+        gap: 20px;
     }
     
     .btn-secondary,
     .btn-primary {
-        width: auto;
+        width: auto; /* ボタン自体の幅も自動調整 */
+        padding: 12px 32px; /* 横幅だけ少し余裕を持たせる */
     }
     
     .copyright {
@@ -529,6 +526,6 @@ a {
 
 @media (min-width: 1024px) {
     .main-copy {
-        font-size: 6rem; 
+        font-size: 4.5rem; 
     }
 }
