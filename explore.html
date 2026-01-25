@@ -99,41 +99,43 @@
 
     <div class="qr-modal-overlay" id="qrModal">
         <div class="qr-modal-content art-layout">
-            <button class="qr-modal-close" onclick="closeQrModal()"></button>
-            <div class="art-image-section">
-                <img src="" alt="Profile Photo" id="modalPhoto">
-            </div>
-            <div class="art-info-section">
-                <div class="art-info-header">
-                    <div class="art-name-row">
-                        <h2 class="art-name" id="modalName">NAME</h2>
-                        <span class="art-role-badge" id="modalRole">DJ</span>
-                    </div>
-                    <div class="art-meta-row">
-                        <span class="art-location" id="modalLocation">TOKYO</span>
-                        <span class="art-slash">/</span>
-                        <span class="art-genre" id="modalGenre">GENRE</span>
-                    </div>
-                </div>
-                <div class="art-qr-wrapper">
-                    <div class="art-qr-box">
-                        <a id="modalQrLink" href="#" target="_blank" rel="noopener noreferrer">
-                            <img src="" alt="QR Code" id="modalQr">
-                        </a>
-                    </div>
-                    <p class="art-instruction-text">Tap or Scan the QR</p>
-                </div>
-                <div class="art-info-footer" id="modalInstaArea">
-                    <a id="modalInstaLink" href="#" target="_blank" rel="noopener noreferrer" class="art-insta-link">
-                        <div class="insta-left">
-                            <img src="images/InstagramLogo.png" alt="IG" class="insta-icon">
-                            <span class="insta-val" id="modalInstaName">username</span>
-                        </div>
-                        <span class="art-instruction-text">Check Profile</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+  <button class="qr-modal-close" onclick="closeQrModal()"></button>
+
+  <!-- Background Image -->
+  <div class="art-bg">
+    <img id="modalPhoto" src="">
+  </div>
+
+  <!-- Overlay Content -->
+  <div class="art-overlay">
+
+    <!-- Artist Header -->
+    <div class="art-header">
+      <h1 id="modalName" class="art-title">DJ NAME</h1>
+      <div class="art-meta">
+        <span id="modalLocation">TOKYO</span>
+        <span>—</span>
+        <span id="modalGenre">HOUSE</span>
+      </div>
+    </div>
+
+    <!-- QR Area -->
+    <div class="art-qr-section">
+      <a id="modalQrLink" target="_blank">
+        <img id="modalQr" src="">
+      </a>
+      <p class="qr-caption">SCAN TO FEEL CURRENT VIBE</p>
+    </div>
+
+    <!-- Social -->
+    <a id="modalInstaLink" target="_blank" class="art-social">
+      <img src="images/InstagramLogo.png">
+      <span id="modalInstaName">@username</span>
+    </a>
+
+  </div>
+</div>
+
     </div>
 
     <script src="js/dig_data.js"></script>
