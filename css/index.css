@@ -248,9 +248,9 @@ a {
     position: absolute;
     /* ボタンの右横あたりに配置するための座標 */
     bottom: -27%;
-    right: -25%;
+    right: -32%;
     /* コンテンツ幅に対するサイズ指定 */
-    width: 87%;
+    width: 95%;
     max-width: none; /* 親要素からはみ出させる */
     
     opacity: 0.4;
