@@ -12,10 +12,7 @@
     --color-gray-300: #d1d5db;
     --color-gray-500: #6b7280;
     
-    --font-sans: 'Inter', sans-serif;
-    --font-jp: 'Noto Sans JP', sans-serif;
-    
-    --header-height: 56px; /* h-14 equivalent */
+    --header-height: 64px; 
 }
 
 * {
@@ -48,14 +45,8 @@ a {
 }
 
 /* ==================================================
-   Header (Updated for Professional Look)
+   Header (Black Glass Style)
    ================================================== */
-:root {
-    /* ヘッダーの高さを少しスリムに調整 */
-    --header-height: 64px; 
-    /* ...他の変数はそのままでOK */
-}
-
 .site-header {
     position: fixed;
     top: 0;
@@ -65,27 +56,20 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
-    /* 左右の余白を少し広げて上品に */
     padding: 0 32px; 
     z-index: 50;
     
-    /* 【プロ風ポイント】
-       白背景の不透明度を下げ、ブラー(ぼかし)を強くする。
-       これで背景の黒やネオンがうっすら透けて、浮いた感じがなくなります。
-    */
-    background-color: rgba(255, 255, 255, 0.85); 
+    /* 黒ベースのすりガラスに変更 */
+    background-color: rgba(5, 5, 5, 0.7); 
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     
-    /* ボーダーを削除し、代わりに極薄のシャドウで立体感を出す */
-    border-bottom: none;
-    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
+    /* 境界線を白の極薄ラインに変更して高級感を出す */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: none;
     
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-/* スクロール時に少し見た目を変えたい場合用（今回はシンプルに固定） */
 
 .logo-link {
     display: flex;
@@ -94,36 +78,22 @@ a {
 }
 
 .header-logo {
-    /* ロゴサイズを少し小さくして余白を強調 */
     height: 32px; 
     width: auto;
-    /* 黒ロゴをくっきり見せつつ、少し馴染ませる */
-    opacity: 0.95;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1; /* 黒背景で見やすくするため透過なしに */
+    transition: transform 0.3s ease;
 }
 
 .header-logo:hover {
-    opacity: 1;
-    transform: scale(1.02); /* ホバー時にわずかに浮き上がる演出 */
-}
-
-/* スマホでの余白調整 */
-@media (max-width: 768px) {
-    .site-header {
-        padding: 0 20px;
-        height: 56px; /* スマホでは少し細く */
-    }
-    .header-logo {
-        height: 28px;
-    }
+    transform: scale(1.02);
 }
 
 /* Hamburger Button */
 .menu-btn {
     position: relative;
     z-index: 60;
-    width: 32px; /* w-8 */
-    height: 24px; /* h-6 */
+    width: 32px; 
+    height: 24px; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -136,7 +106,8 @@ a {
 .menu-btn span {
     display: block;
     height: 2px;
-    background-color: var(--color-black);
+    /* 背景が黒になったので、線を白に変更 */
+    background-color: var(--color-white);
     transition: all 0.3s ease;
 }
 
@@ -162,17 +133,15 @@ a {
    ================================================== */
 .menu-panel {
     position: fixed;
-    inset: 0; /* top:0, right:0, bottom:0, left:0 */
+    inset: 0; 
     z-index: 40;
-    background-color: rgba(5, 5, 5, 0.95); /* bg-black/95 */
+    background-color: rgba(5, 5, 5, 0.95);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
-    /* Animation base */
     transform: translateX(100%);
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -187,7 +156,7 @@ a {
     gap: 40px;
     text-align: center;
     width: 100%;
-    max-width: 448px; /* max-w-md */
+    max-width: 448px;
     padding: 0 24px;
 }
 
@@ -208,7 +177,7 @@ a {
 
 .nav-en {
     font-family: var(--font-sans);
-    font-size: 1.875rem; /* text-3xl */
+    font-size: 1.875rem; 
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -221,7 +190,7 @@ a {
 }
 
 .nav-link.highlight .nav-en {
-    font-size: 2.25rem; /* text-4xl */
+    font-size: 2.25rem; 
     font-weight: 900;
     color: var(--color-neon);
     filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
@@ -248,8 +217,8 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 80px; /* pt-20 */
-    padding-bottom: 40px; /* pb-10 */
+    padding-top: 80px; 
+    padding-bottom: 40px; 
     overflow: hidden;
 }
 
@@ -277,9 +246,9 @@ a {
     position: absolute;
     top: 25%;
     left: 25%;
-    width: 24rem; /* 384px */
+    width: 24rem; 
     height: 24rem;
-    background-color: rgba(168, 85, 247, 0.3); /* bg-neon/30 */
+    background-color: rgba(168, 85, 247, 0.3);
     border-radius: 9999px;
     filter: blur(120px);
     animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -312,7 +281,7 @@ a {
     position: relative;
     z-index: 10;
     width: 100%;
-    max-width: 896px; /* max-w-4xl */
+    max-width: 896px; 
     margin: 0 auto;
     padding: 0 24px;
 }
@@ -321,14 +290,14 @@ a {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 32px; /* space-y-8 */
+    gap: 32px; 
 }
 
 /* Typography */
 .main-copy {
     font-family: var(--font-jp);
     font-weight: 900;
-    font-size: 3rem; /* text-5xl */
+    font-size: 3rem; 
     line-height: 1.1;
     letter-spacing: -0.025em;
     color: var(--color-white);
@@ -349,7 +318,7 @@ a {
 .sub-copy-jp {
     font-family: var(--font-jp);
     font-weight: 700;
-    font-size: 1.125rem; /* text-lg */
+    font-size: 1.125rem; 
     line-height: 1.625;
     color: var(--color-gray-300);
 }
@@ -357,7 +326,7 @@ a {
 .sub-copy-en {
     font-family: var(--font-sans);
     font-weight: 300;
-    font-size: 0.875rem; /* text-sm */
+    font-size: 0.875rem; 
     color: var(--color-gray-500);
     letter-spacing: 0.025em;
     border-left: 2px solid var(--color-neon);
@@ -489,7 +458,7 @@ a {
 
 .copyright {
     font-family: var(--font-sans);
-    font-size: 0.625rem; /* text-[10px] */
+    font-size: 0.625rem; 
     font-weight: 500;
     color: rgba(107, 114, 128, 0.8);
     letter-spacing: 0.1em;
@@ -516,21 +485,23 @@ a {
 @media (min-width: 768px) {
     .site-header { padding: 0 48px; }
     
+    /* PCではメニューボタンを少し大きくするなど必要であれば調整 */
+    
     .bg-image {
         width: 80%;
         right: -10%;
     }
     
     .hero-content {
-        gap: 48px; /* space-y-12 */
+        gap: 48px; 
     }
     
     .main-copy {
-        font-size: 4.5rem; /* text-7xl */
+        font-size: 4.5rem; 
     }
     
     .sub-copy-jp {
-        font-size: 1.5rem; /* text-2xl */
+        font-size: 1.5rem; 
     }
     
     .sub-copy-jp br {
@@ -538,7 +509,7 @@ a {
     }
     
     .sub-copy-en {
-        font-size: 1rem; /* text-base */
+        font-size: 1rem; 
     }
     
     .action-buttons {
@@ -552,12 +523,12 @@ a {
     }
     
     .copyright {
-        font-size: 0.75rem; /* text-xs */
+        font-size: 0.75rem; 
     }
 }
 
 @media (min-width: 1024px) {
     .main-copy {
-        font-size: 6rem; /* text-8xl */
+        font-size: 6rem; 
     }
 }
