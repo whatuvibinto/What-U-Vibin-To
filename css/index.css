@@ -366,6 +366,7 @@ a {
     flex-direction: column;
     gap: 4px;
     margin-top: 8px;
+    margin-bottom: 35px;
 }
 
 /* Buttons (Compact & Left Aligned) */
