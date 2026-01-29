@@ -215,34 +215,60 @@
 
         function renderProfiles(data) {
             if (data.length === 0) {
-                container.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1;margin-top:50px;font-weight:bold;color:#fff;">NO VIBES FOUND...</p>';
+                container.innerHTML = '<p style="text-align:center;width:100%;padding:40px;color:#666;font-family:monospace;">>> NO VIBES FOUND_</p>';
                 return;
             }
+            
             let html = '';
+            
+            // 1. 通常のプロフィールカード生成
             data.forEach((person, index) => {
-                const delay = index * 0.05; 
+                // スクロール時のアニメーション用遅延
+                const delay = Math.min(index * 0.05, 0.5); 
+                
                 const genreText = person.genre.join(', ');
-                const serviceIconUrl = person.serviceIcon || "images/default_icon.png"; 
-                const role = person.role || "";
-                const roleBadge = role ? `<span class="role-badge">${role}</span>` : "";
-                let linkUrl = person.id ? `profile.html?id=${person.id}` : (person.qrLink || "#");
+                const role = person.role || "DJ";
+                const linkUrl = person.id ? `profile.html?id=${person.id}` : (person.qrLink || "#");
                 const instaId = person.instagram || "";
-                const location = person.location || "";
+                const location = person.location || "TOKYO";
+                
+                // バッジのスタイル：ROLEの横に緑の点を点滅させる（CSSで実装済み）
+                const roleBadge = `<span class="role-badge">${role}</span>`;
 
                 html += `
-                <div class="profile-card" style="animation-delay: ${delay}s" 
+                <div class="profile-card" style="animation: fadeInUpCard 0.6s ease-out forwards; animation-delay: ${delay}s; opacity: 0;"
                      onclick="openQrModal('${person.name}', '${genreText}', '${person.image}', '${person.qr}', '${linkUrl}', '${instaId}', '${role}', '${location}')">
-                    <div class="profile-img"><img src="${person.image}" alt="${person.name}">${roleBadge}</div>
+                    
+                    <div class="profile-img">
+                        <img src="${person.image}" alt="${person.name}" loading="lazy">
+                        ${roleBadge}
+                    </div>
+                    
                     <div class="profile-info">
-                        <h2 class="profile-name">${person.name}</h2>
-                        <span class="profile-loc">${person.location}</span>
+                        <div>
+                            <h2 class="profile-name">${person.name}</h2>
+                            <span class="profile-loc">${location} // ${genreText}</span>
+                        </div>
                         <div class="profile-bottom-row">
-                            <div class="mini-qr-wrapper"><img src="${person.qr}" alt="QR" class="mini-qr"></div>
-                            <div class="service-icon-wrapper"><img src="${serviceIconUrl}" alt="Service" class="service-icon"></div>
+                            <div class="mini-qr-wrapper">
+                                <img src="${person.qr}" alt="QR" class="mini-qr">
+                            </div>
                         </div>
                     </div>
                 </div>`;
             });
+
+            // 2. 最後に「あなたも参加しませんか？」というカードを追加
+            // インディーDJの承認欲求と所属欲求を刺激します
+            html += `
+            <a href="getQR.html" class="profile-card join-card" style="animation: fadeInUpCard 0.6s ease-out forwards; animation-delay: ${data.length * 0.05}s; opacity: 0;">
+                <div class="join-content">
+                    <span class="join-title">YOU?</span>
+                    <span class="join-text">Create Your Vibe &rarr;</span>
+                </div>
+            </a>
+            `;
+
             container.innerHTML = html;
         }
 
