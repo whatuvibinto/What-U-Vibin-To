@@ -351,3 +351,16 @@
     .profile-name { font-size: 1rem; }
     .search-btn { position: relative; width: 100%; right: auto; margin-top: 10px; }
 }
+/* ==================================================
+   Missing Keyframes (アニメーション定義)
+   ================================================== */
+@keyframes fadeInUpCard {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
