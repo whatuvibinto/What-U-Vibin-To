@@ -130,7 +130,7 @@
 
             <div style="margin-top: 40px;">
                 <div id="qrPreviewArea" class="qr-preview-area hidden">
-                    <div class="preview-text" style="color:#aaa;">QR PREVIEW</div>
+                    <div class="preview-text">QR PREVIEW</div>
                     <div id="qrCanvas"></div>
                 </div>
                 <button type="button" class="btn-preview" onclick="app.previewQR()">PREVIEW QR</button>
@@ -148,7 +148,7 @@
             url: 'https://zcjzmuzmhuanyauhgeni.supabase.co',
             key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjanptdXptaHVhbnlhdWhnZW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MzAyNjAsImV4cCI6MjA4NTQwNjI2MH0.pNB58zLyRR4iM1oYoKeZQcJ1grKyrOY8F-Akd2298-A'
         };
-        // ★固定ロゴのパス (プロジェクト内に配置してください)
+        // ★QRの真ん中に入れる画像のパス (imagesフォルダに入れてください)
         const LOGO_PATH = "images/qr_logo.PNG";
 
         // --- Menu Logic ---
@@ -168,41 +168,32 @@
         // --- App Logic ---
         const app = {
             currentPlan: 'free',
-            currentDesign: 'A', // デフォルトはA
+            currentDesign: 'A',
             selectedGenres: [],
             qrCodeObj: null,
 
-            // デザイン定義 (白黒ベース)
+            // デザイン定義
             styles: {
-                A: { // Standard: 角ばったクラシック
-                    dotsOptions: { type: 'square', color: '#ffffff' },
-                    cornersSquareOptions: { type: 'square', color: '#ffffff' },
-                    cornersDotOptions: { type: 'square', color: '#ffffff' }
-                },
-                B: { // Modern: 丸みのある液体のようなデザイン
-                    dotsOptions: { type: 'rounded', color: '#ffffff' },
-                    cornersSquareOptions: { type: 'extra-rounded', color: '#ffffff' },
-                    cornersDotOptions: { type: 'dot', color: '#ffffff' }
-                },
-                C: { // Edgy: ドットで構成されたシャープなデザイン
-                    dotsOptions: { type: 'dots', color: '#ffffff' },
-                    cornersSquareOptions: { type: 'dot', color: '#ffffff' },
-                    cornersDotOptions: { type: 'square', color: '#ffffff' }
-                }
+                A: { dots: 'square', cornerSq: 'square', cornerDot: 'square' },
+                B: { dots: 'rounded', cornerSq: 'extra-rounded', cornerDot: 'dot' },
+                C: { dots: 'dots', cornerSq: 'dot', cornerDot: 'square' }
             },
 
             init: function() {
                 this.setPlan('free');
-                // QR初期化
-                this.qrCodeObj = new QRCodeStyling({
-                    width: 240,
-                    height: 240,
-                    type: "canvas",
-                    data: "https://what-u-vibin-to.netlify.app",
-                    image: LOGO_PATH, // 固定ロゴ
-                    backgroundOptions: { color: "transparent" },
-                    imageOptions: { crossOrigin: "anonymous", margin: 8, imageSize: 0.4 }
-                });
+                // QRライブラリ初期化
+                if(typeof QRCodeStyling !== 'undefined') {
+                    this.qrCodeObj = new QRCodeStyling({
+                        width: 200, height: 200, type: "canvas",
+                        data: "https://what-u-vibin-to.netlify.app",
+                        image: LOGO_PATH,
+                        dotsOptions: { color: "#ffffff", type: "square" },
+                        backgroundOptions: { color: "transparent" },
+                        imageOptions: { crossOrigin: "anonymous", margin: 5 }
+                    });
+                } else {
+                    console.error("QR Library not loaded");
+                }
             },
 
             setPlan: function(plan) {
@@ -218,7 +209,6 @@
                 const desB = document.getElementById('designBtnB');
                 const desC = document.getElementById('designBtnC');
                 
-                // ボタンの見た目
                 if(btnFree) btnFree.className = plan === 'free' ? 'plan-btn active' : 'plan-btn';
                 if(btnPro) btnPro.className = plan === 'pro' ? 'plan-btn active' : 'plan-btn';
                 
@@ -227,8 +217,6 @@
                     labelMorning.style.color = '#FFD700'; 
                     labelDaytime.style.color = '#FFD700'; 
                     labelNight.style.color = '#FFD700';
-                    
-                    // Unlock Designs
                     desB.classList.remove('locked');
                     desC.classList.remove('locked');
                 } else {
@@ -236,14 +224,11 @@
                     labelMorning.style.color = '#fff';      
                     labelDaytime.style.color = '#fff';      
                     labelNight.style.color = '#a855f7';
-                    
-                    // Lock Designs & Force A
                     desB.classList.add('locked');
                     desC.classList.add('locked');
                     this.selectDesign('A');
                 }
 
-                // ロック制御
                 const lockList = ['groupMorning', 'groupDaytime', 'nightTimeUI', 'exploreGroup'];
                 lockList.forEach(id => {
                     const el = document.getElementById(id);
@@ -274,29 +259,21 @@
                 }
             },
 
-            // --- Design Selection ---
             selectDesign: function(type) {
-                if(this.currentPlan === 'free' && type !== 'A') return; // Freeガード
-
+                if(this.currentPlan === 'free' && type !== 'A') return;
                 this.currentDesign = type;
-                
-                // UI更新
                 document.querySelectorAll('.design-btn').forEach(btn => {
                     btn.classList.remove('active');
                     if(btn.dataset.type === type) btn.classList.add('active');
                 });
-
-                // プレビューが開いていれば即時反映
                 const previewArea = document.getElementById('qrPreviewArea');
-                if(!previewArea.classList.contains('hidden')) {
-                    this.previewQR();
-                }
+                if(!previewArea.classList.contains('hidden')) { this.previewQR(); }
             },
 
-            // --- Preview Logic ---
             previewQR: function() {
                 const link = document.getElementById('linkDefault').value;
                 if(!link) { alert("Default Linkを入力してください"); return; }
+                if(!this.qrCodeObj) { alert("QR Library Error"); return; }
 
                 const previewArea = document.getElementById('qrPreviewArea');
                 const canvasBox = document.getElementById('qrCanvas');
@@ -304,25 +281,21 @@
                 previewArea.classList.remove('hidden');
                 canvasBox.innerHTML = "";
 
-                // 現在のスタイル定義を取得
                 const style = this.styles[this.currentDesign];
                 
-                // プレビュー用に更新
+                // QR更新
                 this.qrCodeObj.update({
                     data: link,
-                    dotsOptions: style.dotsOptions,
-                    cornersSquareOptions: style.cornersSquareOptions,
-                    cornersDotOptions: style.cornersDotOptions,
-                    image: LOGO_PATH // 常に固定ロゴ
+                    dotsOptions: { color: "#ffffff", type: style.dots },
+                    cornersSquareOptions: { color: "#ffffff", type: style.cornerSq },
+                    cornersDotOptions: { color: "#ffffff", type: style.cornerDot }
                 });
 
                 this.qrCodeObj.append(canvasBox);
             },
 
-            // --- Generate Logic ---
             generateQR: async function() {
                 const btn = document.getElementById('btnSubmit');
-
                 if(CONFIG.url.includes('YOUR_')) { alert("APIキーが設定されていません。"); return; }
 
                 const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
@@ -337,7 +310,7 @@
                 try {
                     const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
 
-                    // 1. Profile保存
+                    // 1. Profile
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([{
                         dj_name: name,
                         city: getVal('city'),
@@ -346,20 +319,18 @@
                         is_public: document.getElementById('isPublic') ? document.getElementById('isPublic').checked : false,
                         slug: Math.random().toString(36).slice(-8)
                     }]).select().single();
-                    
                     if(err1) throw new Error("Profile Error: " + err1.message);
 
-                    // 2. QR保存
+                    // 2. QR
                     const { data: qr, error: err2 } = await sb.from('qr_codes').insert([{
                         profile_id: prof.id, 
                         qr_type: this.currentPlan,
-                        design_type: this.currentDesign, // A, B, Cを保存
-                        logo_url: LOGO_PATH // 固定ロゴのパスを保存（参照用）
+                        design_type: this.currentDesign,
+                        logo_url: LOGO_PATH
                     }]).select().single();
-                    
                     if(err2) throw new Error("QR Error: " + err2.message);
 
-                    // 3. Links保存
+                    // 3. Links
                     const saveLink = async (type, url, s, e) => {
                         const payload = { profile_id: prof.id, time_type: type, url: url };
                         if(s && e) { payload.start_time = s.length === 5 ? s+":00" : s; payload.end_time = e.length === 5 ? e+":00" : e; }
@@ -376,7 +347,7 @@
                     if(getVal('linkNight')) await saveLink('nighttime', getVal('linkNight'), getVal('timeStartNight'), getVal('timeEndNight'));
 
                     btn.innerText = "SUCCESS!";
-                    alert("登録完了！" + (this.currentPlan === 'pro' ? "Pro仕様のQRが生成されました。" : ""));
+                    alert("登録完了！DBを確認してください。");
                     btn.disabled = false;
                     btn.innerText = "GENERATE QR";
 
