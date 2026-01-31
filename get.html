@@ -256,7 +256,7 @@
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([{
                         dj_name: name,
                         city: "Tokyo", // テスト用固定
-                        genre: this.selectedGenres,
+                        genres: this.selectedGenres,
                         plan: this.currentPlan,
                         is_public: document.getElementById('isPublic').checked,
                         slug: Math.random().toString(36).slice(-8)
