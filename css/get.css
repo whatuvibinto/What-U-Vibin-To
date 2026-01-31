@@ -239,100 +239,11 @@
 
 .time-sep { color: #666; font-family: var(--font-mono); }
 
-/* ==================== QR DESIGN SELECTOR ==================== */
-.design-selector-label {
-    display: block;
-    font-size: 0.8rem;
-    color: #aaa;
-    margin-bottom: 12px;
-    font-weight: bold;
-    font-family: var(--font-sans);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.design-options {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 30px;
-}
-
-.design-btn {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 15px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    min-width: 80px;
-}
-
-.design-icon {
-    width: 40px; height: 40px;
-    border: 2px solid #666; 
-    position: relative;
-    transition: all 0.3s;
-}
-
-/* Style A: Square (Standard) */
-.design-btn[data-type="A"] .design-icon { border-radius: 0; }
-.design-btn[data-type="A"] .design-icon::after { 
-    content:''; position:absolute; inset:6px; background:#666; border-radius:0; 
-}
-
-/* Style B: Round (Modern) */
-.design-btn[data-type="B"] .design-icon { border-radius: 12px; }
-.design-btn[data-type="B"] .design-icon::after { 
-    content:''; position:absolute; inset:6px; background:#666; border-radius:50%; 
-}
-
-/* Style C: Dot (旧Edgy) - 点線廃止、丸枠に変更 */
-.design-btn[data-type="C"] .design-icon { 
-    border: 2px solid #666; /* 点線(dashed)から実線(solid)へ変更 */
-    border-radius: 50%;     /* 完全な円 */
-}
-.design-btn[data-type="C"] .design-icon::after { 
-    content:''; position:absolute; inset:8px; background:#666; border-radius:50%; 
-}
-
-/* Active & Locked States */
-.design-btn.active {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--color-white);
-    transform: translateY(-2px);
-}
-.design-btn.active .design-icon { border-color: #fff; }
-.design-btn.active .design-icon::after { background: #fff; }
-
-.design-btn.locked {
-    opacity: 0.3; pointer-events: none; filter: grayscale(1);
-}
-.design-btn.locked::before {
-    content: "🔒"; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); font-size: 1.5rem; z-index: 10;
-}
-
-/* ==================== LOCK STATE ==================== */
-.locked-section {
-    opacity: 0.2;
-    pointer-events: none;
-    filter: grayscale(1);
-    position: relative;
-    transition: all 0.3s;
-}
-
-/* ==================== EXPLORE SWITCH ==================== */
+/* ==================== EXPLORE SWITCH & DETAILS ==================== */
 .toggle-wrapper {
     display: flex; justify-content: space-between; align-items: center;
     background: rgba(255, 255, 255, 0.05); padding: 15px;
-    border-radius: 10px; margin-top: 30px;
+    border-radius: 10px; margin-top: 30px; margin-bottom: 10px;
 }
 .switch { position: relative; width: 50px; height: 26px; }
 .switch input { opacity: 0; width: 0; height: 0; }
@@ -347,7 +258,61 @@
 input:checked+.slider { background-color: var(--color-gold); }
 input:checked+.slider:before { transform: translateX(24px); }
 
-/* ==================== 3-COLUMN PREVIEW AREA (★New) ==================== */
+/* Explore Details (Hidden by default) */
+.explore-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease;
+    opacity: 0;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.explore-details.open {
+    max-height: 600px; /* 十分な高さ */
+    opacity: 1;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 40px;
+}
+
+/* File Upload */
+.file-upload-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    border: 1px dashed #666;
+    border-radius: 8px;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+.file-upload-btn:hover { border-color: #fff; color: #fff; }
+
+/* Color Picker */
+.color-picker {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+.color-opt {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.3s;
+}
+.color-opt.selected {
+    border-color: #fff;
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ==================== PREVIEW AREA & SELECTOR ==================== */
 .qr-preview-area {
     margin-bottom: 20px;
     padding: 20px;
@@ -365,49 +330,67 @@ input:checked+.slider:before { transform: translateX(24px); }
     color: #888; font-size: 0.8rem; margin-bottom: 16px; letter-spacing: 0.1em; text-align: center; 
 }
 
-/* 3つのQRを横並びにするコンテナ */
+/* Selector inside Preview */
 .preview-grid {
     display: flex;
     justify-content: center;
     gap: 16px;
-    flex-wrap: wrap; /* 画面が狭い場合は折り返し */
+    flex-wrap: wrap;
 }
 
-/* 個別のQRカード */
-.preview-card {
+.design-btn {
     flex: 1;
-    min-width: 140px; /* 最小幅 */
+    min-width: 140px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative; /* ロックアイコン用 */
 }
 
-/* 選択されているQRを強調 */
-.preview-card.selected-card {
+/* Selected State */
+.design-btn.active {
     border-color: var(--color-gold);
     background: rgba(255, 215, 0, 0.05);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-.preview-card canvas {
-    width: 100% !important;
-    height: auto !important;
+/* Canvas container inside button */
+.style-preview-box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex; align-items: center; justify-content: center;
+    background: #000;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    pointer-events: none;
+}
+.style-preview-box canvas {
+    width: 100% !important; height: auto !important;
     object-fit: contain;
-    border-radius: 4px;
 }
 
-.preview-label {
-    margin-top: 8px;
-    font-size: 0.7rem;
-    color: #aaa;
-    font-weight: bold;
-    text-transform: uppercase;
+.design-name {
+    font-size: 0.7rem; color: #aaa; font-weight: bold; text-transform: uppercase;
+}
+.design-btn.active .design-name { color: var(--color-gold); }
+
+/* Locked State */
+.design-btn.locked {
+    opacity: 0.4; pointer-events: none; filter: grayscale(1); border-color: #333;
+}
+.design-btn.locked::after {
+    content: "🔒"; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); font-size: 2rem; z-index: 10;
 }
 
-/* プレビューボタン */
+/* Buttons */
 .btn-preview {
     width: 100%;
     background: transparent;
@@ -423,22 +406,16 @@ input:checked+.slider:before { transform: translateX(24px); }
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
-
 .btn-preview:hover {
-    background: rgba(168, 85, 247, 0.1);
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+    background: rgba(168, 85, 247, 0.1); box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
 }
-
 .gold-border .btn-preview {
-    border-color: var(--color-gold);
-    color: var(--color-gold);
+    border-color: var(--color-gold); color: var(--color-gold);
 }
 .gold-border .btn-preview:hover {
-    background: rgba(255, 215, 0, 0.1);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
 }
 
-/* Submit Button */
 .btn-submit {
     width: 100%;
     background: var(--color-neon);
@@ -455,54 +432,28 @@ input:checked+.slider:before { transform: translateX(24px); }
     transition: all 0.3s;
 }
 .gold-border .btn-submit {
-    background: var(--color-gold);
-    color: #000;
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+    background: var(--color-gold); color: #000; box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
 }
 .btn-submit:hover { transform: scale(1.02); }
 .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
 /* Loading Spinner */
 .loading-overlay {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: rgba(0, 0, 0, 0.85);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.3s;
 }
-
-.loading-overlay.visible {
-    opacity: 1;
-    pointer-events: all;
-}
-
+.loading-overlay.visible { opacity: 1; pointer-events: all; }
 .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-top-color: var(--color-neon);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 12px;
+    width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-neon); border-radius: 50%;
+    animation: spin 1s linear infinite; margin-bottom: 12px;
 }
-
-.gold-border .spinner {
-    border-top-color: var(--color-gold);
-}
-
-.loading-text {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.1em;
-    animation: pulse 1.5s infinite ease-in-out;
-}
-
+.gold-border .spinner { border-top-color: var(--color-gold); }
+.loading-text { font-size: 0.75rem; font-weight: 700; color: #fff; letter-spacing: 0.1em; animation: pulse 1.5s infinite ease-in-out; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+/* Lock State */
+.locked-section { opacity: 0.2; pointer-events: none; filter: grayscale(1); transition: all 0.3s; }
