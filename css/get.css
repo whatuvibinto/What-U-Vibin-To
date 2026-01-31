@@ -4,9 +4,11 @@
 :root {
     --color-black: #050505;
     --color-white: #ffffff;
-    --color-neon: #a855f7;
+    --color-neon: #a855f7;       /* Default (Free) Purple */
+    --color-gold: #FFD700;       /* Pro Gold */
     --color-gray-300: #d1d5db;
     --font-sans: 'Inter', sans-serif;
+    --font-mono: 'Courier New', Courier, monospace; /* Digital Clock Font */
     --header-height: 64px;
 }
 
@@ -19,6 +21,7 @@
     min-height: 100vh;
     background-color: var(--color-black);
     color: var(--color-white);
+    transition: background 0.5s;
 }
 
 .form-title {
@@ -28,6 +31,13 @@
     margin-bottom: 30px;
     text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
     font-family: var(--font-sans);
+    transition: all 0.5s;
+}
+
+/* Pro Mode Title Effect */
+.pro-mode .form-title {
+    color: var(--color-gold);
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
 }
 
 .form-container {
@@ -39,6 +49,13 @@
     padding: 30px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ★ GOLD MODE (Pro Active) */
+.form-container.gold-border {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
 }
 
 /* ==================== PLAN TOGGLE ==================== */
@@ -69,19 +86,25 @@
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
 }
 
-/* ==================== INPUT FIELDS ==================== */
-.form-group {
-    margin-bottom: 24px;
+/* Pro Button Active State */
+.plan-btn#btnPro.active {
+    background: var(--color-gold);
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
 }
+
+/* ==================== INPUT FIELDS ==================== */
+.form-group { margin-bottom: 24px; }
 
 .form-label {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #aaa;
     margin-bottom: 8px;
-    font-weight: bold;
+    font-weight: 700;
     font-family: var(--font-sans);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 
 .form-input {
@@ -102,12 +125,14 @@
     background: rgba(168, 85, 247, 0.05);
 }
 
-/* ==================== GENRE PILLS ==================== */
-.genre-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+/* Gold Focus for Pro inputs */
+.gold-border .form-input:focus {
+    border-color: var(--color-gold);
+    background: rgba(255, 215, 0, 0.05);
 }
+
+/* ==================== GENRE PILLS ==================== */
+.genre-container { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .genre-pill {
     padding: 8px 16px;
@@ -121,10 +146,7 @@
     font-family: var(--font-sans);
 }
 
-.genre-pill:hover {
-    border-color: #fff;
-    color: #fff;
-}
+.genre-pill:hover { border-color: #fff; color: #fff; }
 
 .genre-pill.selected {
     background: var(--color-neon);
@@ -134,40 +156,98 @@
     font-weight: bold;
 }
 
-/* ==================== TIME & LINK GROUPS ==================== */
-.time-link-group {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
+/* Gold Genre for Pro */
+.gold-border .genre-pill.selected {
+    background: var(--color-gold);
+    color: #000;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
+/* ==================== TIME & LINK GROUPS (PRO UI) ==================== */
+.time-link-group {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header with Flexbox */
 .time-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    font-family: var(--font-sans);
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #888;
 }
 
-.time-inputs input {
+/* ★ PRO TIME UI: デジタル時計風 */
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     background: #000;
-    color: #fff;
-    border: 1px solid #444;
     padding: 4px 8px;
-    border-radius: 4px;
-    font-family: monospace;
+    border-radius: 6px;
+    border: 1px solid #333;
+}
+
+.time-inputs input[type="time"] {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 0;
+    outline: none;
+    width: auto;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* 時計のアイコン（カレンダーマーク）を白くするハック */
+.time-inputs input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.time-sep {
+    color: #666;
+    font-family: var(--font-mono);
+}
+
+/* Focus effect for Time */
+.time-inputs:focus-within {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
 }
 
 /* ==================== LOCK STATE ==================== */
 .locked-section {
-    opacity: 0.3;
+    opacity: 0.2;
     pointer-events: none;
     filter: grayscale(1);
     position: relative;
+    transition: all 0.3s;
+}
+
+/* Unlock visual cue */
+.time-link-group:not(.locked-section) {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* Gold border for unlocked items in Pro */
+.gold-border .time-link-group:not(.locked-section) {
+    border-color: rgba(255, 215, 0, 0.3);
 }
 
 /* ==================== EXPLORE SWITCH ==================== */
@@ -181,50 +261,19 @@
     margin-top: 30px;
 }
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 26px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
+.switch { position: relative; width: 50px; height: 26px; }
+.switch input { opacity: 0; width: 0; height: 0; }
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #333;
-    transition: .4s;
-    border-radius: 34px;
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #333; transition: .4s; border-radius: 34px;
 }
-
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+    position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+    background-color: white; transition: .4s; border-radius: 50%;
 }
 
-input:checked+.slider {
-    background-color: var(--color-neon);
-}
-
-input:checked+.slider:before {
-    transform: translateX(24px);
-}
+input:checked+.slider { background-color: var(--color-gold); } /* Gold switch */
+input:checked+.slider:before { transform: translateX(24px); }
 
 /* ==================== SUBMIT BUTTON ==================== */
 .btn-submit {
@@ -244,13 +293,12 @@ input:checked+.slider:before {
     transition: all 0.3s;
 }
 
-.btn-submit:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+/* Gold Submit Button */
+.gold-border .btn-submit {
+    background: var(--color-gold);
+    color: #000;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
 }
 
-.btn-submit:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
+.btn-submit:hover { transform: scale(1.02); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
