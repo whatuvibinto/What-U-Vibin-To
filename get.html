@@ -507,14 +507,17 @@
                     }
 
                     // 6. DBへQR情報保存 (qr_image_url)
+                    // 6. DBへQR情報保存 (qr_image_url)
                     const { error: err2 } = await sb.from('qr_codes').insert([{
                         profile_id: prof.id, 
                         qr_type: this.currentPlan,
                         design_type: this.currentDesign,
                         logo_url: LOGO_PATH,
-                        qr_image_url: qrStorageUrl // ★変更済みのカラム名
+                        qr_image_url: qrStorageUrl 
                     }]);
-                    if(err2) console.error("QR DB Error:", err2);
+                    
+                    // ★修正: エラーがあったら処理を止めてアラートを出す
+                    if(err2) throw new Error("QR DB Error: " + err2.message);
 
                     // 7. 成功モーダル表示
                     const localQrUrl = URL.createObjectURL(qrBlob);
