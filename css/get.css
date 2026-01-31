@@ -4,19 +4,19 @@
 :root {
     --color-black: #050505;
     --color-white: #ffffff;
-    --color-neon: #a855f7;       /* Default (Free) Purple */
+    --color-neon: #a855f7;       /* Free Purple */
     --color-gold: #FFD700;       /* Pro Gold */
     --color-gray-300: #d1d5db;
-    --color-gray-500: #6b7280;   /* Subtitle Gray */
+    --color-gray-500: #6b7280;
     --font-sans: 'Inter', sans-serif;
-    --font-jp: 'Noto Sans JP', sans-serif; /* Added for subtitle */
+    --font-jp: 'Noto Sans JP', sans-serif;
     --font-mono: 'Courier New', Courier, monospace;
     --header-height: 64px;
 }
 
-/* ==================== FORM SECTION LAYOUT ==================== */
+/* ==================== LAYOUT ==================== */
 .form-section {
-    position: relative; /* 背景レイヤーのために必要 */
+    position: relative;
     padding: calc(var(--header-height) + 40px) 20px 100px;
     display: flex;
     flex-direction: column;
@@ -24,12 +24,11 @@
     min-height: 100vh;
     background-color: var(--color-black);
     color: var(--color-white);
-    transition: background 0.5s;
-    overflow: hidden; /* 光がはみ出さないように */
+    overflow: hidden;
     z-index: 1;
 }
 
-/* --- Title & Subtitle (Match How.html) --- */
+/* Titles */
 .form-title {
     font-family: var(--font-sans);
     font-size: 2.5rem;
@@ -38,10 +37,9 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--color-white);
-    margin-bottom: 8px; /* サブタイトルとの距離を詰める */
+    margin-bottom: 8px;
     text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
     transition: all 0.5s;
-    position: relative;
     z-index: 10;
 }
 
@@ -51,19 +49,17 @@
     font-weight: 500;
     color: var(--color-gray-500);
     text-align: center;
-    margin-bottom: 48px; /* フォームとの距離 */
+    margin-bottom: 48px;
     letter-spacing: 0.05em;
-    position: relative;
     z-index: 10;
 }
 
-/* Pro Mode Title Effect */
 .pro-mode .form-title {
     color: var(--color-gold);
     text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
 }
 
-/* --- Form Container --- */
+/* Form Container */
 .form-container {
     width: 100%;
     max-width: 600px;
@@ -78,28 +74,10 @@
     z-index: 10;
 }
 
-/* ★ GOLD MODE (Pro Active) - Sparkle Shadow Effect */
+/* Gold Pro Effect */
 .form-container.gold-border {
     border-color: var(--color-gold);
-    /* 金色の影（バックライト）を強力に */
-    box-shadow: 
-        0 0 30px rgba(255, 215, 0, 0.2), 
-        0 0 80px rgba(255, 215, 0, 0.15),
-        inset 0 0 20px rgba(255, 215, 0, 0.05);
-    animation: goldBreath 3s infinite alternate; /* 呼吸するように光る */
-}
-
-@keyframes goldBreath {
-    0% {
-        box-shadow: 
-            0 0 30px rgba(255, 215, 0, 0.2), 
-            0 0 60px rgba(255, 215, 0, 0.1);
-    }
-    100% {
-        box-shadow: 
-            0 0 40px rgba(255, 215, 0, 0.4), 
-            0 0 100px rgba(255, 215, 0, 0.2);
-    }
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
 }
 
 /* ==================== PLAN TOGGLE ==================== */
@@ -136,7 +114,7 @@
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
 }
 
-/* ==================== INPUT FIELDS ==================== */
+/* ==================== INPUTS ==================== */
 .form-group { margin-bottom: 24px; }
 
 .form-label {
@@ -173,7 +151,7 @@
     background: rgba(255, 215, 0, 0.05);
 }
 
-/* ==================== GENRE PILLS ==================== */
+/* ==================== GENRES ==================== */
 .genre-container { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .genre-pill {
@@ -205,7 +183,7 @@
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
-/* ==================== TIME & LINK GROUPS (PRO UI) ==================== */
+/* ==================== TIME & LINK GROUPS ==================== */
 .time-link-group {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid #333;
@@ -257,90 +235,14 @@
     cursor: pointer;
 }
 
-.time-sep { color: #666; font-family: var(--font-mono); }
-
 .time-inputs:focus-within {
     border-color: var(--color-gold);
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
 }
 
-/* ==================== LOCK STATE ==================== */
-.locked-section {
-    opacity: 0.2;
-    pointer-events: none;
-    filter: grayscale(1);
-    position: relative;
-    transition: all 0.3s;
-}
+.time-sep { color: #666; font-family: var(--font-mono); }
 
-.time-link-group:not(.locked-section) {
-    border-color: rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.gold-border .time-link-group:not(.locked-section) {
-    border-color: rgba(255, 215, 0, 0.3);
-}
-
-/* ==================== EXPLORE SWITCH ==================== */
-.toggle-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 30px;
-}
-
-.switch { position: relative; width: 50px; height: 26px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider {
-    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #333; transition: .4s; border-radius: 34px;
-}
-.slider:before {
-    position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
-    background-color: white; transition: .4s; border-radius: 50%;
-}
-
-input:checked+.slider { background-color: var(--color-gold); }
-input:checked+.slider:before { transform: translateX(24px); }
-
-/* ==================== SUBMIT BUTTON ==================== */
-.btn-submit {
-    width: 100%;
-    background: var(--color-neon);
-    color: #fff;
-    padding: 18px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: 900;
-    margin-top: 30px;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-    font-family: var(--font-sans);
-    letter-spacing: 0.05em;
-    transition: all 0.3s;
-}
-
-.gold-border .btn-submit {
-    background: var(--color-gold);
-    color: #000;
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
-}
-
-.btn-submit:hover { transform: scale(1.02); }
-.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-/* PC Responsive */
-@media (min-width: 768px) {
-    .form-title { font-size: 3.5rem; }
-    .form-subtitle { font-size: 1rem; }
-}
 /* ==================== QR DESIGN SELECTOR ==================== */
-
 .design-selector-label {
     display: block;
     font-size: 0.8rem;
@@ -370,83 +272,139 @@ input:checked+.slider:before { transform: translateX(24px); }
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s;
 }
 
-/* Icon representation of the style */
 .design-icon {
-    width: 40px;
-    height: 40px;
-    background: transparent;
-    border: 2px solid #666;
-    position: relative;
+    width: 40px; height: 40px;
+    border: 2px solid #666; position: relative;
 }
 
 /* Style A: Square */
-.design-btn[data-type="A"] .design-icon {
-    border-radius: 0; /* Square */
-}
-.design-btn[data-type="A"] .design-icon::after {
-    content: ''; position: absolute; inset: 6px; background: #666; border-radius: 0;
-}
+.design-btn[data-type="A"] .design-icon { border-radius: 0; }
+.design-btn[data-type="A"] .design-icon::after { content:''; position:absolute; inset:6px; background:#666; border-radius:0; }
 
 /* Style B: Round */
-.design-btn[data-type="B"] .design-icon {
-    border-radius: 12px; /* Round */
-}
-.design-btn[data-type="B"] .design-icon::after {
-    content: ''; position: absolute; inset: 6px; background: #666; border-radius: 50%;
-}
+.design-btn[data-type="B"] .design-icon { border-radius: 12px; }
+.design-btn[data-type="B"] .design-icon::after { content:''; position:absolute; inset:6px; background:#666; border-radius:50%; }
 
-/* Style C: Dots / Classy */
-.design-btn[data-type="C"] .design-icon {
-    border: 2px dashed #666; border-radius: 4px;
-}
-.design-btn[data-type="C"] .design-icon::after {
-    content: ''; position: absolute; inset: 8px; background: #666; border-radius: 50%;
-}
+/* Style C: Dots */
+.design-btn[data-type="C"] .design-icon { border: 2px dashed #666; border-radius: 4px; }
+.design-btn[data-type="C"] .design-icon::after { content:''; position:absolute; inset:8px; background:#666; border-radius:50%; }
 
-.design-name {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #888;
-}
-
-/* Active State */
+/* Active & Locked */
 .design-btn.active {
     background: rgba(255, 255, 255, 0.1);
     border-color: var(--color-white);
     transform: translateY(-2px);
 }
-
 .design-btn.active .design-icon { border-color: #fff; }
 .design-btn.active .design-icon::after { background: #fff; }
-.design-btn.active .design-name { color: #fff; }
 
-/* Locked State (for Free plan) */
 .design-btn.locked {
-    opacity: 0.3;
+    opacity: 0.3; pointer-events: none; filter: grayscale(1);
+}
+.design-btn.locked::before {
+    content: "🔒"; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); font-size: 1.5rem; z-index: 10;
+}
+
+/* ==================== LOCK STATE ==================== */
+.locked-section {
+    opacity: 0.2;
     pointer-events: none;
     filter: grayscale(1);
-    cursor: not-allowed;
+    position: relative;
+    transition: all 0.3s;
 }
 
-.design-btn.locked::before {
-    content: "🔒"; /* Lock Icon */
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.5rem;
-    z-index: 10;
+/* ==================== EXPLORE SWITCH ==================== */
+.toggle-wrapper {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255, 255, 255, 0.05); padding: 15px;
+    border-radius: 10px; margin-top: 30px;
 }
+.switch { position: relative; width: 50px; height: 26px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #333; transition: .4s; border-radius: 34px;
+}
+.slider:before {
+    position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+    background-color: white; transition: .4s; border-radius: 50%;
+}
+input:checked+.slider { background-color: var(--color-gold); }
+input:checked+.slider:before { transform: translateX(24px); }
 
-/* Preview Area Tweaks */
+/* ==================== PREVIEW & BUTTONS ==================== */
 .qr-preview-area {
-    background: #fff; /* 背景を白にして、QR（黒）を見やすくするか、逆に黒背景に白QRか */
-    /* 今回は「サイトの世界観」に合わせて、黒背景に白QRとします */
-    background: rgba(0,0,0,0.8); 
-    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    min-height: 280px;
+    transition: all 0.3s;
 }
+.qr-preview-area.hidden { display: none; }
+.preview-text { color: #888; font-size: 0.8rem; margin-bottom: 16px; letter-spacing: 0.1em; }
+
+/* ★ 以前抜けていたプレビューボタンの装飾 ★ */
+.btn-preview {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--color-neon);
+    color: var(--color-neon);
+    padding: 14px;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+    font-family: var(--font-sans);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.btn-preview:hover {
+    background: rgba(168, 85, 247, 0.1);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+.gold-border .btn-preview {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+.gold-border .btn-preview:hover {
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Submit Button */
+.btn-submit {
+    width: 100%;
+    background: var(--color-neon);
+    color: #fff;
+    padding: 18px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    font-family: var(--font-sans);
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+}
+.gold-border .btn-submit {
+    background: var(--color-gold);
+    color: #000;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+}
+.btn-submit:hover { transform: scale(1.02); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
