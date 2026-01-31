@@ -181,23 +181,22 @@
             styles: {
                 A: { 
                     // A: Dots=Dot, 枠=激丸, 芯=丸角四角
+                    dots: { type: 'square', color: '#ffffff' }, 
+                    cornersSq: { type: 'square', color: '#ffffff' }, 
+                    cornersDot: { type: 'square', color: '#ffffff' },
+                    bg: { color: '#000000' }
+                },
+                B: { 
+                    // B: 全て Dot
                     dots: { type: 'extra-rounded', color: '#ffffff' }, 
                     cornersSq: { type: 'extra-rounded', color: '#ffffff' }, 
                     cornersDot: { type: 'rounded', color: '#ffffff' },
                     bg: { color: '#000000' }
                 },
-                B: { 
-                    // B: 全て Dot
+                C: { 
                     dots: { type: 'dots', color: '#ffffff' }, 
                     cornersSq: { type: 'dot', color: '#ffffff' }, 
                     cornersDot: { type: 'dot', color: '#ffffff' },
-                    bg: { color: '#000000' }
-                },
-                C: { 
-                    // C: 線とドットが混ざった有機的な形 + 隅はDot
-                    dots: { type: 'classy-rounded', color: '#ffffff' },
-                    cornersSq: { type: 'dot', color: '#ffffff' }, 
-                    cornersDot: { type: 'dot', color: '#ffffff' }, 
                     bg: { color: '#000000' }
                 }
             },
