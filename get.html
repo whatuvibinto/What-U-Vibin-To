@@ -196,7 +196,10 @@
         const LOGO_PATH = "images/qr_logo.PNG"; 
         
         // ★遷移先を qr_links.html に修正済み
-        const BASE_URL = window.location.href.replace('get.html', 'qr_links.html?id=');
+        const path = window.location.pathname;
+        const dir = path.substring(0, path.lastIndexOf('/'));
+        const directory = dir.endsWith('/') ? dir : dir + '/';
+        const BASE_URL = window.location.origin + directory + 'qr_links.html?id=';
 
         // --- Menu Logic ---
         const menuBtn = document.getElementById('menuBtn');
@@ -429,14 +432,14 @@
                 try {
                     const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
                     
-                    // 1. プロフィール画像アップロード
+                    // 1. プロフィール画像アップロード (Bucket: user_images)
                     let imageUrl = "";
                     if(this.profileFile) {
                         const fileExt = this.profileFile.name.split('.').pop();
                         const fileName = `image_${Date.now()}.${fileExt}`;
-                        const { error: upErr } = await sb.storage.from('qr-logos').upload(fileName, this.profileFile);
+                        const { error: upErr } = await sb.storage.from('user_images').upload(fileName, this.profileFile);
                         if(!upErr) {
-                            const { data: pubUrl } = sb.storage.from('qr-logos').getPublicUrl(fileName);
+                            const { data: pubUrl } = sb.storage.from('user_images').getPublicUrl(fileName);
                             imageUrl = pubUrl.publicUrl;
                         }
                     }
@@ -450,8 +453,8 @@
                         is_public: document.getElementById('isPublic') ? document.getElementById('isPublic').checked : false,
                         slug: Math.random().toString(36).slice(-8),
                         instagram_id: getVal('instaId'),
-                        color: this.selectedColor, // カラム名を theme_color -> color に変更
-                        image_url: imageUrl // カラム名を avatar_url -> image_url に変更
+                        color: this.selectedColor, 
+                        image_url: imageUrl 
                     };
 
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([profileData]).select().single();
@@ -489,27 +492,27 @@
                         backgroundOptions: style.bg
                     });
 
-                    // 5. Blob変換 & Storageアップロード
+                    // 5. Blob変換 & Storageアップロード (Bucket: qr_images)
                     const qrBlob = await this.qrCodeObj.getRawData('png');
                     const qrFileName = `qr_${prof.id}.png`;
                     
-                    const { error: qrUpErr } = await sb.storage.from('qr-images').upload(qrFileName, qrBlob, {
+                    const { error: qrUpErr } = await sb.storage.from('qr_images').upload(qrFileName, qrBlob, {
                         contentType: 'image/png'
                     });
                     
                     let qrStorageUrl = "";
                     if(!qrUpErr) {
-                        const { data: qrPub } = sb.storage.from('qr-images').getPublicUrl(qrFileName);
+                        const { data: qrPub } = sb.storage.from('qr_images').getPublicUrl(qrFileName);
                         qrStorageUrl = qrPub.publicUrl;
                     }
 
-                    // 6. DBへQR情報保存
+                    // 6. DBへQR情報保存 (qr_image_url)
                     const { error: err2 } = await sb.from('qr_codes').insert([{
                         profile_id: prof.id, 
                         qr_type: this.currentPlan,
                         design_type: this.currentDesign,
                         logo_url: LOGO_PATH,
-                        storage_url: qrStorageUrl
+                        qr_image_url: qrStorageUrl // ★変更済みのカラム名
                     }]);
                     if(err2) console.error("QR DB Error:", err2);
 
