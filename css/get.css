@@ -28,7 +28,6 @@
     z-index: 1;
 }
 
-/* Titles */
 .form-title {
     font-family: var(--font-sans);
     font-size: 2.5rem;
@@ -59,7 +58,6 @@
     text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
 }
 
-/* Form Container */
 .form-container {
     width: 100%;
     max-width: 600px;
@@ -74,7 +72,6 @@
     z-index: 10;
 }
 
-/* Gold Pro Effect */
 .form-container.gold-border {
     border-color: var(--color-gold);
     box-shadow: 0 0 30px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
@@ -350,11 +347,15 @@ input:checked+.slider:before { transform: translateX(24px); }
     border-radius: 20px;
     min-height: 280px;
     transition: all 0.3s;
+    /* ★追加：ローディングを重ねるために必要 */
+    position: relative;
+    overflow: hidden;
 }
+
 .qr-preview-area.hidden { display: none; }
 .preview-text { color: #888; font-size: 0.8rem; margin-bottom: 16px; letter-spacing: 0.1em; }
 
-/* ★ 以前抜けていたプレビューボタンの装飾 ★ */
+/* プレビューボタン */
 .btn-preview {
     width: 100%;
     background: transparent;
@@ -408,3 +409,48 @@ input:checked+.slider:before { transform: translateX(24px); }
 }
 .btn-submit:hover { transform: scale(1.02); }
 .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* ==================== LOADING SPINNER (★ここを追加しました) ==================== */
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85); /* 背景を少し濃く */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.loading-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-neon);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+}
+
+.gold-border .spinner {
+    border-top-color: var(--color-gold);
+}
+
+.loading-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.1em;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
