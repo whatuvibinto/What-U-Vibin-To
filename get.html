@@ -430,14 +430,14 @@
                     const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
                     
                     // 1. プロフィール画像アップロード
-                    let avatarUrl = "";
+                    let imageUrl = "";
                     if(this.profileFile) {
                         const fileExt = this.profileFile.name.split('.').pop();
-                        const fileName = `avatar_${Date.now()}.${fileExt}`;
+                        const fileName = `image_${Date.now()}.${fileExt}`;
                         const { error: upErr } = await sb.storage.from('qr-logos').upload(fileName, this.profileFile);
                         if(!upErr) {
                             const { data: pubUrl } = sb.storage.from('qr-logos').getPublicUrl(fileName);
-                            avatarUrl = pubUrl.publicUrl;
+                            imageUrl = pubUrl.publicUrl;
                         }
                     }
 
@@ -450,8 +450,8 @@
                         is_public: document.getElementById('isPublic') ? document.getElementById('isPublic').checked : false,
                         slug: Math.random().toString(36).slice(-8),
                         instagram_id: getVal('instaId'),
-                        theme_color: this.selectedColor,
-                        avatar_url: avatarUrl
+                        color: this.selectedColor, // カラム名を theme_color -> color に変更
+                        image_url: imageUrl // カラム名を avatar_url -> image_url に変更
                     };
 
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([profileData]).select().single();
