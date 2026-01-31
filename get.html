@@ -155,56 +155,47 @@
         };
 
         // ===============================================
-        // システムログ機能 (画面右下に表示)
+        // ログ機能
         // ===============================================
         function log(msg) {
             const consoleBox = document.getElementById('debugConsole');
-            const time = new Date().toLocaleTimeString();
-            consoleBox.innerHTML += `[${time}] ${msg}<br>`;
-            consoleBox.scrollTop = consoleBox.scrollHeight;
-            console.log(msg); // ブラウザのコンソールにも出す
+            if(consoleBox) {
+                const time = new Date().toLocaleTimeString();
+                consoleBox.innerHTML += `[${time}] ${msg}<br>`;
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            }
+            console.log(msg);
         }
 
         // ===============================================
-        // アプリケーションロジック (即時実行)
+        // アプリケーション
         // ===============================================
         const app = {
             currentPlan: 'free',
             selectedGenres: [],
 
-            // 初期化
             init: function() {
                 log("App Initialized.");
-                log("Supabase Library Status: " + (window.supabase ? "OK" : "NOT LOADED"));
-                this.setPlan('free'); // UI初期セット
+                this.setPlan('free');
             },
 
-            // プラン切り替え
             setPlan: function(plan) {
                 log("Switching Plan to: " + plan);
                 this.currentPlan = plan;
-                
-                // ボタン色
                 document.getElementById('btnFree').className = plan === 'free' ? 'plan-btn active' : 'plan-btn';
                 document.getElementById('btnPro').className = plan === 'pro' ? 'plan-btn active' : 'plan-btn';
-
-                // ロック制御
+                
                 const lockList = ['groupMorning', 'groupDaytime', 'nightTimeUI', 'exploreGroup'];
                 lockList.forEach(id => {
                     const el = document.getElementById(id);
                     if(plan === 'free') el.classList.add('locked-section');
                     else el.classList.remove('locked-section');
                 });
-                
-                // チェックボックス
                 document.getElementById('isPublic').checked = (plan === 'pro');
             },
 
-            // ジャンル選択
             toggleGenre: function(btn) {
                 const val = btn.innerText;
-                log("Genre Clicked: " + val);
-
                 if(this.selectedGenres.includes(val)) {
                     this.selectedGenres = this.selectedGenres.filter(g => g !== val);
                     btn.classList.remove('selected');
@@ -215,99 +206,99 @@
                 }
             },
 
-            // QR生成 (Submit)
             generateQR: async function() {
                 log("Generate Button Clicked.");
                 const btn = document.getElementById('btnSubmit');
 
-                // 1. キーチェック
                 if(CONFIG.url.includes('YOUR_')) {
-                    alert("【エラー】APIキーが設定されていません。コードを修正してください。");
-                    log("Error: API Key missing");
-                    return;
+                    alert("APIキーが設定されていません。"); return;
                 }
 
-                // 2. ライブラリチェック
-                if(!window.supabase) {
-                    alert("【エラー】Supabaseライブラリが読み込まれていません。ネット接続を確認してください。");
-                    log("Error: Supabase lib missing");
-                    return;
-                }
-
-                // 3. 入力チェック
                 const name = document.getElementById('djName').value;
                 const link = document.getElementById('linkDefault').value;
-                if(!name || !link) {
-                    alert("名前とDefault Linkを入力してください");
-                    log("Validation Failed");
-                    return;
-                }
+                if(!name || !link) { alert("名前とDefault Linkは必須です"); return; }
 
-                // 4. DB保存処理
                 btn.disabled = true;
                 btn.innerText = "CONNECTING...";
-                log("Connecting to Supabase...");
 
                 try {
                     const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
 
-                    // Profile
+                    // 1. Profile保存
                     log("Saving Profile...");
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([{
                         dj_name: name,
-                        city: "Tokyo", // テスト用固定
-                        genres: this.selectedGenres,
+                        city: document.getElementById('city').value,
+                        // ★修正1: 列名を 'genres' (複数形) に修正
+                        genres: this.selectedGenres, 
                         plan: this.currentPlan,
                         is_public: document.getElementById('isPublic').checked,
                         slug: Math.random().toString(36).slice(-8)
                     }]).select().single();
                     
-                    if(err1) throw err1;
+                    if(err1) throw new Error("Profile Error: " + err1.message);
                     log("Profile Saved ID: " + prof.id);
 
-                    // QR
+                    // 2. QR保存
+                    log("Saving QR Code...");
                     const { data: qr, error: err2 } = await sb.from('qr_codes').insert([{
-                        profile_id: prof.id, qr_type: this.currentPlan
+                        profile_id: prof.id, 
+                        qr_type: this.currentPlan
                     }]).select().single();
                     
-                    if(err2) throw err2;
+                    if(err2) throw new Error("QR Error: " + err2.message);
                     log("QR Saved ID: " + qr.id);
 
-                    // Link Helper
-                    const saveLink = async (type, url, s, e, def=false) => {
+                    // 3. Links保存 (ここを修正)
+                    log("Saving Links...");
+                    
+                    // ヘルパー関数を修正
+                    const saveLink = async (type, url, s, e) => {
+                        // ★修正2: 存在しない列 (qr_code_id, is_default) を削除
                         const payload = { 
-                            profile_id: prof.id, qr_code_id: qr.id, 
-                            time_type: type, url: url, is_default: def 
+                            profile_id: prof.id,
+                            time_type: type, 
+                            url: url
                         };
-                        if(s && e) { payload.start_time = s+":00"; payload.end_time = e+":00"; }
-                        await sb.from('links').insert([payload]);
+                        // 時間がある場合のみ追加
+                        if(s && e) { 
+                            payload.start_time = s + ":00"; 
+                            payload.end_time = e + ":00"; 
+                        }
+
+                        const { error } = await sb.from('links').insert([payload]);
+                        // ★修正3: エラーがあったら無視せず投げる
+                        if(error) throw new Error(`Link Error (${type}): ` + error.message);
                     };
 
                     // Default Link
-                    await saveLink('default', link, null, null, true);
-                    log("Default Link Saved.");
+                    await saveLink('default', link, null, null);
+                    log("Default Link OK");
 
-                    // Success
+                    // Other Links
+                    const getVal = (id) => document.getElementById(id).value;
+                    
+                    if(this.currentPlan === 'pro') {
+                        if(getVal('linkMorning')) await saveLink('morning', getVal('linkMorning'), getVal('timeStartMorning'), getVal('timeEndMorning'));
+                        if(getVal('linkDaytime')) await saveLink('daytime', getVal('linkDaytime'), getVal('timeStartDaytime'), getVal('timeEndDaytime'));
+                    }
+                    if(getVal('linkNight')) await saveLink('nighttime', getVal('linkNight'), getVal('timeStartNight'), getVal('timeEndNight'));
+
                     btn.innerText = "SUCCESS!";
-                    log("ALL DONE.");
-                    alert("成功！DBに保存されました。");
+                    alert("成功！今度こそ全てのデータが保存されました。");
                     btn.disabled = false;
 
                 } catch(e) {
                     console.error(e);
-                    log("FATAL ERROR: " + e.message);
-                    alert("エラー: " + e.message);
+                    log("ERROR: " + e.message);
+                    alert("エラー発生: " + e.message);
                     btn.disabled = false;
                     btn.innerText = "RETRY";
                 }
             }
         };
 
-        // ページ読み込み完了時にアプリ起動
-        window.addEventListener('DOMContentLoaded', () => {
-            app.init();
-        });
-
+        window.addEventListener('DOMContentLoaded', () => { app.init(); });
     </script>
 </body>
 </html>
