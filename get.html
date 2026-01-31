@@ -208,7 +208,7 @@
                         // 初期表示は Aスタイル
                         const style = this.styles.A;
                         this.qrCodeObj = new QRCodeStyling({
-                            width: 300, height: 300, type: "canvas",
+                            width: 250, height: 250, type: "canvas",
                             data: BASE_URL + "PREVIEW",
                             image: LOGO_PATH,
                             // ロゴのために補正レベルを高く設定
@@ -221,7 +221,7 @@
                                 crossOrigin: "anonymous", 
                                 margin: 2, 
                                 hideBackgroundDots: true,
-                                imageSize: 0.3 
+                                imageSize: 0.3
                             },
                             // 初期のデザイン適用
                             dotsOptions: style.dots,
