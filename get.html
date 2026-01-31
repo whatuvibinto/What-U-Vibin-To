@@ -105,26 +105,33 @@
                 <input type="url" id="linkNight" class="form-input" placeholder="Night Playlist URL">
             </div>
 
-            <div style="margin-top: 40px;">
-                <span class="design-selector-label">QR STYLE SELECTOR</span>
-                <div class="design-options">
-                    <div class="design-btn active" data-type="A" onclick="app.selectDesign('A')">
-                        <div class="design-icon"></div>
-                        <span class="design-name">Standard</span>
-                    </div>
-                    <div class="design-btn locked" id="designBtnB" data-type="B" onclick="app.selectDesign('B')">
-                        <div class="design-icon"></div>
-                        <span class="design-name">Modern</span>
-                    </div>
-                    <div class="design-btn locked" id="designBtnC" data-type="C" onclick="app.selectDesign('C')">
-                        <div class="design-icon"></div>
-                        <span class="design-name">Dot</span> </div>
-                </div>
-            </div>
-
             <div id="exploreGroup" class="toggle-wrapper locked-section">
                 <span class="form-label" style="margin:0">SHOW ON EXPLORE</span>
-                <label class="switch"><input type="checkbox" id="isPublic"><span class="slider"></span></label>
+                <label class="switch"><input type="checkbox" id="isPublic" onchange="app.toggleExplore()"><span class="slider"></span></label>
+            </div>
+
+            <div id="exploreDetails" class="explore-details">
+                <div class="form-group">
+                    <label class="form-label">PROFILE IMAGE</label>
+                    <label class="file-upload-btn">
+                        <input type="file" id="profileImage" accept="image/*" style="display:none" onchange="app.handleProfileImage(this)">
+                        <span id="profileImageLabel">Click to Upload Image</span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">INSTAGRAM ID</label>
+                    <input type="text" id="instaId" class="form-input" placeholder="@username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">CARD THEME COLOR</label>
+                    <div class="color-picker" id="colorPicker">
+                        <div class="color-opt selected" style="background:#a855f7" data-color="#a855f7" onclick="app.selectColor(this)"></div>
+                        <div class="color-opt" style="background:#3b82f6" data-color="#3b82f6" onclick="app.selectColor(this)"></div>
+                        <div class="color-opt" style="background:#ef4444" data-color="#ef4444" onclick="app.selectColor(this)"></div>
+                        <div class="color-opt" style="background:#22c55e" data-color="#22c55e" onclick="app.selectColor(this)"></div>
+                        <div class="color-opt" style="background:#f59e0b" data-color="#f59e0b" onclick="app.selectColor(this)"></div>
+                    </div>
+                </div>
             </div>
 
             <div style="margin-top: 40px;">
@@ -133,22 +140,25 @@
                         <div class="spinner"></div>
                         <div class="loading-text">GENERATING...</div>
                     </div>
-                    <div class="preview-text">QR PREVIEW (3 STYLES)</div>
+                    
+                    <div class="preview-text">SELECT YOUR STYLE</div>
+                    
                     <div class="preview-grid">
-                        <div class="preview-card" id="card-A">
-                            <div id="canvas-A"></div>
-                            <span class="preview-label">Standard</span>
+                        <div class="design-btn active" data-type="A" id="btnA" onclick="app.selectDesign('A')">
+                            <div class="style-preview-box" id="canvas-A"></div>
+                            <span class="design-name">Standard</span>
                         </div>
-                        <div class="preview-card" id="card-B">
-                            <div id="canvas-B"></div>
-                            <span class="preview-label">Modern</span>
+                        <div class="design-btn locked" data-type="B" id="btnB" onclick="app.selectDesign('B')">
+                            <div class="style-preview-box" id="canvas-B"></div>
+                            <span class="design-name">Modern</span>
                         </div>
-                        <div class="preview-card" id="card-C">
-                            <div id="canvas-C"></div>
-                            <span class="preview-label">Dot</span>
+                        <div class="design-btn locked" data-type="C" id="btnC" onclick="app.selectDesign('C')">
+                            <div class="style-preview-box" id="canvas-C"></div>
+                            <span class="design-name">Dot</span>
                         </div>
                     </div>
                 </div>
+                
                 <button type="button" class="btn-preview" onclick="app.previewQR()">PREVIEW QR</button>
                 <button type="button" class="btn-submit" id="btnSubmit" onclick="app.generateQR()">GENERATE QR</button>
             </div>
@@ -158,8 +168,8 @@
 
     <script>
         const CONFIG = {
-            url: 'YOUR_SUPABASE_URL', 
-            key: 'YOUR_ANON_KEY'      
+            url: 'https://zcjzmuzmhuanyauhgeni.supabase.co',
+            key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjanptdXptaHVhbnlhdWhnZW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MzAyNjAsImV4cCI6MjA4NTQwNjI2MH0.pNB58zLyRR4iM1oYoKeZQcJ1grKyrOY8F-Akd2298-A'
         };
 
         const LOGO_PATH = "images/qr_logo.PNG"; 
@@ -183,8 +193,9 @@
             currentPlan: 'free',
             currentDesign: 'A',
             selectedGenres: [],
+            profileFile: null,
+            selectedColor: '#a855f7',
             
-            // ★デザイン定義 (ロゴサイズ 0.3)
             styles: {
                 A: { 
                     dots: { type: 'square', color: '#ffffff' }, 
@@ -199,8 +210,7 @@
                     bg: { color: '#000000' }
                 },
                 C: { 
-                    // Edgy改めDot: にじみを避けるため "rounded" に変更
-                    dots: { type: 'dots', color: '#ffffff' }, 
+                    dots: { type: 'rounded', color: '#ffffff' }, 
                     cornersSq: { type: 'dot', color: '#ffffff' }, 
                     cornersDot: { type: 'dot', color: '#ffffff' }, 
                     bg: { color: '#000000' }
@@ -220,8 +230,10 @@
                 const labelMorning = document.getElementById('labelMorning');
                 const labelDaytime = document.getElementById('labelDaytime');
                 const labelNight = document.getElementById('labelNight');
-                const desB = document.getElementById('designBtnB');
-                const desC = document.getElementById('designBtnC');
+                
+                // Style Buttons
+                const btnB = document.getElementById('btnB');
+                const btnC = document.getElementById('btnC');
                 
                 if(btnFree) btnFree.className = plan === 'free' ? 'plan-btn active' : 'plan-btn';
                 if(btnPro) btnPro.className = plan === 'pro' ? 'plan-btn active' : 'plan-btn';
@@ -231,15 +243,17 @@
                     labelMorning.style.color = '#FFD700'; 
                     labelDaytime.style.color = '#FFD700'; 
                     labelNight.style.color = '#FFD700';
-                    desB.classList.remove('locked');
-                    desC.classList.remove('locked');
+                    // Unlock styles
+                    if(btnB) btnB.classList.remove('locked');
+                    if(btnC) btnC.classList.remove('locked');
                 } else {
                     container.classList.remove('gold-border', 'pro-mode');
                     labelMorning.style.color = '#fff';      
                     labelDaytime.style.color = '#fff';      
                     labelNight.style.color = '#a855f7';
-                    desB.classList.add('locked');
-                    desC.classList.add('locked');
+                    // Lock styles
+                    if(btnB) btnB.classList.add('locked');
+                    if(btnC) btnC.classList.add('locked');
                     this.selectDesign('A');
                 }
 
@@ -251,8 +265,12 @@
                         else el.classList.remove('locked-section');
                     }
                 });
+                
                 const publicCheck = document.getElementById('isPublic');
-                if(publicCheck) publicCheck.checked = (plan === 'pro');
+                if(publicCheck) {
+                    publicCheck.checked = (plan === 'pro');
+                    this.toggleExplore(); // Refresh explore visibility
+                }
 
                 if(plan === 'free') {
                     const clearVal = (id) => { const el = document.getElementById(id); if(el) el.value = ""; };
@@ -272,29 +290,39 @@
                 }
             },
 
+            // --- Explore Features ---
+            toggleExplore: function() {
+                const isChecked = document.getElementById('isPublic').checked;
+                const details = document.getElementById('exploreDetails');
+                if(isChecked) details.classList.add('open');
+                else details.classList.remove('open');
+            },
+
+            handleProfileImage: function(input) {
+                if(input.files && input.files[0]) {
+                    this.profileFile = input.files[0];
+                    document.getElementById('profileImageLabel').innerText = "Selected: " + this.profileFile.name;
+                }
+            },
+
+            selectColor: function(el) {
+                document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('selected'));
+                el.classList.add('selected');
+                this.selectedColor = el.getAttribute('data-color');
+            },
+
+            // --- QR Logic ---
             selectDesign: function(type) {
                 if(this.currentPlan === 'free' && type !== 'A') return;
+
                 this.currentDesign = type;
                 document.querySelectorAll('.design-btn').forEach(btn => {
                     btn.classList.remove('active');
                     if(btn.dataset.type === type) btn.classList.add('active');
                 });
-                
-                // プレビュー表示中なら、選択したカードをハイライト
-                this.highlightSelectedPreview();
             },
 
-            highlightSelectedPreview: function() {
-                ['A', 'B', 'C'].forEach(t => {
-                    const card = document.getElementById('card-' + t);
-                    if(card) {
-                        if(t === this.currentDesign) card.classList.add('selected-card');
-                        else card.classList.remove('selected-card');
-                    }
-                });
-            },
-
-            // ★プレビュー機能 (3つのQRを並べて表示)
+            // ★ プレビュー：ボタンの中に3つのQRを描画する
             previewQR: function() {
                 const link = document.getElementById('linkDefault').value;
                 if(!link) { alert("Default Linkを入力してください"); return; }
@@ -308,25 +336,19 @@
 
                 setTimeout(() => {
                     try {
-                        // 3種類のQRを生成して描画
+                        // 3種類すべて描画
                         ['A', 'B', 'C'].forEach(type => {
                             const box = document.getElementById('canvas-' + type);
                             if(box) {
                                 box.innerHTML = "";
                                 const style = this.styles[type];
-                                
                                 const qr = new QRCodeStyling({
-                                    width: 150, height: 150, // プレビュー用サイズ
+                                    width: 150, height: 150,
                                     type: "canvas",
                                     data: BASE_URL + "PREVIEW",
                                     image: LOGO_PATH,
                                     qrOptions: { errorCorrectionLevel: "Q" },
-                                    imageOptions: { 
-                                        crossOrigin: "anonymous", 
-                                        margin: 2, 
-                                        imageSize: 0.3, // ★ロゴサイズ縮小 0.3
-                                        hideBackgroundDots: true 
-                                    },
+                                    imageOptions: { crossOrigin: "anonymous", margin: 2, imageSize: 0.3, hideBackgroundDots: true },
                                     dotsOptions: style.dots,
                                     cornersSquareOptions: style.cornersSq,
                                     cornersDotOptions: style.cornersDot,
@@ -335,13 +357,13 @@
                                 qr.append(box);
                             }
                         });
-
-                        // 選択中のデザインをハイライト
-                        this.highlightSelectedPreview();
                         
+                        // 選択状態の反映
+                        this.selectDesign(this.currentDesign);
+
                     } catch(e) {
                         console.error("Preview Error:", e);
-                        alert("プレビュー生成に失敗しました。画像のパスを確認してください。");
+                        alert("プレビュー生成に失敗しました。");
                     } finally {
                         setTimeout(() => {
                             loading.classList.remove('visible');
@@ -350,7 +372,6 @@
                 }, 200);
             },
 
-            // ★生成処理 (選択されたデザインで保存)
             generateQR: async function() {
                 const btn = document.getElementById('btnSubmit');
                 if(CONFIG.url.includes('YOUR_')) { alert("APIキーが設定されていません。"); return; }
@@ -366,19 +387,38 @@
 
                 try {
                     const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
+                    
+                    // プロフィール画像アップロード (簡易実装: qr-logosバケット利用)
+                    let avatarUrl = "";
+                    if(this.profileFile) {
+                        const fileExt = this.profileFile.name.split('.').pop();
+                        const fileName = `avatar_${Date.now()}.${fileExt}`;
+                        // ※バケット名は環境に合わせて変更してください
+                        const { error: upErr } = await sb.storage.from('qr-logos').upload(fileName, this.profileFile);
+                        if(!upErr) {
+                            const { data: pubUrl } = sb.storage.from('qr-logos').getPublicUrl(fileName);
+                            avatarUrl = pubUrl.publicUrl;
+                        }
+                    }
 
-                    // 1. Profile
-                    const { data: prof, error: err1 } = await sb.from('profiles').insert([{
+                    // Profile保存
+                    const profileData = {
                         dj_name: name,
                         city: getVal('city'),
                         genres: this.selectedGenres,
                         plan: this.currentPlan,
                         is_public: document.getElementById('isPublic') ? document.getElementById('isPublic').checked : false,
-                        slug: Math.random().toString(36).slice(-8)
-                    }]).select().single();
+                        slug: Math.random().toString(36).slice(-8),
+                        // 新規追加項目 (DBカラムが必要)
+                        instagram_id: getVal('instaId'),
+                        theme_color: this.selectedColor,
+                        avatar_url: avatarUrl
+                    };
+
+                    const { data: prof, error: err1 } = await sb.from('profiles').insert([profileData]).select().single();
                     if(err1) throw new Error("Profile Error: " + err1.message);
 
-                    // 2. QR
+                    // QR保存
                     const { data: qr, error: err2 } = await sb.from('qr_codes').insert([{
                         profile_id: prof.id, 
                         qr_type: this.currentPlan,
@@ -387,7 +427,7 @@
                     }]).select().single();
                     if(err2) throw new Error("QR Error: " + err2.message);
 
-                    // 3. Links
+                    // Links保存
                     const saveLink = async (type, url, s, e) => {
                         const payload = { profile_id: prof.id, time_type: type, url: url };
                         if(s && e) { payload.start_time = s.length === 5 ? s+":00" : s; payload.end_time = e.length === 5 ? e+":00" : e; }
