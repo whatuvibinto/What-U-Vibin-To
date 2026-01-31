@@ -164,33 +164,41 @@
             </div>
             
         </div>
+
         <div id="resultModal" class="result-modal">
             <div class="result-content" id="resultContent">
                 <h2 class="result-title">QR CODE GENERATED</h2>
-            
+                
                 <div class="result-image-box">
                     <img id="finalQrImage" src="" alt="Generated QR">
                 </div>
 
                 <div class="result-actions">
-                <button type="button" class="btn-download" onclick="app.downloadQR()">
-                    <span>⬇ DOWNLOAD IMAGE</span>
-                </button>
-                <button type="button" class="btn-close" onclick="app.closeResult()">CLOSE</button>
+                    <button type="button" class="btn-download" onclick="app.downloadQR()">
+                        <span>⬇ DOWNLOAD IMAGE</span>
+                    </button>
+                    <button type="button" class="btn-close" onclick="app.closeResult()">CLOSE</button>
                 </div>
             </div>
         </div>
+
     </main>
 
     <script>
+        // ===============================================
+        // ★★★ 設定: APIキーを入力してください ★★★
+        // ===============================================
         const CONFIG = {
             url: 'https://zcjzmuzmhuanyauhgeni.supabase.co',
             key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjanptdXptaHVhbnlhdWhnZW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MzAyNjAsImV4cCI6MjA4NTQwNjI2MH0.pNB58zLyRR4iM1oYoKeZQcJ1grKyrOY8F-Akd2298-A'
         };
 
         const LOGO_PATH = "images/qr_logo.PNG"; 
+        
+        // ★遷移先を qr_links.html に修正済み
         const BASE_URL = window.location.href.replace('get.html', 'qr_links.html?id=');
 
+        // --- Menu Logic ---
         const menuBtn = document.getElementById('menuBtn');
         const menuPanel = document.getElementById('menuPanel');
         let isMenuOpen = false;
@@ -211,7 +219,9 @@
             selectedGenres: [],
             profileFile: null,
             selectedColor: '#a855f7',
+            qrCodeObj: null, // 生成後に保持するオブジェクト
             
+            // デザイン定義 (ロゴサイズ0.3, 背景黒, QR白)
             styles: {
                 A: { 
                     dots: { type: 'square', color: '#ffffff' }, 
@@ -226,7 +236,7 @@
                     bg: { color: '#000000' }
                 },
                 C: { 
-                    dots: { type: 'dots', color: '#ffffff' }, 
+                    dots: { type: 'rounded', color: '#ffffff' }, 
                     cornersSq: { type: 'dot', color: '#ffffff' }, 
                     cornersDot: { type: 'dot', color: '#ffffff' }, 
                     bg: { color: '#000000' }
@@ -332,6 +342,8 @@
                 if(this.currentPlan === 'free' && type !== 'A') return;
 
                 this.currentDesign = type;
+                
+                // ボタンの選択状態更新
                 document.querySelectorAll('.design-btn').forEach(btn => {
                     btn.classList.remove('active');
                     if(btn.dataset.type === type) btn.classList.add('active');
@@ -388,6 +400,19 @@
                 }, 200);
             },
 
+            // ★ ダウンロード機能
+            downloadQR: function() {
+                if(this.qrCodeObj) {
+                    this.qrCodeObj.download({ name: "my_vibe_qr", extension: "png" });
+                }
+            },
+
+            // ★ モーダルを閉じる
+            closeResult: function() {
+                document.getElementById('resultModal').classList.remove('visible');
+                window.location.reload(); // リセットのためリロード
+            },
+
             generateQR: async function() {
                 const btn = document.getElementById('btnSubmit');
                 if(CONFIG.url.includes('YOUR_')) { alert("APIキーが設定されていません。"); return; }
@@ -404,12 +429,11 @@
                 try {
                     const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
                     
-                    // プロフィール画像アップロード (簡易実装: qr-logosバケット利用)
+                    // 1. プロフィール画像アップロード
                     let avatarUrl = "";
                     if(this.profileFile) {
                         const fileExt = this.profileFile.name.split('.').pop();
                         const fileName = `avatar_${Date.now()}.${fileExt}`;
-                        // ※バケット名は環境に合わせて変更してください
                         const { error: upErr } = await sb.storage.from('qr-logos').upload(fileName, this.profileFile);
                         if(!upErr) {
                             const { data: pubUrl } = sb.storage.from('qr-logos').getPublicUrl(fileName);
@@ -417,7 +441,7 @@
                         }
                     }
 
-                    // Profile保存
+                    // 2. Profile保存
                     const profileData = {
                         dj_name: name,
                         city: getVal('city'),
@@ -425,7 +449,6 @@
                         plan: this.currentPlan,
                         is_public: document.getElementById('isPublic') ? document.getElementById('isPublic').checked : false,
                         slug: Math.random().toString(36).slice(-8),
-                        // 新規追加項目 (DBカラムが必要)
                         instagram_id: getVal('instaId'),
                         theme_color: this.selectedColor,
                         avatar_url: avatarUrl
@@ -434,21 +457,11 @@
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([profileData]).select().single();
                     if(err1) throw new Error("Profile Error: " + err1.message);
 
-                    // QR保存
-                    const { data: qr, error: err2 } = await sb.from('qr_codes').insert([{
-                        profile_id: prof.id, 
-                        qr_type: this.currentPlan,
-                        design_type: this.currentDesign,
-                        logo_url: LOGO_PATH
-                    }]).select().single();
-                    if(err2) throw new Error("QR Error: " + err2.message);
-
-                    // Links保存
+                    // 3. Links保存
                     const saveLink = async (type, url, s, e) => {
                         const payload = { profile_id: prof.id, time_type: type, url: url };
                         if(s && e) { payload.start_time = s.length === 5 ? s+":00" : s; payload.end_time = e.length === 5 ? e+":00" : e; }
-                        const { error } = await sb.from('links').insert([payload]);
-                        if(error) throw new Error(`Link Error (${type}): ` + error.message);
+                        await sb.from('links').insert([payload]);
                     };
 
                     await saveLink('default', link, null, null);
@@ -459,12 +472,58 @@
                     }
                     if(getVal('linkNight')) await saveLink('nighttime', getVal('linkNight'), getVal('timeStartNight'), getVal('timeEndNight'));
 
+                    // 4. QRコード生成（本番データ）
                     const finalUrl = BASE_URL + prof.id; 
+                    const style = this.styles[this.currentDesign];
+
+                    this.qrCodeObj = new QRCodeStyling({
+                        width: 500, height: 500, // 高画質用
+                        type: "canvas",
+                        data: finalUrl,
+                        image: LOGO_PATH,
+                        qrOptions: { errorCorrectionLevel: "Q" },
+                        imageOptions: { crossOrigin: "anonymous", margin: 2, imageSize: 0.3, hideBackgroundDots: true },
+                        dotsOptions: style.dots,
+                        cornersSquareOptions: style.cornersSq,
+                        cornersDotOptions: style.cornersDot,
+                        backgroundOptions: style.bg
+                    });
+
+                    // 5. Blob変換 & Storageアップロード
+                    const qrBlob = await this.qrCodeObj.getRawData('png');
+                    const qrFileName = `qr_${prof.id}.png`;
                     
+                    const { error: qrUpErr } = await sb.storage.from('qr-images').upload(qrFileName, qrBlob, {
+                        contentType: 'image/png'
+                    });
+                    
+                    let qrStorageUrl = "";
+                    if(!qrUpErr) {
+                        const { data: qrPub } = sb.storage.from('qr-images').getPublicUrl(qrFileName);
+                        qrStorageUrl = qrPub.publicUrl;
+                    }
+
+                    // 6. DBへQR情報保存
+                    const { error: err2 } = await sb.from('qr_codes').insert([{
+                        profile_id: prof.id, 
+                        qr_type: this.currentPlan,
+                        design_type: this.currentDesign,
+                        logo_url: LOGO_PATH,
+                        storage_url: qrStorageUrl
+                    }]);
+                    if(err2) console.error("QR DB Error:", err2);
+
+                    // 7. 成功モーダル表示
+                    const localQrUrl = URL.createObjectURL(qrBlob);
+                    document.getElementById('finalQrImage').src = localQrUrl;
+                    
+                    const modalContent = document.getElementById('resultContent');
+                    if(this.currentPlan === 'pro') modalContent.parentElement.classList.add('gold-border');
+                    else modalContent.parentElement.classList.remove('gold-border');
+
+                    document.getElementById('resultModal').classList.add('visible');
                     btn.innerText = "SUCCESS!";
-                    alert("登録完了！\nこのQRコードは以下のURLにリンクします:\n" + finalUrl);
                     btn.disabled = false;
-                    btn.innerText = "GENERATE QR";
 
                 } catch(e) {
                     console.error(e);
