@@ -239,7 +239,7 @@
 
 .time-sep { color: #666; font-family: var(--font-mono); }
 
-/* ==================== QR DESIGN SELECTOR ==================== */
+/* ==================== QR DESIGN SELECTOR (VISUAL PREVIEW) ==================== */
 .design-selector-label {
     display: block;
     font-size: 0.8rem;
@@ -249,13 +249,15 @@
     font-family: var(--font-sans);
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    text-align: center;
 }
 
 .design-options {
     display: flex;
-    gap: 16px;
-    margin-bottom: 30px;
     justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    width: 100%;
 }
 
 .design-btn {
@@ -263,47 +265,81 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
-    padding: 20px 10px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
 }
 
-.design-icon {
-    width: 40px; height: 40px;
-    border: 2px solid #666; position: relative;
+/* ミニQRを表示するボックス */
+.style-preview-box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000; /* QRが白なので背景は黒 */
+    border-radius: 8px;
+    overflow: hidden;
+    pointer-events: none;
 }
 
-/* Style A: Square */
-.design-btn[data-type="A"] .design-icon { border-radius: 0; }
-.design-btn[data-type="A"] .design-icon::after { content:''; position:absolute; inset:6px; background:#666; border-radius:0; }
+/* Canvasのサイズ調整 */
+.style-preview-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
 
-/* Style B: Round */
-.design-btn[data-type="B"] .design-icon { border-radius: 12px; }
-.design-btn[data-type="B"] .design-icon::after { content:''; position:absolute; inset:6px; background:#666; border-radius:50%; }
+.design-name {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+}
 
-/* Style C: Dots */
-.design-btn[data-type="C"] .design-icon { border: 2px dashed #666; border-radius: 4px; }
-.design-btn[data-type="C"] .design-icon::after { content:''; position:absolute; inset:8px; background:#666; border-radius:50%; }
-
-/* Active & Locked */
+/* 選択中の状態 */
 .design-btn.active {
     background: rgba(255, 255, 255, 0.1);
-    border-color: var(--color-white);
-    transform: translateY(-2px);
+    border-color: var(--color-white); /* デフォルト白 */
+    transform: translateY(-4px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
-.design-btn.active .design-icon { border-color: #fff; }
-.design-btn.active .design-icon::after { background: #fff; }
 
-.design-btn.locked {
-    opacity: 0.3; pointer-events: none; filter: grayscale(1);
+/* Proモードで選択中の場合 */
+.gold-border .design-btn.active {
+    border-color: var(--color-gold);
 }
-.design-btn.locked::before {
-    content: "🔒"; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); font-size: 1.5rem; z-index: 10;
+.gold-border .design-btn.active .design-name {
+    color: var(--color-gold);
+}
+
+/* ロック状態 (Freeプラン) */
+.design-btn.locked {
+    opacity: 0.4;
+    pointer-events: none;
+    filter: grayscale(1);
+    border-color: #333;
+}
+
+/* ロックアイコン */
+.design-btn.locked::after {
+    content: "🔒"; 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    z-index: 10;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    opacity: 0.8;
 }
 
 /* ==================== LOCK STATE ==================== */
@@ -347,7 +383,6 @@ input:checked+.slider:before { transform: translateX(24px); }
     border-radius: 20px;
     min-height: 280px;
     transition: all 0.3s;
-    /* ★追加：ローディングを重ねるために必要 */
     position: relative;
     overflow: hidden;
 }
@@ -410,11 +445,11 @@ input:checked+.slider:before { transform: translateX(24px); }
 .btn-submit:hover { transform: scale(1.02); }
 .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-/* ==================== LOADING SPINNER (★ここを追加しました) ==================== */
+/* ==================== LOADING SPINNER ==================== */
 .loading-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.85); /* 背景を少し濃く */
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     flex-direction: column;
     align-items: center;
