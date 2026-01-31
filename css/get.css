@@ -7,13 +7,16 @@
     --color-neon: #a855f7;       /* Default (Free) Purple */
     --color-gold: #FFD700;       /* Pro Gold */
     --color-gray-300: #d1d5db;
+    --color-gray-500: #6b7280;   /* Subtitle Gray */
     --font-sans: 'Inter', sans-serif;
-    --font-mono: 'Courier New', Courier, monospace; /* Digital Clock Font */
+    --font-jp: 'Noto Sans JP', sans-serif; /* Added for subtitle */
+    --font-mono: 'Courier New', Courier, monospace;
     --header-height: 64px;
 }
 
 /* ==================== FORM SECTION LAYOUT ==================== */
 .form-section {
+    position: relative; /* 背景レイヤーのために必要 */
     padding: calc(var(--header-height) + 40px) 20px 100px;
     display: flex;
     flex-direction: column;
@@ -22,16 +25,36 @@
     background-color: var(--color-black);
     color: var(--color-white);
     transition: background 0.5s;
+    overflow: hidden; /* 光がはみ出さないように */
+    z-index: 1;
 }
 
+/* --- Title & Subtitle (Match How.html) --- */
 .form-title {
-    font-size: 2rem;
+    font-family: var(--font-sans);
+    font-size: 2.5rem;
     font-weight: 900;
     text-align: center;
-    margin-bottom: 30px;
-    text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-white);
+    margin-bottom: 8px; /* サブタイトルとの距離を詰める */
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
     transition: all 0.5s;
+    position: relative;
+    z-index: 10;
+}
+
+.form-subtitle {
+    font-family: var(--font-jp);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-500);
+    text-align: center;
+    margin-bottom: 48px; /* フォームとの距離 */
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 10;
 }
 
 /* Pro Mode Title Effect */
@@ -40,6 +63,7 @@
     text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
 }
 
+/* --- Form Container --- */
 .form-container {
     width: 100%;
     max-width: 600px;
@@ -50,12 +74,32 @@
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
     transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+    z-index: 10;
 }
 
-/* ★ GOLD MODE (Pro Active) */
+/* ★ GOLD MODE (Pro Active) - Sparkle Shadow Effect */
 .form-container.gold-border {
     border-color: var(--color-gold);
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
+    /* 金色の影（バックライト）を強力に */
+    box-shadow: 
+        0 0 30px rgba(255, 215, 0, 0.2), 
+        0 0 80px rgba(255, 215, 0, 0.15),
+        inset 0 0 20px rgba(255, 215, 0, 0.05);
+    animation: goldBreath 3s infinite alternate; /* 呼吸するように光る */
+}
+
+@keyframes goldBreath {
+    0% {
+        box-shadow: 
+            0 0 30px rgba(255, 215, 0, 0.2), 
+            0 0 60px rgba(255, 215, 0, 0.1);
+    }
+    100% {
+        box-shadow: 
+            0 0 40px rgba(255, 215, 0, 0.4), 
+            0 0 100px rgba(255, 215, 0, 0.2);
+    }
 }
 
 /* ==================== PLAN TOGGLE ==================== */
@@ -86,7 +130,6 @@
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
 }
 
-/* Pro Button Active State */
 .plan-btn#btnPro.active {
     background: var(--color-gold);
     color: #000;
@@ -125,7 +168,6 @@
     background: rgba(168, 85, 247, 0.05);
 }
 
-/* Gold Focus for Pro inputs */
 .gold-border .form-input:focus {
     border-color: var(--color-gold);
     background: rgba(255, 215, 0, 0.05);
@@ -156,7 +198,6 @@
     font-weight: bold;
 }
 
-/* Gold Genre for Pro */
 .gold-border .genre-pill.selected {
     background: var(--color-gold);
     color: #000;
@@ -175,7 +216,6 @@
     overflow: hidden;
 }
 
-/* Header with Flexbox */
 .time-header {
     display: flex;
     justify-content: space-between;
@@ -187,7 +227,6 @@
     color: #888;
 }
 
-/* ★ PRO TIME UI: デジタル時計風 */
 .time-inputs {
     display: flex;
     align-items: center;
@@ -212,19 +251,14 @@
     text-align: center;
 }
 
-/* 時計のアイコン（カレンダーマーク）を白くするハック */
 .time-inputs input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     opacity: 0.5;
     cursor: pointer;
 }
 
-.time-sep {
-    color: #666;
-    font-family: var(--font-mono);
-}
+.time-sep { color: #666; font-family: var(--font-mono); }
 
-/* Focus effect for Time */
 .time-inputs:focus-within {
     border-color: var(--color-gold);
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
@@ -239,13 +273,11 @@
     transition: all 0.3s;
 }
 
-/* Unlock visual cue */
 .time-link-group:not(.locked-section) {
     border-color: rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.04);
 }
 
-/* Gold border for unlocked items in Pro */
 .gold-border .time-link-group:not(.locked-section) {
     border-color: rgba(255, 215, 0, 0.3);
 }
@@ -272,7 +304,7 @@
     background-color: white; transition: .4s; border-radius: 50%;
 }
 
-input:checked+.slider { background-color: var(--color-gold); } /* Gold switch */
+input:checked+.slider { background-color: var(--color-gold); }
 input:checked+.slider:before { transform: translateX(24px); }
 
 /* ==================== SUBMIT BUTTON ==================== */
@@ -293,7 +325,6 @@ input:checked+.slider:before { transform: translateX(24px); }
     transition: all 0.3s;
 }
 
-/* Gold Submit Button */
 .gold-border .btn-submit {
     background: var(--color-gold);
     color: #000;
@@ -302,3 +333,9 @@ input:checked+.slider:before { transform: translateX(24px); }
 
 .btn-submit:hover { transform: scale(1.02); }
 .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* PC Responsive */
+@media (min-width: 768px) {
+    .form-title { font-size: 3.5rem; }
+    .form-subtitle { font-size: 1rem; }
+}
