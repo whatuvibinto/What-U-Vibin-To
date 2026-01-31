@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checking Vibe...</title>
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <style>
+        /* 全体のスタイル */
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        /* ロゴのスタイル */
+        .vibe-logo {
+            width: 240px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.7));
+            animation: breathe 3s infinite ease-in-out;
+        }
+
+        /* テキストのスタイル */
+        #status {
+            min-height: 24px; /* ガタつき防止 */
+        }
+        #status p {
+            margin: 0;
+            font-size: 14px;
+            color: #ccc;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: fadeIn 0.5s;
+        }
+
+        /* 背景エフェクト（get.htmlと統一） */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .glow-spot {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(0,0,0,0) 70%);
+            animation: pulseBg 4s infinite alternate;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.9)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5)); }
+        }
+        
+        @keyframes pulseBg {
+            0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer">
+        <div class="glow-spot"></div>
+    </div>
+
+    <div class="container">
+        <img src="images/white_logo.png" alt="What U Vibin To?" class="vibe-logo" onerror="this.style.display='none'">
+        
+        <div id="status">
+            <p>ACCESSING VIBES...</p>
+        </div>
+    </div>
+
+    <script>
+        // ===============================================
+        // ★★★ 設定: get.htmlと同じキーを入れてください ★★★
+        // ===============================================
+        const CONFIG = {
+            url: 'YOUR_SUPABASE_URL', 
+            key: 'YOUR_ANON_KEY'      
+        };
+
+        const statusDiv = document.getElementById('status');
+
+        // 時間比較用のヘルパー関数 (HH:MM:SS を 今日のDateオブジェクトに変換)
+        function getTimeDate(timeStr) {
+            const d = new Date();
+            const [h, m, s] = timeStr.split(':');
+            d.setHours(h, m, s || 0);
+            return d;
+        }
+
+        async function initRedirect() {
+            // 1. URLからIDを取得 (?id=xxxx)
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get('id');
+
+            if (!userId) {
+                statusDiv.innerHTML = "<p style='color:red'>INVALID QR CODE</p>";
+                return;
+            }
+
+            if (CONFIG.url.includes('YOUR_')) {
+                statusDiv.innerHTML = "<p style='color:red'>SYSTEM ERROR: API KEY</p>";
+                return;
+            }
+
+            try {
+                const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
+
+                // 2. プロフィール取得（名前表示用）
+                const { data: profile, error: errProf } = await sb
+                    .from('profiles')
+                    .select('dj_name, is_public')
+                    .eq('id', userId)
+                    .single();
+
+                if (errProf || !profile) {
+                    throw new Error("Profile not found");
+                }
+
+                // 名前を表示して雰囲気を出す
+                statusDiv.innerHTML = `<p>CHECKING ${profile.dj_name}'s VIBE...</p>`;
+
+                // 3. リンク一覧を取得
+                const { data: links, error: errLinks } = await sb
+                    .from('links')
+                    .select('*')
+                    .eq('profile_id', userId);
+
+                if (errLinks || !links || links.length === 0) {
+                    throw new Error("No vibes found");
+                }
+
+                // 4. 現在時刻に合うリンクを探す
+                const now = new Date();
+                let targetLink = null;
+                let defaultLink = null;
+
+                // リンクをループしてチェック
+                for (const link of links) {
+                    if (link.time_type === 'default') {
+                        defaultLink = link.url;
+                        continue;
+                    }
+
+                    if (link.start_time && link.end_time) {
+                        const start = getTimeDate(link.start_time);
+                        const end = getTimeDate(link.end_time);
+
+                        // 日付またぎ対応 (例: 22:00 -> 06:00)
+                        if (end < start) {
+                            // 今が開始時間より後 OR 今が終了時間より前
+                            if (now >= start || now < end) {
+                                targetLink = link.url;
+                                break; // 見つかったら終了
+                            }
+                        } else {
+                            // 通常 (例: 06:00 -> 11:00)
+                            if (now >= start && now < end) {
+                                targetLink = link.url;
+                                break; 
+                            }
+                        }
+                    }
+                }
+
+                // 時間指定が見つからなければデフォルトへ
+                const finalUrl = targetLink || defaultLink;
+
+                if (!finalUrl) {
+                    throw new Error("Link setting incomplete");
+                }
+
+                // 5. 少し待たせてからリダイレクト（演出）
+                setTimeout(() => {
+                    statusDiv.innerHTML = `<p style="color:#a855f7; font-weight:bold;">VIBE FOUND. OPENING...</p>`;
+                    setTimeout(() => {
+                        window.location.href = finalUrl;
+                    }, 800);
+                }, 1200);
+
+            } catch (e) {
+                console.error(e);
+                statusDiv.innerHTML = `<p style='color:red'>ERROR: ${e.message}</p>`;
+            }
+        }
+
+        // 実行
+        document.addEventListener('DOMContentLoaded', initRedirect);
+    </script>
+</body>
+</html>
