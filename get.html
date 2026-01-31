@@ -3,204 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GET QR | WHAT U VIBIN TO?</title>
+    <title>GET QR | DEBUG MODE</title>
     
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
     <style>
-        /* ==================== BASE STYLES ==================== */
-        :root {
-            --color-black: #050505;
-            --color-white: #ffffff;
-            --color-neon: #a855f7;
-            --color-gray-300: #d1d5db;
-            --font-sans: 'Inter', sans-serif;
-            --header-height: 64px;
-        }
+        /* ========== STYLE RESET & BASE ========== */
+        :root { --color-neon: #a855f7; --bg: #050505; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--color-black);
-            color: var(--color-white);
-            font-family: var(--font-sans);
-            padding-top: var(--header-height);
-        }
-
-        /* ==================== HEADER ==================== */
-        .site-header {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
-            display: flex; justify-content: space-between; align-items: center; padding: 0 20px;
-            background-color: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .header-logo { height: 32px; width: auto; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding-bottom: 200px; }
         
-        /* ==================== FORM STYLES ==================== */
-        .form-section {
-            padding: 40px 20px 100px;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh;
-        }
-        .form-title {
-            font-size: 2rem; font-weight: 900; text-align: center; margin-bottom: 30px;
-            text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-        }
-        .form-container {
-            width: 100%; max-width: 600px;
-            background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px; padding: 30px;
-        }
+        /* HEADER */
+        .site-header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: center; }
+        .header-logo { height: 30px; }
 
-        /* Plan Toggle */
-        .plan-toggle {
-            display: flex; background: rgba(255,255,255,0.1);
-            border-radius: 50px; padding: 4px; margin-bottom: 30px;
-        }
-        .plan-btn {
-            flex: 1; padding: 12px; border-radius: 50px; border: none;
-            background: transparent; color: #888; font-weight: bold; cursor: pointer;
-        }
-        .plan-btn.active {
-            background: var(--color-neon); color: #fff;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-        }
+        /* FORM CONTAINER */
+        .form-section { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+        .form-title { font-size: 2rem; margin-bottom: 30px; text-align: center; font-weight: 900; }
+        .form-container { width: 100%; max-width: 600px; background: #111; border: 1px solid #333; border-radius: 20px; padding: 30px; }
 
-        /* Inputs */
-        .form-group { margin-bottom: 24px; }
+        /* PLAN SWITCH */
+        .plan-toggle { display: flex; background: #222; border-radius: 50px; padding: 4px; margin-bottom: 30px; }
+        .plan-btn { flex: 1; padding: 12px; background: none; border: none; color: #888; font-weight: bold; cursor: pointer; border-radius: 50px; transition: 0.3s; }
+        .plan-btn.active { background: var(--color-neon); color: #fff; box-shadow: 0 0 15px rgba(168,85,247,0.5); }
+
+        /* INPUTS */
+        .form-group { margin-bottom: 20px; }
         .form-label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 8px; font-weight: bold; }
-        .form-input {
-            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333;
-            border-radius: 10px; padding: 14px; color: #fff; font-size: 1rem;
-        }
+        .form-input { width: 100%; padding: 14px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; font-size: 1rem; }
         .form-input:focus { outline: none; border-color: var(--color-neon); }
 
-        /* Genres */
+        /* GENRES */
         .genre-container { display: flex; flex-wrap: wrap; gap: 8px; }
-        .genre-pill {
-            padding: 8px 16px; border: 1px solid #444; border-radius: 50px;
-            font-size: 0.8rem; cursor: pointer; background: transparent; color: #ccc;
-            transition: 0.2s;
-        }
-        /* ★修正: 選択時のスタイル */
-        .genre-pill.selected {
-            background: var(--color-neon); color: #fff; border-color: var(--color-neon);
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5); font-weight: bold;
-        }
+        .genre-pill { padding: 8px 16px; border: 1px solid #444; border-radius: 50px; background: transparent; color: #ccc; cursor: pointer; transition: 0.2s; }
+        .genre-pill.selected { background: var(--color-neon); border-color: var(--color-neon); color: #fff; font-weight: bold; box-shadow: 0 0 10px rgba(168,85,247,0.5); }
 
-        /* Time Groups & Lock */
-        .time-link-group {
-            background: rgba(255,255,255,0.03); border: 1px solid #333;
-            border-radius: 12px; padding: 16px; margin-bottom: 16px;
-        }
-        .locked-section {
-            opacity: 0.3; pointer-events: none; filter: grayscale(1);
-        }
-        .time-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; font-weight: bold;}
-        .time-inputs input { background: #000; color: #fff; border: 1px solid #444; padding: 4px; border-radius: 4px; }
+        /* TIME & LOCK */
+        .locked-section { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
+        .time-link-group { border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 15px; background: #0a0a0a; }
+        .time-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; font-weight: bold; }
+        .time-inputs input { background: #000; border: 1px solid #333; color: #fff; padding: 4px; border-radius: 4px; }
 
-        /* Explore Switch */
-        .toggle-wrapper {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;
-        }
-        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        /* EXPLORE SWITCH */
+        .toggle-wrapper { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 15px; border-radius: 10px; }
+        .switch { position: relative; width: 50px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #333; transition: .4s; border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
-            background-color: white; transition: .4s; border-radius: 50%;
-        }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--color-neon); }
         input:checked + .slider:before { transform: translateX(24px); }
 
-        /* Submit Button */
-        .btn-submit {
-            width: 100%; background: var(--color-neon); color: #fff;
-            padding: 18px; border: none; border-radius: 50px;
-            font-size: 1.1rem; font-weight: 900; margin-top: 30px; cursor: pointer;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-        }
+        /* SUBMIT BTN */
+        .btn-submit { width: 100%; padding: 18px; background: var(--color-neon); color: #fff; font-weight: 900; font-size: 1.1rem; border: none; border-radius: 50px; margin-top: 30px; cursor: pointer; box-shadow: 0 0 20px rgba(168,85,247,0.4); }
         .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* DEBUG CONSOLE (画面右下のログ表示エリア) */
+        #debugConsole {
+            position: fixed; bottom: 0; right: 0; width: 100%; height: 150px;
+            background: rgba(0,0,0,0.9); border-top: 2px solid #333;
+            color: #0f0; font-family: monospace; font-size: 12px;
+            padding: 10px; overflow-y: scroll; z-index: 9999;
+        }
     </style>
 </head>
 <body>
 
     <header class="site-header">
-        <a href="index.html"><img src="images/white_logo.png" alt="LOGO" class="header-logo" onerror="this.style.display='none'"></a>
+        <span>WHAT U VIBIN TO? (FORM TEST)</span>
     </header>
 
     <main class="form-section">
         <h1 class="form-title">GET YOUR QR</h1>
-
         <div class="form-container">
-            
+
             <div class="plan-toggle">
-                <button class="plan-btn active" id="btnFree" onclick="setPlan('free')">FREE</button>
-                <button class="plan-btn" id="btnPro" onclick="setPlan('pro')">PRO PLAN</button>
+                <button type="button" class="plan-btn active" id="btnFree" onclick="app.setPlan('free')">FREE</button>
+                <button type="button" class="plan-btn" id="btnPro" onclick="app.setPlan('pro')">PRO PLAN</button>
             </div>
 
             <div class="form-group">
                 <label class="form-label">DJ NAME</label>
-                <input type="text" id="djName" class="form-input" placeholder="DJ Name">
-            </div>
-            <div class="form-group">
-                <label class="form-label">CITY</label>
-                <input type="text" id="city" class="form-input" placeholder="City">
+                <input type="text" id="djName" class="form-input" placeholder="Enter Name">
             </div>
 
             <div class="form-group">
-                <label class="form-label">GENRES (Max 3)</label>
+                <label class="form-label">GENRES (Select up to 3)</label>
                 <div class="genre-container">
-                    <button class="genre-pill" onclick="toggleGenre(this)">House</button>
-                    <button class="genre-pill" onclick="toggleGenre(this)">Techno</button>
-                    <button class="genre-pill" onclick="toggleGenre(this)">Hip Hop</button>
-                    <button class="genre-pill" onclick="toggleGenre(this)">R&B</button>
-                    <button class="genre-pill" onclick="toggleGenre(this)">Disco</button>
-                    <button class="genre-pill" onclick="toggleGenre(this)">Trap</button>
+                    <button type="button" class="genre-pill" onclick="app.toggleGenre(this)">House</button>
+                    <button type="button" class="genre-pill" onclick="app.toggleGenre(this)">Techno</button>
+                    <button type="button" class="genre-pill" onclick="app.toggleGenre(this)">Hip Hop</button>
+                    <button type="button" class="genre-pill" onclick="app.toggleGenre(this)">R&B</button>
+                    <button type="button" class="genre-pill" onclick="app.toggleGenre(this)">Disco</button>
                 </div>
             </div>
 
-            <hr style="border:0; border-top:1px solid #333; margin: 30px 0;">
+            <hr style="border: 0; border-top: 1px solid #333; margin: 30px 0;">
 
             <div class="form-group">
                 <label class="form-label" style="color:#fff">DEFAULT LINK (Required)</label>
-                <input type="url" id="linkDefault" class="form-input" placeholder="Spotify / Apple Music URL">
+                <input type="url" id="linkDefault" class="form-input" placeholder="Spotify URL">
             </div>
 
             <div id="groupMorning" class="time-link-group locked-section">
-                <div class="time-header">
-                    <span>MORNING VIBE</span>
-                    <div class="time-inputs">
-                        <input type="time" id="timeStartMorning" value="06:00"> - <input type="time" id="timeEndMorning" value="11:00">
-                    </div>
-                </div>
+                <div class="time-header"><span>MORNING (06:00-11:00)</span></div>
                 <input type="url" id="linkMorning" class="form-input" placeholder="Morning URL">
+                <input type="hidden" id="timeStartMorning" value="06:00">
+                <input type="hidden" id="timeEndMorning" value="11:00">
             </div>
 
             <div id="groupDaytime" class="time-link-group locked-section">
-                <div class="time-header">
-                    <span>DAYTIME VIBE</span>
-                    <div class="time-inputs">
-                        <input type="time" id="timeStartDaytime" value="11:00"> - <input type="time" id="timeEndDaytime" value="18:00">
-                    </div>
-                </div>
+                <div class="time-header"><span>DAYTIME (11:00-18:00)</span></div>
                 <input type="url" id="linkDaytime" class="form-input" placeholder="Daytime URL">
+                <input type="hidden" id="timeStartDaytime" value="11:00">
+                <input type="hidden" id="timeEndDaytime" value="18:00">
             </div>
 
-            <div id="groupNighttime" class="time-link-group">
-                <div class="time-header">
-                    <span style="color:var(--color-neon)">NIGHTTIME VIBE</span>
-                    <div class="time-inputs locked-section" id="nightTimeUI">
-                        <input type="time" id="timeStartNight" value="18:00"> - <input type="time" id="timeEndNight" value="06:00">
-                    </div>
-                </div>
+            <div id="groupNight" class="time-link-group">
+                <div class="time-header"><span style="color:var(--color-neon)">NIGHT (18:00-06:00)</span></div>
                 <input type="url" id="linkNight" class="form-input" placeholder="Night URL">
+                <div id="nightTimeUI" class="locked-section" style="margin-top:10px;">
+                    <input type="time" id="timeStartNight" value="18:00"> - <input type="time" id="timeEndNight" value="06:00">
+                </div>
             </div>
 
             <div id="exploreGroup" class="toggle-wrapper locked-section">
@@ -211,142 +138,176 @@
                 </label>
             </div>
 
-            <button class="btn-submit" id="btnSubmit" onclick="generateQR()">GENERATE QR</button>
-            <p id="msg" style="text-align:center; margin-top:10px; color:#a855f7;"></p>
-
+            <button type="button" class="btn-submit" id="btnSubmit" onclick="app.generateQR()">GENERATE QR</button>
+            
         </div>
     </main>
+    
+    <div id="debugConsole">DEBUG LOG START...<br></div>
 
     <script>
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        //  ここを書き換えてください
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        const supabaseUrl = 'https://zcjzmuzmhuanyauhgeni.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjanptdXptaHVhbnlhdWhnZW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MzAyNjAsImV4cCI6MjA4NTQwNjI2MH0.pNB58zLyRR4iM1oYoKeZQcJ1grKyrOY8F-Akd2298-A';
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-
-        // Supabase初期化チェック
-        let supabase;
-        try {
-            if(window.supabase) {
-                supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-                console.log("Supabase Initialized");
-            } else {
-                alert("Supabase Library Error");
-            }
-        } catch(e) { console.error(e); }
-
-        // 状態管理
-        let currentPlan = 'free';
-        let selectedGenres = [];
-
-        // 1. プラン切り替え
-        window.setPlan = function(plan) {
-            console.log("Plan:", plan);
-            currentPlan = plan;
-            
-            // ボタン色替え
-            document.getElementById('btnFree').className = plan === 'free' ? 'plan-btn active' : 'plan-btn';
-            document.getElementById('btnPro').className = plan === 'pro' ? 'plan-btn active' : 'plan-btn';
-
-            // ロック制御
-            const lockTargets = ['groupMorning', 'groupDaytime', 'nightTimeUI', 'exploreGroup'];
-            lockTargets.forEach(id => {
-                const el = document.getElementById(id);
-                if(plan === 'free') el.classList.add('locked-section');
-                else el.classList.remove('locked-section');
-            });
-            
-            // チェックボックス制御
-            document.getElementById('isPublic').checked = (plan === 'pro');
+        // ===============================================
+        // 設定: ここにSupabaseのキーを入れてください
+        // ===============================================
+        const CONFIG = {
+            url: 'YOUR_SUPABASE_URL',
+            key: 'YOUR_ANON_KEY'
         };
 
-        // 2. ジャンル選択
-        window.toggleGenre = function(btn) {
-            const val = btn.innerText;
-            if(selectedGenres.includes(val)) {
-                selectedGenres = selectedGenres.filter(g => g !== val);
-                btn.classList.remove('selected');
-            } else {
-                if(selectedGenres.length >= 3) { alert("Max 3 genres"); return; }
-                selectedGenres.push(val);
-                btn.classList.add('selected');
-            }
-            console.log("Genres:", selectedGenres);
-        };
+        // ===============================================
+        // システムログ機能 (画面右下に表示)
+        // ===============================================
+        function log(msg) {
+            const consoleBox = document.getElementById('debugConsole');
+            const time = new Date().toLocaleTimeString();
+            consoleBox.innerHTML += `[${time}] ${msg}<br>`;
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+            console.log(msg); // ブラウザのコンソールにも出す
+        }
 
-        // 3. QR生成（DB保存）
-        window.generateQR = async function() {
-            console.log("Submit Clicked");
-            const btn = document.getElementById('btnSubmit');
-            
-            // APIキー確認
-            if(supabaseUrl.includes('YOUR_')) {
-                alert("APIキーが設定されていません。コードを書き換えてください。");
-                return;
-            }
+        // ===============================================
+        // アプリケーションロジック (即時実行)
+        // ===============================================
+        const app = {
+            currentPlan: 'free',
+            selectedGenres: [],
 
-            const name = document.getElementById('djName').value;
-            const linkDef = document.getElementById('linkDefault').value;
+            // 初期化
+            init: function() {
+                log("App Initialized.");
+                log("Supabase Library Status: " + (window.supabase ? "OK" : "NOT LOADED"));
+                this.setPlan('free'); // UI初期セット
+            },
 
-            if(!name || !linkDef) { alert("DJ NameとDefault Linkは必須です"); return; }
-
-            btn.disabled = true;
-            btn.innerText = "SAVING...";
-
-            try {
-                // Profile保存
-                const { data: prof, error: err1 } = await supabase.from('profiles').insert([{
-                    dj_name: name,
-                    city: document.getElementById('city').value,
-                    genre: selectedGenres,
-                    plan: currentPlan,
-                    is_public: document.getElementById('isPublic').checked,
-                    slug: Math.random().toString(36).slice(-8)
-                }]).select().single();
+            // プラン切り替え
+            setPlan: function(plan) {
+                log("Switching Plan to: " + plan);
+                this.currentPlan = plan;
                 
-                if(err1) throw err1;
+                // ボタン色
+                document.getElementById('btnFree').className = plan === 'free' ? 'plan-btn active' : 'plan-btn';
+                document.getElementById('btnPro').className = plan === 'pro' ? 'plan-btn active' : 'plan-btn';
 
-                // QR保存
-                const { data: qr, error: err2 } = await supabase.from('qr_codes').insert([{
-                    profile_id: prof.id,
-                    qr_type: currentPlan
-                }]).select().single();
-
-                if(err2) throw err2;
-
-                // リンク保存関数
-                const saveLink = async (type, url, s, e, def=false) => {
-                    const pl = {
-                        profile_id: prof.id, qr_code_id: qr.id,
-                        time_type: type, url: url, is_default: def
-                    };
-                    if(s && e) { pl.start_time = s+":00"; pl.end_time = e+":00"; }
-                    await supabase.from('links').insert([pl]);
-                };
-
-                // Defaultリンク
-                await saveLink('default', linkDef, null, null, true);
-
-                // その他リンク
-                const getVal = (id) => document.getElementById(id).value;
+                // ロック制御
+                const lockList = ['groupMorning', 'groupDaytime', 'nightTimeUI', 'exploreGroup'];
+                lockList.forEach(id => {
+                    const el = document.getElementById(id);
+                    if(plan === 'free') el.classList.add('locked-section');
+                    else el.classList.remove('locked-section');
+                });
                 
-                if(currentPlan === 'pro') {
-                    if(getVal('linkMorning')) await saveLink('morning', getVal('linkMorning'), getVal('timeStartMorning'), getVal('timeEndMorning'));
-                    if(getVal('linkDaytime')) await saveLink('daytime', getVal('linkDaytime'), getVal('timeStartDaytime'), getVal('timeEndDaytime'));
+                // チェックボックス
+                document.getElementById('isPublic').checked = (plan === 'pro');
+            },
+
+            // ジャンル選択
+            toggleGenre: function(btn) {
+                const val = btn.innerText;
+                log("Genre Clicked: " + val);
+
+                if(this.selectedGenres.includes(val)) {
+                    this.selectedGenres = this.selectedGenres.filter(g => g !== val);
+                    btn.classList.remove('selected');
+                } else {
+                    if(this.selectedGenres.length >= 3) { alert("Max 3 genres"); return; }
+                    this.selectedGenres.push(val);
+                    btn.classList.add('selected');
                 }
-                if(getVal('linkNight')) await saveLink('nighttime', getVal('linkNight'), getVal('timeStartNight'), getVal('timeEndNight'));
+            },
 
-                btn.innerText = "SUCCESS!";
-                setTimeout(() => { alert("登録完了！DBを確認してください。"); btn.disabled = false; btn.innerText = "GENERATE QR"; }, 500);
+            // QR生成 (Submit)
+            generateQR: async function() {
+                log("Generate Button Clicked.");
+                const btn = document.getElementById('btnSubmit');
 
-            } catch(e) {
-                console.error(e);
-                alert("エラー: " + e.message);
-                btn.disabled = false;
-                btn.innerText = "GENERATE QR";
+                // 1. キーチェック
+                if(CONFIG.url.includes('YOUR_')) {
+                    alert("【エラー】APIキーが設定されていません。コードを修正してください。");
+                    log("Error: API Key missing");
+                    return;
+                }
+
+                // 2. ライブラリチェック
+                if(!window.supabase) {
+                    alert("【エラー】Supabaseライブラリが読み込まれていません。ネット接続を確認してください。");
+                    log("Error: Supabase lib missing");
+                    return;
+                }
+
+                // 3. 入力チェック
+                const name = document.getElementById('djName').value;
+                const link = document.getElementById('linkDefault').value;
+                if(!name || !link) {
+                    alert("名前とDefault Linkを入力してください");
+                    log("Validation Failed");
+                    return;
+                }
+
+                // 4. DB保存処理
+                btn.disabled = true;
+                btn.innerText = "CONNECTING...";
+                log("Connecting to Supabase...");
+
+                try {
+                    const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
+
+                    // Profile
+                    log("Saving Profile...");
+                    const { data: prof, error: err1 } = await sb.from('profiles').insert([{
+                        dj_name: name,
+                        city: "Tokyo", // テスト用固定
+                        genre: this.selectedGenres,
+                        plan: this.currentPlan,
+                        is_public: document.getElementById('isPublic').checked,
+                        slug: Math.random().toString(36).slice(-8)
+                    }]).select().single();
+                    
+                    if(err1) throw err1;
+                    log("Profile Saved ID: " + prof.id);
+
+                    // QR
+                    const { data: qr, error: err2 } = await sb.from('qr_codes').insert([{
+                        profile_id: prof.id, qr_type: this.currentPlan
+                    }]).select().single();
+                    
+                    if(err2) throw err2;
+                    log("QR Saved ID: " + qr.id);
+
+                    // Link Helper
+                    const saveLink = async (type, url, s, e, def=false) => {
+                        const payload = { 
+                            profile_id: prof.id, qr_code_id: qr.id, 
+                            time_type: type, url: url, is_default: def 
+                        };
+                        if(s && e) { payload.start_time = s+":00"; payload.end_time = e+":00"; }
+                        await sb.from('links').insert([payload]);
+                    };
+
+                    // Default Link
+                    await saveLink('default', link, null, null, true);
+                    log("Default Link Saved.");
+
+                    // Success
+                    btn.innerText = "SUCCESS!";
+                    log("ALL DONE.");
+                    alert("成功！DBに保存されました。");
+                    btn.disabled = false;
+
+                } catch(e) {
+                    console.error(e);
+                    log("FATAL ERROR: " + e.message);
+                    alert("エラー: " + e.message);
+                    btn.disabled = false;
+                    btn.innerText = "RETRY";
+                }
             }
         };
+
+        // ページ読み込み完了時にアプリ起動
+        window.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+
     </script>
 </body>
 </html>
