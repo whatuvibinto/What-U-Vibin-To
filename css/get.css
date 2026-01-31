@@ -4,8 +4,8 @@
 :root {
     --color-black: #050505;
     --color-white: #ffffff;
-    --color-neon: #a855f7;
-    --color-gold: #FFD700;
+    --color-neon: #a855f7;       /* Free Purple */
+    --color-gold: #FFD700;       /* Pro Gold */
     --color-gray-300: #d1d5db;
     --color-gray-500: #6b7280;
     --font-sans: 'Inter', sans-serif;
@@ -312,7 +312,7 @@ input:checked+.slider:before { transform: translateX(24px); }
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* ==================== PREVIEW AREA & SELECTOR ==================== */
+/* ==================== PREVIEW AREA ==================== */
 .qr-preview-area {
     margin-bottom: 20px;
     padding: 20px;
@@ -330,67 +330,83 @@ input:checked+.slider:before { transform: translateX(24px); }
     color: #888; font-size: 0.8rem; margin-bottom: 16px; letter-spacing: 0.1em; text-align: center; 
 }
 
-/* Selector inside Preview */
+/* ==================== STYLE SELECTOR (IN PREVIEW) ==================== */
+/* 3つのQRを横並びにするコンテナ */
 .preview-grid {
     display: flex;
     justify-content: center;
     gap: 16px;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* 画面が狭い場合は折り返し */
 }
 
-.design-btn {
+/* 個別のQRカード */
+.preview-card {
     flex: 1;
-    min-width: 140px;
+    min-width: 140px; /* 最小幅 */
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    cursor: pointer;
+    border: 1px solid transparent;
     transition: all 0.3s;
-    position: relative; /* ロックアイコン用 */
+    cursor: pointer;
+    position: relative;
 }
 
-/* Selected State */
-.design-btn.active {
-    border-color: var(--color-gold);
-    background: rgba(255, 215, 0, 0.05);
+/* 選択されているQRを強調 (Free: Purple) */
+.preview-card.selected-card {
+    border-color: var(--color-neon);
+    background: rgba(168, 85, 247, 0.1);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
     transform: translateY(-4px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-/* Canvas container inside button */
-.style-preview-box {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    display: flex; align-items: center; justify-content: center;
-    background: #000;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    pointer-events: none;
+/* 選択されているQRを強調 (Pro: Gold) */
+.gold-border .preview-card.selected-card {
+    border-color: var(--color-gold);
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
-.style-preview-box canvas {
-    width: 100% !important; height: auto !important;
+
+.preview-card canvas {
+    width: 100% !important;
+    height: auto !important;
     object-fit: contain;
+    border-radius: 4px;
 }
 
-.design-name {
-    font-size: 0.7rem; color: #aaa; font-weight: bold; text-transform: uppercase;
-}
-.design-btn.active .design-name { color: var(--color-gold); }
-
-/* Locked State */
-.design-btn.locked {
-    opacity: 0.4; pointer-events: none; filter: grayscale(1); border-color: #333;
-}
-.design-btn.locked::after {
-    content: "🔒"; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); font-size: 2rem; z-index: 10;
+.preview-label {
+    margin-top: 8px;
+    font-size: 0.7rem;
+    color: #aaa;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
-/* Buttons */
+/* Locked State Overlay for Cards */
+.preview-card.locked {
+    opacity: 0.4;
+    pointer-events: none;
+    filter: grayscale(1);
+    border-color: #333;
+}
+
+.preview-card.locked::after {
+    content: "🔒"; 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    z-index: 10;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    opacity: 0.8;
+}
+
+/* ==================== BUTTONS ==================== */
+/* プレビューボタン */
 .btn-preview {
     width: 100%;
     background: transparent;
@@ -406,16 +422,22 @@ input:checked+.slider:before { transform: translateX(24px); }
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
+
 .btn-preview:hover {
-    background: rgba(168, 85, 247, 0.1); box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
-}
-.gold-border .btn-preview {
-    border-color: var(--color-gold); color: var(--color-gold);
-}
-.gold-border .btn-preview:hover {
-    background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    background: rgba(168, 85, 247, 0.1);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
 }
 
+.gold-border .btn-preview {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+.gold-border .btn-preview:hover {
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Submit Button */
 .btn-submit {
     width: 100%;
     background: var(--color-neon);
@@ -432,28 +454,57 @@ input:checked+.slider:before { transform: translateX(24px); }
     transition: all 0.3s;
 }
 .gold-border .btn-submit {
-    background: var(--color-gold); color: #000; box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+    background: var(--color-gold);
+    color: #000;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
 }
 .btn-submit:hover { transform: scale(1.02); }
 .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-/* Loading Spinner */
+/* ==================== LOADING SPINNER ==================== */
 .loading-overlay {
-    position: absolute; inset: 0;
+    position: absolute;
+    inset: 0;
     background: rgba(0, 0, 0, 0.85);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
 }
-.loading-overlay.visible { opacity: 1; pointer-events: all; }
+
+.loading-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
 .spinner {
-    width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.1);
-    border-top-color: var(--color-neon); border-radius: 50%;
-    animation: spin 1s linear infinite; margin-bottom: 12px;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-neon);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
 }
-.gold-border .spinner { border-top-color: var(--color-gold); }
-.loading-text { font-size: 0.75rem; font-weight: 700; color: #fff; letter-spacing: 0.1em; animation: pulse 1.5s infinite ease-in-out; }
+
+.gold-border .spinner {
+    border-top-color: var(--color-gold);
+}
+
+.loading-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.1em;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
-/* Lock State */
+/* Lock State Helper */
 .locked-section { opacity: 0.2; pointer-events: none; filter: grayscale(1); transition: all 0.3s; }
