@@ -110,6 +110,8 @@
     gap: 10px;
 }
 
+/* css/get.css の該当部分をこれに置き換え */
+
 .genre-pill {
     padding: 8px 16px;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -126,10 +128,12 @@
     color: var(--color-white);
 }
 
+/* 修正点：選んだ時の色を強力に指定 */
 .genre-pill.selected {
-    background: var(--color-white);
-    color: var(--color-black);
-    border-color: var(--color-white);
+    background: var(--color-neon);     /* 背景をネオンパープルに */
+    color: var(--color-white);         /* 文字を白に */
+    border-color: var(--color-neon);   /* 枠線もネオンに */
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); /* 光らせる */
     font-weight: 700;
 }
 
