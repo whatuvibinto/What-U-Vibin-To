@@ -12,7 +12,7 @@
 
 /* ==================== FORM SECTION LAYOUT ==================== */
 .form-section {
-    padding: calc(var(--header-height) + 40px) 20px 100px; /* ヘッダー分空ける */
+    padding: calc(var(--header-height) + 40px) 20px 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -253,21 +253,4 @@ input:checked+.slider:before {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
-}
-
-/* ==================== DEBUG CONSOLE ==================== */
-#debugConsole {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 150px;
-    background: rgba(0, 0, 0, 0.9);
-    border-top: 2px solid #333;
-    color: #0f0;
-    font-family: monospace;
-    font-size: 12px;
-    padding: 10px;
-    overflow-y: scroll;
-    z-index: 9999;
 }
