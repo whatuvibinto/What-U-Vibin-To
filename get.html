@@ -146,8 +146,8 @@
 
     <script>
         const CONFIG = {
-            url: 'https://zcjzmuzmhuanyauhgeni.supabase.co',
-            key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjanptdXptaHVhbnlhdWhnZW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MzAyNjAsImV4cCI6MjA4NTQwNjI2MH0.pNB58zLyRR4iM1oYoKeZQcJ1grKyrOY8F-Akd2298-A'
+            url: 'YOUR_SUPABASE_URL', 
+            key: 'YOUR_ANON_KEY'      
         };
 
         const LOGO_PATH = "images/qr_logo.PNG"; 
@@ -173,21 +173,25 @@
             selectedGenres: [],
             qrCodeObj: null,
 
+            // ★★★ 修正版デザイン定義 (黒背景・白QR) ★★★
             styles: {
                 A: { 
-                    dots: { type: 'square', color: '#ffffff' }, 
-                    cornersSq: { type: 'square', color: '#ffffff' }, 
-                    cornersDot: { type: 'square', color: '#ffffff' },
-                    bg: { color: '#000000' }
-                },
-                B: { 
-                    dots: { type: 'extra-rounded', color: '#ffffff' }, 
+                    // A: Dots=Dot, 枠=激丸, 芯=丸角四角
+                    dots: { type: 'dots', color: '#ffffff' }, 
                     cornersSq: { type: 'extra-rounded', color: '#ffffff' }, 
                     cornersDot: { type: 'rounded', color: '#ffffff' },
                     bg: { color: '#000000' }
                 },
-                C: { 
+                B: { 
+                    // B: 全て Dot
                     dots: { type: 'dots', color: '#ffffff' }, 
+                    cornersSq: { type: 'dot', color: '#ffffff' }, 
+                    cornersDot: { type: 'dot', color: '#ffffff' },
+                    bg: { color: '#000000' }
+                },
+                C: { 
+                    // C: 線とドットが混ざった有機的な形 + 隅はDot
+                    dots: { type: 'classy-rounded', color: '#ffffff' },
                     cornersSq: { type: 'dot', color: '#ffffff' }, 
                     cornersDot: { type: 'dot', color: '#ffffff' }, 
                     bg: { color: '#000000' }
@@ -196,13 +200,16 @@
 
             init: function() {
                 this.setPlan('free');
-                // ページ読み込み時にスタイル選択ボタンの中にミニQRを描画
+                // ページ読み込み時に3つのミニQRを生成して描画
                 this.renderStylePreviews();
             },
 
-            // ★選択ボタンの中にミニQRを描画する関数
+            // ★ボタン内にミニQRを描画する機能
             renderStylePreviews: function() {
-                if(typeof QRCodeStyling === 'undefined') return;
+                if(typeof QRCodeStyling === 'undefined') {
+                    console.error("QR Library not loaded");
+                    return;
+                }
 
                 ['A', 'B', 'C'].forEach(type => {
                     const box = document.getElementById('preview-box-' + type);
@@ -210,13 +217,13 @@
                     box.innerHTML = ''; // クリア
 
                     const style = this.styles[type];
-                    // ミニプレビュー用のインスタンス生成
+                    // ミニプレビュー用のQR生成
                     const qr = new QRCodeStyling({
-                        width: 120, height: 120, // 小さめ
+                        width: 120, height: 120, 
                         type: "canvas",
-                        data: "STYLE " + type, // ダミーデータ
+                        data: "STYLE " + type,
                         image: LOGO_PATH,
-                        qrOptions: { errorCorrectionLevel: "Q" },
+                        qrOptions: { errorCorrectionLevel: "Q" }, // ロゴが被っても大丈夫なように
                         imageOptions: { crossOrigin: "anonymous", margin: 0, imageSize: 0.4, hideBackgroundDots: true },
                         dotsOptions: style.dots,
                         cornersSquareOptions: style.cornersSq,
@@ -248,7 +255,7 @@
                     labelMorning.style.color = '#FFD700'; 
                     labelDaytime.style.color = '#FFD700'; 
                     labelNight.style.color = '#FFD700';
-                    // Unlock
+                    // Unlock styles
                     desB.classList.remove('locked');
                     desC.classList.remove('locked');
                 } else {
@@ -256,10 +263,10 @@
                     labelMorning.style.color = '#fff';      
                     labelDaytime.style.color = '#fff';      
                     labelNight.style.color = '#a855f7';
-                    // Lock
+                    // Lock styles
                     desB.classList.add('locked');
                     desC.classList.add('locked');
-                    this.selectDesign('A'); // 強制的にAに戻す
+                    this.selectDesign('A'); // FreeはAのみ
                 }
 
                 const lockList = ['groupMorning', 'groupDaytime', 'nightTimeUI', 'exploreGroup'];
@@ -292,7 +299,6 @@
             },
 
             selectDesign: function(type) {
-                // FreeプランでA以外を選ぼうとしたら無視
                 if(this.currentPlan === 'free' && type !== 'A') return;
 
                 this.currentDesign = type;
@@ -301,12 +307,11 @@
                     if(btn.dataset.type === type) btn.classList.add('active');
                 });
                 
-                // もしメインプレビューが表示中なら更新する
                 const previewArea = document.getElementById('qrPreviewArea');
                 if(!previewArea.classList.contains('hidden')) { this.previewQR(); }
             },
 
-            // メインの大きなプレビュー（実際にリンクを入れて確認する用）
+            // メインプレビュー（大きなQR）
             previewQR: function() {
                 const link = document.getElementById('linkDefault').value;
                 if(!link) { alert("Default Linkを入力してください"); return; }
@@ -324,7 +329,6 @@
                         canvasBox.innerHTML = "";
                         const style = this.styles[this.currentDesign];
                         
-                        // メインプレビュー用インスタンス
                         this.qrCodeObj = new QRCodeStyling({
                             width: 300, height: 300, type: "canvas",
                             data: BASE_URL + "PREVIEW",
