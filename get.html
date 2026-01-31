@@ -22,7 +22,7 @@
                 <img src="images/white_logo.png" alt="WHAT U VIBIN TO?" class="header-logo" onerror="this.style.display='none'">
             </a>
         </div>
-        </header>
+    </header>
 
     <main class="form-section">
         <h1 class="form-title">GET YOUR QR</h1>
@@ -100,12 +100,10 @@
             
         </div>
     </main>
-    
-    <div id="debugConsole">DEBUG LOG START...<br></div>
 
     <script>
         // ===============================================
-        // 設定: ここにSupabaseのキーを入れてください
+        // 設定: APIキーを入力してください
         // ===============================================
         const CONFIG = {
             url: 'https://zcjzmuzmhuanyauhgeni.supabase.co',
@@ -113,32 +111,17 @@
         };
 
         // ===============================================
-        // ログ機能
-        // ===============================================
-        function log(msg) {
-            const consoleBox = document.getElementById('debugConsole');
-            if(consoleBox) {
-                const time = new Date().toLocaleTimeString();
-                consoleBox.innerHTML += `[${time}] ${msg}<br>`;
-                consoleBox.scrollTop = consoleBox.scrollHeight;
-            }
-            console.log(msg);
-        }
-
-        // ===============================================
-        // アプリケーション
+        // アプリケーションロジック
         // ===============================================
         const app = {
             currentPlan: 'free',
             selectedGenres: [],
 
             init: function() {
-                log("App Initialized.");
                 this.setPlan('free');
             },
 
             setPlan: function(plan) {
-                log("Switching Plan to: " + plan);
                 this.currentPlan = plan;
                 const btnFree = document.getElementById('btnFree');
                 const btnPro = document.getElementById('btnPro');
@@ -171,27 +154,22 @@
             },
 
             generateQR: async function() {
-                log("Generate Button Clicked.");
                 const btn = document.getElementById('btnSubmit');
 
                 if(CONFIG.url.includes('YOUR_')) {
-                    alert("APIキーが設定されていません。"); return;
+                    alert("APIキーが設定されていません。HTMLファイルを編集してください。"); return;
                 }
 
                 // 安全な値取得関数
                 const getVal = (id) => {
                     const el = document.getElementById(id);
-                    if (!el) {
-                        log("⚠️ Warning: Element not found -> " + id);
-                        return "";
-                    }
-                    return el.value;
+                    return el ? el.value : "";
                 };
 
                 const name = getVal('djName');
                 const link = getVal('linkDefault');
                 
-                if(!name || !link) { alert("名前とDefault Linkは必須です"); return; }
+                if(!name || !link) { alert("DJ NameとDefault Linkは必須です"); return; }
 
                 btn.disabled = true;
                 btn.innerText = "CONNECTING...";
@@ -200,7 +178,6 @@
                     const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
 
                     // 1. Profile保存
-                    log("Saving Profile...");
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([{
                         dj_name: name,
                         city: getVal('city'),
@@ -211,28 +188,22 @@
                     }]).select().single();
                     
                     if(err1) throw new Error("Profile Error: " + err1.message);
-                    log("Profile Saved ID: " + prof.id);
 
                     // 2. QR保存
-                    log("Saving QR Code...");
                     const { data: qr, error: err2 } = await sb.from('qr_codes').insert([{
                         profile_id: prof.id, 
                         qr_type: this.currentPlan
                     }]).select().single();
                     
                     if(err2) throw new Error("QR Error: " + err2.message);
-                    log("QR Saved ID: " + qr.id);
 
                     // 3. Links保存
-                    log("Saving Links...");
-                    
                     const saveLink = async (type, url, s, e) => {
                         const payload = { 
                             profile_id: prof.id,
                             time_type: type, 
                             url: url
                         };
-                        // 時間がある場合のみ追加（Time型エラー防止のため秒までつける）
                         if(s && e) { 
                             payload.start_time = s.length === 5 ? s + ":00" : s; 
                             payload.end_time = e.length === 5 ? e + ":00" : e; 
@@ -244,24 +215,25 @@
 
                     // Default Link
                     await saveLink('default', link, null, null);
-                    log("Default Link OK");
 
                     // Other Links
                     if(this.currentPlan === 'pro') {
                         if(getVal('linkMorning')) await saveLink('morning', getVal('linkMorning'), getVal('timeStartMorning'), getVal('timeEndMorning'));
                         if(getVal('linkDaytime')) await saveLink('daytime', getVal('linkDaytime'), getVal('timeStartDaytime'), getVal('timeEndDaytime'));
                     }
-                    // Night Link
                     if(getVal('linkNight')) await saveLink('nighttime', getVal('linkNight'), getVal('timeStartNight'), getVal('timeEndNight'));
 
                     btn.innerText = "SUCCESS!";
-                    alert("成功！DBを確認してください。");
+                    alert("登録完了！あなたのQRが生成されました。");
                     btn.disabled = false;
+                    btn.innerText = "GENERATE QR";
+
+                    // ここに完了画面への遷移を入れるとベター
+                    // location.href = "complete.html?id=" + qr.id;
 
                 } catch(e) {
                     console.error(e);
-                    log("ERROR: " + e.message);
-                    alert("エラー発生: " + e.message);
+                    alert("エラーが発生しました: " + e.message);
                     btn.disabled = false;
                     btn.innerText = "RETRY";
                 }
