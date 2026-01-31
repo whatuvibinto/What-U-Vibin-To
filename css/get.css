@@ -339,3 +339,114 @@ input:checked+.slider:before { transform: translateX(24px); }
     .form-title { font-size: 3.5rem; }
     .form-subtitle { font-size: 1rem; }
 }
+/* ==================== QR DESIGN SELECTOR ==================== */
+
+.design-selector-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-bottom: 12px;
+    font-weight: bold;
+    font-family: var(--font-sans);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.design-options {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.design-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Icon representation of the style */
+.design-icon {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid #666;
+    position: relative;
+}
+
+/* Style A: Square */
+.design-btn[data-type="A"] .design-icon {
+    border-radius: 0; /* Square */
+}
+.design-btn[data-type="A"] .design-icon::after {
+    content: ''; position: absolute; inset: 6px; background: #666; border-radius: 0;
+}
+
+/* Style B: Round */
+.design-btn[data-type="B"] .design-icon {
+    border-radius: 12px; /* Round */
+}
+.design-btn[data-type="B"] .design-icon::after {
+    content: ''; position: absolute; inset: 6px; background: #666; border-radius: 50%;
+}
+
+/* Style C: Dots / Classy */
+.design-btn[data-type="C"] .design-icon {
+    border: 2px dashed #666; border-radius: 4px;
+}
+.design-btn[data-type="C"] .design-icon::after {
+    content: ''; position: absolute; inset: 8px; background: #666; border-radius: 50%;
+}
+
+.design-name {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+}
+
+/* Active State */
+.design-btn.active {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-white);
+    transform: translateY(-2px);
+}
+
+.design-btn.active .design-icon { border-color: #fff; }
+.design-btn.active .design-icon::after { background: #fff; }
+.design-btn.active .design-name { color: #fff; }
+
+/* Locked State (for Free plan) */
+.design-btn.locked {
+    opacity: 0.3;
+    pointer-events: none;
+    filter: grayscale(1);
+    cursor: not-allowed;
+}
+
+.design-btn.locked::before {
+    content: "🔒"; /* Lock Icon */
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    z-index: 10;
+}
+
+/* Preview Area Tweaks */
+.qr-preview-area {
+    background: #fff; /* 背景を白にして、QR（黒）を見やすくするか、逆に黒背景に白QRか */
+    /* 今回は「サイトの世界観」に合わせて、黒背景に白QRとします */
+    background: rgba(0,0,0,0.8); 
+    border: 1px solid #333;
+}
