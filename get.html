@@ -149,16 +149,11 @@
         // ★★★ 設定: APIキーを入力してください ★★★
         // ===============================================
         const CONFIG = {
-            url: 'YOUR_SUPABASE_URL', 
-            key: 'YOUR_ANON_KEY'      
+            url: 'https://zcjzmuzmhuanyauhgeni.supabase.co',
+            key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjanptdXptaHVhbnlhdWhnZW5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4MzAyNjAsImV4cCI6MjA4NTQwNjI2MH0.pNB58zLyRR4iM1oYoKeZQcJ1grKyrOY8F-Akd2298-A'
         };
 
-        // ★★★ 重要：ロゴ画像のパスを確認してください ★★★
-        // プロジェクト内の「images」フォルダに、この名前で保存されていますか？(大文字小文字注意)
         const LOGO_PATH = "images/qr_logo.PNG"; 
-
-        // ★遷移先のベースURL
-        // 現在のURLの get.html 部分を index.html?id= に置換
         const BASE_URL = window.location.href.replace('get.html', 'index.html?id=');
 
         // --- Menu Logic ---
@@ -182,25 +177,58 @@
             selectedGenres: [],
             qrCodeObj: null,
 
-            // デザイン定義
+            // ★★★ デザイン定義（背景黒・QR白） ★★★
             styles: {
-                A: { dots: 'rounded', cornerSq: 'square', cornerDot: 'square' }, // Standard
-                B: { dots: 'dots', cornerSq: 'dot', cornerDot: 'dot' },    // Modern
-                C: { dots: 'classy', cornerSq: 'extra-rounded', cornerDot: 'extra-rounded' }              // Edgy
+                A: { 
+                    // A: Dots=Dot, 枠=激丸, 芯=丸角四角
+                    dots: { type: 'dots', color: '#ffffff' }, 
+                    cornersSq: { type: 'extra-rounded', color: '#ffffff' }, 
+                    cornersDot: { type: 'rounded', color: '#ffffff' },
+                    bg: { color: '#000000' }
+                },
+                B: { 
+                    // B: 全て Dot
+                    dots: { type: 'dots', color: '#ffffff' }, 
+                    cornersSq: { type: 'dot', color: '#ffffff' }, 
+                    cornersDot: { type: 'dot', color: '#ffffff' },
+                    bg: { color: '#000000' }
+                },
+                C: { 
+                    // C: 線とドットが混ざった有機的な形 + 隅はDot
+                    dots: { type: 'classy-rounded', color: '#ffffff' },
+                    cornersSq: { type: 'dot', color: '#ffffff' }, 
+                    cornersDot: { type: 'dot', color: '#ffffff' }, 
+                    bg: { color: '#000000' }
+                }
             },
 
             init: function() {
                 this.setPlan('free');
-                // QRライブラリ初期化
                 if(typeof QRCodeStyling !== 'undefined') {
                     try {
+                        // 初期表示は Aスタイル
+                        const style = this.styles.A;
                         this.qrCodeObj = new QRCodeStyling({
-                            width: 200, height: 200, type: "canvas",
-                            data: BASE_URL + "PREVIEW_USER",
+                            width: 300, height: 300, type: "canvas",
+                            data: BASE_URL + "PREVIEW",
                             image: LOGO_PATH,
-                            imageOptions: { crossOrigin: "anonymous", margin: 2, imageSize: 0.5 },
-                            dotsOptions: { color: "#ffffff", type: "rounded" },
-                            backgroundOptions: { color: "transparent" }
+                            // ロゴのために補正レベルを高く設定
+                            qrOptions: {
+                                typeNumber: 0,
+                                mode: "Byte",
+                                errorCorrectionLevel: "Q"
+                            },
+                            imageOptions: { 
+                                crossOrigin: "anonymous", 
+                                margin: 2, 
+                                hideBackgroundDots: true,
+                                imageSize: 0.4 
+                            },
+                            // 初期のデザイン適用
+                            dotsOptions: style.dots,
+                            cornersSquareOptions: style.cornersSq,
+                            cornersDotOptions: style.cornersDot,
+                            backgroundOptions: style.bg
                         });
                     } catch(e) {
                         console.error("QR Init Error:", e);
@@ -282,43 +310,37 @@
                 if(!previewArea.classList.contains('hidden')) { this.previewQR(); }
             },
 
-            // ★プレビュー機能（安全装置付き）
             previewQR: function() {
                 const link = document.getElementById('linkDefault').value;
                 if(!link) { alert("Default Linkを入力してください"); return; }
-                if(!this.qrCodeObj) { alert("QR Library Error: ライブラリが読み込まれていません。"); return; }
+                if(!this.qrCodeObj) { alert("QR Library Error"); return; }
 
                 const previewArea = document.getElementById('qrPreviewArea');
                 const canvasBox = document.getElementById('qrCanvas');
                 const loading = document.getElementById('loadingOverlay');
                 
-                // 表示＆ローディング開始
                 previewArea.classList.remove('hidden');
                 loading.classList.add('visible');
 
-                // 処理を少し遅らせてローディングを見せる＆描画時間を確保
                 setTimeout(() => {
                     try {
                         canvasBox.innerHTML = "";
                         const style = this.styles[this.currentDesign];
                         
-                        // QRの更新設定
                         this.qrCodeObj.update({
-                            data: BASE_URL + "PREVIEW_USER",
-                            dotsOptions: { color: "#ffffff", type: style.dots },
-                            cornersSquareOptions: { color: "#ffffff", type: style.cornerSq },
-                            cornersDotOptions: { color: "#ffffff", type: style.cornerDot },
-                            image: LOGO_PATH // 画像を再設定
+                            data: BASE_URL + "PREVIEW",
+                            dotsOptions: style.dots,
+                            cornersSquareOptions: style.cornersSq,
+                            cornersDotOptions: style.cornersDot,
+                            backgroundOptions: style.bg
                         });
 
-                        // 描画実行
                         this.qrCodeObj.append(canvasBox);
                         
                     } catch(e) {
                         console.error("Preview Error:", e);
-                        alert("プレビュー生成に失敗しました。\n画像のパス(images/qr_logo.PNG)が正しいか確認してください。");
+                        alert("プレビュー生成に失敗しました。");
                     } finally {
-                        // ★重要: 成功しても失敗しても必ずローディングを消す
                         setTimeout(() => {
                             loading.classList.remove('visible');
                         }, 500); 
@@ -342,7 +364,6 @@
                 try {
                     const sb = window.supabase.createClient(CONFIG.url, CONFIG.key);
 
-                    // 1. Profile
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([{
                         dj_name: name,
                         city: getVal('city'),
@@ -353,7 +374,6 @@
                     }]).select().single();
                     if(err1) throw new Error("Profile Error: " + err1.message);
 
-                    // 2. QR
                     const { data: qr, error: err2 } = await sb.from('qr_codes').insert([{
                         profile_id: prof.id, 
                         qr_type: this.currentPlan,
@@ -362,7 +382,6 @@
                     }]).select().single();
                     if(err2) throw new Error("QR Error: " + err2.message);
 
-                    // 3. Links
                     const saveLink = async (type, url, s, e) => {
                         const payload = { profile_id: prof.id, time_type: type, url: url };
                         if(s && e) { payload.start_time = s.length === 5 ? s+":00" : s; payload.end_time = e.length === 5 ? e+":00" : e; }
