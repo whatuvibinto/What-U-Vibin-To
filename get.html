@@ -182,16 +182,22 @@
             setPlan: function(plan) {
                 log("Switching Plan to: " + plan);
                 this.currentPlan = plan;
-                document.getElementById('btnFree').className = plan === 'free' ? 'plan-btn active' : 'plan-btn';
-                document.getElementById('btnPro').className = plan === 'pro' ? 'plan-btn active' : 'plan-btn';
+                const btnFree = document.getElementById('btnFree');
+                const btnPro = document.getElementById('btnPro');
+                
+                if(btnFree) btnFree.className = plan === 'free' ? 'plan-btn active' : 'plan-btn';
+                if(btnPro) btnPro.className = plan === 'pro' ? 'plan-btn active' : 'plan-btn';
                 
                 const lockList = ['groupMorning', 'groupDaytime', 'nightTimeUI', 'exploreGroup'];
                 lockList.forEach(id => {
                     const el = document.getElementById(id);
-                    if(plan === 'free') el.classList.add('locked-section');
-                    else el.classList.remove('locked-section');
+                    if(el) {
+                        if(plan === 'free') el.classList.add('locked-section');
+                        else el.classList.remove('locked-section');
+                    }
                 });
-                document.getElementById('isPublic').checked = (plan === 'pro');
+                const publicCheck = document.getElementById('isPublic');
+                if(publicCheck) publicCheck.checked = (plan === 'pro');
             },
 
             toggleGenre: function(btn) {
@@ -214,8 +220,19 @@
                     alert("APIキーが設定されていません。"); return;
                 }
 
-                const name = document.getElementById('djName').value;
-                const link = document.getElementById('linkDefault').value;
+                // 安全な値取得関数（ここが修正ポイント）
+                const getVal = (id) => {
+                    const el = document.getElementById(id);
+                    if (!el) {
+                        log("⚠️ Warning: Element not found -> " + id);
+                        return ""; // 見つからなくても空文字を返してエラーを防ぐ
+                    }
+                    return el.value;
+                };
+
+                const name = getVal('djName');
+                const link = getVal('linkDefault');
+                
                 if(!name || !link) { alert("名前とDefault Linkは必須です"); return; }
 
                 btn.disabled = true;
@@ -228,11 +245,10 @@
                     log("Saving Profile...");
                     const { data: prof, error: err1 } = await sb.from('profiles').insert([{
                         dj_name: name,
-                        city: document.getElementById('city').value,
-                        // ★修正1: 列名を 'genres' (複数形) に修正
-                        genres: this.selectedGenres, 
+                        city: getVal('city'),
+                        genres: this.selectedGenres, // sあり
                         plan: this.currentPlan,
-                        is_public: document.getElementById('isPublic').checked,
+                        is_public: document.getElementById('isPublic') ? document.getElementById('isPublic').checked : false,
                         slug: Math.random().toString(36).slice(-8)
                     }]).select().single();
                     
@@ -249,25 +265,22 @@
                     if(err2) throw new Error("QR Error: " + err2.message);
                     log("QR Saved ID: " + qr.id);
 
-                    // 3. Links保存 (ここを修正)
+                    // 3. Links保存
                     log("Saving Links...");
                     
-                    // ヘルパー関数を修正
                     const saveLink = async (type, url, s, e) => {
-                        // ★修正2: 存在しない列 (qr_code_id, is_default) を削除
                         const payload = { 
                             profile_id: prof.id,
                             time_type: type, 
                             url: url
                         };
-                        // 時間がある場合のみ追加
+                        // 時間がある場合のみ追加（Time型エラー防止のため秒までつける）
                         if(s && e) { 
-                            payload.start_time = s + ":00"; 
-                            payload.end_time = e + ":00"; 
+                            payload.start_time = s.length === 5 ? s + ":00" : s; 
+                            payload.end_time = e.length === 5 ? e + ":00" : e; 
                         }
 
                         const { error } = await sb.from('links').insert([payload]);
-                        // ★修正3: エラーがあったら無視せず投げる
                         if(error) throw new Error(`Link Error (${type}): ` + error.message);
                     };
 
@@ -276,16 +289,15 @@
                     log("Default Link OK");
 
                     // Other Links
-                    const getVal = (id) => document.getElementById(id).value;
-                    
                     if(this.currentPlan === 'pro') {
                         if(getVal('linkMorning')) await saveLink('morning', getVal('linkMorning'), getVal('timeStartMorning'), getVal('timeEndMorning'));
                         if(getVal('linkDaytime')) await saveLink('daytime', getVal('linkDaytime'), getVal('timeStartDaytime'), getVal('timeEndDaytime'));
                     }
+                    // Night Link
                     if(getVal('linkNight')) await saveLink('nighttime', getVal('linkNight'), getVal('timeStartNight'), getVal('timeEndNight'));
 
                     btn.innerText = "SUCCESS!";
-                    alert("成功！今度こそ全てのデータが保存されました。");
+                    alert("成功！DBを確認してください。");
                     btn.disabled = false;
 
                 } catch(e) {
