@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GET QR | WHAT U VIBIN TO?</title>
+    
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/get.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="logo-container">
+            <a href="index.html" class="logo-link">
+                <img src="images/white_logo.png" alt="WHAT U VIBIN TO?" class="header-logo">
+            </a>
+        </div>
+        <button id="menuBtn" class="menu-btn" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <div id="menuPanel" class="menu-panel">
+        <nav class="menu-nav">
+            <a href="index.html" class="nav-link" onclick="closeMenu()">
+                <span class="nav-en">Home</span><span class="nav-jp">トップページに戻る</span>
+            </a>
+            <a href="explore.html" class="nav-link" onclick="closeMenu()">
+                <span class="nav-en">Explore</span><span class="nav-jp">あの人の"この時間"をのぞく</span>
+            </a>
+            <a href="how.html" class="nav-link" onclick="closeMenu()">
+                <span class="nav-en">How it works</span><span class="nav-jp">仕組み / 使い方</span>
+            </a>
+            <a href="getQR.html" class="nav-link highlight" onclick="closeMenu()">
+                <span class="nav-en">Get QR</span><span class="nav-jp">あなただけのQRをつくる</span>
+            </a>
+        </nav>
+    </div>
+
+    <main class="form-section">
+        <div class="bg-layer">
+            <div class="glow-spot-1" style="top: 10%; left: 80%;"></div>
+            <div class="glow-spot-2" style="top: 80%; left: 10%;"></div>
+        </div>
+
+        <h1 class="form-title">Get Your "Vibin QR"</h1>
+
+        <div class="form-container">
+            
+            <div class="plan-toggle">
+                <button class="plan-btn active" id="btnFree" onclick="setPlan('free')">FREE</button>
+                <button class="plan-btn" id="btnPro" onclick="setPlan('pro')">PRO PLAN</button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">DJ Name / Artist Name</label>
+                <input type="text" id="djName" class="form-input" placeholder="Ex. DJ YUTO">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">City / Location</label>
+                <input type="text" id="city" class="form-input" placeholder="Ex. TOKYO">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Genres (Max 3)</label>
+                <div class="genre-container" id="genreContainer">
+                    <button class="genre-pill" onclick="toggleGenre(this)">House</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">Techno</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">Hip Hop</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">R&B</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">Disco</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">Ambient</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">Bass</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">J-Pop</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">K-Pop</button>
+                    <button class="genre-pill" onclick="toggleGenre(this)">Rock</button>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 32px 0;">
+
+            <div class="form-group">
+                <label class="form-label" style="color:#fff;">DEFAULT LINK (REQUIRED)</label>
+                <input type="url" id="linkDefault" class="form-input" placeholder="https://spotify.com/playlist/...">
+                <p style="font-size:0.7rem; color:#666; margin-top:4px;">※設定時間外にスキャンされた場合に表示されます</p>
+            </div>
+
+            <div id="groupMorning" class="time-link-group locked-section">
+                <div class="time-header">
+                    <span class="time-label">MORNING VIBE</span>
+                    <div class="time-inputs">
+                        <input type="time" id="timeStartMorning" class="time-input-field" value="06:00">
+                        <span>-</span>
+                        <input type="time" id="timeEndMorning" class="time-input-field" value="11:00">
+                    </div>
+                </div>
+                <input type="url" id="linkMorning" class="form-input" placeholder="Morning Playlist URL">
+            </div>
+
+            <div id="groupDaytime" class="time-link-group locked-section">
+                <div class="time-header">
+                    <span class="time-label" style="color: #fff;">DAYTIME VIBE</span>
+                    <div class="time-inputs">
+                        <input type="time" id="timeStartDaytime" class="time-input-field" value="11:00">
+                        <span>-</span>
+                        <input type="time" id="timeEndDaytime" class="time-input-field" value="18:00">
+                    </div>
+                </div>
+                <input type="url" id="linkDaytime" class="form-input" placeholder="Daytime Playlist URL">
+            </div>
+
+            <div id="groupNighttime" class="time-link-group">
+                <div class="time-header">
+                    <span class="time-label" style="color: #a855f7;">NIGHTTIME VIBE</span>
+                    <div class="time-inputs locked-section" id="nightTimeUI"> <input type="time" id="timeStartNight" class="time-input-field" value="18:00">
+                        <span>-</span>
+                        <input type="time" id="timeEndNight" class="time-input-field" value="06:00">
+                    </div>
+                </div>
+                <input type="url" id="linkNight" class="form-input" placeholder="Night Playlist URL">
+            </div>
+
+            <div id="exploreGroup" class="toggle-wrapper locked-section">
+                <div>
+                    <label class="form-label" style="margin:0; color:#fff;">Show on Explore Page</label>
+                    <p style="font-size:0.7rem; color:#666;">Exploreページ（一覧）への掲載</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="isPublic">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="submit-area">
+                <button class="btn-primary btn-submit" onclick="generateQR()" id="btnSubmit">
+                    <span>GENERATE QR</span>
+                </button>
+                <p id="msg" style="margin-top:10px; font-size:0.8rem; color:#a855f7; min-height:1.2em;"></p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p class="copyright">© 2026 WHAT U VIBIN TO</p>
+    </footer>
+
+    <script>
+        // ==========================================
+        // 1. UI Logic
+        // ==========================================
+        
+        // Menu Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const menuPanel = document.getElementById('menuPanel');
+        let isMenuOpen = false;
+        menuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                menuPanel.classList.add('menu-open');
+                menuBtn.classList.add('active');
+            } else {
+                closeMenu();
+            }
+        });
+        function closeMenu() {
+            isMenuOpen = false;
+            menuPanel.classList.remove('menu-open');
+            menuBtn.classList.remove('active');
+        }
+
+        // Plan Logic
+        let currentPlan = 'free';
+        const groupMorning = document.getElementById('groupMorning');
+        const groupDaytime = document.getElementById('groupDaytime');
+        const nightTimeUI = document.getElementById('nightTimeUI'); // Nighttimeの時間設定のみロック
+        const exploreGroup = document.getElementById('exploreGroup');
+        const isPublicCheck = document.getElementById('isPublic');
+
+        function setPlan(plan) {
+            currentPlan = plan;
+            // UI Update
+            document.getElementById('btnFree').classList.toggle('active', plan === 'free');
+            document.getElementById('btnPro').classList.toggle('active', plan === 'pro');
+
+            // Lock/Unlock Logic
+            if (plan === 'free') {
+                groupMorning.classList.add('locked-section');
+                groupDaytime.classList.add('locked-section');
+                nightTimeUI.classList.add('locked-section');
+                exploreGroup.classList.add('locked-section');
+                
+                // Reset Values for Free
+                document.getElementById('linkMorning').value = '';
+                document.getElementById('linkDaytime').value = '';
+                isPublicCheck.checked = false;
+            } else {
+                groupMorning.classList.remove('locked-section');
+                groupDaytime.classList.remove('locked-section');
+                nightTimeUI.classList.remove('locked-section');
+                exploreGroup.classList.remove('locked-section');
+                isPublicCheck.checked = true; // Pro default on
+            }
+        }
+
+        // Genre Logic
+        let selectedGenres = [];
+        function toggleGenre(btn) {
+            const genre = btn.textContent;
+            if (selectedGenres.includes(genre)) {
+                selectedGenres = selectedGenres.filter(g => g !== genre);
+                btn.classList.remove('selected');
+            } else {
+                if (selectedGenres.length >= 3) {
+                    alert('You can select up to 3 genres.');
+                    return;
+                }
+                selectedGenres.push(genre);
+                btn.classList.add('selected');
+            }
+        }
+
+        // ==========================================
+        // 2. Supabase Logic
+        // ==========================================
+        const supabaseUrl = 'https://zcjzmuzmhuanyauhgeni.supabase.co'; // ★ここにURL
+        const supabaseKey = 'sb_publishable_28zl763gg-zt5wNDediMpg_b7qhGif-';     // ★ここにAPIキー
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function generateQR() {
+            const btn = document.getElementById('btnSubmit');
+            const msg = document.getElementById('msg');
+            
+            // Validation
+            const name = document.getElementById('djName').value;
+            const defaultLink = document.getElementById('linkDefault').value;
+
+            if (!name || !defaultLink) {
+                alert('DJ Name and Default Link are required.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span>SAVING...</span>';
+
+            try {
+                // 1. Save Profile
+                const { data: profileData, error: profileError } = await supabase
+                    .from('profiles')
+                    .insert([{
+                        dj_name: name,
+                        city: document.getElementById('city').value,
+                        genre: selectedGenres,
+                        plan: currentPlan,
+                        is_public: document.getElementById('isPublic').checked,
+                        edit_token: Math.random().toString(36).slice(-8) // 簡易トークン生成
+                    }])
+                    .select()
+                    .single();
+
+                if (profileError) throw profileError;
+                const profileId = profileData.id;
+
+                // 2. Save QR Code
+                const { data: qrData, error: qrError } = await supabase
+                    .from('qr_codes')
+                    .insert([{
+                        profile_id: profileId,
+                        qr_type: currentPlan,
+                        is_active: true
+                    }])
+                    .select()
+                    .single();
+
+                if (qrError) throw qrError;
+                const qrId = qrData.id;
+
+                // 3. Save Links (Batch or Loop)
+                // Default
+                await saveLink(profileId, qrId, 'default', defaultLink, null, null, true);
+                
+                // Morning (Only if filled or Pro)
+                const morningLink = document.getElementById('linkMorning').value;
+                if (morningLink) {
+                    await saveLink(profileId, qrId, 'morning', morningLink, 
+                        document.getElementById('timeStartMorning').value + ':00', 
+                        document.getElementById('timeEndMorning').value + ':00'
+                    );
+                }
+
+                // Daytime
+                const daytimeLink = document.getElementById('linkDaytime').value;
+                if (daytimeLink) {
+                    await saveLink(profileId, qrId, 'daytime', daytimeLink, 
+                        document.getElementById('timeStartDaytime').value + ':00', 
+                        document.getElementById('timeEndDaytime').value + ':00'
+                    );
+                }
+
+                // Nighttime
+                const nightLink = document.getElementById('linkNight').value;
+                if (nightLink) {
+                    await saveLink(profileId, qrId, 'nighttime', nightLink, 
+                        document.getElementById('timeStartNight').value + ':00', 
+                        document.getElementById('timeEndNight').value + ':00'
+                    );
+                }
+
+                msg.textContent = "SUCCESS! Redirecting...";
+                // 成功したらQR表示ページなどへ遷移（今回はアラートのみ）
+                setTimeout(() => {
+                    alert('QR Created! ID: ' + qrId);
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>GENERATE QR</span>';
+                    // window.location.href = `complete.html?id=${qrId}`; 
+                }, 1000);
+
+            } catch (error) {
+                console.error(error);
+                msg.textContent = "ERROR: " + error.message;
+                btn.disabled = false;
+                btn.innerHTML = '<span>GENERATE QR</span>';
+            }
+        }
+
+        async function saveLink(pId, qId, type, url, start, end, isDefault = false) {
+            // 時間がない場合(FreeのDefaultなど)はNULLを送るか、固定値を入れるかは設計次第。
+            // 今回のDBはTime型なので、Default以外は時間を入れます
+            const payload = {
+                profile_id: pId,
+                qr_code_id: qId,
+                time_type: type,
+                url: url,
+                is_active: true,
+                is_default: isDefault
+            };
+            
+            if (start && end) {
+                payload.start_time = start;
+                payload.end_time = end;
+            }
+
+            const { error } = await supabase.from('links').insert([payload]);
+            if (error) throw error;
+        }
+
+    </script>
+</body>
+</html>
