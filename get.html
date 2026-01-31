@@ -164,6 +164,22 @@
             </div>
             
         </div>
+        <div id="resultModal" class="result-modal">
+            <div class="result-content" id="resultContent">
+                <h2 class="result-title">QR CODE GENERATED</h2>
+            
+                <div class="result-image-box">
+                    <img id="finalQrImage" src="" alt="Generated QR">
+                </div>
+
+                <div class="result-actions">
+                <button type="button" class="btn-download" onclick="app.downloadQR()">
+                    <span>⬇ DOWNLOAD IMAGE</span>
+                </button>
+                <button type="button" class="btn-close" onclick="app.closeResult()">CLOSE</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
